@@ -61,9 +61,9 @@ class TCPAbridged(Connection):
         length = (len(data) + 3) // 4
         
         if length >= 0x7f:  # 127
-            await self.writer.write(b"\x7f")
+            self.writer.write(b"\x7f")
         
-        await self.writer.write(length.to_bytes(1, byteorder="little", signed=False))
+        self.writer.write(length.to_bytes(1, byteorder="little", signed=False))
         await self.writer.drain()
 
 
@@ -97,8 +97,8 @@ class TCPIntermediate(Connection):
 
     async def send(self, data: bytes):
         length = len(data)
-        await self.writer.write(length.to_bytes(4, "little", signed=False))
-        await self.writer.write(data)
+        self.writer.write(length.to_bytes(4, "little", signed=False))
+        self.writer.write(data)
         await self.writer.drain()
 
     async def recv(self) -> bytes:

@@ -1,4 +1,5 @@
 import asyncio
+import secrets
 
 from uuid import uuid4
 from io import BytesIO
@@ -8,17 +9,24 @@ from piltover.enums import Transport
 from piltover.exceptions import Disconnection
 from piltover.connection import Connection
 from piltover.types.primitive import Message
-from piltover.utils import read_int
+from piltover.types import Keys
+from piltover.utils import read_int, generate_large_prime, gen_keys, get_public_key_fingerprint
 from piltover.tl import TL
+from piltover.tl.types import Int128
 
 
 class Server:
     HOST = "127.0.0.1"
     PORT = 4430
 
-    def __init__(self, host: str = None, port: int = None):
+    def __init__(self, host: str = None, port: int = None, server_keys: Keys = None):
         self.host = host if host is not None else self.HOST
         self.port = port if port is not None else self.PORT
+
+        self.server_keys: Keys = server_keys
+        if self.server_keys is None:
+            self.server_keys = gen_keys()
+        self.fingerprint: int = get_public_key_fingerprint(self.server_keys.public_key)
 
         self.clients: dict[str, Client] = {}
         self.clients_lock = asyncio.Lock()
@@ -114,9 +122,47 @@ class Client:
 
         if msg.session_id == 0:
             print(msg.data.hex())
-            print(TL.decode(BytesIO(msg.data)).__str__())
+            req_pq = TL.decode(BytesIO(msg.data))
+            print(req_pq)
+
+            p = generate_large_prime(32)
+            q = generate_large_prime(32)
+
+            if p > q:
+                p, q = q, p
+
+            assert p != -1, "p is -1"
+            assert q != -1, "q is -1"
+            assert p != q
+
+            pq = p * q
+            print(f"server {p=}")
+            print(f"server {q=}")
+            print(f"server {pq=}")
+
+            server_nonce = read_int(secrets.token_bytes(128 // 8))
+            print(f"{server_nonce=}")
+            # TODO: remember nonce and server_nonce in the session for security purposes
+
+            # resPQ#05162463 nonce:int128 server_nonce:int128 pq:string server_public_key_fingerprints:Vector long = ResPQ;
+            # TODO: replace bytes(20) with actual data:
+            # auth_key_id (8), message_id (8) and message_length (4)
+            await self.conn.send(
+                bytes(20) + TL.encode(
+                    {
+                        "_": "resPQ",
+                        "nonce": req_pq.nonce,
+                        "server_nonce": server_nonce,
+                        "pq": str(pq),
+                        "server_public_key_fingerprints": [self.server.fingerprint],
+                    }
+                )
+            )
         else:
             assert False, "TODO: authorized messages check"
+
+    async def recv(self) -> TL:
+        return await self.read_msg()
 
     @logger.catch
     async def worker(self):
@@ -126,8 +172,8 @@ class Client:
 
                 while True:
                     try:
-                        payload = await self.conn.recv()
-                        print(payload.hex())
+                        payload = await self.recv()
+                        print(payload)
                     except AssertionError:
                         logger.exception("Unexpected failed assertion", backtrace=True)
             except Disconnection:
