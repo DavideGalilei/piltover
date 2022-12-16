@@ -17,6 +17,19 @@ def get_public_key_fingerprint(public_key: str) -> int:
     )
 
 
+def restore_private_key(private_key: str):
+    return serialization.load_pem_private_key(
+        private_key.encode(),
+        password=None,
+    )
+
+
+def restore_public_key(public_key: str):
+    return serialization.load_pem_public_key(
+        public_key.encode(),
+    )
+
+
 def gen_keys():
     # https://dev.to/aaronktberry/generating-encrypted-key-pairs-in-python-69b
 

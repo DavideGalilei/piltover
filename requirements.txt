@@ -1,4 +1,5 @@
 cryptography
 jurigged
+tgcrypto
 uvloop
 loguru

@@ -1,11 +1,13 @@
 import json
+import inspect
 
 from io import BytesIO
 from typing import cast, Union
 from types import GenericAlias
 
-from piltover.tl.types import Basic, Int64, Int128
-from piltover.utils import read_int
+from piltover.tl.types import Basic, Int, Int64, Int128, Int256
+from piltover.utils import read_int, nameof
+from piltover.exceptions import InvalidConstructor
 
 
 VECTOR_CID = 0x1cb5c415
@@ -15,27 +17,74 @@ MAP = {
     0xbe7e8ef1: {
         "_": "req_pq_multi",
         "params": {
-            "nonce": Int128,
+            "nonce": Int128(signed=False),
         },
         "ret": "ResPQ",
     },
     0x60469778: {
         "_": "req_pq",
         "params": {
-            "nonce": Int128,
+            "nonce": Int128(signed=False),
         },
         "ret": "ResPQ",
     },
     0x05162463: {
         "_": "resPQ",
         "params": {
-            "nonce": Int128,
-            "server_nonce": Int128,
-            "pq": str,
-            "server_public_key_fingerprints": list[Int64],
+            "nonce": Int128(signed=False),
+            "server_nonce": Int128(signed=False),
+            "pq": bytes,
+            "server_public_key_fingerprints": list[Int64(signed=False)],
         },
         "is": "ResPQ",
     },
+    0xd712e4be: {
+        "_": "req_DH_params",
+        "params": {
+            "nonce": Int128(signed=False),
+            "server_nonce": Int128(signed=False),
+            "p": bytes,
+            "q": bytes,
+            "public_key_fingerprint": Int64,
+            "encrypted_data": bytes,
+        },
+        "ret": "Server_DH_Params"
+    },
+    0x83c95aec: {
+        "_": "p_q_inner_data",
+        "params": {
+            "pq": bytes,
+            "p": bytes,
+            "q": bytes,
+            "nonce": Int128(signed=False),
+            "server_nonce": Int128(signed=False),
+            "new_nonce": Int256(signed=False),
+        },
+        "is": "P_Q_inner_data",
+    },
+    0xa9f55f95: {
+        "_": "p_q_inner_data_dc",
+        "params": {
+            "pq": str,
+            "p": str,
+            "q": str,
+            "nonce": Int128(signed=False),
+            "server_nonce": Int128(signed=False),
+            "new_nonce": Int256(signed=False),
+            "dc": int,
+        },
+        "is": "P_Q_inner_data",
+    },
+    0xd0e8075c: {
+        "_": "server_DH_params_ok",
+        "params": {
+            "nonce": Int128,
+            "server_nonce": Int128,
+            "encrypted_answer": bytes,
+        },
+        "is": "Server_DH_Params",
+    },
+
 }
 
 NAME_MAP = {
@@ -71,33 +120,36 @@ def read_string(data: BytesIO) -> str:
 
 
 def read_builtin(typ: type, data: BytesIO):
-    if isinstance(typ, int):
+    if issubclass(typ, int):
         return read_int(data.read(4))
-    elif isinstance(typ, str):
+    elif issubclass(typ, str):
         return read_string(data)
-    elif isinstance(typ, bytes):
+    elif issubclass(typ, bytes):
         return read_bytes(data)
-    elif isinstance(typ, list):
-        args = typ.__args__
-        assert len(args) == 1, "Wrong type specified"
-        ret: type = args[0]
+    elif isinstance(typ, GenericAlias):
+        if issubclass(typ.mro()[0], list):
+            args = typ.__args__
+            assert len(args) == 1, "Wrong type specified"
+            ret: type = args[0]
 
-        assert read_int(data.read(4)) == VECTOR_CID, "Vector with wrong constructor id"
-        if issubclass(ret, TL):
-            cid = read_int(data.read(4))
+            assert read_int(data.read(4)) == VECTOR_CID, "Vector with wrong constructor id"
+            if issubclass(ret, TL):
+                cid = read_int(data.read(4))
 
-        length = read_int(data.read(4))
+            length = read_int(data.read(4))
 
-        result = []
-        if issubclass(ret, TL):
-            for _ in range(length):
-                result.append(TL.decode(data))
+            result = []
+            if issubclass(ret, TL):
+                for _ in range(length):
+                    result.append(TL.decode(data))
+            else:
+                for _ in range(length):
+                    result.append(read_builtin(ret, data))
+            return result
         else:
-            for _ in range(length):
-                result.append(read_builtin(ret, data))
-        return result
+            assert False, "Unreachable"
     else:
-        raise TypeError("Invalid type, couldn't deserialize")
+        raise TypeError(f"Invalid type, couldn't deserialize: {nameof(typ)}")
 
 
 def write_builtin(typ: type, value, to: BytesIO):
@@ -112,10 +164,14 @@ def write_builtin(typ: type, value, to: BytesIO):
             write_builtin(int, VECTOR_CID, to=to)
             write_builtin(int, len(value), to=to)
 
-            if issubclass(ret, Basic):
+            check_type = ret
+            if isinstance(check_type, GenericAlias) or not inspect.isclass(check_type):
+                check_type = type(ret)
+
+            if issubclass(check_type, Basic):
                 for element in value:
                     to.write(ret.serialize(element))
-            elif issubclass(ret, TL):
+            elif issubclass(check_type, TL):
                 write_builtin(int, value._cid, to=to)
 
                 for element in value:
@@ -150,25 +206,33 @@ def write_builtin(typ: type, value, to: BytesIO):
 
 
 def typecheck(typ: type, value) -> bool:
-    if isinstance(typ, GenericAlias):
-        if issubclass(typ.mro()[0], list):
-            if not isinstance(value, list):
-                return False
+    if isinstance(typ, GenericAlias) or not inspect.isclass(typ):
+        if isinstance(typ, GenericAlias):
+            if issubclass(typ.mro()[0], list):
+                if not isinstance(value, list):
+                    return False
 
-            args = typ.__args__
-            assert len(args) == 1, "Wrong type specified"
-            ret: type = args[0]
+                args = typ.__args__
+                assert len(args) == 1, "Wrong type specified"
+                ret: type = args[0]
 
-            if len(value) == 0:
+                if len(value) == 0:
+                    return True
+
+                return typecheck(ret, value[0])
+            else:
+                assert False, "Unreachable"
+        elif isinstance(typ, Basic):
+            if issubclass(type(typ), Int) and isinstance(value, int):
                 return True
-            return typecheck(ret, value[0])
-    elif issubclass(typ, (int, str, bytes)):
-        return isinstance(value, (int, str, bytes))
-    elif issubclass(typ, Basic):
-        if typ in {Int64, Int128} and isinstance(value, int):
-            return True
-    elif issubclass(typ, TL):
-        return isinstance(value, (dict, TL))
+    else:
+        if issubclass(typ, (int, str, bytes)):
+            return isinstance(value, typ)
+        elif issubclass(typ, Basic):
+            if issubclass(typ, Int) and isinstance(value, int):
+                return True
+        elif issubclass(typ, TL):
+            return isinstance(value, (dict, TL))
     return False
 
 
@@ -177,28 +241,36 @@ class TL:
     def decode(data: BytesIO) -> "TL":
         cid = int.from_bytes(data.read(4), byteorder="little", signed=False)
 
+        if cid not in MAP:
+            raise InvalidConstructor(cid=cid)
         reference = MAP[cid]
         objname = reference["_"]
         result = type(objname, (TL,), {})()
 
-        for name, typ in reference["params"].items():
-            if isinstance(typ, GenericAlias) or isinstance(typ, (int, str, bytes)):
+        for name, typ in reference.get("params", {}).items():
+            check_type = typ
+            if isinstance(check_type, GenericAlias) or not inspect.isclass(check_type):
+                check_type = type(typ)
+
+            if issubclass(check_type, GenericAlias) or issubclass(check_type, (int, str, bytes)):
                 decoded = read_builtin(typ, data)
-            if issubclass(typ, Basic):
+            elif issubclass(check_type, Basic):
                 decoded = typ.deserialize(data)
-            elif isinstance(typ, TL):
+            elif issubclass(check_type, TL):
                 decoded = TL.decode(data)
             else:
-                raise ValueError(f"Invalid type: {objname}({name}: {typ})")
+                raise ValueError(f"Invalid type: {objname}({name}: {nameof(typ)})")
 
             setattr(result, name, decoded)
 
         result._cid = cid
+        result._ = objname
         return cast(TL, result)
 
     @staticmethod
     def encode(obj: Union[dict, "TL"]) -> bytes:
         result = BytesIO()
+        print(obj)
 
         if isinstance(obj, TL):
             obj = obj.get_dict()
@@ -211,29 +283,37 @@ class TL:
         for field, typ in tltype["params"].items():
             value = obj[field]
 
+            checked = False
+            check_type = typ
+            if isinstance(check_type, GenericAlias) or not inspect.isclass(check_type):
+                if not typecheck(check_type, value):
+                    raise TypeError(f"Wrong parameter type for {field!r}: got {nameof(value)} but expected {nameof(typ)}")
+                checked = True
+                check_type = type(typ)
+
+            if not checked and not isinstance(value, check_type):
+                raise TypeError(f"Wrong parameter type for {field!r}: got {nameof(value)} but expected {nameof(typ)}")
+
             if field.startswith("_"):
                 continue
             elif field not in obj:
-                raise ValueError(f"Missing parameter {field!r} of type {type(typ).__name__}")
-            elif not typecheck(typ, value):
-                raise TypeError(f"Wrong parameter type for {field!r}: got {type(value).__name__} but expected {typ.__name__}")
+                raise ValueError(f"Missing parameter {field!r} of type {nameof(typ)}")
 
-            if isinstance(typ, GenericAlias) or issubclass(typ, (int, str, bytes)):
+            if issubclass(check_type, (int, str, bytes, list, GenericAlias)):
                 write_builtin(typ, value, to=result)
-            elif issubclass(typ, Basic):
+            elif issubclass(check_type, Basic):
                 result.write(typ.serialize(value))
-            elif issubclass(typ, TL):
+            elif issubclass(check_type, TL):
                 result.write(TL.encode(value))
             else:
-                raise ValueError(f"Invalid type: expected {field}: {typ.__name__}, got {type(value).__name__}")
+                raise ValueError(f"Invalid type: expected {field}: {nameof(typ)}, got {nameof(value)}")
 
         result.seek(0)
         data = result.read()
-        print(data)
         return data
 
     def get_dict(self) -> dict:
-        attrs = {"_": type(self).__name__}
+        attrs = {"_": nameof(self)}
         attrs |= {
             param: value
             for param, value
@@ -244,10 +324,10 @@ class TL:
 
     def __str__(self) -> str:
         attrs = self.get_dict()
-        return json.dumps(attrs, indent=4)
+        return json.dumps(attrs, indent=4, default=str)
 
     def __repr__(self) -> str:
-        return f"""{type(self).__name__}({
+        return f"""{nameof(self)}({
             ", ".join(
                 f"{param}={value}"
                 for param, value

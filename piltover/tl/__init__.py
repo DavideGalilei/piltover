@@ -1,1 +1,1 @@
-from .tl import TL
+from .tl import TL, NAME_MAP

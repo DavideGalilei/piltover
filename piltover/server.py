@@ -1,18 +1,22 @@
 import asyncio
 import secrets
+import hashlib
+
+import tgcrypto
 
 from uuid import uuid4
 from io import BytesIO
 
 from loguru import logger
+from icecream import ic
+
 from piltover.enums import Transport
 from piltover.exceptions import Disconnection
 from piltover.connection import Connection
 from piltover.types.primitive import Message
 from piltover.types import Keys
-from piltover.utils import read_int, generate_large_prime, gen_keys, get_public_key_fingerprint
+from piltover.utils import read_int, generate_large_prime, gen_keys, get_public_key_fingerprint, restore_private_key, restore_public_key
 from piltover.tl import TL
-from piltover.tl.types import Int128
 
 
 class Server:
@@ -26,6 +30,10 @@ class Server:
         self.server_keys: Keys = server_keys
         if self.server_keys is None:
             self.server_keys = gen_keys()
+
+        self.public_key = restore_public_key(self.server_keys.public_key)
+        self.private_key = restore_private_key(self.server_keys.private_key)
+
         self.fingerprint: int = get_public_key_fingerprint(self.server_keys.public_key)
 
         self.clients: dict[str, Client] = {}
@@ -140,29 +148,79 @@ class Client:
             print(f"server {q=}")
             print(f"server {pq=}")
 
-            server_nonce = read_int(secrets.token_bytes(128 // 8))
+            server_nonce = int.from_bytes(secrets.token_bytes(128 // 8), byteorder="big", signed=True)
             print(f"{server_nonce=}")
             # TODO: remember nonce and server_nonce in the session for security purposes
 
             # resPQ#05162463 nonce:int128 server_nonce:int128 pq:string server_public_key_fingerprints:Vector long = ResPQ;
             # TODO: replace bytes(20) with actual data:
             # auth_key_id (8), message_id (8) and message_length (4)
+
+            # TODO: ERROR: server_nonce isn't equal to pyrogram's deserialized value...
             await self.conn.send(
                 bytes(20) + TL.encode(
                     {
                         "_": "resPQ",
                         "nonce": req_pq.nonce,
                         "server_nonce": server_nonce,
-                        "pq": str(pq),
+                        "pq": pq.to_bytes(128 // 8, "big", signed=True),
                         "server_public_key_fingerprints": [self.server.fingerprint],
                     }
                 )
             )
+
+            req_dh_params = await self.recv()
+            print(f"{req_dh_params=}")
+            assert req_dh_params._ == "req_DH_params"
+            client_p = int.from_bytes(req_dh_params.p, "big", signed=False)
+            client_q = int.from_bytes(req_dh_params.q, "big", signed=False)
+            
+            assert client_p == p, "client_p is different than server_p"
+            assert client_q == q, "client_q is different than server_q"
+            
+            print(f"{client_p=} {client_q=}")
+
+            encrypted_data = req_dh_params.encrypted_data
+
+            private = self.server.private_key.private_numbers()
+            public = self.server.public_key.public_numbers()
+
+            key_aes_encrypted = pow(
+                int.from_bytes(encrypted_data, "big", signed=False),
+                private.d,
+                public.n,
+            ).to_bytes(256, "big", signed=False).lstrip(b"\0")
+
+            # idk TODO: restart generation with dh_fail instead
+            # assert key_aes_encrypted >= public.n, "key_aes_encrypted greater than RSA modulus, aborting..."
+            
+
+            # https://github.com/teamgram/teamgram-server/blob/820e5b122285b7ce76ffa81e8e4ac48e211ce423/app/interface/gateway/internal/server/handshake.go#L338
+
+            # print(key_aes_encrypted)
+            # ic(key_aes_encrypted.hex())
+            p_q_inner_data = TL.decode(BytesIO(key_aes_encrypted[20:]))
+            assert hashlib.sha1(TL.encode(p_q_inner_data)).digest() == key_aes_encrypted[:20], "sha1 of data doesn't match"
+
+            print(p_q_inner_data)
+            await self.conn.send(
+                bytes(8) + TL.encode(
+                    {
+                        "_": "server_DH_params_ok",
+                        "nonce": p_q_inner_data.nonce,
+                        "server_nonce": p_q_inner_data.server_nonce,
+                        "encrypted_answer": string,
+                    }
+                )
+            )
+            ic(await self.recv())
+            # TODO: https://core.telegram.org/mtproto/samples-auth_key#request-to-start-diffie-hellman-key-exchange
+            # TODO: https://core.telegram.org/mtproto/auth_key#presenting-proof-of-work-server-authentication
         else:
             assert False, "TODO: authorized messages check"
 
     async def recv(self) -> TL:
-        return await self.read_msg()
+        return TL.decode(BytesIO((await self.read_msg()).data))
 
     @logger.catch
     async def worker(self):
