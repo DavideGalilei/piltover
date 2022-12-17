@@ -84,7 +84,18 @@ MAP = {
         },
         "is": "Server_DH_Params",
     },
-
+    0xb5890dba: {
+        "_": "server_DH_inner_data",
+        "params": {
+            "nonce": Int128(signed=False),
+            "server_nonce": Int128(signed=False),
+            "g": int,
+            "dh_prime": bytes,
+            "g_a": bytes,
+            "server_time": int,
+        },
+        "is": "Server_DH_inner_data",
+    },
 }
 
 NAME_MAP = {

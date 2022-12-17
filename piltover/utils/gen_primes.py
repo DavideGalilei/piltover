@@ -48,20 +48,24 @@ def is_prime(n):
             for p in LOW_PRIMES:
                 if n == p:
                     return True
-                if n % p == 0:
+                elif n % p == 0:
                     return False
             return rabin_miller(n)
     return False
 
 
-def generate_large_prime(k: int) -> int:
+def generate_large_prime(k: int, safe: bool = False) -> int:
     # k is the desired bit length
     r = 100 * (math.log(k, 2) + 1)  # number of attempts max
     # r_ = r
+
     while r > 0:
+        print("attempt", r)
         n = RNG.randrange(2 ** (k - 1), 2 ** (k))
         r -= 1
-        if is_prime(n):
+        if safe and not is_prime((n - 1) >> 1):
+            continue
+        elif is_prime(n):
             return n
     return -1
 
@@ -69,6 +73,12 @@ def generate_large_prime(k: int) -> int:
 if __name__ == "__main__":
     p = generate_large_prime(32)
     q = generate_large_prime(32)
+
+    safe = -1
+    while safe == -1:
+        safe = generate_large_prime(2048, safe=True)
+        print(-1)
+    print(safe)
 
     assert p != -1
     assert q != -1

@@ -1,3 +1,4 @@
+import time
 import asyncio
 import secrets
 import hashlib
@@ -203,13 +204,61 @@ class Client:
             assert hashlib.sha1(TL.encode(p_q_inner_data)).digest() == key_aes_encrypted[:20], "sha1 of data doesn't match"
 
             print(p_q_inner_data)
+
+            new_nonce: bytes = p_q_inner_data.new_nonce.to_bytes(128, "big", signed=False)
+
+            new_nonce_hash = hashlib.sha1(new_nonce).digest()[:128 // 8]
+            dh_prime = generate_large_prime(2048, safe=True)
+            assert dh_prime != -1, "Couldn't generate dh_prime"
+            print(dh_prime)
+
+            if p % 8 == 7:
+                g = 2
+            elif p % 3 == 2:
+                g = 3
+            elif p % 5 in [1, 4]:
+                g = 5
+            elif p % 24 in [19, 23]:
+                g = 6
+            elif p % 7 in [3, 5, 6]:
+                g = 7
+            else:
+                g = 4
+            
+            a = int.from_bytes(secrets.token_bytes(256), "big")
+            g_a = pow(g, a, dh_prime).to_bytes(256, "big")
+
+            answer = TL.encode(
+                {
+                    "_": "server_DH_inner_data",
+                    "nonce": p_q_inner_data.nonce,
+                    "server_nonce": server_nonce,
+                    "g": g,
+                    "dh_prime": dh_prime.to_bytes(2048 // 8, "big", signed=False),
+                    "g_a": g_a,
+                    "server_time": int(time.time()),
+                }
+            )
+            answer_with_hash = hashlib.sha1(answer).digest() + answer
+            answer_with_hash += secrets.token_bytes(-len(answer_with_hash) % 16)
+            tmp_aes_key = (
+                hashlib.sha1(new_nonce + server_nonce).digest()
+                + hashlib.sha1(server_nonce + new_nonce).digest()[:12]
+            )
+            tmp_aes_iv = (
+                hashlib.sha1(server_nonce + new_nonce).digest()[12:12+8]
+                + hashlib.sha1(new_nonce + new_nonce)
+                + new_nonce[:4]
+            )
+            encrypted_answer = tgcrypto.ige256_encrypt(answer_with_hash, tmp_aes_key, tmp_aes_iv)
+
             await self.conn.send(
                 bytes(8) + TL.encode(
                     {
                         "_": "server_DH_params_ok",
                         "nonce": p_q_inner_data.nonce,
                         "server_nonce": p_q_inner_data.server_nonce,
-                        "encrypted_answer": string,
+                        "encrypted_answer": encrypted_answer,
                     }
                 )
             )
