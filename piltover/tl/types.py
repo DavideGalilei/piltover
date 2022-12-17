@@ -1,7 +1,7 @@
 from io import BytesIO
 from abc import ABC, abstractmethod
 
-from piltover.utils import read_int
+from piltover.utils import read_int, nameof
 
 
 class Basic(ABC):
@@ -17,28 +17,24 @@ class Basic(ABC):
 
 
 class Int(Basic):
-    SIZE = 32
-    signed = True
-
-    def __init__(self, signed: bool = True):
+    def __init__(self, name: str, size: int, signed: bool = True):
+        self.size = size
         self.signed = signed
+        self.__name__ = name
 
-    @classmethod
-    def deserialize(cls, data: BytesIO, signed: bool = None) -> int:
-        return read_int(data.read(cls.SIZE), signed=signed if signed is not None else cls.signed)
+    def deserialize(self, data: BytesIO, signed: bool = None) -> int:
+        return read_int(data.read(self.size), signed=signed if signed is not None else self.signed)
 
-    @classmethod
-    def serialize(cls, n: int, signed: bool = True) -> bytes:
-        return n.to_bytes(cls.SIZE, byteorder="little", signed=signed if signed is not None else cls.signed)
+    def serialize(self, n: int, signed: bool = None) -> bytes:
+        return n.to_bytes(self.size, byteorder="little", signed=signed if signed is not None else self.signed)
 
+    def __str__(self) -> str:
+        return f"{nameof(self)}(signed={self.signed})"
 
-class Int64(Int):
-    SIZE = 64 // 8
-
-
-class Int128(Int):
-    SIZE = 128 // 8
+    def __call__(self, signed: bool = True) -> "Int":
+        return Int(self.__name__, self.size, signed=signed)
 
 
-class Int256(Int):
-    SIZE = 256 // 8
+Int64 = Int("Int64", size=64 // 8)
+Int128 = Int("Int128", size=128 // 8)
+Int256 = Int("Int256", size=256 // 8)

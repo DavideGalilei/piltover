@@ -17,22 +17,22 @@ MAP = {
     0xbe7e8ef1: {
         "_": "req_pq_multi",
         "params": {
-            "nonce": Int128(signed=False),
+            "nonce": Int128(signed=True),
         },
         "ret": "ResPQ",
     },
     0x60469778: {
         "_": "req_pq",
         "params": {
-            "nonce": Int128(signed=False),
+            "nonce": Int128(signed=True),
         },
         "ret": "ResPQ",
     },
     0x05162463: {
         "_": "resPQ",
         "params": {
-            "nonce": Int128(signed=False),
-            "server_nonce": Int128(signed=False),
+            "nonce": Int128(signed=True),
+            "server_nonce": Int128(signed=True),
             "pq": bytes,
             "server_public_key_fingerprints": list[Int64(signed=False)],
         },
@@ -41,8 +41,8 @@ MAP = {
     0xd712e4be: {
         "_": "req_DH_params",
         "params": {
-            "nonce": Int128(signed=False),
-            "server_nonce": Int128(signed=False),
+            "nonce": Int128(signed=True),
+            "server_nonce": Int128(signed=True),
             "p": bytes,
             "q": bytes,
             "public_key_fingerprint": Int64,
@@ -56,8 +56,8 @@ MAP = {
             "pq": bytes,
             "p": bytes,
             "q": bytes,
-            "nonce": Int128(signed=False),
-            "server_nonce": Int128(signed=False),
+            "nonce": Int128(signed=True),
+            "server_nonce": Int128(signed=True),
             "new_nonce": Int256(signed=False),
         },
         "is": "P_Q_inner_data",
@@ -68,8 +68,8 @@ MAP = {
             "pq": str,
             "p": str,
             "q": str,
-            "nonce": Int128(signed=False),
-            "server_nonce": Int128(signed=False),
+            "nonce": Int128(signed=True),
+            "server_nonce": Int128(signed=True),
             "new_nonce": Int256(signed=False),
             "dc": int,
         },
@@ -78,8 +78,8 @@ MAP = {
     0xd0e8075c: {
         "_": "server_DH_params_ok",
         "params": {
-            "nonce": Int128,
-            "server_nonce": Int128,
+            "nonce": Int128(signed=True),
+            "server_nonce": Int128(signed=True),
             "encrypted_answer": bytes,
         },
         "is": "Server_DH_Params",
@@ -87,14 +87,42 @@ MAP = {
     0xb5890dba: {
         "_": "server_DH_inner_data",
         "params": {
-            "nonce": Int128(signed=False),
-            "server_nonce": Int128(signed=False),
+            "nonce": Int128(signed=True),
+            "server_nonce": Int128(signed=True),
             "g": int,
             "dh_prime": bytes,
             "g_a": bytes,
             "server_time": int,
         },
         "is": "Server_DH_inner_data",
+    },
+    0xf5045f1f: {
+        "_": "set_client_DH_params",
+        "params": {
+            "nonce": Int128(signed=True),
+            "server_nonce": Int128(signed=True),
+            "encrypted_data": bytes,
+        },
+        "ret": "Set_client_DH_params_answer",
+    },
+    0x6643b654: {
+        "_": "client_DH_inner_data",
+        "params": {
+            "nonce": Int128(signed=True),
+            "server_nonce": Int128(signed=True),
+            "retry_id": Int64(signed=True),
+            "g_b": bytes,
+        },
+        "is": "Client_DH_Inner_Data",
+    },
+    0x3bcbf734: {
+        "_": "dh_gen_ok",
+        "params": {
+            "nonce": Int128(signed=True),
+            "server_nonce": Int128(signed=True),
+            "new_nonce_hash1": Int128(signed=False),
+        },
+        "is": "Set_client_DH_params_answer",
     },
 }
 
@@ -281,7 +309,6 @@ class TL:
     @staticmethod
     def encode(obj: Union[dict, "TL"]) -> bytes:
         result = BytesIO()
-        print(obj)
 
         if isinstance(obj, TL):
             obj = obj.get_dict()
@@ -302,7 +329,7 @@ class TL:
                 checked = True
                 check_type = type(typ)
 
-            if not checked and not isinstance(value, check_type):
+            if not checked and not typecheck(check_type, value):
                 raise TypeError(f"Wrong parameter type for {field!r}: got {nameof(value)} but expected {nameof(typ)}")
 
             if field.startswith("_"):
@@ -313,6 +340,7 @@ class TL:
             if issubclass(check_type, (int, str, bytes, list, GenericAlias)):
                 write_builtin(typ, value, to=result)
             elif issubclass(check_type, Basic):
+                # print(name, field, typ)
                 result.write(typ.serialize(value))
             elif issubclass(check_type, TL):
                 result.write(TL.encode(value))
@@ -346,3 +374,6 @@ class TL:
                 if not callable(value) and not param.startswith("_")
             )
         })"""
+
+    def __getattr__(self, __name: str):
+        return self.__getattribute__(__name)

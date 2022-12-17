@@ -16,7 +16,7 @@ from piltover.exceptions import Disconnection
 from piltover.connection import Connection
 from piltover.types.primitive import Message
 from piltover.types import Keys
-from piltover.utils import read_int, generate_large_prime, gen_keys, get_public_key_fingerprint, restore_private_key, restore_public_key
+from piltover.utils import read_int, generate_large_prime, gen_safe_prime, gen_keys, get_public_key_fingerprint, restore_private_key, restore_public_key
 from piltover.tl import TL
 
 
@@ -100,7 +100,7 @@ class Client:
         transport: Transport,
         reader: asyncio.StreamReader,
         writer: asyncio.StreamWriter,
-        peerinfo: tuple = None,
+        peerinfo: tuple,
     ):
         self.server: Server = server
         self.uuid: str = uuid
@@ -127,12 +127,9 @@ class Client:
 
     async def authorize(self):
         msg = await self.read_msg()
-        print(msg)
 
         if msg.session_id == 0:
-            print(msg.data.hex())
             req_pq = TL.decode(BytesIO(msg.data))
-            print(req_pq)
 
             p = generate_large_prime(32)
             q = generate_large_prime(32)
@@ -150,7 +147,7 @@ class Client:
             print(f"server {pq=}")
 
             server_nonce = int.from_bytes(secrets.token_bytes(128 // 8), byteorder="big", signed=True)
-            print(f"{server_nonce=}")
+
             # TODO: remember nonce and server_nonce in the session for security purposes
 
             # resPQ#05162463 nonce:int128 server_nonce:int128 pq:string server_public_key_fingerprints:Vector long = ResPQ;
@@ -171,7 +168,7 @@ class Client:
             )
 
             req_dh_params = await self.recv()
-            print(f"{req_dh_params=}")
+
             assert req_dh_params._ == "req_DH_params"
             client_p = int.from_bytes(req_dh_params.p, "big", signed=False)
             client_q = int.from_bytes(req_dh_params.q, "big", signed=False)
@@ -203,27 +200,14 @@ class Client:
             p_q_inner_data = TL.decode(BytesIO(key_aes_encrypted[20:]))
             assert hashlib.sha1(TL.encode(p_q_inner_data)).digest() == key_aes_encrypted[:20], "sha1 of data doesn't match"
 
-            print(p_q_inner_data)
+            new_nonce: bytes = p_q_inner_data.new_nonce.to_bytes(256 // 8, "little", signed=False)
 
-            new_nonce: bytes = p_q_inner_data.new_nonce.to_bytes(128, "big", signed=False)
+            # new_nonce_hash = hashlib.sha1(new_nonce).digest()[:128 // 8]
+            logger.info("Generating safe prime...")
+            dh_prime, g = gen_safe_prime(2048)
 
-            new_nonce_hash = hashlib.sha1(new_nonce).digest()[:128 // 8]
-            dh_prime = generate_large_prime(2048, safe=True)
-            assert dh_prime != -1, "Couldn't generate dh_prime"
-            print(dh_prime)
-
-            if p % 8 == 7:
-                g = 2
-            elif p % 3 == 2:
-                g = 3
-            elif p % 5 in [1, 4]:
-                g = 5
-            elif p % 24 in [19, 23]:
-                g = 6
-            elif p % 7 in [3, 5, 6]:
-                g = 7
-            else:
-                g = 4
+            # ic(dh_prime, g)
+            logger.info("Prime successfully generated")
             
             a = int.from_bytes(secrets.token_bytes(256), "big")
             g_a = pow(g, a, dh_prime).to_bytes(256, "big")
@@ -239,21 +223,23 @@ class Client:
                     "server_time": int(time.time()),
                 }
             )
+            server_nonce_bytes = server_nonce.to_bytes(128 // 8, "little", signed=True)
+
             answer_with_hash = hashlib.sha1(answer).digest() + answer
             answer_with_hash += secrets.token_bytes(-len(answer_with_hash) % 16)
             tmp_aes_key = (
-                hashlib.sha1(new_nonce + server_nonce).digest()
-                + hashlib.sha1(server_nonce + new_nonce).digest()[:12]
+                hashlib.sha1(new_nonce + server_nonce_bytes).digest()
+                + hashlib.sha1(server_nonce_bytes + new_nonce).digest()[:12]
             )
             tmp_aes_iv = (
-                hashlib.sha1(server_nonce + new_nonce).digest()[12:12+8]
-                + hashlib.sha1(new_nonce + new_nonce)
+                hashlib.sha1(server_nonce_bytes + new_nonce).digest()[12:]
+                + hashlib.sha1(new_nonce + new_nonce).digest()
                 + new_nonce[:4]
             )
             encrypted_answer = tgcrypto.ige256_encrypt(answer_with_hash, tmp_aes_key, tmp_aes_iv)
 
             await self.conn.send(
-                bytes(8) + TL.encode(
+                bytes(20) + TL.encode(
                     {
                         "_": "server_DH_params_ok",
                         "nonce": p_q_inner_data.nonce,
@@ -262,9 +248,43 @@ class Client:
                     }
                 )
             )
+            
+            set_client_DH_params = await self.recv()
+
+            decrypted_params = tgcrypto.ige256_decrypt(set_client_DH_params.encrypted_data, tmp_aes_key, tmp_aes_iv)
+            client_DH_inner_data = TL.decode(BytesIO(decrypted_params[20:]))
+            assert hashlib.sha1(TL.encode(client_DH_inner_data)).digest() == decrypted_params[:20], "sha1 hash mismatch for client_DH_inner_data"
+
+            auth_key = (
+                pow(
+                    int.from_bytes(client_DH_inner_data.g_b, "big", signed=False),
+                    a,
+                    dh_prime,
+                )
+            ).to_bytes(256, "big", signed=False)
+
+            auth_key_hash = hashlib.sha1(auth_key).digest()[64 // 8:]
+            auth_key_aux_hash = hashlib.sha1(auth_key).digest()[:64 // 8]
+
+            ic(server_nonce_bytes, auth_key, auth_key_hash)
+
+            await self.conn.send(
+                bytes(20) + TL.encode(
+                    {
+                        "_": "dh_gen_ok",
+                        "nonce": client_DH_inner_data.nonce,
+                        "server_nonce": server_nonce,
+                        "new_nonce_hash1": int.from_bytes(
+                            hashlib.sha1(
+                                new_nonce + bytes([1]) + auth_key_aux_hash
+                            ).digest()[:128 // 8],
+                            "big", signed=False,
+                        ),
+                    }
+                )
+            )
+
             ic(await self.recv())
-            # TODO: https://core.telegram.org/mtproto/samples-auth_key#request-to-start-diffie-hellman-key-exchange
-            # TODO: https://core.telegram.org/mtproto/auth_key#presenting-proof-of-work-server-authentication
         else:
             assert False, "TODO: authorized messages check"
 
@@ -276,6 +296,7 @@ class Client:
         try:
             try:
                 await self.authorize()
+                return
 
                 while True:
                     try:
