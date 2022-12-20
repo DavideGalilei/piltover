@@ -17,7 +17,7 @@ class Basic(ABC):
 
 
 class Int(Basic):
-    def __init__(self, name: str, size: int, signed: bool = True):
+    def __init__(self, name: str, size: int, signed: bool = False):
         self.size = size
         self.signed = signed
         self.__name__ = name
@@ -30,8 +30,11 @@ class Int(Basic):
 
     def __str__(self) -> str:
         return f"{nameof(self)}(signed={self.signed})"
+    
+    def __repr__(self) -> str:
+        return nameof(self)
 
-    def __call__(self, signed: bool = True) -> "Int":
+    def __call__(self, signed: bool = False) -> "Int":
         return Int(self.__name__, self.size, signed=signed)
 
 

@@ -6,3 +6,5 @@ class Message:
     session_id: int
     msg_id: int
     data: bytes
+
+    seq_no: int = 0

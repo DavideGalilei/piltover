@@ -1,6 +1,9 @@
 import asyncio
 
 from abc import ABC, abstractmethod
+
+from loguru import logger
+
 from piltover.enums import Transport
 from piltover.exceptions import Disconnection
 
@@ -8,6 +11,7 @@ from piltover.exceptions import Disconnection
 def check(data: bytes) -> bytes:
     if not data:
         # data = b""
+        logger.error("Empty data received")
         raise Disconnection()
     return data
 

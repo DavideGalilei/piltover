@@ -2,7 +2,7 @@ import json
 import inspect
 
 from io import BytesIO
-from typing import cast, Union
+from typing import cast, Union, Any
 from types import GenericAlias
 
 from piltover.tl.types import Basic, Int, Int64, Int128, Int256
@@ -123,6 +123,21 @@ MAP = {
             "new_nonce_hash1": Int128(signed=False),
         },
         "is": "Set_client_DH_params_answer",
+    },
+    0x7abe77ec: {
+        "_": "ping",
+        "params": {
+            "ping_id": Int64,
+        },
+        "ret": "Pong",
+    },
+    0x347773c5: {
+        "_": "pong",
+        "params": {
+            "msg_id": Int64,
+            "ping_id": Int64,
+        },
+        "is": "Pong",
     },
 }
 
@@ -312,7 +327,7 @@ class TL:
 
         if isinstance(obj, TL):
             obj = obj.get_dict()
-        
+
         name = obj["_"]
         tltype = NAME_MAP[name]
 
@@ -351,6 +366,36 @@ class TL:
         data = result.read()
         return data
 
+    @staticmethod
+    def from_dict(obj: dict) -> "TL":
+        objname = obj["_"]
+        tltype = NAME_MAP[objname]
+
+        result = type(objname, (TL,), {})()
+
+        for field, typ in tltype["params"].items():
+            if field.startswith("_"):
+                continue
+            elif field not in obj:
+                raise ValueError(f"Missing parameter {field!r} of type {nameof(typ)}")
+
+            value = obj[field]
+
+            checked = False
+            check_type = typ
+            if isinstance(check_type, GenericAlias) or not inspect.isclass(check_type):
+                if not typecheck(check_type, value):
+                    raise TypeError(f"Wrong parameter type for {field!r}: got {nameof(value)} but expected {nameof(typ)}")
+                checked = True
+                check_type = type(typ)
+
+            if not checked and not typecheck(check_type, value):
+                raise TypeError(f"Wrong parameter type for {field!r}: got {nameof(value)} but expected {nameof(typ)}")
+            
+            setattr(result, field, value)
+
+        return result
+
     def get_dict(self) -> dict:
         attrs = {"_": nameof(self)}
         attrs |= {
@@ -377,3 +422,6 @@ class TL:
 
     def __getattr__(self, __name: str):
         return self.__getattribute__(__name)
+
+    def __setattr__(self, __name: str, __value: Any) -> None:
+        return super().__setattr__(__name, __value)

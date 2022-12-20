@@ -4,7 +4,7 @@ import uvloop
 from pathlib import Path
 
 from loguru import logger
-from piltover.server import Server
+from piltover.server import Server, Client, Request
 from piltover.utils import gen_keys, get_public_key_fingerprint
 from piltover.types import Keys
 
@@ -50,6 +50,19 @@ async def main():
             public_key=public_key,
         )
     )
+
+    @pilt.on_message("ping")
+    async def pong(client: Client, request: Request):
+        print(request.obj, request.msg_id)
+        await request.answer(
+            {
+                "_": "pong",
+                "msg_id": request.msg_id,
+                "ping_id": request.obj.ping_id,
+            }
+        )
+        logger.success("Sent ping ping_id={ping_id}", ping_id=request.obj.ping_id)
+
     await pilt.serve()
 
 try:
