@@ -4,13 +4,11 @@ import inspect
 from io import BytesIO
 from typing import cast, Union, Any
 from types import GenericAlias
+from collections import defaultdict
 
-from piltover.tl.types import Basic, Int, Int64, Int128, Int256
-from piltover.utils import read_int, nameof
+from piltover.tl.types import Basic, TLType, Int, Int64, Int128, Int256, FlagsOf, read_builtin, write_builtin, typecheck
 from piltover.exceptions import InvalidConstructor
-
-
-VECTOR_CID = 0x1cb5c415
+from piltover.utils import nameof
 
 
 MAP = {
@@ -139,9 +137,113 @@ MAP = {
         },
         "is": "Pong",
     },
+    0xda9b0d0d: {
+        "_": "invokeWithLayer",
+        "params": {
+            "layer": int,
+            "query": TLType,
+        },
+        "ret": TLType,
+    },
+    0xc1cd5ea9: {
+        "_": "initConnection",
+        "params": {
+            "flags": int,
+            "api_id": int,
+            "device_model": str,
+            "system_version": str,
+            "app_version": str,
+            "system_lang_code": str,
+            "lang_pack": str,
+            "lang_code": str,
+            "proxy": FlagsOf("flags", 0, "InputClientProxy"),
+            "params": FlagsOf("flags", 1, "JSONValue"),
+            "query": TLType,
+        },
+        "ret": TLType,
+    },
+    0xc4f9186b: {
+        "_": "help.getConfig",
+        "ret": "Config",
+    },
+    0x232566ac: {
+        "_": "config",
+        "params": {
+            "flags": int,
+            "phonecalls_enabled": FlagsOf("flags", 1, bool),
+            "default_p2p_contacts": FlagsOf("flags", 3, bool),
+            "preload_featured_stickers": FlagsOf("flags", 4, bool),
+            "ignore_phone_entities": FlagsOf("flags", 5, bool),
+            "revoke_pm_inbox": FlagsOf("flags", 6, bool),
+            "blocked_mode": FlagsOf("flags", 8, bool),
+            "pfs_enabled": FlagsOf("flags", 13, bool),
+            "force_try_ipv6": FlagsOf("flags", 14, bool),
+            "date": int,
+            "expires": int,
+            "test_mode": bool,
+            "this_dc": int,
+            "dc_options": list["DcOption"],
+            "dc_txt_domain_name": str,
+            "chat_size_max": int,
+            "megagroup_size_max": int,
+            "forwarded_count_max": int,
+            "online_update_period_ms": int,
+            "offline_blur_timeout_ms": int,
+            "offline_idle_timeout_ms": int,
+            "online_cloud_timeout_ms": int,
+            "notify_cloud_delay_ms": int,
+            "notify_default_delay_ms": int,
+            "push_chat_period_ms": int,
+            "push_chat_limit": int,
+            "saved_gifs_limit": int,
+            "edit_time_limit": int,
+            "revoke_time_limit": int,
+            "revoke_pm_time_limit": int,
+            "rating_e_decay": int,
+            "stickers_recent_limit": int,
+            "stickers_faved_limit": int,
+            "channels_read_media_period": int,
+            "tmp_sessions": FlagsOf("flags", 0, int),
+            "pinned_dialogs_count_max": int,
+            "pinned_infolder_count_max": int,
+            "call_receive_timeout_ms": int,
+            "call_ring_timeout_ms": int,
+            "call_connect_timeout_ms": int,
+            "call_packet_timeout_ms": int,
+            "me_url_prefix": str,
+            "autoupdate_url_prefix": FlagsOf("flags", 7, str),
+            "gif_search_username": FlagsOf("flags", 9, str),
+            "venue_search_username": FlagsOf("flags", 10, str),
+            "img_search_username": FlagsOf("flags", 11, str),
+            "static_maps_provider": FlagsOf("flags", 12, str),
+            "caption_length_max": int,
+            "message_length_max": int,
+            "webfile_dc_id": int,
+            "suggested_lang_code": FlagsOf("flags", 2, str),
+            "lang_pack_version": FlagsOf("flags", 2, int),
+            "base_lang_pack_version": FlagsOf("flags", 2, int),
+            "reactions_default": FlagsOf("flags", 15, "Reaction"),
+        },
+        "ret": "Config",
+    },
+    0xf35c6d01: {
+        "_": "rpc_result",
+        "params": {
+            "req_msg_id": Int64,
+            "result": TLType,
+        },
+        "is": "RpcResult",
+    },
+    0x73f1f8dc: {
+        "_": "msg_container",
+        "params": {
+            "messages": list[bytes, "RAW"],
+        },
+        "is": "MessageContainer",
+    },
 }
 
-NAME_MAP = {
+NAME_MAP: dict[int, dict] = {
     ref["_"]: {
         "cid": cid,
         **ref,
@@ -153,144 +255,7 @@ NAME_MAP = {
 # resPQ#05162463 nonce:int128 server_nonce:int128 pq:string server_public_key_fingerprints:Vector<long> = ResPQ;
 
 
-def read_bytes(data: BytesIO) -> bytes:
-    # https://core.telegram.org/mtproto/serialize#base-types
-
-    length = int.from_bytes(data.read(1), "little")
-
-    if length <= 253:
-        result = data.read(length)
-        data.read(-(length + 1) % 4)
-    else:
-        length = int.from_bytes(data.read(3), "little")
-        result = data.read(length)
-        data.read(-length % 4)
-    
-    return result
-
-
-def read_string(data: BytesIO) -> str:
-    return read_bytes(data).decode(errors="ignore")
-
-
-def read_builtin(typ: type, data: BytesIO):
-    if issubclass(typ, int):
-        return read_int(data.read(4))
-    elif issubclass(typ, str):
-        return read_string(data)
-    elif issubclass(typ, bytes):
-        return read_bytes(data)
-    elif isinstance(typ, GenericAlias):
-        if issubclass(typ.mro()[0], list):
-            args = typ.__args__
-            assert len(args) == 1, "Wrong type specified"
-            ret: type = args[0]
-
-            assert read_int(data.read(4)) == VECTOR_CID, "Vector with wrong constructor id"
-            if issubclass(ret, TL):
-                cid = read_int(data.read(4))
-
-            length = read_int(data.read(4))
-
-            result = []
-            if issubclass(ret, TL):
-                for _ in range(length):
-                    result.append(TL.decode(data))
-            else:
-                for _ in range(length):
-                    result.append(read_builtin(ret, data))
-            return result
-        else:
-            assert False, "Unreachable"
-    else:
-        raise TypeError(f"Invalid type, couldn't deserialize: {nameof(typ)}")
-
-
-def write_builtin(typ: type, value, to: BytesIO):
-    if not typecheck(typ, value):
-        raise TypeError("Invalid type")
-    elif isinstance(typ, GenericAlias) and issubclass(typ.mro()[0], (list,)):
-        if issubclass(typ.mro()[0], list):
-            args = typ.__args__
-            assert len(args) == 1, "Wrong type specified"
-            ret: type = args[0]
-
-            write_builtin(int, VECTOR_CID, to=to)
-            write_builtin(int, len(value), to=to)
-
-            check_type = ret
-            if isinstance(check_type, GenericAlias) or not inspect.isclass(check_type):
-                check_type = type(ret)
-
-            if issubclass(check_type, Basic):
-                for element in value:
-                    to.write(ret.serialize(element))
-            elif issubclass(check_type, TL):
-                write_builtin(int, value._cid, to=to)
-
-                for element in value:
-                    to.write(element.serialize())
-            else:
-                for element in value:
-                    write_builtin(ret, element, to=to)
-        else:
-            assert False, "Unreachable"
-    elif issubclass(typ, int):
-        to.write(int.to_bytes(value, 4, byteorder="little", signed=False))
-    elif issubclass(typ, str):
-        write_builtin(bytes, value.encode(), to=to)
-    elif issubclass(typ, bytes):
-        length = len(value)
-
-        if length <= 253:
-            to.write(
-                bytes([length])
-                + value
-                + bytes(-(length + 1) % 4)
-            )
-        else:
-            to.write(
-                bytes([254])
-                + length.to_bytes(3, "little")
-                + value
-                + bytes(-length % 4)
-            )
-    else:
-        raise TypeError("Invalid type, couldn't serialize")
-
-
-def typecheck(typ: type, value) -> bool:
-    if isinstance(typ, GenericAlias) or not inspect.isclass(typ):
-        if isinstance(typ, GenericAlias):
-            if issubclass(typ.mro()[0], list):
-                if not isinstance(value, list):
-                    return False
-
-                args = typ.__args__
-                assert len(args) == 1, "Wrong type specified"
-                ret: type = args[0]
-
-                if len(value) == 0:
-                    return True
-
-                return typecheck(ret, value[0])
-            else:
-                assert False, "Unreachable"
-        elif isinstance(typ, Basic):
-            if issubclass(type(typ), Int) and isinstance(value, int):
-                return True
-    else:
-        if issubclass(typ, (int, str, bytes)):
-            return isinstance(value, typ)
-        elif issubclass(typ, Basic):
-            if issubclass(typ, Int) and isinstance(value, int):
-                return True
-        elif issubclass(typ, TL):
-            return isinstance(value, (dict, TL))
-    return False
-
-
-class TL:
+class TL(TLType):
     @staticmethod
     def decode(data: BytesIO) -> "TL":
         cid = int.from_bytes(data.read(4), byteorder="little", signed=False)
@@ -306,11 +271,16 @@ class TL:
             if isinstance(check_type, GenericAlias) or not inspect.isclass(check_type):
                 check_type = type(typ)
 
-            if issubclass(check_type, GenericAlias) or issubclass(check_type, (int, str, bytes)):
-                decoded = read_builtin(typ, data)
+            if issubclass(check_type, GenericAlias) or issubclass(check_type, (bool, int, str, bytes)):
+                decoded = read_builtin(TL, typ, data)
             elif issubclass(check_type, Basic):
-                decoded = typ.deserialize(data)
-            elif issubclass(check_type, TL):
+                if isinstance(typ, Int):
+                    decoded = typ.deserialize(data)
+                elif isinstance(typ, FlagsOf):
+                    decoded = typ.deserialize(TL, result, data)
+                else:
+                    assert False, "Unreachable"
+            elif issubclass(check_type, TLType):
                 decoded = TL.decode(data)
             else:
                 raise ValueError(f"Invalid type: {objname}({name}: {nameof(typ)})")
@@ -325,15 +295,28 @@ class TL:
     def encode(obj: Union[dict, "TL"]) -> bytes:
         result = BytesIO()
 
-        if isinstance(obj, TL):
+        if isinstance(obj, TLType):
             obj = obj.get_dict()
 
         name = obj["_"]
         tltype = NAME_MAP[name]
 
-        write_builtin(int, tltype["cid"], to=result)
+        write_builtin(TL, int, tltype["cid"], to=result)
+
+        reference_flags: defaultdict[str, int] = defaultdict(int)
+        to_skip: set[str] = set()
+        for field, typ in tltype["params"].items():
+            if isinstance(typ, FlagsOf):
+                if obj.get(field, None) is not None:
+                    reference_flags[typ.param] |= typ.pos
+                else:
+                    to_skip.add(field)
+                    reference_flags[typ.param] |= 0
 
         for field, typ in tltype["params"].items():
+            if field in to_skip:
+                continue
+
             value = obj[field]
 
             checked = False
@@ -352,12 +335,17 @@ class TL:
             elif field not in obj:
                 raise ValueError(f"Missing parameter {field!r} of type {nameof(typ)}")
 
-            if issubclass(check_type, (int, str, bytes, list, GenericAlias)):
-                write_builtin(typ, value, to=result)
+            if issubclass(check_type, (bool, int, str, bytes, list, GenericAlias)):
+                write_builtin(TL, typ, value, to=result)
             elif issubclass(check_type, Basic):
                 # print(name, field, typ)
-                result.write(typ.serialize(value))
-            elif issubclass(check_type, TL):
+                if isinstance(typ, Int):
+                    result.write(typ.serialize(value))
+                elif isinstance(typ, FlagsOf):
+                    result.write(typ.serialize(TL, value))
+                else:
+                    assert False, "Unreachable"
+            elif issubclass(check_type, TLType):
                 result.write(TL.encode(value))
             else:
                 raise ValueError(f"Invalid type: expected {field}: {nameof(typ)}, got {nameof(value)}")
@@ -372,15 +360,30 @@ class TL:
         tltype = NAME_MAP[objname]
 
         result = type(objname, (TL,), {})()
+        result._ = objname
+
+        reference_flags: defaultdict[str, int] = defaultdict(int)
+        to_skip: set[str] = set()
+        for field, typ in tltype["params"].items():
+            if isinstance(typ, FlagsOf):
+                if obj.get(field, None) is not None:
+                    reference_flags[typ.param] |= typ.pos
+                else:
+                    to_skip.add(field)
+                    reference_flags[typ.param] |= 0
 
         for field, typ in tltype["params"].items():
-            if field.startswith("_"):
+            if field.startswith("_") or field in to_skip:
+                continue
+            elif field in reference_flags:
+                setattr(result, field, reference_flags[field])
                 continue
             elif field not in obj:
                 raise ValueError(f"Missing parameter {field!r} of type {nameof(typ)}")
 
             value = obj[field]
 
+            """
             checked = False
             check_type = typ
             if isinstance(check_type, GenericAlias) or not inspect.isclass(check_type):
@@ -391,7 +394,8 @@ class TL:
 
             if not checked and not typecheck(check_type, value):
                 raise TypeError(f"Wrong parameter type for {field!r}: got {nameof(value)} but expected {nameof(typ)}")
-            
+            """
+
             setattr(result, field, value)
 
         return result

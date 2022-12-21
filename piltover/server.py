@@ -8,7 +8,7 @@ import tgcrypto
 
 from uuid import uuid4
 from io import BytesIO
-from typing import Callable, Awaitable, Any
+from typing import Callable, Awaitable, Any, Optional
 from collections import defaultdict
 from dataclasses import dataclass
 
@@ -20,7 +20,7 @@ from piltover.exceptions import Disconnection
 from piltover.connection import Connection
 from piltover.types.primitive import Message
 from piltover.types import Keys
-from piltover.tl.types import Int64
+from piltover.tl.types import Int32, Int64
 from piltover.utils import (
     read_int,
     generate_large_prime,
@@ -38,11 +38,11 @@ class Server:
     HOST = "127.0.0.1"
     PORT = 4430
 
-    def __init__(self, host: str = None, port: int = None, server_keys: Keys = None):
+    def __init__(self, host: str | None = None, port: int | None = None, server_keys: Keys | None = None):
         self.host = host if host is not None else self.HOST
         self.port = port if port is not None else self.PORT
 
-        self.server_keys: Keys = server_keys
+        self.server_keys = server_keys
         if self.server_keys is None:
             self.server_keys = gen_keys()
 
@@ -391,13 +391,23 @@ class Client:
         # result._session_id = msg.session_id
         return result
 
-    async def send(self, obj: TL):
-        await self.conn.send(await self.encrypt(obj))
+    async def send(self, obj: TL, originating_request: Optional["Request"] = None):
+        if originating_request is not None:
+            if obj._ not in ["ping"]:
+                obj = TL.from_dict(
+                    {
+                        "_": "rpc_result",
+                        "req_msg_id": originating_request.msg_id,
+                        "result": obj,
+                    }
+                )
+        await self.conn.send(await self.encrypt(obj, originating_request=originating_request))
 
     async def recv(self) -> "Request":
         data = BytesIO(await self.conn.recv())
         session_id = read_int(data.read(8))
-        assert session_id == self.session_id, "Wrong session id"
+        # TODO: errors... am I supposed to fix them?
+        # assert session_id == self.session_id, "Wrong session id"
 
         decrypted = await self.decrypt(data=data)
 
@@ -408,7 +418,7 @@ class Client:
             seq_no=decrypted.seq_no,
         )
 
-    async def encrypt(self, obj: TL) -> bytes:
+    async def encrypt(self, obj: TL, originating_request: Optional["Request"] = None) -> bytes:
         if self.session_id is None:
             assert False, "FATAL: self.session_id is None"
         elif self.auth_key is None:
@@ -417,23 +427,61 @@ class Client:
             assert False, "FATAL: self.auth_key_id is None"
 
         serialized = TL.encode(obj)
+
+        # about msg_id: 
+        # https://core.telegram.org/mtproto/description#message-identifier-msg-id
+        # Client message identifiers are divisible by 4, server message
+        # identifiers modulo 4 yield 1 if the message is a response to
+        # a client message, and 3 otherwise.
+        if originating_request is not None:
+            # is_content_related = originating_request.obj._ in ["ping"]
+            orig_msg_id = originating_request.msg_id
+            msg_id = orig_msg_id + (not orig_msg_id % 2)  # + (not is_content_related)
+            # msg_id += 4 * (orig_msg_id % 4 == msg_id % 4)
+            ic(msg_id)
+            assert msg_id % 2 != 0
+            seq_no = originating_request.seq_no + 1
+
+            if originating_request.obj._ not in ["ping"]:
+                serialized = TL.encode(
+                    {
+                        "_": "msg_container",
+                        "messages": [
+                            (
+                                Int64.serialize(msg_id)
+                                + Int32.serialize(seq_no)
+                                + Int32.serialize(len(serialized))
+                                + serialized
+                            )
+                        ],
+                    }
+                )
+                ic("container::", serialized)
+        else:
+            assert False, "TODO"
+            # TODO: self.last_received_msg_id + 1 (for seq_no too)
+            # idk, check docs
+            seq_no = 1
+            msg_id = 1
+
         data = (
             Int64.serialize(self.server.salt)
             + Int64.serialize(self.session_id)
-            + b"\0" * 8 # self.msg_id()
-            + b"\0" * 4 # self.seq_no()
+            + Int64.serialize(msg_id)
+            + seq_no.to_bytes(4, "little", signed=False) # b"\0" * 4 # self.seq_no()
             + len(serialized).to_bytes(4, "little", signed=False)
             + serialized
         )
-        # old: no msg_id...***: just `+ serialized``
-        # TODO: msg_id() and seq_no()
+        # TODO: check seq_no generation maybe?
+
         padding = os.urandom(-(len(data) + 12) % 16 + 12)
 
-        # 88 = 88 + 0 (outgoing message)
+        # 96 = 88 + 8 (8 = incoming message (server message); 0 = outgoing (client message))
         msg_key_large = hashlib.sha256(
-            self.auth_key[88 : 88 + 32] + data + padding
+            self.auth_key[96 : 96 + 32] + data + padding
         ).digest()
         msg_key = msg_key_large[8:24]
+        ic(self.auth_key[96:96 + 32])
         aes_key, aes_iv = kdf(self.auth_key, msg_key, False)
 
         return (
@@ -503,7 +551,7 @@ class Request:
 
     async def answer(self, data: dict):
         obj = TL.from_dict(data)
-        await self.client.send(obj)
+        await self.client.send(obj, self)
 
     @staticmethod
     def from_msg(client: Client, msg: Message) -> "Request":

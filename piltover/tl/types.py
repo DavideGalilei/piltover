@@ -1,18 +1,184 @@
+import inspect
+
 from io import BytesIO
 from abc import ABC, abstractmethod
+from types import GenericAlias
+
+from loguru import logger
 
 from piltover.utils import read_int, nameof
 
 
+VECTOR_CID = 0x1cb5c415
+
+
+class TLType:
+    ...
+
+
+def read_bytes(data: BytesIO) -> bytes:
+    # https://core.telegram.org/mtproto/serialize#base-types
+
+    length = int.from_bytes(data.read(1), "little")
+
+    if length <= 253:
+        result = data.read(length)
+        data.read(-(length + 1) % 4)
+    else:
+        length = int.from_bytes(data.read(3), "little")
+        result = data.read(length)
+        data.read(-length % 4)
+    
+    return result
+
+
+def read_string(data: BytesIO) -> str:
+    return read_bytes(data).decode(errors="ignore")
+
+
+def read_builtin(TL, typ: type, data: BytesIO):
+    if issubclass(typ, bool):
+        return bool(read_int(data.read(4)))
+    elif issubclass(typ, int):
+        return read_int(data.read(4))
+    elif issubclass(typ, str):
+        return read_string(data)
+    elif issubclass(typ, bytes):
+        return read_bytes(data)
+    elif isinstance(typ, GenericAlias):
+        if issubclass(typ.mro()[0], list):
+            args = typ.__args__
+            assert len(args) >= 1, "Wrong type specified"
+            ret = args[0]
+            
+            is_raw = len(args) > 1 and args[1] == "RAW"
+            if not is_raw:
+                assert read_int(data.read(4)) == VECTOR_CID, "Vector with wrong constructor id"
+            if issubclass(ret, (str, TLType)):
+                cid = read_int(data.read(4))
+
+            length = read_int(data.read(4))
+
+            result = []
+            if is_raw and issubclass(ret, bytes):
+                logger.warning("If this didn't work, remember that you didn't check RAW is_raw types read for msg_container yet...")
+                for _ in range(length):
+                    result.append(TL.decode(data))
+            elif issubclass(ret, (str, TLType)):
+                for _ in range(length):
+                    result.append(TL.decode(data))
+            else:
+                for _ in range(length):
+                    result.append(read_builtin(TL, ret, data))
+            return result
+        else:
+            assert False, "Unreachable"
+    else:
+        raise TypeError(f"Invalid type, couldn't deserialize: {nameof(typ)}")
+
+
+def write_builtin(TL, typ: type, value, to: BytesIO):
+    if not typecheck(typ, value):
+        raise TypeError("Invalid type")
+    elif isinstance(typ, GenericAlias) and issubclass(typ.mro()[0], (list,)):
+        if issubclass(typ.mro()[0], list):
+            args = typ.__args__
+            assert len(args) >= 1, "Wrong type specified"
+            ret = args[0]
+
+            is_raw = len(args) > 1 and args[1] == "RAW"
+            if not is_raw:
+                write_builtin(TL, int, VECTOR_CID, to=to)
+            write_builtin(TL, int, len(value), to=to)
+
+            check_type = ret
+            if isinstance(check_type, GenericAlias) or not inspect.isclass(check_type):
+                check_type = type(ret)
+
+            if issubclass(check_type, Basic):
+                if issubclass(check_type, Int):
+                    for element in value:
+                        to.write(ret.serialize(element))
+                # elif isinstance(typ, FlagsOf):
+                #     for element in value:
+                #         to.write(ret.serialize(element))
+                else:
+                    assert False, "Unreachable"
+            elif issubclass(check_type, TLType):
+                write_builtin(TL, int, value._cid, to=to)
+
+                for element in value:
+                    to.write(TL.encode(element))
+            elif issubclass(check_type, bytes) and is_raw:
+                for element in value:
+                    to.write(element)
+            else:
+                for element in value:
+                    write_builtin(TL, ret, element, to=to)
+        else:
+            assert False, "Unreachable"
+    elif issubclass(typ, (int, bool)):
+        to.write(int.to_bytes(value, 4, byteorder="little", signed=False))
+    elif issubclass(typ, str):
+        write_builtin(TL, bytes, value.encode(), to=to)
+    elif issubclass(typ, bytes):
+        length = len(value)
+
+        if length <= 253:
+            to.write(
+                bytes([length])
+                + value
+                + bytes(-(length + 1) % 4)
+            )
+        else:
+            to.write(
+                bytes([254])
+                + length.to_bytes(3, "little")
+                + value
+                + bytes(-length % 4)
+            )
+    else:
+        raise TypeError("Invalid type, couldn't serialize")
+
+
+def typecheck(typ, value) -> bool:
+    if isinstance(typ, GenericAlias) or not inspect.isclass(typ):
+        if isinstance(typ, GenericAlias):
+            if issubclass(typ.mro()[0], list):
+                if not isinstance(value, list):
+                    return False
+
+                args = typ.__args__
+                assert len(args) >= 1, "Wrong type specified"
+                ret = args[0]
+
+                if len(value) == 0:
+                    return True
+
+                return typecheck(ret, value[0])
+            else:
+                assert False, "Unreachable"
+        elif isinstance(typ, Basic):
+            if issubclass(type(typ), Int) and isinstance(value, int):
+                return True
+    else:
+        if issubclass(typ, (bool, int, str, bytes)):
+            return isinstance(value, typ)
+        elif issubclass(typ, Basic):
+            if issubclass(typ, Int) and isinstance(value, int):
+                return True
+        elif issubclass(typ, TLType):
+            return isinstance(value, (dict, TLType))
+    return False
+
+
 class Basic(ABC):
-    @classmethod
     @abstractmethod
-    def deserialize(cls, data: BytesIO):
+    def deserialize(cls, TL, data: BytesIO):
         ...
 
-    @classmethod
     @abstractmethod
-    def serialize(cls):
+    def serialize(cls, TL):
         ...
 
 
@@ -22,10 +188,10 @@ class Int(Basic):
         self.signed = signed
         self.__name__ = name
 
-    def deserialize(self, data: BytesIO, signed: bool = None) -> int:
+    def deserialize(self, data: BytesIO, signed: bool | None = None) -> int:
         return read_int(data.read(self.size), signed=signed if signed is not None else self.signed)
 
-    def serialize(self, n: int, signed: bool = None) -> bytes:
+    def serialize(self, n: int, signed: bool | None = None) -> bytes:
         return n.to_bytes(self.size, byteorder="little", signed=signed if signed is not None else self.signed)
 
     def __str__(self) -> str:
@@ -38,6 +204,62 @@ class Int(Basic):
         return Int(self.__name__, self.size, signed=signed)
 
 
+Int32 = Int("Int32", size=32 // 8)
 Int64 = Int("Int64", size=64 // 8)
 Int128 = Int("Int128", size=128 // 8)
 Int256 = Int("Int256", size=256 // 8)
+
+
+class FlagsOf(Basic):
+    def __init__(self, param: str, pos: int, typ) -> None:
+        self.param = param
+        self.pos = pos
+        self.typ = typ
+
+    def deserialize(self, TL, result: TLType, data: BytesIO):
+        if getattr(result, self.param) & self.pos:
+            if isinstance(self.typ, str):
+                return TL.decode(data)
+
+            check_type = self.typ
+            if isinstance(check_type, GenericAlias) or not inspect.isclass(check_type):
+                check_type = type(self.typ)
+
+            if issubclass(check_type, GenericAlias) or issubclass(check_type, (bool, int, str, bytes)):
+                decoded = read_builtin(TL, self.typ, data)
+            elif issubclass(check_type, Basic):
+                decoded = self.typ.deserialize(data)
+            elif issubclass(check_type, TLType):
+                decoded = TL.decode(data)
+            else:
+                raise ValueError("Invalid type")
+
+            return decoded
+        return None
+
+    def serialize(self, TL, obj) -> bytes:
+        if getattr(obj, self.param, None) is not None:
+            if isinstance(self.typ, str):
+                return TL.encode(obj)
+
+            check_type = self.typ
+            if isinstance(check_type, GenericAlias) or not inspect.isclass(check_type):
+                check_type = type(self.typ)
+
+            if issubclass(check_type, (bool, int, str, bytes, list, GenericAlias)):
+                tmp = BytesIO()
+                write_builtin(TL, self.typ, obj, to=tmp)
+                return tmp.getvalue()
+            elif issubclass(check_type, Basic):
+                # print(name, field, typ)
+                if isinstance(self.typ, Int):
+                    return self.typ.serialize(obj)
+                elif isinstance(self.typ, FlagsOf):
+                    return self.typ.serialize(TL, obj)
+                else:
+                    assert False, "Unreachable"
+            elif issubclass(check_type, TLType):
+                return TL.encode(obj)
+            else:
+                raise ValueError("Invalid type")
+        return b""

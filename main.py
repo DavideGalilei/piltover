@@ -63,6 +63,78 @@ async def main():
         )
         logger.success("Sent ping ping_id={ping_id}", ping_id=request.obj.ping_id)
 
+    @pilt.on_message("invokeWithLayer")
+    async def invoke_with_layer(client: Client, request: Request):
+        await client.propagate(
+            Request(
+                client=client,
+                obj=request.obj.query,
+                msg_id=request.msg_id,
+                seq_no=request.seq_no,
+            )
+        )
+
+    @pilt.on_message("initConnection")
+    async def init_connection(client: Client, request: Request):
+        # hmm yes yes, I trust you client
+        # the api id is always correct, it has always been!
+
+        print(request.obj.api_id)
+
+        await client.propagate(
+            Request(
+                client=client,
+                obj=request.obj.query,
+                msg_id=request.msg_id,
+                seq_no=request.seq_no,
+            )
+        )
+
+    @pilt.on_message("help.getConfig")
+    async def get_config(client: Client, request: Request):
+        import time
+
+        await request.answer(
+            {
+                "_": "config",
+                "date": int(time.time()),
+                "expires": int(time.time() + 60 * 10),
+                "test_mode": False,
+                "this_dc": 2,
+                "dc_options": [],
+                "dc_txt_domain_name": "",
+                "chat_size_max": 200,
+                "megagroup_size_max": 200000,
+                "forwarded_count_max": 100,
+                "online_update_period_ms": 30_000,
+                "offline_blur_timeout_ms": 30_000,
+                "offline_idle_timeout_ms": 30_000,
+                "online_cloud_timeout_ms": 30_000,
+                "notify_cloud_delay_ms": 60_000,
+                "notify_default_delay_ms": 10_000,
+                "push_chat_period_ms": 1_000,
+                "push_chat_limit": 1,
+                "saved_gifs_limit": 100,
+                "edit_time_limit": 48 * 60 * 60,
+                "revoke_time_limit": int(2 ** 31 - 1),
+                "revoke_pm_time_limit": int(2 ** 31 - 1),
+                "rating_e_decay": 2,
+                "stickers_recent_limit": 15,
+                "stickers_faved_limit": 5,
+                "channels_read_media_period": 24 * 60 * 60,
+                "pinned_dialogs_count_max": 5,
+                "pinned_infolder_count_max": 200,
+                "call_receive_timeout_ms": 20_000,
+                "call_ring_timeout_ms": 20_000,
+                "call_connect_timeout_ms": 20_000,
+                "call_packet_timeout_ms": 5_000,
+                "me_url_prefix": "https://🐳.me/",
+                "caption_length_max": 2048,
+                "message_length_max": 4096,
+                "webfile_dc_id": 2,
+            }
+        )
+
     await pilt.serve()
 
 try:

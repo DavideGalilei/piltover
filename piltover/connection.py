@@ -27,7 +27,8 @@ class Connection(ABC):
             Transport.Intermediate: TCPIntermediate
         }
 
-        trans = MODES.get(transport)
+        trans = MODES.get(transport, MODES[Transport.Intermediate])
+
         return trans(reader=reader, writer=writer)
 
     @abstractmethod
@@ -86,7 +87,7 @@ class TCPAbridged(Connection):
         return check(await self.reader.read(length))
 
     async def close(self):
-        await self.writer.close()
+        self.writer.close()
         await self.writer.wait_closed()
 
 
@@ -116,5 +117,5 @@ class TCPIntermediate(Connection):
         return payload
 
     async def close(self):
-        await self.writer.close()
+        self.writer.close()
         await self.writer.wait_closed()
