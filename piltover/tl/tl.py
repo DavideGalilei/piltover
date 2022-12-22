@@ -532,7 +532,11 @@ class TL(TLType):
             if isinstance(typ, FlagsOf):
                 if typ.typ is Bit:
                     typ.serialize(TL, field, obj, obj)
-                    reference_flags[typ.param] |= ((field in obj) << typ.pos)
+
+                    if obj.get(field, False):
+                        reference_flags[typ.param] |= (1 << typ.pos)
+                    else:
+                        reference_flags[typ.param] &= ~(1 << typ.pos)
 
                     if field not in obj:
                         to_skip.add(field)

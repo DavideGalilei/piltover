@@ -298,7 +298,6 @@ class FlagsOf(Basic):
                 raise ValueError("Invalid type")
         return b""
 
-
     def __str__(self) -> str:
         return f"{nameof(self)}({self.param}, {self.pos}, {nameof(self.typ)})"
 

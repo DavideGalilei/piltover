@@ -34,16 +34,6 @@ if True:
 
 
 async def main():
-    # print(
-    #     TL.encode(
-    #         {
-    #             "_": "peerNotifySettings",
-    #             "show_previews": True,
-    #             "silent": False,
-    #         }
-    #     )
-    # )
-
     if not (pubkey.exists() and privkey.exists()):
         with privkey.open("w+") as priv, pubkey.open("w+") as pub:
             keys: Keys = gen_keys()
