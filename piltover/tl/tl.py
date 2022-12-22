@@ -6,9 +6,11 @@ from typing import cast, Union, Any
 from types import GenericAlias
 from collections import defaultdict
 
-from piltover.tl.types import Basic, TLType, Int, Int64, Int128, Int256, FlagsOf, read_builtin, write_builtin, typecheck
+from piltover.tl.types import Basic, TLType, Int, Int64, Int128, Int256, FlagsOf, Bit, read_builtin, write_builtin, typecheck
 from piltover.exceptions import InvalidConstructor
 from piltover.utils import nameof
+
+from icecream import ic
 
 
 MAP = {
@@ -145,6 +147,13 @@ MAP = {
         },
         "ret": TLType,
     },
+    0xbf9459b7: {
+        "_": "invokeWithoutUpdates",
+        "params": {
+            "query": TLType,
+        },
+        "ret": TLType,
+    },
     0xc1cd5ea9: {
         "_": "initConnection",
         "params": {
@@ -170,14 +179,14 @@ MAP = {
         "_": "config",
         "params": {
             "flags": int,
-            "phonecalls_enabled": FlagsOf("flags", 1, bool),
-            "default_p2p_contacts": FlagsOf("flags", 3, bool),
-            "preload_featured_stickers": FlagsOf("flags", 4, bool),
-            "ignore_phone_entities": FlagsOf("flags", 5, bool),
-            "revoke_pm_inbox": FlagsOf("flags", 6, bool),
-            "blocked_mode": FlagsOf("flags", 8, bool),
-            "pfs_enabled": FlagsOf("flags", 13, bool),
-            "force_try_ipv6": FlagsOf("flags", 14, bool),
+            "phonecalls_enabled": FlagsOf("flags", 1, Bit),
+            "default_p2p_contacts": FlagsOf("flags", 3, Bit),
+            "preload_featured_stickers": FlagsOf("flags", 4, Bit),
+            "ignore_phone_entities": FlagsOf("flags", 5, Bit),
+            "revoke_pm_inbox": FlagsOf("flags", 6, Bit),
+            "blocked_mode": FlagsOf("flags", 8, Bit),
+            "pfs_enabled": FlagsOf("flags", 13, Bit),
+            "force_try_ipv6": FlagsOf("flags", 14, Bit),
             "date": int,
             "expires": int,
             "test_mode": bool,
@@ -241,6 +250,220 @@ MAP = {
         },
         "is": "MessageContainer",
     },
+    0x5e002502: {
+        "_": "auth.sentCode",
+        "params": {
+            "flags": int,
+            "type": TLType,
+            "phone_code_hash": str,
+            "next_type": FlagsOf("flags", 1, "auth.CodeType"),
+            "timeout": FlagsOf("flags", 2, int),
+        },
+        "is": "auth.SentCode",
+    },
+    0xa677244f: {
+        "_": "auth.sendCode",
+        "params": {
+            "phone_number": str,
+            "api_id": int,
+            "api_hash": str,
+            "settings": TLType,
+        },
+        "ret": "auth.SentCode",
+    },
+    0xc000bba2: {
+        "_": "auth.sentCodeTypeSms",
+        "params": {
+            "length": int,
+        },
+        "is": "auth.SentCodeType",
+    },
+    0x8a6469c2: {
+        "_": "codeSettings",
+        "params": {
+            "flags": int,
+            "allow_flashcall": FlagsOf("flags", 0, Bit),
+            "current_number": FlagsOf("flags", 1, Bit),
+            "allow_app_hash": FlagsOf("flags", 4, Bit),
+            "allow_missed_call": FlagsOf("flags", 5, Bit),
+            "logout_tokens": FlagsOf("flags", 6, list[bytes]),
+        },
+        "is": "CodeSettings",
+    },
+    0xf3427b8c: {
+        "_": "ping_delay_disconnect",
+        "params": {
+            "ping_id": Int64,
+            "disconnect_delay": int,
+        },
+        "ret": "Pong",
+    },
+    0x8d52a951: {
+        "_": "auth.signIn",
+        "params": {
+            "flags": int,
+            "phone_number": str,
+            "phone_code_hash": str,
+            "phone_code": FlagsOf("flags", 0, str),
+            "email_verification": FlagsOf("flags", 1, "EmailVerification"),
+        },
+        "ret": "auth.Authorization",
+    },
+    0x33fb7bb8: {
+        "_": "auth.authorization",
+        "params": {
+            "flags": int,
+            "setup_password_required": FlagsOf("flags", 1, Bit),
+            "otherwise_relogin_days": FlagsOf("flags", 1, int),
+            "tmp_sessions": FlagsOf("flags", 0, int),
+            "user": TLType, # User
+        },
+        "is": "auth.Authorization",
+    },
+    0x8f97c628: {
+        "_": "user",
+        "params": {
+            "flags": int,
+            "self": FlagsOf("flags", 10, Bit),
+            "contact": FlagsOf("flags", 11, Bit),
+            "mutual_contact": FlagsOf("flags", 12, Bit),
+            "deleted": FlagsOf("flags", 13, Bit),
+            "bot": FlagsOf("flags", 14, Bit),
+            "bot_chat_history": FlagsOf("flags", 15, Bit),
+            "bot_nochats": FlagsOf("flags", 16, Bit),
+            "verified": FlagsOf("flags", 17, Bit),
+            "restricted": FlagsOf("flags", 18, Bit),
+            "min": FlagsOf("flags", 20, Bit),
+            "bot_inline_geo": FlagsOf("flags", 21, Bit),
+            "support": FlagsOf("flags", 23, Bit),
+            "scam": FlagsOf("flags", 24, Bit),
+            "apply_min_photo": FlagsOf("flags", 25, Bit),
+            "fake": FlagsOf("flags", 26, Bit),
+            "bot_attach_menu": FlagsOf("flags", 27, Bit),
+            "premium": FlagsOf("flags", 28, Bit),
+            "attach_menu_enabled": FlagsOf("flags", 29, Bit),
+            "flags2": int,
+            "id": Int64,
+            "access_hash": FlagsOf("flags", 0, Int64),
+            "first_name": FlagsOf("flags", 1, str),
+            "last_name": FlagsOf("flags", 2, str),
+            "username": FlagsOf("flags", 3, str),
+            "phone": FlagsOf("flags", 4, str),
+            "photo": FlagsOf("flags", 5, "UserProfilePhoto"),
+            "status": FlagsOf("flags", 6, "UserStatus"),
+            "bot_info_version": FlagsOf("flags", 14, int),
+            "restriction_reason": FlagsOf("flags", 18, list["RestrictionReason"]),
+            "bot_inline_placeholder": FlagsOf("flags", 19, str),
+            "lang_code": FlagsOf("flags", 22, str),
+            "emoji_status": FlagsOf("flags", 30, "EmojiStatus"),
+            "usernames": FlagsOf("flags2", 0, list["Username"]),
+        },
+        "is": "User",
+    },
+    0xedd4882a: {
+        "_": "updates.getState",
+        "ret": "updates.State",
+    },
+    0xa56c2a3e: {
+        "_": "updates.state",
+        "params": {
+            "pts": int,
+            "qts": int,
+            "date": int,
+            "seq": int,
+            "unread_count": int,
+        },
+        "is": "updates.State",
+    },
+    0xb60f5918: {
+        "_": "users.getFullUser",
+        "params": {
+            "id": TLType,
+        },
+        "is": "users.UserFull",
+    },
+    0x3b6d152e: {
+        "_": "users.userFull",
+        "params": {
+            "full_user": TLType,
+            "chats": list["Chat"],
+            "users": list["User"],
+        },
+        "is": "users.UserFull",
+    },
+    0xf7c1b13f: {
+        "_": "inputUserSelf",
+        "is": "InputUser",
+    },
+    0xc4b1fc3f: {
+        "_": "userFull",
+        "params": {
+            "flags": int,
+            "blocked": FlagsOf("flags", 0, Bit),
+            "phone_calls_available": FlagsOf("flags", 4, Bit),
+            "phone_calls_private": FlagsOf("flags", 5, Bit),
+            "can_pin_message": FlagsOf("flags", 7, Bit),
+            "has_scheduled": FlagsOf("flags", 12, Bit),
+            "video_calls_available": FlagsOf("flags", 13, Bit),
+            "voice_messages_forbidden": FlagsOf("flags", 20, Bit),
+            "id": Int64,
+            "about": FlagsOf("flags", 1, str),
+            "settings": TLType,
+            "profile_photo": FlagsOf("flags", 2, "Photo"),
+            "notify_settings": TLType,
+            "bot_info": FlagsOf("flags", 3, "BotInfo"),
+            "pinned_msg_id": FlagsOf("flags", 6, int),
+            "common_chats_count": int,
+            "folder_id": FlagsOf("flags", 11, int),
+            "ttl_period": FlagsOf("flags", 14, int),
+            "theme_emoticon": FlagsOf("flags", 15, str),
+            "private_forward_name": FlagsOf("flags", 16, str),
+            "bot_group_admin_rights": FlagsOf("flags", 17, "ChatAdminRights"),
+            "bot_broadcast_admin_rights": FlagsOf("flags", 18, "ChatAdminRights"),
+            "premium_gifts": FlagsOf("flags", 19, list["PremiumGiftOption"]),
+        },
+        "is": "UserFull",
+    },
+    0xa518110d: {
+        "_": "peerSettings",
+        "params": {
+            "flags": int,
+            "report_spam": FlagsOf("flags", 0, Bit),
+            "add_contact": FlagsOf("flags", 1, Bit),
+            "block_contact": FlagsOf("flags", 2, Bit),
+            "share_contact": FlagsOf("flags", 3, Bit),
+            "need_contacts_exception": FlagsOf("flags", 4, Bit),
+            "report_geo": FlagsOf("flags", 5, Bit),
+            "autoarchived": FlagsOf("flags", 7, Bit),
+            "invite_members": FlagsOf("flags", 8, Bit),
+            "request_chat_broadcast": FlagsOf("flags", 10, Bit),
+            "geo_distance": FlagsOf("flags", 6, int),
+            "request_chat_title": FlagsOf("flags", 9, str),
+            "request_chat_date": FlagsOf("flags", 9, int),
+        },
+        "is": "PeerSettings",
+    },
+    0xa83b0426: {
+        "_": "peerNotifySettings",
+        "params": {
+            "flags": int,
+            "show_previews": FlagsOf("flags", 0, bool),
+            "silent": FlagsOf("flags", 1, bool),
+            "mute_until": FlagsOf("flags", 2, int),
+            "ios_sound": FlagsOf("flags", 3, "NotificationSound"),
+            "android_sound": FlagsOf("flags", 4, "NotificationSound"),
+            "other_sound": FlagsOf("flags", 5, "NotificationSound"),
+        },
+        "is": "PeerNotifySettings",
+    },
+    0x10101010: {
+        "_": "test",
+        "params": {
+            "users": list["User"],
+        },
+        "is": "Test",
+    }
+    # auth.authorizationSignUpRequired#44747e9a flags:# terms_of_service:flags.0?help.TermsOfService = auth.Authorization;
 }
 
 NAME_MAP: dict[int, dict] = {
@@ -307,22 +530,32 @@ class TL(TLType):
         to_skip: set[str] = set()
         for field, typ in tltype["params"].items():
             if isinstance(typ, FlagsOf):
-                if obj.get(field, None) is not None:
-                    reference_flags[typ.param] |= typ.pos
+                if typ.typ is Bit:
+                    typ.serialize(TL, field, obj, obj)
+                    reference_flags[typ.param] |= ((field in obj) << typ.pos)
+
+                    if field not in obj:
+                        to_skip.add(field)
                 else:
-                    to_skip.add(field)
-                    reference_flags[typ.param] |= 0
+                    if obj.get(field, None) is not None:
+                        reference_flags[typ.param] |= (1 << typ.pos)
+                    else:
+                        to_skip.add(field)
+                        reference_flags[typ.param] &= ~(1 << typ.pos)
 
         for field, typ in tltype["params"].items():
             if field in to_skip:
                 continue
-
+            elif field in reference_flags:
+                obj[field] = reference_flags[field]
+                # ic("FLAGS", value)
+            
             value = obj[field]
 
             checked = False
             check_type = typ
             if isinstance(check_type, GenericAlias) or not inspect.isclass(check_type):
-                if not typecheck(check_type, value):
+                if not typecheck(typ, value):
                     raise TypeError(f"Wrong parameter type for {field!r}: got {nameof(value)} but expected {nameof(typ)}")
                 checked = True
                 check_type = type(typ)
@@ -342,7 +575,7 @@ class TL(TLType):
                 if isinstance(typ, Int):
                     result.write(typ.serialize(value))
                 elif isinstance(typ, FlagsOf):
-                    result.write(typ.serialize(TL, value))
+                    result.write(typ.serialize(TL, field, obj, value))
                 else:
                     assert False, "Unreachable"
             elif issubclass(check_type, TLType):
@@ -350,9 +583,7 @@ class TL(TLType):
             else:
                 raise ValueError(f"Invalid type: expected {field}: {nameof(typ)}, got {nameof(value)}")
 
-        result.seek(0)
-        data = result.read()
-        return data
+        return result.getvalue()
 
     @staticmethod
     def from_dict(obj: dict) -> "TL":
@@ -361,16 +592,17 @@ class TL(TLType):
 
         result = type(objname, (TL,), {})()
         result._ = objname
+        result._cid = tltype["cid"]
 
         reference_flags: defaultdict[str, int] = defaultdict(int)
         to_skip: set[str] = set()
         for field, typ in tltype["params"].items():
             if isinstance(typ, FlagsOf):
                 if obj.get(field, None) is not None:
-                    reference_flags[typ.param] |= typ.pos
+                    reference_flags[typ.param] |= (1 << typ.pos)
                 else:
                     to_skip.add(field)
-                    reference_flags[typ.param] |= 0
+                    reference_flags[typ.param] &= ~(1 << typ.pos)
 
         for field, typ in tltype["params"].items():
             if field.startswith("_") or field in to_skip:
@@ -417,7 +649,7 @@ class TL(TLType):
     def __repr__(self) -> str:
         return f"""{nameof(self)}({
             ", ".join(
-                f"{param}={value}"
+                f"{param}={value!r}"
                 for param, value
                 in self.__dict__.items()
                 if not callable(value) and not param.startswith("_")

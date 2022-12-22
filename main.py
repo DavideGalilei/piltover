@@ -7,6 +7,7 @@ from loguru import logger
 from piltover.server import Server, Client, Request
 from piltover.utils import gen_keys, get_public_key_fingerprint
 from piltover.types import Keys
+from piltover.tl import TL
 
 
 root = Path(__file__).parent.resolve(strict=True)
@@ -33,6 +34,16 @@ if True:
 
 
 async def main():
+    # print(
+    #     TL.encode(
+    #         {
+    #             "_": "peerNotifySettings",
+    #             "show_previews": True,
+    #             "silent": False,
+    #         }
+    #     )
+    # )
+
     if not (pubkey.exists() and privkey.exists()):
         with privkey.open("w+") as priv, pubkey.open("w+") as pub:
             keys: Keys = gen_keys()
@@ -65,6 +76,17 @@ async def main():
 
     @pilt.on_message("invokeWithLayer")
     async def invoke_with_layer(client: Client, request: Request):
+        await client.propagate(
+            Request(
+                client=client,
+                obj=request.obj.query,
+                msg_id=request.msg_id,
+                seq_no=request.seq_no,
+            )
+        )
+
+    @pilt.on_message("invokeWithoutUpdates")
+    async def invoke_without_updates(client: Client, request: Request):
         await client.propagate(
             Request(
                 client=client,
@@ -134,6 +156,129 @@ async def main():
                 "webfile_dc_id": 2,
             }
         )
+
+    @pilt.on_message("auth.sendCode")
+    async def send_code(client: Client, request: Request):
+        from binascii import crc32
+
+        code = 69696
+        code = str(code).encode()
+
+        await request.answer(
+            {
+                "_": "auth.sentCode",
+                "type": TL.from_dict(
+                    {
+                        "_": "auth.sentCodeTypeSms",
+                        "length": len(code),
+                    }
+                ),
+                "phone_code_hash": f"{crc32(code):x}".zfill(8),
+                # "next_type": FlagsOf("flags", 1, "auth.CodeType"),
+                "timeout": 30,
+            }
+        )
+    
+    user = {
+        "_": "user",
+        "self": True,
+        "contact": True,
+        "mutual_contact": False,
+        "deleted": False,
+        "bot": False,
+        "verified": True,
+        "restricted": False,
+        "min": False,
+        "support": False,
+        "scam": False,
+        "apply_min_photo": False,
+        "fake": False,
+        "bot_attach_menu": False,
+        "premium": False,
+        "attach_menu_enabled": False,
+        "id": 123456,
+        "access_hash": 0,
+        "first_name": "Testing",
+        "last_name": ":)",
+        "username": "test",
+        "phone": "123456",
+        # "status": FlagsOf("flags", 6, "UserStatus"),
+        "lang_code": "en",
+    }
+
+    @pilt.on_message("auth.signIn")
+    async def sign_in(client: Client, request: Request):
+        from binascii import crc32
+
+        code = 69696
+        code = str(code).encode()
+
+        await request.answer(
+            {
+                "_": "auth.authorization",
+                "setup_password_required": False,
+                "user": TL.from_dict(user),
+            }
+        )
+
+    @pilt.on_message("updates.getState")
+    async def get_state(client: Client, request: Request):
+        import time
+
+        await request.answer(
+            {
+                "_": "updates.state",
+                "pts": 0,
+                "qts": 0,
+                "date": int(time.time()),
+                "seq": 0,
+                "unread_count": 0,
+            }
+        )
+
+    @pilt.on_message("users.getFullUser")
+    async def get_full_user(client: Client, request: Request):
+        import time
+
+        if request.obj.id._ == "inputUserSelf":
+            return await request.answer(
+                {
+                    "_": "users.userFull",
+                    "full_user": TL.from_dict(
+                        {
+                            "_": "userFull",
+                            "blocked": False,
+                            "phone_calls_available": False,
+                            "phone_calls_private": False,
+                            "can_pin_message": True,
+                            "has_scheduled": False,
+                            "video_calls_available": False,
+                            "voice_messages_forbidden": True,
+                            "id": user["id"],
+                            "about": "hi, this is a test bio",
+                            "settings": TL.from_dict(
+                                {
+                                    "_": "peerSettings",
+                                }
+                            ),
+                            "profile_photo": None,
+                            "notify_settings": TL.from_dict(
+                                {
+                                    "_": "peerNotifySettings",
+                                    "show_previews": True,
+                                    "silent": False,
+                                }
+                            ),
+                            "common_chats_count": 0,
+                        }
+                    ),
+                    "chats": [],
+                    "users": [
+                        TL.from_dict(user)
+                    ],
+                }
+            )
+        logger.warning("id: inputUser is not inputUserSelf: not implemented")
 
     await pilt.serve()
 

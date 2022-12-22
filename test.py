@@ -1,9 +1,7 @@
 import logging
 
-import pyrogram
 from pyrogram import Client
 
-print(pyrogram.__file__)
 logging.basicConfig(level=logging.DEBUG)
 
 app = Client(
@@ -12,7 +10,9 @@ app = Client(
     api_hash="test",
     in_memory=True,
     phone_number="42777",
-    phone_code=42,
+    phone_code="69696",
+    # no_updates=True,
 )
 
-app.run()
+with app:
+    print(app.get_me())

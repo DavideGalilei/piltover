@@ -438,7 +438,7 @@ class Client:
             orig_msg_id = originating_request.msg_id
             msg_id = orig_msg_id + (not orig_msg_id % 2)  # + (not is_content_related)
             # msg_id += 4 * (orig_msg_id % 4 == msg_id % 4)
-            ic(msg_id)
+            # ic(msg_id)
             assert msg_id % 2 != 0
             seq_no = originating_request.seq_no + 1
 
@@ -456,7 +456,7 @@ class Client:
                         ],
                     }
                 )
-                ic("container::", serialized)
+                # ic("container::", serialized)
         else:
             assert False, "TODO"
             # TODO: self.last_received_msg_id + 1 (for seq_no too)
@@ -481,7 +481,7 @@ class Client:
             self.auth_key[96 : 96 + 32] + data + padding
         ).digest()
         msg_key = msg_key_large[8:24]
-        ic(self.auth_key[96:96 + 32])
+        # ic(self.auth_key[96:96 + 32])
         aes_key, aes_iv = kdf(self.auth_key, msg_key, False)
 
         return (
@@ -530,8 +530,8 @@ class Client:
                         logger.exception("Unexpected failed assertion", backtrace=True)
             except Disconnection:
                 logger.info("Client disconnected")
-                import traceback
-                traceback.print_exc()
+                # import traceback
+                # traceback.print_exc()
         finally:
             # Cleanup tasks: client disconnected, or an error occurred
             async with self.server.clients_lock:

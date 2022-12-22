@@ -7,9 +7,12 @@ from types import GenericAlias
 from loguru import logger
 
 from piltover.utils import read_int, nameof
+from icecream import ic
 
 
 VECTOR_CID = 0x1cb5c415
+BOOL_FALSE = 0xbc799737
+BOOL_TRUE = 0x997275b5
 
 
 class TLType:
@@ -38,7 +41,9 @@ def read_string(data: BytesIO) -> str:
 
 def read_builtin(TL, typ: type, data: BytesIO):
     if issubclass(typ, bool):
-        return bool(read_int(data.read(4)))
+        cid = data.read(4)
+        assert cid in [BOOL_FALSE, BOOL_TRUE], "Invalid bool value provided"
+        return cid == BOOL_TRUE
     elif issubclass(typ, int):
         return read_int(data.read(4))
     elif issubclass(typ, str):
@@ -53,21 +58,27 @@ def read_builtin(TL, typ: type, data: BytesIO):
             
             is_raw = len(args) > 1 and args[1] == "RAW"
             if not is_raw:
-                assert read_int(data.read(4)) == VECTOR_CID, "Vector with wrong constructor id"
-            if issubclass(ret, (str, TLType)):
-                cid = read_int(data.read(4))
+                cid = data.read(4)
+                # ic(cid.hex())
+                assert read_int(cid) == VECTOR_CID, "Vector with wrong constructor id"
+            # if isinstance(ret, str) or issubclass(ret, TLType):
+            #     cid = read_int(data.read(4))
+            #     print(cid, hex(cid))
 
             length = read_int(data.read(4))
+            # ic(length)
 
             result = []
             if is_raw and issubclass(ret, bytes):
+                raise
                 logger.warning("If this didn't work, remember that you didn't check RAW is_raw types read for msg_container yet...")
                 for _ in range(length):
                     result.append(TL.decode(data))
-            elif issubclass(ret, (str, TLType)):
+            elif isinstance(ret, str) or issubclass(ret, TLType):
                 for _ in range(length):
                     result.append(TL.decode(data))
             else:
+                raise
                 for _ in range(length):
                     result.append(read_builtin(TL, ret, data))
             return result
@@ -91,6 +102,9 @@ def write_builtin(TL, typ: type, value, to: BytesIO):
                 write_builtin(TL, int, VECTOR_CID, to=to)
             write_builtin(TL, int, len(value), to=to)
 
+            if len(value) == 0:
+                return
+
             check_type = ret
             if isinstance(check_type, GenericAlias) or not inspect.isclass(check_type):
                 check_type = type(ret)
@@ -104,8 +118,8 @@ def write_builtin(TL, typ: type, value, to: BytesIO):
                 #         to.write(ret.serialize(element))
                 else:
                     assert False, "Unreachable"
-            elif issubclass(check_type, TLType):
-                write_builtin(TL, int, value._cid, to=to)
+            elif issubclass(check_type, TLType) or isinstance(value[0], TLType):
+                # write_builtin(TL, int, value[0]._cid, to=to)
 
                 for element in value:
                     to.write(TL.encode(element))
@@ -117,7 +131,9 @@ def write_builtin(TL, typ: type, value, to: BytesIO):
                     write_builtin(TL, ret, element, to=to)
         else:
             assert False, "Unreachable"
-    elif issubclass(typ, (int, bool)):
+    elif issubclass(typ, bool):
+        to.write(Int32.serialize(BOOL_TRUE if value else BOOL_FALSE))
+    elif issubclass(typ, int):
         to.write(int.to_bytes(value, 4, byteorder="little", signed=False))
     elif issubclass(typ, str):
         write_builtin(TL, bytes, value.encode(), to=to)
@@ -142,7 +158,13 @@ def write_builtin(TL, typ: type, value, to: BytesIO):
 
 
 def typecheck(typ, value) -> bool:
-    if isinstance(typ, GenericAlias) or not inspect.isclass(typ):
+    if isinstance(typ, FlagsOf):
+        return typecheck(typ.typ, value)
+    elif isinstance(typ, str) and isinstance(value, TLType):
+        # print(typ, value._, repr(value), typ == value._)
+        # TODO: user of User (using obj["is"])
+        return True
+    elif isinstance(typ, GenericAlias) or not inspect.isclass(typ):
         if isinstance(typ, GenericAlias):
             if issubclass(typ.mro()[0], list):
                 if not isinstance(value, list):
@@ -155,6 +177,8 @@ def typecheck(typ, value) -> bool:
                 if len(value) == 0:
                     return True
 
+                if isinstance(ret, str) and isinstance(value[0], TLType):
+                    return True
                 return typecheck(ret, value[0])
             else:
                 assert False, "Unreachable"
@@ -166,6 +190,8 @@ def typecheck(typ, value) -> bool:
             return isinstance(value, typ)
         elif issubclass(typ, Basic):
             if issubclass(typ, Int) and isinstance(value, int):
+                return True
+            elif issubclass(typ, Bit) and isinstance(value, bool):
                 return True
         elif issubclass(typ, TLType):
             return isinstance(value, (dict, TLType))
@@ -217,7 +243,9 @@ class FlagsOf(Basic):
         self.typ = typ
 
     def deserialize(self, TL, result: TLType, data: BytesIO):
-        if getattr(result, self.param) & self.pos:
+        if self.typ is Bit:
+            return bool(getattr(result, self.param) & (1 << self.pos))
+        elif getattr(result, self.param) & (1 << self.pos):
             if isinstance(self.typ, str):
                 return TL.decode(data)
 
@@ -237,8 +265,14 @@ class FlagsOf(Basic):
             return decoded
         return None
 
-    def serialize(self, TL, obj) -> bytes:
-        if getattr(obj, self.param, None) is not None:
+    def serialize(self, TL, field: str, orig: dict, obj) -> bytes:
+        if self.typ is Bit:
+            if orig.get(field, False):
+                orig[self.param] |= (1 << self.pos)
+            else:
+                orig[self.param] &= ~(1 << self.pos)
+            return b""
+        elif orig[self.param] & (1 << self.pos):
             if isinstance(self.typ, str):
                 return TL.encode(obj)
 
@@ -263,3 +297,11 @@ class FlagsOf(Basic):
             else:
                 raise ValueError("Invalid type")
         return b""
+
+
+    def __str__(self) -> str:
+        return f"{nameof(self)}({self.param}, {self.pos}, {nameof(self.typ)})"
+
+
+class Bit(Basic):
+    ...
