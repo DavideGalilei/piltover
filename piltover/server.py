@@ -214,20 +214,23 @@ class Client:
             # auth_key_id (8), message_id (8) and message_length (4)
 
             # TODO: ERROR: server_nonce isn't equal to pyrogram's deserialized value...
+            res_pq = TL.encode(
+                {
+                    "_": "resPQ",
+                    "nonce": req_pq.nonce,
+                    "server_nonce": server_nonce,
+                    "pq": pq.to_bytes(128 // 8, "big", signed=True),
+                    "server_public_key_fingerprints": [self.server.fingerprint],
+                }
+            )
             await self.conn.send(
-                bytes(20)
-                + TL.encode(
-                    {
-                        "_": "resPQ",
-                        "nonce": req_pq.nonce,
-                        "server_nonce": server_nonce,
-                        "pq": pq.to_bytes(128 // 8, "big", signed=True),
-                        "server_public_key_fingerprints": [self.server.fingerprint],
-                    }
-                )
+                bytes(8)
+                + Int64.serialize(msg_id + 1 + (not msg_id % 2))
+                + Int32.serialize(len(res_pq))
+                + res_pq
             )
 
-            req_dh_params = await self.auth_recv()
+            req_dh_params, msg_id = await self.auth_recv()
 
             assert req_dh_params._ == "req_DH_params"
             client_p = int.from_bytes(req_dh_params.p, "big", signed=False)
@@ -240,14 +243,14 @@ class Client:
 
             encrypted_data = req_dh_params.encrypted_data
 
-            private = self.server.private_key.private_numbers()
-            public = self.server.public_key.public_numbers()
+            private = self.server.private_key.private_numbers()  # type: ignore
+            public = self.server.public_key.public_numbers()  # type: ignore
 
             key_aes_encrypted = (
                 pow(
                     int.from_bytes(encrypted_data, "big", signed=False),
-                    private.d,
-                    public.n,
+                    private.d,  # type: ignore
+                    public.n,  # type: ignore
                 )
                 .to_bytes(256, "big", signed=False)
                 .lstrip(b"\0")
@@ -308,19 +311,23 @@ class Client:
                 answer_with_hash, tmp_aes_key, tmp_aes_iv
             )
 
-            await self.conn.send(
-                bytes(20)
-                + TL.encode(
-                    {
-                        "_": "server_DH_params_ok",
-                        "nonce": p_q_inner_data.nonce,
-                        "server_nonce": p_q_inner_data.server_nonce,
-                        "encrypted_answer": encrypted_answer,
-                    }
-                )
+            server_dh_params_ok = TL.encode(
+                {
+                    "_": "server_DH_params_ok",
+                    "nonce": p_q_inner_data.nonce,
+                    "server_nonce": p_q_inner_data.server_nonce,
+                    "encrypted_answer": encrypted_answer,
+                }
             )
 
-            set_client_DH_params = await self.auth_recv()
+            await self.conn.send(
+                bytes(8)
+                + Int64.serialize(msg_id + 1 + (not msg_id % 2))
+                + Int32.serialize(len(server_dh_params_ok))
+                + server_dh_params_ok
+            )
+
+            set_client_DH_params, msg_id = await self.auth_recv()
 
             decrypted_params = tgcrypto.ige256_decrypt(
                 set_client_DH_params.encrypted_data, tmp_aes_key, tmp_aes_iv
@@ -344,22 +351,26 @@ class Client:
 
             ic(server_nonce_bytes, auth_key, auth_key_hash)
 
+            dh_gen_ok = TL.encode(
+                {
+                    "_": "dh_gen_ok",
+                    "nonce": client_DH_inner_data.nonce,
+                    "server_nonce": server_nonce,
+                    "new_nonce_hash1": int.from_bytes(
+                        hashlib.sha1(
+                            new_nonce + bytes([1]) + auth_key_aux_hash
+                        ).digest()[4:20],
+                        "little",
+                        signed=False,
+                    ),
+                }
+            )
+
             await self.conn.send(
-                bytes(20)
-                + TL.encode(
-                    {
-                        "_": "dh_gen_ok",
-                        "nonce": client_DH_inner_data.nonce,
-                        "server_nonce": server_nonce,
-                        "new_nonce_hash1": int.from_bytes(
-                            hashlib.sha1(
-                                new_nonce + bytes([1]) + auth_key_aux_hash
-                            ).digest()[: 128 // 8],
-                            "big",
-                            signed=False,
-                        ),
-                    }
-                )
+                bytes(8)
+                + Int64.serialize(msg_id + 1 + (not msg_id % 2))
+                + Int32.serialize(len(dh_gen_ok))
+                + dh_gen_ok
             )
 
             auth_key_id = read_int(hashlib.sha1(auth_key).digest()[-8:])
@@ -369,39 +380,45 @@ class Client:
             logger.info(
                 "Auth key generation successfully completed! Disconnecting client..."
             )
-            raise Disconnection()
+
+            self.auth_key = auth_key
+            self.auth_key_id = auth_key_id
+            # raise Disconnection()
+            # await self.conn.send(Int32.serialize(-404, signed=True))
         # else:
         #     assert False, "TODO: authorized messages check"
+        else:
+            self.auth_key = await self.server.get_auth_key(auth_key_id=auth_key_id)
 
-        self.auth_key = await self.server.get_auth_key(auth_key_id=auth_key_id)
+            if self.auth_key is None:
+                logger.warning("Invalid auth key id provided, disconnecting...")
+                raise Disconnection()
 
-        if self.auth_key is None:
-            logger.warning("Invalid auth key id provided, disconnecting...")
-            raise Disconnection()
+            self.session_id = auth_key_id
+            msg = await self.decrypt(data=data)
+            ic(self.session_id)
 
-        self.session_id = auth_key_id
-        msg = await self.decrypt(data=data)
-        ic(self.session_id)
+            await self.propagate(Request.from_msg(self, msg))
 
-        await self.propagate(Request.from_msg(self, msg))
-
-    async def auth_recv(self) -> TL:
+    async def auth_recv(self) -> tuple[TL, int]:
         msg = await self.read_auth_msg()
         result = TL.decode(BytesIO(msg.data))
         # result._session_id = msg.session_id
-        return result
+        return result, msg.msg_id
 
-    async def send(self, obj: TL, originating_request: Optional["Request"] = None):
+    async def send(self, objects: list[TL], originating_request: Optional["Request"] = None):
         if originating_request is not None:
-            if obj._ not in ["ping"]:
-                obj = TL.from_dict(
-                    {
-                        "_": "rpc_result",
-                        "req_msg_id": originating_request.msg_id,
-                        "result": obj,
-                    }
-                )
-        await self.conn.send(await self.encrypt(obj, originating_request=originating_request))
+            for i in range(len(objects)):
+                if objects[i]._ not in ["ping"]:
+                    objects[i] = TL.from_dict(
+                        {
+                            "_": "rpc_result",
+                            "req_msg_id": originating_request.msg_id,
+                            "result": objects[i],
+                        }
+                    )
+
+        await self.conn.send(await self.encrypt(objects, originating_request=originating_request))
 
     async def recv(self) -> "Request":
         data = BytesIO(await self.conn.recv())
@@ -418,7 +435,7 @@ class Client:
             seq_no=decrypted.seq_no,
         )
 
-    async def encrypt(self, obj: TL, originating_request: Optional["Request"] = None) -> bytes:
+    async def encrypt(self, objects: TL | list[TL], originating_request: Optional["Request"] = None) -> bytes:
         if self.session_id is None:
             assert False, "FATAL: self.session_id is None"
         elif self.auth_key is None:
@@ -426,7 +443,11 @@ class Client:
         elif self.auth_key_id is None:
             assert False, "FATAL: self.auth_key_id is None"
 
-        serialized = TL.encode(obj)
+        if isinstance(objects, TL):
+            return await self.encrypt([objects], originating_request=originating_request)
+
+        serialized = TL.encode(objects[0])
+        # TODO: handle multiple messages in a single container
 
         # about msg_id: 
         # https://core.telegram.org/mtproto/description#message-identifier-msg-id
@@ -464,6 +485,7 @@ class Client:
             seq_no = 1
             msg_id = 1
 
+        ic(self.session_id, self.auth_key_id)
         data = (
             Int64.serialize(self.server.salt)
             + Int64.serialize(self.session_id)
@@ -532,6 +554,7 @@ class Client:
                 logger.info("Client disconnected")
                 # import traceback
                 # traceback.print_exc()
+            # TODO: except invalid constructor id, raise INPUT_CONSTRUCTOR_INVALID_5EEF0214 (e.g.)
         finally:
             # Cleanup tasks: client disconnected, or an error occurred
             async with self.server.clients_lock:
@@ -549,8 +572,17 @@ class Request:
     msg_id: int
     seq_no: int
 
-    async def answer(self, data: dict):
-        obj = TL.from_dict(data)
+    async def answer(self, data: dict | list | TL):
+        if isinstance(data, dict):
+            obj = [TL.from_dict(data)]
+        elif isinstance(data, list):
+            obj = [
+                TL.from_dict(element)
+                for element in data
+                if not isinstance(element, TL)
+            ]
+        else:
+            obj = [data]
         await self.client.send(obj, self)
 
     @staticmethod

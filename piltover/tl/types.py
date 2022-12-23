@@ -6,7 +6,7 @@ from types import GenericAlias
 
 from loguru import logger
 
-from piltover.utils import read_int, nameof
+from piltover.utils import read_int, nameof, read_bytes, write_bytes
 from icecream import ic
 
 
@@ -17,22 +17,6 @@ BOOL_TRUE = 0x997275b5
 
 class TLType:
     ...
-
-
-def read_bytes(data: BytesIO) -> bytes:
-    # https://core.telegram.org/mtproto/serialize#base-types
-
-    length = int.from_bytes(data.read(1), "little")
-
-    if length <= 253:
-        result = data.read(length)
-        data.read(-(length + 1) % 4)
-    else:
-        length = int.from_bytes(data.read(3), "little")
-        result = data.read(length)
-        data.read(-length % 4)
-    
-    return result
 
 
 def read_string(data: BytesIO) -> str:
@@ -70,15 +54,19 @@ def read_builtin(TL, typ: type, data: BytesIO):
 
             result = []
             if is_raw and issubclass(ret, bytes):
-                raise
                 logger.warning("If this didn't work, remember that you didn't check RAW is_raw types read for msg_container yet...")
                 for _ in range(length):
                     result.append(TL.decode(data))
-            elif isinstance(ret, str) or issubclass(ret, TLType):
+            elif isinstance(ret, str) or (inspect.isclass(ret) and issubclass(ret, TLType)):
                 for _ in range(length):
                     result.append(TL.decode(data))
+            elif isinstance(ret, Basic):
+                if isinstance(ret, Int):
+                    for _ in range(length):
+                        result.append(ret.deserialize(data))
+                else:
+                    assert False, "TODO, flags read in vector?"
             else:
-                raise
                 for _ in range(length):
                     result.append(read_builtin(TL, ret, data))
             return result
@@ -138,21 +126,7 @@ def write_builtin(TL, typ: type, value, to: BytesIO):
     elif issubclass(typ, str):
         write_builtin(TL, bytes, value.encode(), to=to)
     elif issubclass(typ, bytes):
-        length = len(value)
-
-        if length <= 253:
-            to.write(
-                bytes([length])
-                + value
-                + bytes(-(length + 1) % 4)
-            )
-        else:
-            to.write(
-                bytes([254])
-                + length.to_bytes(3, "little")
-                + value
-                + bytes(-length % 4)
-            )
+        write_bytes(value, to=to)
     else:
         raise TypeError("Invalid type, couldn't serialize")
 

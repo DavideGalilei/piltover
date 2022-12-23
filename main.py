@@ -128,8 +128,8 @@ async def main():
                 "push_chat_limit": 1,
                 "saved_gifs_limit": 100,
                 "edit_time_limit": 48 * 60 * 60,
-                "revoke_time_limit": int(2 ** 31 - 1),
-                "revoke_pm_time_limit": int(2 ** 31 - 1),
+                "revoke_time_limit": int(2**31 - 1),
+                "revoke_pm_time_limit": int(2**31 - 1),
                 "rating_e_decay": 2,
                 "stickers_recent_limit": 15,
                 "stickers_faved_limit": 5,
@@ -168,7 +168,7 @@ async def main():
                 "timeout": 30,
             }
         )
-    
+
     user = {
         "_": "user",
         "self": True,
@@ -228,8 +228,6 @@ async def main():
 
     @pilt.on_message("users.getFullUser")
     async def get_full_user(client: Client, request: Request):
-        import time
-
         if request.obj.id._ == "inputUserSelf":
             return await request.answer(
                 {
@@ -263,14 +261,31 @@ async def main():
                         }
                     ),
                     "chats": [],
-                    "users": [
-                        TL.from_dict(user)
-                    ],
+                    "users": [TL.from_dict(user)],
                 }
             )
         logger.warning("id: inputUser is not inputUserSelf: not implemented")
 
+    @pilt.on_message("users.getUsers")
+    async def get_users(client: Client, request: Request):
+        result: list[TL] = []
+
+        for id in request.obj.id:
+            if id._ == "inputUserSelf":
+                result.append(TL.from_dict(user))
+            else:
+                # TODO: other input users
+                result.append(TL.from_dict({"_": "userEmpty"}))
+
+        await request.answer(
+            {
+                "_": "vector",
+                "data": result,
+            }
+        )
+
     await pilt.serve()
+
 
 try:
     uvloop.install()

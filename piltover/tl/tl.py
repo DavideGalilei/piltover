@@ -6,7 +6,7 @@ from typing import cast, Union, Any
 from types import GenericAlias
 from collections import defaultdict
 
-from piltover.tl.types import Basic, TLType, Int, Int64, Int128, Int256, FlagsOf, Bit, read_builtin, write_builtin, typecheck
+from piltover.tl.types import Basic, TLType, Int, Int64, Int128, Int256, FlagsOf, Bit, read_builtin, write_builtin, typecheck, VECTOR_CID
 from piltover.exceptions import InvalidConstructor
 from piltover.utils import nameof
 
@@ -34,7 +34,7 @@ MAP = {
             "nonce": Int128(signed=True),
             "server_nonce": Int128(signed=True),
             "pq": bytes,
-            "server_public_key_fingerprints": list[Int64(signed=False)],
+            "server_public_key_fingerprints": list[Int64(signed=True)],
         },
         "is": "ResPQ",
     },
@@ -462,7 +462,35 @@ MAP = {
             "users": list["User"],
         },
         "is": "Test",
-    }
+    },
+    0x0d91a548: {
+        "_": "users.getUsers",
+        "params": {
+            "id": list["InputUser"],
+        },
+        "ret": list["User"],
+    },
+    0xd3bc4b7a: {
+        "_": "userEmpty",
+        "params": {
+            "id": Int64(signed=False)
+        },
+        "is": "User",
+    },
+    VECTOR_CID: {
+        "_": "vector",
+        "params": {
+            "data": list[TLType, "RAW"],
+        },
+        "is": "Vector",
+    },
+    0x62d6b459: {
+        "_": "msgs_ack",
+        "params": {
+            "msg_ids": list[Int64(signed=False)],
+        },
+        "is": "MsgsAck",
+    },
     # auth.authorizationSignUpRequired#44747e9a flags:# terms_of_service:flags.0?help.TermsOfService = auth.Authorization;
 }
 

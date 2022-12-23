@@ -1,11 +1,46 @@
 import inspect
 
+from io import BytesIO
 from hashlib import sha256
 from types import GenericAlias
 
 
 def read_int(data: bytes, signed: bool = False) -> int:
     return int.from_bytes(data, byteorder="little", signed=signed)
+
+
+def read_bytes(data: BytesIO) -> bytes:
+    # https://core.telegram.org/mtproto/serialize#base-types
+
+    length = int.from_bytes(data.read(1), "little")
+
+    if length <= 253:
+        result = data.read(length)
+        data.read(-(length + 1) % 4)
+    else:
+        length = int.from_bytes(data.read(3), "little")
+        result = data.read(length)
+        data.read(-length % 4)
+    
+    return result
+
+
+def write_bytes(value: bytes, to: BytesIO):
+    length = len(value)
+
+    if length <= 253:
+        to.write(
+            bytes([length])
+            + value
+            + bytes(-(length + 1) % 4)
+        )
+    else:
+        to.write(
+            bytes([254])
+            + length.to_bytes(3, "little")
+            + value
+            + bytes(-length % 4)
+        )
 
 
 def nameof(class_or_value) -> str:
