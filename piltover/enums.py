@@ -5,3 +5,4 @@ class Transport(Enum):
     Intermediate = auto()
     PaddedIntermediate = auto()
     Full = auto()
+    Obfuscated = auto()

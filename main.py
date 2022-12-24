@@ -43,7 +43,11 @@ async def main():
     private_key = privkey.read_text()
     public_key = pubkey.read_text()
 
-    logger.info("Pubkey fingerprint: {fp:x}", fp=get_public_key_fingerprint(public_key))
+    fp = get_public_key_fingerprint(public_key)
+    logger.info(
+        "Pubkey fingerprint: {fp:x} ({no_sign})",
+        fp=fp, no_sign=fp.to_bytes(8, "big", signed=True).hex()
+    )
 
     pilt = Server(
         server_keys=Keys(
@@ -91,7 +95,7 @@ async def main():
         # hmm yes yes, I trust you client
         # the api id is always correct, it has always been!
 
-        print(request.obj.api_id)
+        print("Api ID:", request.obj.api_id)
 
         await client.propagate(
             Request(

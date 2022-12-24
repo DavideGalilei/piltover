@@ -1,5 +1,6 @@
 from telethon import TelegramClient
 from telethon.network.connection.tcpintermediate import ConnectionTcpIntermediate
+from telethon.network.connection.tcpobfuscated import ConnectionTcpObfuscated
 
 # Remember to use your own values from my.telegram.org!
 api_id = 12345
@@ -8,7 +9,7 @@ client = TelegramClient(
     session=None,
     api_id=api_id,
     api_hash=api_hash,
-    connection=ConnectionTcpIntermediate,
+    # connection=ConnectionTcpObfuscated,  # ConnectionTcpIntermediate,
 )
 
 
