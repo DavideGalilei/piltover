@@ -1,8 +1,10 @@
+import struct
 import inspect
 
 from io import BytesIO
 from abc import ABC, abstractmethod
 from types import GenericAlias
+from dataclasses import dataclass
 
 from loguru import logger
 
@@ -19,6 +21,13 @@ class TLType:
     ...
 
 
+@dataclass(init=True, repr=True, frozen=True, kw_only=True)
+class CoreMessage:
+    msg_id: int
+    seq_no: int
+    obj: TLType
+
+
 def read_string(data: BytesIO) -> str:
     return read_bytes(data).decode(errors="ignore")
 
@@ -30,6 +39,8 @@ def read_builtin(TL, typ: type, data: BytesIO):
         return cid == BOOL_TRUE
     elif issubclass(typ, int):
         return read_int(data.read(4))
+    elif issubclass(typ, float):
+        return struct.unpack("d", data.read(8))[0]
     elif issubclass(typ, str):
         return read_string(data)
     elif issubclass(typ, bytes):
@@ -54,9 +65,21 @@ def read_builtin(TL, typ: type, data: BytesIO):
 
             result = []
             if is_raw and issubclass(ret, bytes):
-                logger.warning("If this didn't work, remember that you didn't check RAW is_raw types read for msg_container yet...")
+                # logger.warning("If this didn't work, remember that you didn't check RAW is_raw types read for msg_container yet...")
+
                 for _ in range(length):
-                    result.append(TL.decode(data))
+                    msg_id = read_int(data.read(8))
+                    seq_no = read_int(data.read(4))
+                    length = read_int(data.read(4))
+                    # ic(msg_id, seq_no, length)
+
+                    result.append(
+                        CoreMessage(
+                            msg_id=msg_id,
+                            seq_no=seq_no,
+                            obj=TL.decode(data),
+                        )
+                    )
             elif isinstance(ret, str) or (inspect.isclass(ret) and issubclass(ret, TLType)):
                 for _ in range(length):
                     result.append(TL.decode(data))
@@ -123,6 +146,8 @@ def write_builtin(TL, typ: type, value, to: BytesIO):
         to.write(Int32.serialize(BOOL_TRUE if value else BOOL_FALSE))
     elif issubclass(typ, int):
         to.write(int.to_bytes(value, 4, byteorder="little", signed=False))
+    elif isinstance(typ, float):
+        to.write(struct.pack("d", value))
     elif issubclass(typ, str):
         write_builtin(TL, bytes, value.encode(), to=to)
     elif issubclass(typ, bytes):
@@ -160,7 +185,7 @@ def typecheck(typ, value) -> bool:
             if issubclass(type(typ), Int) and isinstance(value, int):
                 return True
     else:
-        if issubclass(typ, (bool, int, str, bytes)):
+        if issubclass(typ, (bool, int, float, str, bytes)):
             return isinstance(value, typ)
         elif issubclass(typ, Basic):
             if issubclass(typ, Int) and isinstance(value, int):
@@ -227,7 +252,7 @@ class FlagsOf(Basic):
             if isinstance(check_type, GenericAlias) or not inspect.isclass(check_type):
                 check_type = type(self.typ)
 
-            if issubclass(check_type, GenericAlias) or issubclass(check_type, (bool, int, str, bytes)):
+            if issubclass(check_type, GenericAlias) or issubclass(check_type, (bool, int, float, str, bytes)):
                 decoded = read_builtin(TL, self.typ, data)
             elif issubclass(check_type, Basic):
                 decoded = self.typ.deserialize(data)
@@ -254,7 +279,7 @@ class FlagsOf(Basic):
             if isinstance(check_type, GenericAlias) or not inspect.isclass(check_type):
                 check_type = type(self.typ)
 
-            if issubclass(check_type, (bool, int, str, bytes, list, GenericAlias)):
+            if issubclass(check_type, (bool, int, float, str, bytes, list, GenericAlias)):
                 tmp = BytesIO()
                 write_builtin(TL, self.typ, obj, to=tmp)
                 return tmp.getvalue()

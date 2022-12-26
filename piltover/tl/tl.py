@@ -6,7 +6,22 @@ from typing import cast, Union, Any
 from types import GenericAlias
 from collections import defaultdict
 
-from piltover.tl.types import Basic, TLType, Int, Int64, Int128, Int256, FlagsOf, Bit, read_builtin, write_builtin, typecheck, VECTOR_CID
+from piltover.tl.types import (
+    Basic,
+    TLType,
+    Int,
+    Int64,
+    Int128,
+    Int256,
+    FlagsOf,
+    Bit,
+    read_builtin,
+    write_builtin,
+    typecheck,
+    VECTOR_CID,
+    BOOL_TRUE,
+    BOOL_FALSE,
+)
 from piltover.exceptions import InvalidConstructor
 from piltover.utils import nameof
 
@@ -14,7 +29,7 @@ from icecream import ic
 
 
 MAP = {
-    0xbe7e8ef1: {
+    0xBE7E8EF1: {
         "_": "req_pq_multi",
         "params": {
             "nonce": Int128(signed=True),
@@ -38,7 +53,7 @@ MAP = {
         },
         "is": "ResPQ",
     },
-    0xd712e4be: {
+    0xD712E4BE: {
         "_": "req_DH_params",
         "params": {
             "nonce": Int128(signed=True),
@@ -48,9 +63,9 @@ MAP = {
             "public_key_fingerprint": Int64,
             "encrypted_data": bytes,
         },
-        "ret": "Server_DH_Params"
+        "ret": "Server_DH_Params",
     },
-    0x83c95aec: {
+    0x83C95AEC: {
         "_": "p_q_inner_data",
         "params": {
             "pq": bytes,
@@ -62,7 +77,7 @@ MAP = {
         },
         "is": "P_Q_inner_data",
     },
-    0xa9f55f95: {
+    0xA9F55F95: {
         "_": "p_q_inner_data_dc",
         "params": {
             "pq": bytes,
@@ -75,7 +90,21 @@ MAP = {
         },
         "is": "P_Q_inner_data",
     },
-    0xd0e8075c: {
+    0x56FDDF88: {
+        "_": "p_q_inner_data_temp_dc",
+        "params": {
+            "pq": bytes,
+            "p": bytes,
+            "q": bytes,
+            "nonce": Int128(signed=True),
+            "server_nonce": Int128(signed=True),
+            "new_nonce": Int256(signed=False),
+            "dc": int,
+            "expires_in": int,
+        },
+        "is": "P_Q_inner_data",
+    },
+    0xD0E8075C: {
         "_": "server_DH_params_ok",
         "params": {
             "nonce": Int128(signed=True),
@@ -84,7 +113,7 @@ MAP = {
         },
         "is": "Server_DH_Params",
     },
-    0xb5890dba: {
+    0xB5890DBA: {
         "_": "server_DH_inner_data",
         "params": {
             "nonce": Int128(signed=True),
@@ -96,7 +125,7 @@ MAP = {
         },
         "is": "Server_DH_inner_data",
     },
-    0xf5045f1f: {
+    0xF5045F1F: {
         "_": "set_client_DH_params",
         "params": {
             "nonce": Int128(signed=True),
@@ -105,7 +134,7 @@ MAP = {
         },
         "ret": "Set_client_DH_params_answer",
     },
-    0x6643b654: {
+    0x6643B654: {
         "_": "client_DH_inner_data",
         "params": {
             "nonce": Int128(signed=True),
@@ -115,7 +144,7 @@ MAP = {
         },
         "is": "Client_DH_Inner_Data",
     },
-    0x3bcbf734: {
+    0x3BCBF734: {
         "_": "dh_gen_ok",
         "params": {
             "nonce": Int128(signed=True),
@@ -124,14 +153,14 @@ MAP = {
         },
         "is": "Set_client_DH_params_answer",
     },
-    0x7abe77ec: {
+    0x7ABE77EC: {
         "_": "ping",
         "params": {
             "ping_id": Int64,
         },
         "ret": "Pong",
     },
-    0x347773c5: {
+    0x347773C5: {
         "_": "pong",
         "params": {
             "msg_id": Int64,
@@ -139,7 +168,7 @@ MAP = {
         },
         "is": "Pong",
     },
-    0xda9b0d0d: {
+    0xDA9B0D0D: {
         "_": "invokeWithLayer",
         "params": {
             "layer": int,
@@ -147,14 +176,14 @@ MAP = {
         },
         "ret": TLType,
     },
-    0xbf9459b7: {
+    0xBF9459B7: {
         "_": "invokeWithoutUpdates",
         "params": {
             "query": TLType,
         },
         "ret": TLType,
     },
-    0xc1cd5ea9: {
+    0xC1CD5EA9: {
         "_": "initConnection",
         "params": {
             "flags": int,
@@ -171,11 +200,11 @@ MAP = {
         },
         "ret": TLType,
     },
-    0xc4f9186b: {
+    0xC4F9186B: {
         "_": "help.getConfig",
         "ret": "Config",
     },
-    0x232566ac: {
+    0x232566AC: {
         "_": "config",
         "params": {
             "flags": int,
@@ -235,7 +264,7 @@ MAP = {
         },
         "ret": "Config",
     },
-    0xf35c6d01: {
+    0xF35C6D01: {
         "_": "rpc_result",
         "params": {
             "req_msg_id": Int64,
@@ -243,14 +272,14 @@ MAP = {
         },
         "is": "RpcResult",
     },
-    0x73f1f8dc: {
+    0x73F1F8DC: {
         "_": "msg_container",
         "params": {
             "messages": list[bytes, "RAW"],
         },
         "is": "MessageContainer",
     },
-    0x5e002502: {
+    0x5E002502: {
         "_": "auth.sentCode",
         "params": {
             "flags": int,
@@ -261,7 +290,7 @@ MAP = {
         },
         "is": "auth.SentCode",
     },
-    0xa677244f: {
+    0xA677244F: {
         "_": "auth.sendCode",
         "params": {
             "phone_number": str,
@@ -271,14 +300,14 @@ MAP = {
         },
         "ret": "auth.SentCode",
     },
-    0xc000bba2: {
+    0xC000BBA2: {
         "_": "auth.sentCodeTypeSms",
         "params": {
             "length": int,
         },
         "is": "auth.SentCodeType",
     },
-    0x8a6469c2: {
+    0x8A6469C2: {
         "_": "codeSettings",
         "params": {
             "flags": int,
@@ -290,7 +319,7 @@ MAP = {
         },
         "is": "CodeSettings",
     },
-    0xf3427b8c: {
+    0xF3427B8C: {
         "_": "ping_delay_disconnect",
         "params": {
             "ping_id": Int64,
@@ -298,7 +327,7 @@ MAP = {
         },
         "ret": "Pong",
     },
-    0x8d52a951: {
+    0x8D52A951: {
         "_": "auth.signIn",
         "params": {
             "flags": int,
@@ -309,18 +338,18 @@ MAP = {
         },
         "ret": "auth.Authorization",
     },
-    0x33fb7bb8: {
+    0x33FB7BB8: {
         "_": "auth.authorization",
         "params": {
             "flags": int,
             "setup_password_required": FlagsOf("flags", 1, Bit),
             "otherwise_relogin_days": FlagsOf("flags", 1, int),
             "tmp_sessions": FlagsOf("flags", 0, int),
-            "user": TLType, # User
+            "user": TLType,  # User
         },
         "is": "auth.Authorization",
     },
-    0x8f97c628: {
+    0x8F97C628: {
         "_": "user",
         "params": {
             "flags": int,
@@ -360,11 +389,11 @@ MAP = {
         },
         "is": "User",
     },
-    0xedd4882a: {
+    0xEDD4882A: {
         "_": "updates.getState",
         "ret": "updates.State",
     },
-    0xa56c2a3e: {
+    0xA56C2A3E: {
         "_": "updates.state",
         "params": {
             "pts": int,
@@ -375,14 +404,14 @@ MAP = {
         },
         "is": "updates.State",
     },
-    0xb60f5918: {
+    0xB60F5918: {
         "_": "users.getFullUser",
         "params": {
             "id": TLType,
         },
         "is": "users.UserFull",
     },
-    0x3b6d152e: {
+    0x3B6D152E: {
         "_": "users.userFull",
         "params": {
             "full_user": TLType,
@@ -391,11 +420,11 @@ MAP = {
         },
         "is": "users.UserFull",
     },
-    0xf7c1b13f: {
+    0xF7C1B13F: {
         "_": "inputUserSelf",
         "is": "InputUser",
     },
-    0xc4b1fc3f: {
+    0xC4B1FC3F: {
         "_": "userFull",
         "params": {
             "flags": int,
@@ -424,7 +453,7 @@ MAP = {
         },
         "is": "UserFull",
     },
-    0xa518110d: {
+    0xA518110D: {
         "_": "peerSettings",
         "params": {
             "flags": int,
@@ -443,7 +472,7 @@ MAP = {
         },
         "is": "PeerSettings",
     },
-    0xa83b0426: {
+    0xA83B0426: {
         "_": "peerNotifySettings",
         "params": {
             "flags": int,
@@ -463,18 +492,16 @@ MAP = {
         },
         "is": "Test",
     },
-    0x0d91a548: {
+    0x0D91A548: {
         "_": "users.getUsers",
         "params": {
             "id": list["InputUser"],
         },
         "ret": list["User"],
     },
-    0xd3bc4b7a: {
+    0xD3BC4B7A: {
         "_": "userEmpty",
-        "params": {
-            "id": Int64(signed=False)
-        },
+        "params": {"id": Int64(signed=False)},
         "is": "User",
     },
     VECTOR_CID: {
@@ -484,12 +511,175 @@ MAP = {
         },
         "is": "Vector",
     },
-    0x62d6b459: {
+    BOOL_TRUE: {
+        "_": "boolTrue",
+        "is": "Bool",
+    },
+    BOOL_FALSE: {
+        "_": "boolFalse",
+        "is": "Bool",
+    },
+    0x62D6B459: {
         "_": "msgs_ack",
         "params": {
             "msg_ids": list[Int64(signed=False)],
         },
         "is": "MsgsAck",
+    },
+    0xCDD42A05: {
+        "_": "auth.bindTempAuthKey",
+        "params": {
+            "perm_auth_key_id": Int64(signed=False),
+            "nonce": Int64(signed=False),
+            "expires_at": int,
+            "encrypted_message": bytes,
+        },
+        "ret": bool,
+    },
+    0x99c1d49d: {
+        "_": "jsonObject",
+        "params": {
+            "value": list["JSONObjectValue"],
+        },
+        "is": "JSONValue",
+    },
+    0xc0de1bd9: {
+        "_": "jsonObjectValue",
+        "params": {
+            "key": str,
+            "value": TLType,
+        },
+        "is": "JSONObjectValue",
+    },
+    0x3f6d7b68: {
+        "_": "jsonNull",
+        "is": "JSONValue",
+    },
+    0xc7345e6a: {
+        "_": "jsonBool",
+        "params": {
+            "value": bool,
+        },
+        "is": "JSONValue",
+    },
+    0x2be0dfa4: {
+        "_": "jsonNumber",
+        "params": {
+            "value": float,
+        },
+        "is": "JSONValue",
+    },
+    0xb71e767a: {
+        "_": "jsonString",
+        "params": {
+            "value": str,
+        },
+        "is": "JSONValue",
+    },
+    0xf7444763: {
+        "_": "jsonArray",
+        "params": {
+            "value": list["JSONValue"],
+        },
+        "is": "JSONValue",
+    },
+    0x98914110: {
+        "_": "help.getAppConfig",
+        "ret": "JSONValue",
+    },
+    0x8e1a1775: {
+        "_": "nearestDc",
+        "params": {
+            "country": str,
+            "this_dc": int,
+            "nearest_dc": int,
+        },
+        "is": "NearestDc",
+    },
+    0x1fb33026: {
+        "_": "help.getNearestDc",
+        "ret": "NearestDc",
+    },
+    0x735787a8: {
+        "_": "help.getCountriesList",
+        "params": {
+            "lang_code" :str,
+            "hash" :int,
+        },
+        "ret": "help.CountriesList",
+    },
+    0x87d0759e: {
+        "_": "help.countriesList",
+        "params": {
+            "countries": list["help.Country"],
+            "hash": int,
+        },
+        "is": "help.CountriesList",
+    },
+    0xc3878e23: {
+        "_": "help.country",
+        "params": {
+            "flags": int,
+            "hidden": FlagsOf("flags", 0, Bit),
+            "iso2": str,
+            "default_name": str,
+            "name": FlagsOf("flags", 1, str),
+            "country_codes": list["help.CountryCode"],
+        },
+        "is": "help.Country",
+    },
+    0x4203c5ef: {
+        "_": "help.countryCode",
+        "params": {
+            "flags": int,
+            "country_code": str,
+            "prefixes": FlagsOf("flags", 0, list[str]),
+            "patterns": FlagsOf("flags", 1, list[str]),
+        },
+        "is": "help.CountryCode",
+    },
+    0xb7e085fe: {
+        "_": "auth.exportLoginToken",
+        "params": {
+            "api_id": int,
+            "api_hash": str,
+            "except_ids": list[Int64(signed=False)],
+        },
+        "ret": "auth.LoginToken",
+    },
+    0x629f1980: {
+        "_": "auth.loginToken",
+        "params": {
+            "expires": int,
+            "token": bytes,
+        },
+        "is": "auth.LoginToken",
+    },
+    0xda69fb52: {
+        "_": "msgs_state_req",
+        "params": {
+            "msg_ids": list[Int64(signed=False)],
+        },
+        "is": "MsgsStateReq",
+    },
+    0xf19ed96d: {
+        "_": "messages.getDialogFilters",
+        "ret": list["DialogFilter"],
+    },
+    0x18dea0ac: {
+        "_": "messages.getAvailableReactions",
+        "params": {
+            "hash": int,
+        },
+        "ret": "messages.AvailableReactions",
+    },
+    0x768e3aad: {
+        "_": "messages.availableReactions",
+        "params": {
+            "hash": int,
+            "reactions": list["AvailableReaction"],
+        },
+        "is": "messages.AvailableReactions",
     },
     # auth.authorizationSignUpRequired#44747e9a flags:# terms_of_service:flags.0?help.TermsOfService = auth.Authorization;
 }
@@ -499,8 +689,7 @@ NAME_MAP: dict[int, dict] = {
         "cid": cid,
         **ref,
     }
-    for cid, ref
-    in MAP.items()
+    for cid, ref in MAP.items()
 }
 
 # resPQ#05162463 nonce:int128 server_nonce:int128 pq:string server_public_key_fingerprints:Vector<long> = ResPQ;
@@ -522,7 +711,9 @@ class TL(TLType):
             if isinstance(check_type, GenericAlias) or not inspect.isclass(check_type):
                 check_type = type(typ)
 
-            if issubclass(check_type, GenericAlias) or issubclass(check_type, (bool, int, str, bytes)):
+            if issubclass(check_type, GenericAlias) or issubclass(
+                check_type, (bool, int, float, str, bytes)
+            ):
                 decoded = read_builtin(TL, typ, data)
             elif issubclass(check_type, Basic):
                 if isinstance(typ, Int):
@@ -556,13 +747,13 @@ class TL(TLType):
 
         reference_flags: defaultdict[str, int] = defaultdict(int)
         to_skip: set[str] = set()
-        for field, typ in tltype["params"].items():
+        for field, typ in tltype.get("params", {}).items():
             if isinstance(typ, FlagsOf):
                 if typ.typ is Bit:
                     typ.serialize(TL, field, obj, obj)
 
                     if obj.get(field, False):
-                        reference_flags[typ.param] |= (1 << typ.pos)
+                        reference_flags[typ.param] |= 1 << typ.pos
                     else:
                         reference_flags[typ.param] &= ~(1 << typ.pos)
 
@@ -570,37 +761,41 @@ class TL(TLType):
                         to_skip.add(field)
                 else:
                     if obj.get(field, None) is not None:
-                        reference_flags[typ.param] |= (1 << typ.pos)
+                        reference_flags[typ.param] |= 1 << typ.pos
                     else:
                         to_skip.add(field)
                         reference_flags[typ.param] &= ~(1 << typ.pos)
 
-        for field, typ in tltype["params"].items():
+        for field, typ in tltype.get("params", {}).items():
             if field in to_skip:
                 continue
             elif field in reference_flags:
                 obj[field] = reference_flags[field]
                 # ic("FLAGS", value)
-            
+
             value = obj[field]
 
             checked = False
             check_type = typ
             if isinstance(check_type, GenericAlias) or not inspect.isclass(check_type):
                 if not typecheck(typ, value):
-                    raise TypeError(f"Wrong parameter type for {field!r}: got {nameof(value)} but expected {nameof(typ)}")
+                    raise TypeError(
+                        f"Wrong parameter type for {field!r}: got {nameof(value)} but expected {nameof(typ)}"
+                    )
                 checked = True
                 check_type = type(typ)
 
             if not checked and not typecheck(check_type, value):
-                raise TypeError(f"Wrong parameter type for {field!r}: got {nameof(value)} but expected {nameof(typ)}")
+                raise TypeError(
+                    f"Wrong parameter type for {field!r}: got {nameof(value)} but expected {nameof(typ)}"
+                )
 
             if field.startswith("_"):
                 continue
             elif field not in obj:
                 raise ValueError(f"Missing parameter {field!r} of type {nameof(typ)}")
 
-            if issubclass(check_type, (bool, int, str, bytes, list, GenericAlias)):
+            if issubclass(check_type, (bool, int, float, str, bytes, list, GenericAlias)):
                 write_builtin(TL, typ, value, to=result)
             elif issubclass(check_type, Basic):
                 # print(name, field, typ)
@@ -613,7 +808,9 @@ class TL(TLType):
             elif issubclass(check_type, TLType):
                 result.write(TL.encode(value))
             else:
-                raise ValueError(f"Invalid type: expected {field}: {nameof(typ)}, got {nameof(value)}")
+                raise ValueError(
+                    f"Invalid type: expected {field}: {nameof(typ)}, got {nameof(value)}"
+                )
 
         return result.getvalue()
 
@@ -628,15 +825,15 @@ class TL(TLType):
 
         reference_flags: defaultdict[str, int] = defaultdict(int)
         to_skip: set[str] = set()
-        for field, typ in tltype["params"].items():
+        for field, typ in tltype.get("params", {}).items():
             if isinstance(typ, FlagsOf):
                 if obj.get(field, None) is not None:
-                    reference_flags[typ.param] |= (1 << typ.pos)
+                    reference_flags[typ.param] |= 1 << typ.pos
                 else:
                     to_skip.add(field)
                     reference_flags[typ.param] &= ~(1 << typ.pos)
 
-        for field, typ in tltype["params"].items():
+        for field, typ in tltype.get("params", {}).items():
             if field.startswith("_") or field in to_skip:
                 continue
             elif field in reference_flags:
@@ -668,14 +865,34 @@ class TL(TLType):
         attrs = {"_": nameof(self)}
         attrs |= {
             param: value
-            for param, value
-            in self.__dict__.items()
+            for param, value in self.__dict__.items()
             if not callable(value) and not param.startswith("_")
         }
         return attrs
 
+    def _get_recursive_dict(self) -> dict:
+        result = {
+            "_": self._,
+        }
+
+        for param, value in self.__dict__.items():
+            if not callable(value) and not param.startswith("_"):
+                if isinstance(value, TL):
+                    result |= {param: value._get_recursive_dict()}
+                elif isinstance(value, list):
+                    tmp = []
+                    for item in value:
+                        if isinstance(item, TL):
+                            tmp.append(item._get_recursive_dict())
+                        else:
+                            tmp.append(item)
+                    result |= {param: tmp}
+                else:
+                    result |= {param: value}
+        return result
+
     def __str__(self) -> str:
-        attrs = self.get_dict()
+        attrs = self._get_recursive_dict()
         return json.dumps(attrs, indent=4, default=str)
 
     def __repr__(self) -> str:

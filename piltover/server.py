@@ -3,13 +3,14 @@ import time
 import asyncio
 import secrets
 import hashlib
-from types import SimpleNamespace
+import functools
 
 import tgcrypto
 
+from types import SimpleNamespace
 from uuid import uuid4
 from io import BytesIO
-from typing import Callable, Awaitable, Any, Optional
+from typing import Callable, Awaitable, Optional
 from collections import defaultdict
 from dataclasses import dataclass
 
@@ -21,7 +22,7 @@ from piltover.exceptions import Disconnection
 from piltover.connection import Connection
 from piltover.types.primitive import Message
 from piltover.types import Keys
-from piltover.tl.types import Int32, Int64
+from piltover.tl.types import Int32, Int64, CoreMessage
 from piltover.utils import (
     read_int,
     generate_large_prime,
@@ -63,7 +64,7 @@ class Server:
         self.clients_lock = asyncio.Lock()
         self.auth_keys: dict[int, bytes] = {}
         self.handlers: defaultdict[
-            str, list[Callable[[Client, Request], Awaitable[Any]]]
+            str, list[Callable[[Client, Request], Awaitable[TL | dict | None]]]
         ] = defaultdict(list)
         self.salt: int = 0
 
@@ -150,16 +151,15 @@ class Server:
         return self.auth_keys.get(auth_key_id, None)
 
     def on_message(self, typ: str):
-        def decorator(func: Callable[[Client, Request], Awaitable[Any]]):
+        def decorator(func: Callable[[Client, Request], Awaitable[TL | dict | None]]):
             logger.debug("Added handler for function {typ!r}", typ=typ)
 
+            @functools.wraps(func)
             async def wrapper(client: Client, request: Request, *args, **kwargs):
                 return await func(client, request, *args, **kwargs)
 
             self.handlers[typ].append(wrapper)
-
             return wrapper
-
         return decorator
 
 
@@ -184,7 +184,7 @@ class Client:
         self.auth_key: bytes | None = None
         self.auth_key_id: int | None = None
 
-    async def read_auth_msg(self) -> Message:
+    async def read_auth_msg(self) -> tuple[Message, BytesIO]:
         data = BytesIO(await self.conn.recv())
         session_id = read_int(data.read(8))
         msg_id = read_int(data.read(8))
@@ -195,9 +195,9 @@ class Client:
         # TODO: length check
 
         payload = data.read(length)
-        return Message(session_id=session_id, data=payload, msg_id=msg_id)
+        return (Message(session_id=session_id, data=payload, msg_id=msg_id), data)
 
-    async def authorize(self):
+    async def authorize(self) -> BytesIO | None:
         data = BytesIO(await self.conn.recv())
         auth_key_id = read_int(data.read(8))
         self.auth_key_id = auth_key_id
@@ -263,7 +263,6 @@ class Client:
                             + res_pq
                         )
                     case "req_DH_params":
-                        # req_dh_params, msg_id = await self.auth_recv()
                         req_dh_params = obj
                         client_p = int.from_bytes(req_dh_params.p, "big", signed=False)
                         client_q = int.from_bytes(req_dh_params.q, "big", signed=False)
@@ -308,7 +307,12 @@ class Client:
                             ), "sha1 of data doesn't match"
                         else:
                             p_q_inner_data = TL.decode(BytesIO(key_aes_encrypted))
-                            ic(p_q_inner_data)
+                        
+                        assert p_q_inner_data._ in [
+                            "p_q_inner_data",
+                            "p_q_inner_data_dc",
+                            "p_q_inner_data_temp_dc",
+                        ], f"Expected p_q_inner_data_*, got instead {p_q_inner_data._}"
 
                         new_nonce: bytes = p_q_inner_data.new_nonce.to_bytes(
                             256 // 8, "little", signed=False
@@ -405,17 +409,17 @@ class Client:
                         auth_key_aux_hash = hashlib.sha1(auth_key).digest()[: 64 // 8]
 
                         # ic(shared.server_nonce_bytes, auth_key, auth_key_hash)
-                        print("AUTH KEY:", auth_key.hex())
-                        print("SHA1(auth_key) =", hashlib.sha1(auth_key).hexdigest())
-                        ic(shared.new_nonce.hex())
-                        ic(auth_key_aux_hash.hex())
+                        # print("AUTH KEY:", auth_key.hex())
+                        # print("SHA1(auth_key) =", hashlib.sha1(auth_key).hexdigest())
+                        # ic(shared.new_nonce.hex())
+                        # ic(auth_key_aux_hash.hex())
 
                         dh_gen_ok = TL.encode(
                             {
                                 "_": "dh_gen_ok",
                                 "nonce": client_DH_inner_data.nonce,
                                 "server_nonce": shared.server_nonce,
-                                "new_nonce_hash1": ic(int.from_bytes(
+                                "new_nonce_hash1": int.from_bytes(
                                     hashlib.sha1(
                                         shared.new_nonce
                                         + bytes([1])
@@ -423,7 +427,7 @@ class Client:
                                     ).digest()[-16:],
                                     "little",
                                     signed=False,
-                                )),
+                                ),
                             }
                         )
 
@@ -440,21 +444,42 @@ class Client:
 
             await handle(ic(req_pq_multi))
 
-            while True:
-                obj, msg_id = await self.auth_recv()
-                ic(obj)
-                if await handle(obj):
-                    break
+            try:
+                while True:
+                    try:
+                        msg, data = await self.read_auth_msg()
 
-            auth_key_id = read_int(hashlib.sha1(shared.auth_key).digest()[-8:])
-            await self.server.register_auth_key(
-                auth_key_id=auth_key_id,
-                auth_key=shared.auth_key,
-            )
-            logger.info("Auth key generation successfully completed!")
+                        if msg.session_id != 0:
+                            logger.debug("Returning data: client sent an mtproto message")
+                            if not hasattr(shared, "auth_key"):
+                                self.auth_key_id = msg.session_id
+                                self.auth_key = await self.server.get_auth_key(auth_key_id=self.auth_key_id)
 
-            self.auth_key = shared.auth_key
-            self.auth_key_id = auth_key_id
+                                if self.auth_key is None:
+                                    logger.warning("Invalid auth key id provided, disconnecting...")
+                                    raise Disconnection()
+                            return data
+
+                        obj = TL.decode(BytesIO(msg.data))
+                        msg_id = msg.msg_id
+
+                        await handle(ic(obj))
+                        logger.debug("Sent answer")
+                    except Disconnection:
+                        logger.warning("Client disconnected during generation")
+                        break
+            finally:
+                if hasattr(shared, "auth_key"):
+                    auth_key_id = read_int(hashlib.sha1(shared.auth_key).digest()[-8:])
+
+                    await self.server.register_auth_key(
+                        auth_key_id=auth_key_id,
+                        auth_key=shared.auth_key,
+                    )
+                    logger.info("Auth key generation successfully completed!")
+
+                    self.auth_key = shared.auth_key
+                    self.auth_key_id = auth_key_id
             # TODO: server salt
             # self.server_salt = shared.new_nonce[0:8] ^ shared.server_nonce[0:8]
 
@@ -471,32 +496,14 @@ class Client:
 
             self.session_id = auth_key_id
             msg = await self.decrypt(data=data)
-            ic(self.session_id)
 
             await self.propagate(Request.from_msg(self, msg))
 
-    async def auth_recv(self) -> tuple[TL, int]:
-        msg = await self.read_auth_msg()
-        result = TL.decode(BytesIO(msg.data))
-        # result._session_id = msg.session_id
-        return result, msg.msg_id
-
     async def send(
-        self, objects: list[TL], originating_request: Optional["Request"] = None
+        self, objects: TL | list[TL], originating_request: Optional["Request"] = None
     ):
-        if originating_request is not None:
-            for i in range(len(objects)):
-                if objects[i]._ not in ["ping"]:
-                    objects[i] = TL.from_dict(
-                        {
-                            "_": "rpc_result",
-                            "req_msg_id": originating_request.msg_id,
-                            "result": objects[i],
-                        }
-                    )
-
         await self.conn.send(
-            await self.encrypt(objects, originating_request=originating_request)
+            await self.encrypt(objects, originating_request=originating_request,)
         )
 
     async def recv(self) -> "Request":
@@ -526,7 +533,7 @@ class Client:
 
         if isinstance(objects, TL):
             return await self.encrypt(
-                [objects], originating_request=originating_request
+                [objects], originating_request=originating_request,
             )
 
         serialized = TL.encode(objects[0])
@@ -546,7 +553,7 @@ class Client:
             assert msg_id % 2 != 0
             seq_no = originating_request.seq_no + 1
 
-            if originating_request.obj._ not in ["ping"]:
+            if originating_request.obj._ not in ["msg_container", "ping"]:
                 serialized = TL.encode(
                     {
                         "_": "msg_container",
@@ -568,7 +575,7 @@ class Client:
             seq_no = 1
             msg_id = 1
 
-        ic(self.session_id, self.auth_key_id)
+        # ic(self.session_id, self.auth_key_id)
         data = (
             Int64.serialize(self.server.salt)
             + Int64.serialize(self.session_id)
@@ -627,18 +634,24 @@ class Client:
         try:
             try:
                 self.conn = await self.conn.init()
-                await self.authorize()
+                data = await self.authorize()
+                if data is not None:
+                    ic(data.getvalue())
+                    data.seek(8)
+                    msg = await self.decrypt(data=data)
+                    ic(msg)
+
+                    await self.propagate(Request.from_msg(self, msg))
 
                 while True:
                     try:
                         request = await self.recv()
-                        ic(request)
+                        ic(request.obj)
                         await self.propagate(request)
                     except AssertionError:
                         logger.exception("Unexpected failed assertion", backtrace=True)
             except Disconnection:
                 logger.info("Client disconnected")
-                # raise
                 # import traceback
                 # traceback.print_exc()
             # TODO: except invalid constructor id, raise INPUT_CONSTRUCTOR_INVALID_5EEF0214 (e.g.)
@@ -647,9 +660,96 @@ class Client:
             async with self.server.clients_lock:
                 self.server.clients.pop(self.uuid, None)
 
-    async def propagate(self, request: "Request"):
-        for rpc in self.server.handlers.get(request.obj._, []):
-            await rpc(self, request)
+    async def propagate(self, request: "Request", just_return: bool = False):
+        if request.obj._ == "msg_container":
+            results = []
+            for msg in request.obj.messages:
+                msg: CoreMessage
+                handlers = self.server.handlers.get(msg.obj._, [])
+                if not handlers:
+                    logger.warning("No handler found for obj:")
+                    logger.debug("{obj}", obj=msg.obj)
+                    break
+                
+                result = None
+                for rpc in handlers:
+                    result = await rpc(self, Request(
+                        client=self,
+                        obj=msg.obj, # type: ignore
+                        msg_id=msg.msg_id,
+                        seq_no=msg.seq_no,
+                    ))
+                    if result is None:
+                        continue
+                    elif isinstance(result, dict):
+                        result = TL.from_dict(result)
+                    break
+
+                if result is None:
+                    # TODO: return rpc_error(500)
+                    continue
+
+                result = TL.from_dict(
+                    {
+                        "_": "rpc_result",
+                        "req_msg_id": msg.msg_id,
+                        "result": result,
+                    }
+                )
+                results.append(result)
+
+            if not len(results) > 0:
+                # invokeWith_*
+                logger.warning("Empty msg_container, returning...")
+                return
+
+            assert len(results) > 0, "TODO: rpc_error"
+            # if just_return:
+            #     return results
+            await self.send(
+                results,
+                originating_request=request,
+            )
+        else:
+            handlers = self.server.handlers.get(request.obj._, [])
+            if not handlers:
+                logger.warning("No handler found for obj:")
+                logger.debug("{obj}", obj=request.obj)
+
+            result = None
+            for rpc in handlers:
+                result = await rpc(self, Request(
+                    client=self,
+                    obj=request.obj,
+                    msg_id=request.msg_id,
+                    seq_no=request.seq_no,
+                ))
+
+                if result is None:
+                    continue
+                elif isinstance(result, dict):
+                    result = TL.from_dict(result)
+                break
+
+            if result is None:
+                # TODO: return rpc_error(500). or maybe not (invokeWith*)...?
+                return
+
+            result = TL.from_dict(
+                {
+                    "_": "rpc_result",
+                    "req_msg_id": request.msg_id,
+                    "result": result,
+                }
+            )
+
+            if just_return:
+                return result
+
+            await self.send(
+                result,
+                originating_request=request,
+            )
 
 
 @dataclass(init=True, repr=True)
@@ -659,6 +759,7 @@ class Request:
     msg_id: int
     seq_no: int
 
+    """
     async def answer(self, data: dict | list | TL):
         if isinstance(data, dict):
             obj = [TL.from_dict(data)]
@@ -669,6 +770,7 @@ class Request:
         else:
             obj = [data]
         await self.client.send(obj, self)
+    """
 
     @staticmethod
     def from_msg(client: Client, msg: Message) -> "Request":
