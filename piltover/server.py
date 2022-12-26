@@ -18,7 +18,7 @@ from loguru import logger
 from icecream import ic
 
 from piltover.enums import Transport
-from piltover.exceptions import Disconnection
+from piltover.exceptions import Disconnection, InvalidConstructor
 from piltover.connection import Connection
 from piltover.types.primitive import Message
 from piltover.types import Keys
@@ -62,7 +62,7 @@ class Server:
 
         self.clients: dict[str, Client] = {}
         self.clients_lock = asyncio.Lock()
-        self.auth_keys: dict[int, bytes] = {}
+        self.auth_keys: dict[int, tuple[bytes, SimpleNamespace]] = {}
         self.handlers: defaultdict[
             str, list[Callable[[Client, Request], Awaitable[TL | dict | None]]]
         ] = defaultdict(list)
@@ -144,10 +144,10 @@ class Server:
         async with server:
             await server.serve_forever()
 
-    async def register_auth_key(self, auth_key_id: int, auth_key: bytes):
-        self.auth_keys[auth_key_id] = auth_key
+    async def register_auth_key(self, auth_key_id: int, auth_key: bytes, shared: SimpleNamespace):
+        self.auth_keys[auth_key_id] = (auth_key, shared)
 
-    async def get_auth_key(self, auth_key_id: int) -> bytes | None:
+    async def get_auth_key(self, auth_key_id: int) -> tuple[bytes, SimpleNamespace] | None:
         return self.auth_keys.get(auth_key_id, None)
 
     def on_message(self, typ: str):
@@ -209,7 +209,7 @@ class Client:
             req_pq_multi = TL.decode(data)
 
             assert req_pq_multi._ in ("req_pq_multi", "req_pq"), "Invalid request"
-            shared = SimpleNamespace()
+            self.shared = shared = SimpleNamespace()
 
             def get_msg_id() -> int:
                 return msg_id + 1  # 2 + (not msg_id % 2)
@@ -453,11 +453,13 @@ class Client:
                             logger.debug("Returning data: client sent an mtproto message")
                             if not hasattr(shared, "auth_key"):
                                 self.auth_key_id = msg.session_id
-                                self.auth_key = await self.server.get_auth_key(auth_key_id=self.auth_key_id)
 
-                                if self.auth_key is None:
+                                answer = await self.server.get_auth_key(auth_key_id=self.auth_key_id)
+                                if answer is None:
                                     logger.warning("Invalid auth key id provided, disconnecting...")
                                     raise Disconnection()
+
+                                self.auth_key, self.shared = answer
                             return data
 
                         obj = TL.decode(BytesIO(msg.data))
@@ -475,6 +477,7 @@ class Client:
                     await self.server.register_auth_key(
                         auth_key_id=auth_key_id,
                         auth_key=shared.auth_key,
+                        shared=shared,
                     )
                     logger.info("Auth key generation successfully completed!")
 
@@ -488,11 +491,12 @@ class Client:
         # else:
         #     assert False, "TODO: authorized messages check"
         else:
-            self.auth_key = await self.server.get_auth_key(auth_key_id=auth_key_id)
-
-            if self.auth_key is None:
+            answer = await self.server.get_auth_key(auth_key_id=auth_key_id)
+            if answer is None:
                 logger.warning("Invalid auth key id provided, disconnecting...")
                 raise Disconnection()
+
+            self.auth_key, self.shared = answer
 
             self.session_id = auth_key_id
             msg = await self.decrypt(data=data)
@@ -553,7 +557,7 @@ class Client:
             assert msg_id % 2 != 0
             seq_no = originating_request.seq_no + 1
 
-            if originating_request.obj._ not in ["msg_container", "ping"]:
+            if originating_request.obj is not None and originating_request.obj._ not in ["msg_container", "ping"]:
                 serialized = TL.encode(
                     {
                         "_": "msg_container",
@@ -645,9 +649,44 @@ class Client:
 
                 while True:
                     try:
-                        request = await self.recv()
-                        ic(request.obj)
-                        await self.propagate(request)
+                        data = BytesIO(await self.conn.recv())
+                        session_id = read_int(data.read(8))
+                        decrypted = await self.decrypt(data=data)
+
+                        try:
+                            request = Request(
+                                client=self,
+                                obj=TL.decode(BytesIO(decrypted.data)),
+                                msg_id=decrypted.msg_id,
+                                seq_no=decrypted.seq_no,
+                            )
+                            ic(request.obj)
+                            await self.propagate(request)
+                        except InvalidConstructor as e:
+                            formatted = f"{e.cid:x}".zfill(8).upper()
+                            logger.error("Invalid constructor: {formatted}", formatted=formatted)
+
+                            await self.conn.send(
+                                await self.encrypt(
+                                    TL.from_dict(
+                                        {
+                                            "_": "rpc_result",
+                                            "req_msg_id": decrypted.msg_id,
+                                            "result": TL.from_dict(
+                                                {
+                                                    "_": "rpc_error",
+                                                    "error_code": 400,
+                                                    "error_message": f"INPUT_CONSTRUCTOR_INVALID_{formatted}"
+                                                }
+                                            ),
+                                        }
+                                    ),
+                                    originating_request=Request(
+                                        msg_id=decrypted.msg_id,
+                                        seq_no=decrypted.seq_no,
+                                    )
+                                )
+                            )
                     except AssertionError:
                         logger.exception("Unexpected failed assertion", backtrace=True)
             except Disconnection:
@@ -754,10 +793,10 @@ class Client:
 
 @dataclass(init=True, repr=True)
 class Request:
-    client: Client
-    obj: TL
     msg_id: int
     seq_no: int
+    client: Client = None
+    obj: TL = None
 
     """
     async def answer(self, data: dict | list | TL):

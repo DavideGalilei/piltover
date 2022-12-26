@@ -372,6 +372,20 @@ async def main():
             "reactions": [],
         }
 
+    @pilt.on_message("account.getDefaultEmojiStatuses")
+    async def get_default_emoji_statuses(client: Client, request: Request):
+        return {
+            "_": "account.emojiStatuses",
+            "hash": 0,
+            "statuses": [],
+        }
+
+    @pilt.on_message("set_client_DH_params")
+    async def set_client_dh_params(client: Client, request: Request):
+        print(request.obj)
+        print(client.shared)
+        raise
+
     await pilt.serve()
 
 

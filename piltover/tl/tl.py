@@ -272,6 +272,14 @@ MAP = {
         },
         "is": "RpcResult",
     },
+    0x2144ca19: {
+        "_": "rpc_error",
+        "params": {
+            "error_code": int,
+            "error_message": str,
+        },
+        "is": "RpcError",
+    },
     0x73F1F8DC: {
         "_": "msg_container",
         "params": {
@@ -680,6 +688,21 @@ MAP = {
             "reactions": list["AvailableReaction"],
         },
         "is": "messages.AvailableReactions",
+    },
+    0xd6753386: {
+        "_": "account.getDefaultEmojiStatuses",
+        "params": {
+            "hash": Int64(signed=False),
+        },
+        "ret": "account.EmojiStatuses",
+    },
+    0x90c467d1: {
+        "_": "account.emojiStatuses",
+        "params": {
+            "hash": Int64,
+            "statuses": list["EmojiStatus"],
+        },
+        "is": "account.EmojiStatuses",
     },
     # auth.authorizationSignUpRequired#44747e9a flags:# terms_of_service:flags.0?help.TermsOfService = auth.Authorization;
 }
