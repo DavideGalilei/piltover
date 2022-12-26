@@ -9,6 +9,9 @@ from piltover.enums import Transport
 from piltover.utils.buffered_stream import BufferedStream
 
 
+from icecream import ic
+
+
 class Connection(ABC):
     @staticmethod
     def new(
@@ -63,26 +66,26 @@ class TCPAbridged(Connection):
 
         if length >= 0x7F:  # 127
             self.stream.write(b"\x7f")
+            self.stream.write(length.to_bytes(3, byteorder="little", signed=False))
+        else:
+            self.stream.write(length.to_bytes(1, byteorder="little", signed=False))
 
-        self.stream.write(length.to_bytes(1, byteorder="little", signed=False))
+        self.stream.write(data)
         await self.stream.drain()
 
     async def recv(self) -> bytes:
         header = await self.stream.read(1)
 
-        length: int = int.from_bytes(header, byteorder="little", signed=False)
+        length = int.from_bytes(header, byteorder="little", signed=False)
 
-        assert length != 0, "Received packet length=0"
-        if length >= 0x7F:  # 127
-            head = await self.stream.read(1)
-            assert (
-                head == b"\x7f"
-            ), f"Invalid header for TCP Abdridged (should be 0x7f, got {head:x!r})"
+        # assert length != 0, "Received packet length=0"
+        if length == 0x7F:  # 127
             length = int.from_bytes(
                 await self.stream.read(3), byteorder="little", signed=False
             )
+        else:
+            length *= 4
 
-        length *= 4
         return await self.stream.read(length)
 
     async def close(self):

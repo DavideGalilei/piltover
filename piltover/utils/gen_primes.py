@@ -91,7 +91,8 @@ def gen_safe_prime(size: int = 2048) -> tuple[int, int]:
     """
 
     # Cached integer
-    return (CURRENT_DH_PRIME, 2)
+    g = 2
+    return (CURRENT_DH_PRIME, CURRENT_DH_PRIME % (4 * g))
 
 
 if __name__ == "__main__":
@@ -99,7 +100,7 @@ if __name__ == "__main__":
     q = generate_large_prime(32)
 
     safe = gen_safe_prime()
-    print(safe.p, safe.g)
+    print(safe)
 
     assert p != -1
     assert q != -1

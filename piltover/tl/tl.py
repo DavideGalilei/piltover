@@ -65,9 +65,9 @@ MAP = {
     0xa9f55f95: {
         "_": "p_q_inner_data_dc",
         "params": {
-            "pq": str,
-            "p": str,
-            "q": str,
+            "pq": bytes,
+            "p": bytes,
+            "q": bytes,
             "nonce": Int128(signed=True),
             "server_nonce": Int128(signed=True),
             "new_nonce": Int256(signed=False),

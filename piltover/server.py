@@ -32,6 +32,7 @@ from piltover.utils import (
     restore_public_key,
     kdf,
 )
+from piltover.utils.rsa_utils import rsa_decrypt, rsa_pad_inverse
 from piltover.utils.buffered_stream import BufferedStream
 from piltover.tl import TL
 
@@ -78,6 +79,7 @@ class Server:
 
         transport = None
         if header == b"\xef":
+            await stream.read(1)  # discard
             # TCP Abridged
             transport = Transport.Abridged
         elif header == b"\xee":
@@ -205,17 +207,20 @@ class Client:
             length = read_int(data.read(4))
 
             req_pq_multi = TL.decode(data)
-            assert req_pq_multi._ == "req_pq_multi", "Invalid request"
+
+            assert req_pq_multi._ in ("req_pq_multi", "req_pq"), "Invalid request"
             shared = SimpleNamespace()
 
             def get_msg_id() -> int:
-                return msg_id + 1 # 2 + (not msg_id % 2)
+                return msg_id + 1  # 2 + (not msg_id % 2)
+
+            # Whether to use or not the new RSA_PAD algorithm
+            # TODO: handle different server public key
+            old = False
 
             async def handle(obj: TL) -> bool:
-                ic(repr(obj))
-
                 match obj._:
-                    case "req_pq_multi":
+                    case "req_pq_multi" | "req_pq":
                         req_pq_multi = obj
                         p = generate_large_prime(31)
                         q = generate_large_prime(31)
@@ -273,32 +278,37 @@ class Client:
                         # print(f"{client_p=} {client_q=}")
 
                         encrypted_data = req_dh_params.encrypted_data
+                        assert len(encrypted_data) == 256, "Invalid encrypted data"
 
-                        private = self.server.private_key.private_numbers()  # type: ignore
-                        public = self.server.public_key.public_numbers()  # type: ignore
-
-                        key_aes_encrypted = (
-                            pow(
-                                int.from_bytes(encrypted_data, "big", signed=False),
-                                private.d,  # type: ignore
-                                public.n,  # type: ignore
-                            )
-                            .to_bytes(256, "big", signed=False)
-                            .lstrip(b"\0")
-                        )
+                        if old:
+                            key_aes_encrypted = rsa_decrypt(
+                                encrypted_data,
+                                public_key=self.server.public_key,
+                                private_key=self.server.private_key,
+                            ).lstrip(b"\0")
+                        else:
+                            key_aes_encrypted = rsa_pad_inverse(
+                                encrypted_data,
+                                public_key=self.server.public_key,
+                                private_key=self.server.private_key,
+                            ).lstrip(b"\0")
 
                         # idk TODO: restart generation with dh_fail instead
                         # assert key_aes_encrypted >= public.n, "key_aes_encrypted greater than RSA modulus, aborting..."
 
-                        # https://github.com/teamgram/teamgram-server/blob/820e5b122285b7ce76ffa81e8e4ac48e211ce423/app/interface/gateway/internal/server/handshake.go#L338
-
                         # print(key_aes_encrypted)
                         # ic(key_aes_encrypted.hex())
-                        p_q_inner_data = TL.decode(BytesIO(key_aes_encrypted[20:]))
-                        assert (
-                            hashlib.sha1(TL.encode(p_q_inner_data)).digest()
-                            == key_aes_encrypted[:20]
-                        ), "sha1 of data doesn't match"
+
+                        if old:
+                            p_q_inner_data = TL.decode(BytesIO(key_aes_encrypted[20:]))
+
+                            assert (
+                                hashlib.sha1(TL.encode(p_q_inner_data)).digest()
+                                == key_aes_encrypted[:20]
+                            ), "sha1 of data doesn't match"
+                        else:
+                            p_q_inner_data = TL.decode(BytesIO(key_aes_encrypted))
+                            ic(p_q_inner_data)
 
                         new_nonce: bytes = p_q_inner_data.new_nonce.to_bytes(
                             256 // 8, "little", signed=False
@@ -391,25 +401,29 @@ class Client:
                             )
                         ).to_bytes(256, "big", signed=False)
 
-                        auth_key_hash = hashlib.sha1(auth_key).digest()[64 // 8 :]
+                        auth_key_hash = hashlib.sha1(auth_key).digest()[-64 // 8 :]
                         auth_key_aux_hash = hashlib.sha1(auth_key).digest()[: 64 // 8]
 
-                        ic(shared.server_nonce_bytes, auth_key, auth_key_hash)
+                        # ic(shared.server_nonce_bytes, auth_key, auth_key_hash)
+                        print("AUTH KEY:", auth_key.hex())
+                        print("SHA1(auth_key) =", hashlib.sha1(auth_key).hexdigest())
+                        ic(shared.new_nonce.hex())
+                        ic(auth_key_aux_hash.hex())
 
                         dh_gen_ok = TL.encode(
                             {
                                 "_": "dh_gen_ok",
                                 "nonce": client_DH_inner_data.nonce,
                                 "server_nonce": shared.server_nonce,
-                                "new_nonce_hash1": int.from_bytes(
+                                "new_nonce_hash1": ic(int.from_bytes(
                                     hashlib.sha1(
                                         shared.new_nonce
                                         + bytes([1])
                                         + auth_key_aux_hash
-                                    ).digest()[4:20],
+                                    ).digest()[-16:],
                                     "little",
                                     signed=False,
-                                ),
+                                )),
                             }
                         )
 
@@ -424,7 +438,7 @@ class Client:
                         assert False, "Unreachable"
                 return False
 
-            await handle(req_pq_multi)
+            await handle(ic(req_pq_multi))
 
             while True:
                 obj, msg_id = await self.auth_recv()
@@ -437,12 +451,13 @@ class Client:
                 auth_key_id=auth_key_id,
                 auth_key=shared.auth_key,
             )
-            logger.info(
-                "Auth key generation successfully completed! Disconnecting client..."
-            )
+            logger.info("Auth key generation successfully completed!")
 
             self.auth_key = shared.auth_key
             self.auth_key_id = auth_key_id
+            # TODO: server salt
+            # self.server_salt = shared.new_nonce[0:8] ^ shared.server_nonce[0:8]
+
             # raise Disconnection()
             # await self.conn.send(Int32.serialize(-404, signed=True))
         # else:
@@ -591,7 +606,9 @@ class Client:
         msg_key = data.read(16)
 
         aes_key, aes_iv = kdf(self.auth_key, msg_key, True)
-        data = BytesIO(tgcrypto.ige256_decrypt(data.read(), aes_key, aes_iv))
+
+        got = data.read()
+        data = BytesIO(tgcrypto.ige256_decrypt(got, aes_key, aes_iv))
         salt = data.read(8)  # Salt
         self.session_id = read_int(data.read(8))
 
