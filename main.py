@@ -43,7 +43,7 @@ async def main():
     private_key = privkey.read_text()
     public_key = pubkey.read_text()
 
-    fp = get_public_key_fingerprint(public_key)
+    fp = get_public_key_fingerprint(public_key, signed=True)
     logger.info(
         "Pubkey fingerprint: {fp:x} ({no_sign})",
         fp=fp, no_sign=fp.to_bytes(8, "big", signed=True).hex()
@@ -80,6 +80,18 @@ async def main():
 
     @pilt.on_message("invokeWithLayer")
     async def invoke_with_layer(client: Client, request: Request):
+        return await client.propagate(
+            Request(
+                client=client,
+                obj=request.obj.query,
+                msg_id=request.msg_id,
+                seq_no=request.seq_no,
+            ),
+            just_return=True,
+        )
+
+    @pilt.on_message("invokeAfterMsg")
+    async def invoke_after_msg(client: Client, request: Request):
         return await client.propagate(
             Request(
                 client=client,
@@ -311,6 +323,22 @@ async def main():
             "value": [],
         }
 
+    @pilt.on_message("langpack.getLanguages")
+    async def get_languages(client: Client, request: Request):
+        return {
+            "_": "vector",
+            "data": [
+                TL.from_dict(
+                    {
+                        "_": "langPackLanguage",
+                        "name": "Gramz",
+                        "native_name": "Le Gramz",
+                        "lang_code": "grz",
+                    }
+                )
+            ]
+        }
+
     @pilt.on_message("help.getCountriesList")
     async def get_countries_list(client: Client, request: Request):
         return {
@@ -385,6 +413,104 @@ async def main():
         print(request.obj)
         print(client.shared)
         raise
+
+    @pilt.on_message("messages.getHistory")
+    async def get_history(client: Client, request: Request):
+        import time
+
+        if request.obj.offset_id != 0:
+            return {
+                "_": "messages.messages",
+                "messages": [],
+                "chats": [],
+                "users": [],
+            }
+
+        return {
+            "_": "messages.messages",
+            "messages": [
+                TL.from_dict(
+                    {
+                        "_": "message",
+                        "out": True,
+                        "mentioned": True,
+                        "media_unread": False,
+                        "silent": False,
+                        "post": True,
+                        "from_scheduled": False,
+                        "legacy": True,
+                        "edit_hide": True,
+                        "pinned": False,
+                        "noforwards": False,
+                        "id": 1,
+                        "from_id": TL.from_dict(
+                            {
+                                "_": "peerUser",
+                                "user_id": user["id"],
+                            }
+                        ),
+                        "peer_id": TL.from_dict(
+                            {
+                                "_": "peerUser",
+                                "user_id": user["id"],
+                            }
+                        ),
+                        # "fwd_from": FlagsOf("flags", 2, "MessageFwdHeader"),
+                        # "via_bot_id": FlagsOf("flags", 11, Int64(signed=False)),
+                        # "reply_to": FlagsOf("flags", 3, "MessageReplyHeader"),
+                        "date": int(time.time() - 120),
+                        "message": "aaaaaa",
+                        "media": None,
+                        # "reply_markup": FlagsOf("flags", 6, "ReplyMarkup"),
+                        "entities": None,
+                        "views": 40,
+                        "forwards": None,
+                        "edit_date": None,
+                        "post_author": None,
+                        "grouped_id": None,
+                        "reactions": None,
+                        "restriction_reason": None,
+                        "ttl_period": None,
+                    }
+                )
+            ],
+            "chats": [],
+            "users": [],
+        }
+
+    @pilt.on_message("account.updateStatus")
+    async def update_status(client: Client, request: Request):
+        return {
+            "_": "boolTrue",
+        }
+
+    @pilt.on_message("messages.sendMessage")
+    async def send_message(client: Client, request: Request):
+        import time
+    
+        return {
+            "_": "updateShortSentMessage",
+            "out": True,
+            "id": 2,
+            "pts": 2,
+            "pts_count": 2,
+            "date": int(time.time()),
+        }
+
+    @pilt.on_message("messages.readHistory")
+    async def read_history(client: Client, request: Request):
+        return {
+            "_": "messages.affectedMessages",
+            "pts": 3,
+            "pts_count": 1,
+        }
+
+    @pilt.on_message("destroy_session")
+    async def destroy_session(client: Client, request: Request):
+        return {
+            "_": "destroy_session_ok",
+            "session_id": request.obj.session_id,
+        }
 
     await pilt.serve()
 

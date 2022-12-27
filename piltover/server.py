@@ -235,13 +235,14 @@ class Client:
                         assert p != q
 
                         pq = shared.p * shared.q
+                        ic(p, q, pq)
 
                         # print(f"server {p=}")
                         # print(f"server {q=}")
                         # print(f"server {pq=}")
 
                         shared.server_nonce = int.from_bytes(
-                            secrets.token_bytes(128 // 8), byteorder="big", signed=True
+                            secrets.token_bytes(128 // 8), byteorder="big", signed=False
                         )
 
                         res_pq = TL.encode(
@@ -345,7 +346,7 @@ class Client:
                         shared.server_nonce_bytes = (
                             server_nonce_bytes
                         ) = shared.server_nonce.to_bytes(
-                            128 // 8, "little", signed=True
+                            128 // 8, "little", signed=False
                         )
 
                         answer_with_hash = hashlib.sha1(answer).digest() + answer
@@ -438,6 +439,8 @@ class Client:
                             + dh_gen_ok
                         )
                         return True
+                    case "msgs_ack":
+                        pass
                     case _:
                         assert False, "Unreachable"
                 return False
@@ -487,7 +490,7 @@ class Client:
             # self.server_salt = shared.new_nonce[0:8] ^ shared.server_nonce[0:8]
 
             # raise Disconnection()
-            # await self.conn.send(Int32.serialize(-404, signed=True))
+            # await self.conn.send(Int32.serialize(-404, signed=False))
         # else:
         #     assert False, "TODO: authorized messages check"
         else:

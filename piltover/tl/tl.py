@@ -32,32 +32,32 @@ MAP = {
     0xBE7E8EF1: {
         "_": "req_pq_multi",
         "params": {
-            "nonce": Int128(signed=True),
+            "nonce": Int128,
         },
         "ret": "ResPQ",
     },
     0x60469778: {
         "_": "req_pq",
         "params": {
-            "nonce": Int128(signed=True),
+            "nonce": Int128,
         },
         "ret": "ResPQ",
     },
     0x05162463: {
         "_": "resPQ",
         "params": {
-            "nonce": Int128(signed=True),
-            "server_nonce": Int128(signed=True),
+            "nonce": Int128,
+            "server_nonce": Int128,
             "pq": bytes,
-            "server_public_key_fingerprints": list[Int64(signed=True)],
+            "server_public_key_fingerprints": list[Int64],
         },
         "is": "ResPQ",
     },
     0xD712E4BE: {
         "_": "req_DH_params",
         "params": {
-            "nonce": Int128(signed=True),
-            "server_nonce": Int128(signed=True),
+            "nonce": Int128,
+            "server_nonce": Int128,
             "p": bytes,
             "q": bytes,
             "public_key_fingerprint": Int64,
@@ -71,9 +71,9 @@ MAP = {
             "pq": bytes,
             "p": bytes,
             "q": bytes,
-            "nonce": Int128(signed=True),
-            "server_nonce": Int128(signed=True),
-            "new_nonce": Int256(signed=False),
+            "nonce": Int128,
+            "server_nonce": Int128,
+            "new_nonce": Int256,
         },
         "is": "P_Q_inner_data",
     },
@@ -83,9 +83,9 @@ MAP = {
             "pq": bytes,
             "p": bytes,
             "q": bytes,
-            "nonce": Int128(signed=True),
-            "server_nonce": Int128(signed=True),
-            "new_nonce": Int256(signed=False),
+            "nonce": Int128,
+            "server_nonce": Int128,
+            "new_nonce": Int256,
             "dc": int,
         },
         "is": "P_Q_inner_data",
@@ -96,9 +96,9 @@ MAP = {
             "pq": bytes,
             "p": bytes,
             "q": bytes,
-            "nonce": Int128(signed=True),
-            "server_nonce": Int128(signed=True),
-            "new_nonce": Int256(signed=False),
+            "nonce": Int128,
+            "server_nonce": Int128,
+            "new_nonce": Int256,
             "dc": int,
             "expires_in": int,
         },
@@ -107,8 +107,8 @@ MAP = {
     0xD0E8075C: {
         "_": "server_DH_params_ok",
         "params": {
-            "nonce": Int128(signed=True),
-            "server_nonce": Int128(signed=True),
+            "nonce": Int128,
+            "server_nonce": Int128,
             "encrypted_answer": bytes,
         },
         "is": "Server_DH_Params",
@@ -116,8 +116,8 @@ MAP = {
     0xB5890DBA: {
         "_": "server_DH_inner_data",
         "params": {
-            "nonce": Int128(signed=True),
-            "server_nonce": Int128(signed=True),
+            "nonce": Int128,
+            "server_nonce": Int128,
             "g": int,
             "dh_prime": bytes,
             "g_a": bytes,
@@ -128,8 +128,8 @@ MAP = {
     0xF5045F1F: {
         "_": "set_client_DH_params",
         "params": {
-            "nonce": Int128(signed=True),
-            "server_nonce": Int128(signed=True),
+            "nonce": Int128,
+            "server_nonce": Int128,
             "encrypted_data": bytes,
         },
         "ret": "Set_client_DH_params_answer",
@@ -137,9 +137,9 @@ MAP = {
     0x6643B654: {
         "_": "client_DH_inner_data",
         "params": {
-            "nonce": Int128(signed=True),
-            "server_nonce": Int128(signed=True),
-            "retry_id": Int64(signed=True),
+            "nonce": Int128,
+            "server_nonce": Int128,
+            "retry_id": Int64,
             "g_b": bytes,
         },
         "is": "Client_DH_Inner_Data",
@@ -147,9 +147,9 @@ MAP = {
     0x3BCBF734: {
         "_": "dh_gen_ok",
         "params": {
-            "nonce": Int128(signed=True),
-            "server_nonce": Int128(signed=True),
-            "new_nonce_hash1": Int128(signed=False),
+            "nonce": Int128,
+            "server_nonce": Int128,
+            "new_nonce_hash1": Int128,
         },
         "is": "Set_client_DH_params_answer",
     },
@@ -172,6 +172,14 @@ MAP = {
         "_": "invokeWithLayer",
         "params": {
             "layer": int,
+            "query": TLType,
+        },
+        "ret": TLType,
+    },
+    0xcb9f372d: {
+        "_": "invokeAfterMsg",
+        "params": {
+            "msg_id": Int64,
             "query": TLType,
         },
         "ret": TLType,
@@ -509,7 +517,7 @@ MAP = {
     },
     0xD3BC4B7A: {
         "_": "userEmpty",
-        "params": {"id": Int64(signed=False)},
+        "params": {"id": Int64},
         "is": "User",
     },
     VECTOR_CID: {
@@ -530,15 +538,15 @@ MAP = {
     0x62D6B459: {
         "_": "msgs_ack",
         "params": {
-            "msg_ids": list[Int64(signed=False)],
+            "msg_ids": list[Int64],
         },
         "is": "MsgsAck",
     },
     0xCDD42A05: {
         "_": "auth.bindTempAuthKey",
         "params": {
-            "perm_auth_key_id": Int64(signed=False),
-            "nonce": Int64(signed=False),
+            "perm_auth_key_id": Int64,
+            "nonce": Int64,
             "expires_at": int,
             "encrypted_message": bytes,
         },
@@ -651,7 +659,7 @@ MAP = {
         "params": {
             "api_id": int,
             "api_hash": str,
-            "except_ids": list[Int64(signed=False)],
+            "except_ids": list[Int64],
         },
         "ret": "auth.LoginToken",
     },
@@ -666,7 +674,7 @@ MAP = {
     0xda69fb52: {
         "_": "msgs_state_req",
         "params": {
-            "msg_ids": list[Int64(signed=False)],
+            "msg_ids": list[Int64],
         },
         "is": "MsgsStateReq",
     },
@@ -692,7 +700,7 @@ MAP = {
     0xd6753386: {
         "_": "account.getDefaultEmojiStatuses",
         "params": {
-            "hash": Int64(signed=False),
+            "hash": Int64,
         },
         "ret": "account.EmojiStatuses",
     },
@@ -704,6 +712,184 @@ MAP = {
         },
         "is": "account.EmojiStatuses",
     },
+    0x4423e6c5: {
+        "_": "messages.getHistory",
+        "params": {
+            "peer": TLType,
+            "offset_id": int,
+            "offset_date": int,
+            "add_offset": int,
+            "limit": int,
+            "max_id": int,
+            "min_id": int,
+            "hash": Int64,
+        },
+        "ret": "messages.Messages",
+    },
+    0x8c718e87: {
+        "_": "messages.messages",
+        "params": {
+            "messages": list["Message"],
+            "chats": list["Chat"],
+            "users": list["User"],
+        },
+        "is": "messages.Messages",
+    },
+    0x38116ee0: {
+        "_": "message",
+        "params": {
+            "flags": int,
+            "out": FlagsOf("flags", 1, Bit),
+            "mentioned": FlagsOf("flags", 4, Bit),
+            "media_unread": FlagsOf("flags", 5, Bit),
+            "silent": FlagsOf("flags", 13, Bit),
+            "post": FlagsOf("flags", 14, Bit),
+            "from_scheduled": FlagsOf("flags", 18, Bit),
+            "legacy": FlagsOf("flags", 19, Bit),
+            "edit_hide": FlagsOf("flags", 21, Bit),
+            "pinned": FlagsOf("flags", 24, Bit),
+            "noforwards": FlagsOf("flags", 26, Bit),
+            "id": int,
+            "from_id": FlagsOf("flags", 8, "Peer"),
+            "peer_id": TLType,
+            "fwd_from": FlagsOf("flags", 2, "MessageFwdHeader"),
+            "via_bot_id": FlagsOf("flags", 11, Int64),
+            "reply_to": FlagsOf("flags", 3, "MessageReplyHeader"),
+            "date": int,
+            "message": str,
+            "media": FlagsOf("flags", 9, "MessageMedia"),
+            "reply_markup": FlagsOf("flags", 6, "ReplyMarkup"),
+            "entities": FlagsOf("flags", 7, list["MessageEntity"]),
+            "views": FlagsOf("flags", 10, int),
+            "forwards": FlagsOf("flags", 10, int),
+            "replies": FlagsOf("flags", 23, "MessageReplies"),
+            "edit_date": FlagsOf("flags", 15, int),
+            "post_author": FlagsOf("flags", 16, str),
+            "grouped_id": FlagsOf("flags", 17, Int64),
+            "reactions": FlagsOf("flags", 20, "MessageReactions"),
+            "restriction_reason": FlagsOf("flags", 22, list["RestrictionReason"]),
+            "ttl_period": FlagsOf("flags", 25, int),
+        },
+        "is": "Message",
+    },
+    0x9015e101: {
+        "_": "updateShortSentMessage",
+        "params": {
+            "flags": int,
+            "out": FlagsOf("flags", 1, Bit),
+            "id": int,
+            "pts": int,
+            "pts_count": int,
+            "date": int,
+            "media": FlagsOf("flags", 9, "MessageMedia"),
+            "entities": FlagsOf("flags", 7, list["MessageEntity"]),
+            "ttl_period": FlagsOf("flags", 25, int),
+        },
+        "is": "Updates",
+    },
+    0x59511722: {
+        "_": "peerUser",
+        "params": {
+            "user_id": Int64,
+        },
+        "is": "Peer",
+    },
+    0x7da07ec9: {
+        "_": "inputPeerSelf",
+        "is": "InputPeer",
+    },
+    0x6628562c: {
+        "_": "account.updateStatus",
+        "params": {
+            "offline": bool
+        },
+        "ret": bool,
+    },
+    0x1cc20387: {
+        "_": "messages.sendMessage",
+        "params": {
+            "flags": int,
+            "no_webpage": FlagsOf("flags", 1, Bit),
+            "silent": FlagsOf("flags", 5, Bit),
+            "background": FlagsOf("flags", 6, Bit),
+            "clear_draft": FlagsOf("flags", 7, Bit),
+            "noforwards": FlagsOf("flags", 14, Bit),
+            "update_stickersets_order": FlagsOf("flags", 15, Bit),
+            "peer": TLType,
+            "reply_to_msg_id": FlagsOf("flags", 0, int),
+            "top_msg_id": FlagsOf("flags", 9, int),
+            "message": str,
+            "random_id": Int64,
+            "reply_markup": FlagsOf("flags", 2, "ReplyMarkup"),
+            "entities": FlagsOf("flags", 3, list["MessageEntity"]),
+            "schedule_date": FlagsOf("flags", 10, int),
+            "send_as": FlagsOf("flags", 13, "InputPeer"),
+        },
+        "ret": "Updates",
+    },
+    0x0e306d3a: {
+        "_": "messages.readHistory",
+        "params": {
+            "peer": TLType,
+            "max_id": int,
+        },
+        "ret": "messages.AffectedMessages",
+    },
+    0x84d19185: {
+        "_": "messages.affectedMessages",
+        "params": {
+            "pts": int,
+            "pts_count": int,
+        },
+        "is": "messages.AffectedMessages",
+    },
+    0xa0fda762: {
+        "_": "messages.search",
+        "params": {
+            "flags": int,
+            "peer": TLType,
+            "q": str,
+            "from_id": FlagsOf("flags", 0, "InputPeer"),
+            "top_msg_id": FlagsOf("flags", 1, int),
+            "filter": TLType,
+            "min_date": int,
+            "max_date": int,
+            "offset_id": int,
+            "add_offset": int,
+            "limit": int,
+            "max_id": int,
+            "min_id": int,
+            "hash": Int64,
+        },
+        "ret": "messages.Messages",
+    },
+    0xE7512126: {
+        "_": "destroy_session",
+        "params": {
+            "session_id": Int64,
+        },
+        "ret": "DestroySessionRes",
+    },
+    0xe22045fc: {
+        "_": "destroy_session_ok",
+        "params": {
+            "session_id": Int64,
+        },
+        "is": "DestroySessionRes",
+    },
+    0x800FD57D: {
+        "_": "langpack.getLanguages",
+        "ret": list["LangPackLanguage"],
+    },
+    0x117698f1: {
+        "_": "langPackLanguage",
+        "params": {
+            "name": str,
+            "native_name": str,
+            "lang_code": str,
+        },
+        "is": "LangPackLanguage",
+    }
     # auth.authorizationSignUpRequired#44747e9a flags:# terms_of_service:flags.0?help.TermsOfService = auth.Authorization;
 }
 

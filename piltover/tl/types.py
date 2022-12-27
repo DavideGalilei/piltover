@@ -34,7 +34,7 @@ def read_string(data: BytesIO) -> str:
 
 def read_builtin(TL, typ: type, data: BytesIO):
     if issubclass(typ, bool):
-        cid = data.read(4)
+        cid = read_int(data.read(4))
         assert cid in [BOOL_FALSE, BOOL_TRUE], "Invalid bool value provided"
         return cid == BOOL_TRUE
     elif issubclass(typ, int):
@@ -176,7 +176,7 @@ def typecheck(typ, value) -> bool:
                 if len(value) == 0:
                     return True
 
-                if isinstance(ret, str) and isinstance(value[0], TLType):
+                if isinstance(ret, str) and isinstance(value[0], (TLType, dict)):
                     return True
                 return typecheck(ret, value[0])
             else:
