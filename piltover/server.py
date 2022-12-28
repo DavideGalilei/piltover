@@ -216,6 +216,7 @@ class Client:
 
             # Whether to use or not the new RSA_PAD algorithm
             # TODO: handle different server public key
+            # with req_dh_params.public_key_fingerprint
             old = False
 
             async def handle(obj: TL) -> bool:
@@ -529,7 +530,7 @@ class Client:
         )
 
     async def encrypt(
-        self, objects: TL | list[TL], originating_request: Optional["Request"] = None
+        self, objects: TL | list[tuple[TL, CoreMessage]], originating_request: Optional["Request"] = None
     ) -> bytes:
         if self.session_id is None:
             assert False, "FATAL: self.session_id is None"
@@ -539,48 +540,40 @@ class Client:
             assert False, "FATAL: self.auth_key_id is None"
 
         if isinstance(objects, TL):
-            return await self.encrypt(
-                [objects], originating_request=originating_request,
-            )
+            serialized = TL.encode(objects)
 
-        serialized = TL.encode(objects[0])
-        # TODO: handle multiple messages in a single container
-
-        # about msg_id:
-        # https://core.telegram.org/mtproto/description#message-identifier-msg-id
-        # Client message identifiers are divisible by 4, server message
-        # identifiers modulo 4 yield 1 if the message is a response to
-        # a client message, and 3 otherwise.
-        if originating_request is not None:
-            # is_content_related = originating_request.obj._ in ["ping"]
+            # about msg_id:
+            # https://core.telegram.org/mtproto/description#message-identifier-msg-id
+            # Client message identifiers are divisible by 4, server message
+            # identifiers modulo 4 yield 1 if the message is a response to
+            # a client message, and 3 otherwise.
+            if originating_request is None:
+                assert False
+                # is_content_related = originating_request.obj._ in ["ping"]
             orig_msg_id = originating_request.msg_id
             msg_id = orig_msg_id + (not orig_msg_id % 2)  # + (not is_content_related)
             # msg_id += 4 * (orig_msg_id % 4 == msg_id % 4)
             # ic(msg_id)
             assert msg_id % 2 != 0
             seq_no = originating_request.seq_no + 1
-
-            if originating_request.obj is not None and originating_request.obj._ not in ["msg_container", "ping"]:
-                serialized = TL.encode(
-                    {
-                        "_": "msg_container",
-                        "messages": [
-                            (
-                                Int64.serialize(msg_id)
-                                + Int32.serialize(seq_no)
-                                + Int32.serialize(len(serialized))
-                                + serialized
-                            )
-                        ],
-                    }
-                )
-                # ic("container::", serialized)
         else:
-            assert False, "TODO"
-            # TODO: self.last_received_msg_id + 1 (for seq_no too)
-            # idk, check docs
-            seq_no = 1
-            msg_id = 1
+            container = {
+                "_": "msg_container",
+                "messages": [],
+            }
+            for obj, core_message in objects:
+                serialized = TL.encode(obj)
+                container["messages"].append(
+                    (
+                        Int64.serialize(core_message.msg_id + 1)
+                        + Int32.serialize(core_message.seq_no + 1)
+                        + Int32.serialize(len(serialized))
+                        + serialized
+                    )
+                )
+            msg_id = objects[-1][1].msg_id + 5
+            seq_no = objects[-1][1].seq_no + 2
+            serialized = TL.encode(container)
 
         # ic(self.session_id, self.auth_key_id)
         data = (
@@ -667,7 +660,11 @@ class Client:
                             await self.propagate(request)
                         except InvalidConstructor as e:
                             formatted = f"{e.cid:x}".zfill(8).upper()
-                            logger.error("Invalid constructor: {formatted}", formatted=formatted)
+                            logger.error(
+                                "Invalid constructor: {formatted} (msg_id={msg_id})",
+                                formatted=formatted,
+                                msg_id=decrypted.msg_id,
+                            )
 
                             await self.conn.send(
                                 await self.encrypt(
@@ -738,7 +735,7 @@ class Client:
                         "result": result,
                     }
                 )
-                results.append(result)
+                results.append((result, msg))
 
             if not len(results) > 0:
                 # invokeWith_*
@@ -748,10 +745,7 @@ class Client:
             assert len(results) > 0, "TODO: rpc_error"
             # if just_return:
             #     return results
-            await self.send(
-                results,
-                originating_request=request,
-            )
+            await self.send(results)
         else:
             handlers = self.server.handlers.get(request.obj._, [])
             if not handlers:
