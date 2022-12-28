@@ -355,7 +355,7 @@ async def main():
                             TL.from_dict(
                                 {
                                     "_": "help.countryCode",
-                                    "country_code": "yl",
+                                    "country_code": "42",
                                     "prefixes": ["42"],
                                     "patterns": ["XXXXX"],
                                 }
