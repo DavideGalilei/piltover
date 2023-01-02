@@ -889,7 +889,24 @@ MAP = {
             "lang_code": str,
         },
         "is": "LangPackLanguage",
-    }
+    },
+    0x18b7a10d: {
+        "_": "dcOption",
+        "params": {
+            "flags": int,
+            "ipv6": FlagsOf("flags", 0, Bit),
+            "media_only": FlagsOf("flags", 1, Bit),
+            "tcpo_only": FlagsOf("flags", 2, Bit),
+            "cdn": FlagsOf("flags", 3, Bit),
+            "static": FlagsOf("flags", 4, Bit),
+            "this_port_only": FlagsOf("flags", 5, Bit),
+            "id": int,
+            "ip_address": str,
+            "port": int,
+            "secret": FlagsOf("flags", 10, bytes),
+        },
+        "is": "DcOption",
+    },
     # auth.authorizationSignUpRequired#44747e9a flags:# terms_of_service:flags.0?help.TermsOfService = auth.Authorization;
 }
 

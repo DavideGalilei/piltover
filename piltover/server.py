@@ -506,6 +506,7 @@ class Client:
             msg = await self.decrypt(data=data)
 
             await self.propagate(Request.from_msg(self, msg))
+            # TODO: InvalidConstructor check
 
     async def send(
         self, objects: TL | list[TL], originating_request: Optional["Request"] = None
@@ -539,6 +540,7 @@ class Client:
         elif self.auth_key_id is None:
             assert False, "FATAL: self.auth_key_id is None"
 
+        ic("SENDING:", objects)
         if isinstance(objects, TL):
             serialized = TL.encode(objects)
 
@@ -728,13 +730,14 @@ class Client:
                     # TODO: return rpc_error(500)
                     continue
 
-                result = TL.from_dict(
-                    {
-                        "_": "rpc_result",
-                        "req_msg_id": msg.msg_id,
-                        "result": result,
-                    }
-                )
+                if not result._ == "rpc_result":
+                    result = TL.from_dict(
+                        {
+                            "_": "rpc_result",
+                            "req_msg_id": msg.msg_id,
+                            "result": result,
+                        }
+                    )
                 results.append((result, msg))
 
             if not len(results) > 0:
@@ -771,13 +774,14 @@ class Client:
                 # TODO: return rpc_error(500). or maybe not (invokeWith*)...?
                 return
 
-            result = TL.from_dict(
-                {
-                    "_": "rpc_result",
-                    "req_msg_id": request.msg_id,
-                    "result": result,
-                }
-            )
+            if not result._ == "rpc_result":
+                result = TL.from_dict(
+                    {
+                        "_": "rpc_result",
+                        "req_msg_id": request.msg_id,
+                        "result": result,
+                    }
+                )
 
             if just_return:
                 return result

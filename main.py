@@ -142,7 +142,7 @@ async def main():
             "test_mode": False,
             "this_dc": 2,
             "dc_options": [],
-            "dc_txt_domain_name": "",
+            "dc_txt_domain_name": "aa",
             "chat_size_max": 200,
             "megagroup_size_max": 200000,
             "forwarded_count_max": 100,
