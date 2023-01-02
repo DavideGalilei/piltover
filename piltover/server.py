@@ -505,8 +505,10 @@ class Client:
             self.session_id = auth_key_id
             msg = await self.decrypt(data=data)
 
-            await self.propagate(Request.from_msg(self, msg))
-            # TODO: InvalidConstructor check
+            try:
+                await self.propagate(Request.from_msg(self, msg))
+            except InvalidConstructor as e:
+                await self.reply_invalid_constructor(e, msg)
 
     async def send(
         self, objects: TL | list[TL], originating_request: Optional["Request"] = None
@@ -631,6 +633,36 @@ class Client:
             data=data.read(length),
         )
 
+    async def reply_invalid_constructor(self, e: InvalidConstructor, decrypted: Message):
+        formatted = f"{e.cid:x}".zfill(8).upper()
+        logger.error(
+            "Invalid constructor: {formatted} (msg_id={msg_id})",
+            formatted=formatted,
+            msg_id=decrypted.msg_id,
+        )
+
+        await self.conn.send(
+            await self.encrypt(
+                TL.from_dict(
+                    {
+                        "_": "rpc_result",
+                        "req_msg_id": decrypted.msg_id,
+                        "result": TL.from_dict(
+                            {
+                                "_": "rpc_error",
+                                "error_code": 400,
+                                "error_message": f"INPUT_CONSTRUCTOR_INVALID_{formatted}"
+                            }
+                        ),
+                    }
+                ),
+                originating_request=Request(
+                    msg_id=decrypted.msg_id,
+                    seq_no=decrypted.seq_no,
+                )
+            )
+        )
+
     @logger.catch
     async def worker(self):
         try:
@@ -661,34 +693,7 @@ class Client:
                             ic(request.obj)
                             await self.propagate(request)
                         except InvalidConstructor as e:
-                            formatted = f"{e.cid:x}".zfill(8).upper()
-                            logger.error(
-                                "Invalid constructor: {formatted} (msg_id={msg_id})",
-                                formatted=formatted,
-                                msg_id=decrypted.msg_id,
-                            )
-
-                            await self.conn.send(
-                                await self.encrypt(
-                                    TL.from_dict(
-                                        {
-                                            "_": "rpc_result",
-                                            "req_msg_id": decrypted.msg_id,
-                                            "result": TL.from_dict(
-                                                {
-                                                    "_": "rpc_error",
-                                                    "error_code": 400,
-                                                    "error_message": f"INPUT_CONSTRUCTOR_INVALID_{formatted}"
-                                                }
-                                            ),
-                                        }
-                                    ),
-                                    originating_request=Request(
-                                        msg_id=decrypted.msg_id,
-                                        seq_no=decrypted.seq_no,
-                                    )
-                                )
-                            )
+                            await self.reply_invalid_constructor(e, decrypted)
                     except AssertionError:
                         logger.exception("Unexpected failed assertion", backtrace=True)
             except Disconnection:
