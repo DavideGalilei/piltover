@@ -276,6 +276,9 @@ class Client:
                             client_q == shared.q
                         ), "client_q is different than server_q"
 
+                        assert shared.server_nonce == req_dh_params.server_nonce
+                        # TODO: check server_nonce in other places too
+
                         # print(f"{client_p=} {client_q=}")
 
                         encrypted_data = req_dh_params.encrypted_data
@@ -330,6 +333,13 @@ class Client:
 
                         shared.a = int.from_bytes(secrets.token_bytes(256), "big")
                         g_a = pow(g, shared.a, shared.dh_prime).to_bytes(256, "big")
+
+                        # https://core.telegram.org/mtproto/auth_key#dh-key-exchange-complete
+                        # IMPORTANT: Apart from the conditions on the Diffie-Hellman
+                        # prime dh_prime and generator g, both sides are to check
+                        # that g, g_a and g_b are greater than 1 and less than dh_prime - 1.
+                        # We recommend checking that g_a and g_b are between 2^{2048-64} and dh_prime - 2^{2048-64} as well.
+                        # TODO
 
                         answer = TL.encode(
                             {
