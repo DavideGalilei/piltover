@@ -12,9 +12,11 @@ from piltover.utils import read_int, nameof, read_bytes, write_bytes
 from icecream import ic
 
 
-VECTOR_CID = 0x1cb5c415
-BOOL_FALSE = 0xbc799737
-BOOL_TRUE = 0x997275b5
+VECTOR_CID = 0x1CB5C415
+BOOL_FALSE = 0xBC799737
+BOOL_TRUE = 0x997275B5
+MSG_CONTAINER_CID = 0x73F1F8DC
+RPC_RESULT_CID = 0xF35C6D01
 
 
 class TLType:

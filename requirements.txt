@@ -4,3 +4,6 @@ tgcrypto
 uvloop
 loguru
 httpx
+
+jinja2
+black

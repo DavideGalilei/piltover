@@ -203,307 +203,306 @@ class Client:
         self.auth_key_id = auth_key_id
 
         if auth_key_id == 0:
-            msg_id = read_int(data.read(8))
-            length = read_int(data.read(4))
-
-            req_pq_multi = TL.decode(data)
-
-            assert req_pq_multi._ in ("req_pq_multi", "req_pq"), "Invalid request"
-            self.shared = shared = SimpleNamespace()
-
-            def get_msg_id() -> int:
-                return msg_id + 1  # 2 + (not msg_id % 2)
-
-            # Whether to use or not the new RSA_PAD algorithm
-            # TODO: handle different server public key
-            # with req_dh_params.public_key_fingerprint
-            old = False
-
-            async def handle(obj: TL) -> bool:
-                match obj._:
-                    case "req_pq_multi" | "req_pq":
-                        req_pq_multi = obj
-                        p = generate_large_prime(31)
-                        q = generate_large_prime(31)
-
-                        if p > q:
-                            p, q = q, p
-
-                        shared.p, shared.q = p, q
-
-                        assert p != -1, "p is -1"
-                        assert q != -1, "q is -1"
-                        assert p != q
-
-                        pq = shared.p * shared.q
-                        ic(p, q, pq)
-
-                        # print(f"server {p=}")
-                        # print(f"server {q=}")
-                        # print(f"server {pq=}")
-
-                        shared.server_nonce = int.from_bytes(
-                            secrets.token_bytes(128 // 8), byteorder="big", signed=False
-                        )
-
-                        res_pq = TL.encode(
-                            {
-                                "_": "resPQ",
-                                "nonce": req_pq_multi.nonce,
-                                "server_nonce": shared.server_nonce,
-                                "pq": pq.to_bytes(64 // 8, "big", signed=False),
-                                "server_public_key_fingerprints": [
-                                    self.server.fingerprint
-                                ],
-                            }
-                        )
-
-                        await self.conn.send(
-                            bytes(8)
-                            + Int64.serialize(get_msg_id())
-                            + Int32.serialize(len(res_pq))
-                            + res_pq
-                        )
-                    case "req_DH_params":
-                        req_dh_params = obj
-                        client_p = int.from_bytes(req_dh_params.p, "big", signed=False)
-                        client_q = int.from_bytes(req_dh_params.q, "big", signed=False)
-
-                        assert (
-                            client_p == shared.p
-                        ), "client_p is different than server_p"
-                        assert (
-                            client_q == shared.q
-                        ), "client_q is different than server_q"
-
-                        assert shared.server_nonce == req_dh_params.server_nonce
-                        # TODO: check server_nonce in other places too
-
-                        # print(f"{client_p=} {client_q=}")
-
-                        encrypted_data = req_dh_params.encrypted_data
-                        assert len(encrypted_data) == 256, "Invalid encrypted data"
-
-                        if old:
-                            key_aes_encrypted = rsa_decrypt(
-                                encrypted_data,
-                                public_key=self.server.public_key,
-                                private_key=self.server.private_key,
-                            ).lstrip(b"\0")
-                        else:
-                            key_aes_encrypted = rsa_pad_inverse(
-                                encrypted_data,
-                                public_key=self.server.public_key,
-                                private_key=self.server.private_key,
-                            ).lstrip(b"\0")
-
-                        # idk TODO: restart generation with dh_fail instead
-                        # assert key_aes_encrypted >= public.n, "key_aes_encrypted greater than RSA modulus, aborting..."
-
-                        # print(key_aes_encrypted)
-                        # ic(key_aes_encrypted.hex())
-
-                        if old:
-                            p_q_inner_data = TL.decode(BytesIO(key_aes_encrypted[20:]))
-
-                            assert (
-                                hashlib.sha1(TL.encode(p_q_inner_data)).digest()
-                                == key_aes_encrypted[:20]
-                            ), "sha1 of data doesn't match"
-                        else:
-                            p_q_inner_data = TL.decode(BytesIO(key_aes_encrypted))
-                        
-                        assert p_q_inner_data._ in [
-                            "p_q_inner_data",
-                            "p_q_inner_data_dc",
-                            "p_q_inner_data_temp_dc",
-                        ], f"Expected p_q_inner_data_*, got instead {p_q_inner_data._}"
-
-                        new_nonce: bytes = p_q_inner_data.new_nonce.to_bytes(
-                            256 // 8, "little", signed=False
-                        )
-                        shared.new_nonce = new_nonce
-
-                        # new_nonce_hash = hashlib.sha1(new_nonce).digest()[:128 // 8]
-                        logger.info("Generating safe prime...")
-                        shared.dh_prime, g = gen_safe_prime(2048)
-
-                        # ic(dh_prime, g)
-                        logger.info("Prime successfully generated")
-
-                        shared.a = int.from_bytes(secrets.token_bytes(256), "big")
-                        g_a = pow(g, shared.a, shared.dh_prime).to_bytes(256, "big")
-
-                        # https://core.telegram.org/mtproto/auth_key#dh-key-exchange-complete
-                        # IMPORTANT: Apart from the conditions on the Diffie-Hellman
-                        # prime dh_prime and generator g, both sides are to check
-                        # that g, g_a and g_b are greater than 1 and less than dh_prime - 1.
-                        # We recommend checking that g_a and g_b are between 2^{2048-64} and dh_prime - 2^{2048-64} as well.
-                        # TODO
-
-                        answer = TL.encode(
-                            {
-                                "_": "server_DH_inner_data",
-                                "nonce": p_q_inner_data.nonce,
-                                "server_nonce": shared.server_nonce,
-                                "g": g,
-                                "dh_prime": shared.dh_prime.to_bytes(
-                                    2048 // 8, "big", signed=False
-                                ),
-                                "g_a": g_a,
-                                "server_time": int(time.time()),
-                            }
-                        )
-                        shared.server_nonce_bytes = (
-                            server_nonce_bytes
-                        ) = shared.server_nonce.to_bytes(
-                            128 // 8, "little", signed=False
-                        )
-
-                        answer_with_hash = hashlib.sha1(answer).digest() + answer
-                        answer_with_hash += secrets.token_bytes(
-                            -len(answer_with_hash) % 16
-                        )
-                        shared.tmp_aes_key = (
-                            hashlib.sha1(new_nonce + server_nonce_bytes).digest()
-                            + hashlib.sha1(server_nonce_bytes + new_nonce).digest()[:12]
-                        )
-                        shared.tmp_aes_iv = (
-                            hashlib.sha1(server_nonce_bytes + new_nonce).digest()[12:]
-                            + hashlib.sha1(new_nonce + new_nonce).digest()
-                            + new_nonce[:4]
-                        )
-                        encrypted_answer = tgcrypto.ige256_encrypt(
-                            answer_with_hash,
-                            shared.tmp_aes_key,
-                            shared.tmp_aes_iv,
-                        )
-
-                        server_dh_params_ok = TL.encode(
-                            {
-                                "_": "server_DH_params_ok",
-                                "nonce": p_q_inner_data.nonce,
-                                "server_nonce": p_q_inner_data.server_nonce,
-                                "encrypted_answer": encrypted_answer,
-                            }
-                        )
-
-                        await self.conn.send(
-                            bytes(8)
-                            + Int64.serialize(get_msg_id())
-                            + Int32.serialize(len(server_dh_params_ok))
-                            + server_dh_params_ok
-                        )
-                    case "set_client_DH_params":
-                        set_client_DH_params = obj
-                        decrypted_params = tgcrypto.ige256_decrypt(
-                            set_client_DH_params.encrypted_data,
-                            shared.tmp_aes_key,
-                            shared.tmp_aes_iv,
-                        )
-                        client_DH_inner_data = TL.decode(BytesIO(decrypted_params[20:]))
-                        assert (
-                            hashlib.sha1(TL.encode(client_DH_inner_data)).digest()
-                            == decrypted_params[:20]
-                        ), "sha1 hash mismatch for client_DH_inner_data"
-
-                        shared.auth_key = auth_key = (
-                            pow(
-                                int.from_bytes(
-                                    client_DH_inner_data.g_b, "big", signed=False
-                                ),
-                                shared.a,
-                                shared.dh_prime,
-                            )
-                        ).to_bytes(256, "big", signed=False)
-
-                        auth_key_hash = hashlib.sha1(auth_key).digest()[-64 // 8 :]
-                        auth_key_aux_hash = hashlib.sha1(auth_key).digest()[: 64 // 8]
-
-                        # ic(shared.server_nonce_bytes, auth_key, auth_key_hash)
-                        # print("AUTH KEY:", auth_key.hex())
-                        # print("SHA1(auth_key) =", hashlib.sha1(auth_key).hexdigest())
-                        # ic(shared.new_nonce.hex())
-                        # ic(auth_key_aux_hash.hex())
-
-                        dh_gen_ok = TL.encode(
-                            {
-                                "_": "dh_gen_ok",
-                                "nonce": client_DH_inner_data.nonce,
-                                "server_nonce": shared.server_nonce,
-                                "new_nonce_hash1": int.from_bytes(
-                                    hashlib.sha1(
-                                        shared.new_nonce
-                                        + bytes([1])
-                                        + auth_key_aux_hash
-                                    ).digest()[-16:],
-                                    "little",
-                                    signed=False,
-                                ),
-                            }
-                        )
-
-                        await self.conn.send(
-                            bytes(8)
-                            + Int64.serialize(get_msg_id())
-                            + Int32.serialize(len(dh_gen_ok))
-                            + dh_gen_ok
-                        )
-                        return True
-                    case "msgs_ack":
-                        pass
-                    case _:
-                        assert False, "Unreachable"
-                return False
-
-            await handle(ic(req_pq_multi))
-
             try:
-                while True:
-                    try:
-                        msg, data = await self.read_auth_msg()
+                msg_id = read_int(data.read(8))
+                length = read_int(data.read(4))
 
-                        if msg.session_id != 0:
-                            logger.debug("Returning data: client sent an mtproto message")
-                            if not hasattr(shared, "auth_key"):
-                                self.auth_key_id = msg.session_id
+                req_pq_multi = TL.decode(data)
 
-                                answer = await self.server.get_auth_key(auth_key_id=self.auth_key_id)
-                                if answer is None:
-                                    logger.warning("Invalid auth key id provided, disconnecting...")
-                                    raise Disconnection()
+                assert req_pq_multi._ in ("req_pq_multi", "req_pq"), "Invalid request"
+                self.shared = shared = SimpleNamespace()
 
-                                self.auth_key, self.shared = answer
-                            return data
+                def get_msg_id() -> int:
+                    return msg_id + 1  # 2 + (not msg_id % 2)
 
-                        obj = TL.decode(BytesIO(msg.data))
-                        msg_id = msg.msg_id
+                # Whether to use or not the new RSA_PAD algorithm
+                # TODO: handle different server public key
+                # with req_dh_params.public_key_fingerprint
+                old = True
 
-                        await handle(ic(obj))
-                        logger.debug("Sent answer")
-                    except Disconnection:
-                        logger.warning("Client disconnected during generation")
-                        break
-            finally:
-                if hasattr(shared, "auth_key"):
-                    auth_key_id = read_int(hashlib.sha1(shared.auth_key).digest()[-8:])
+                async def handle(obj: TL) -> bool:
+                    match obj._:
+                        case "req_pq_multi" | "req_pq":
+                            req_pq_multi = obj
+                            p = generate_large_prime(31)
+                            q = generate_large_prime(31)
 
-                    await self.server.register_auth_key(
-                        auth_key_id=auth_key_id,
-                        auth_key=shared.auth_key,
-                        shared=shared,
-                    )
-                    logger.info("Auth key generation successfully completed!")
+                            if p > q:
+                                p, q = q, p
 
-                    self.auth_key = shared.auth_key
-                    self.auth_key_id = auth_key_id
-            # TODO: server salt
-            # self.server_salt = shared.new_nonce[0:8] ^ shared.server_nonce[0:8]
+                            shared.p, shared.q = p, q
 
-            # raise Disconnection()
-            # await self.conn.send(Int32.serialize(-404, signed=False))
-        # else:
-        #     assert False, "TODO: authorized messages check"
+                            assert p != -1, "p is -1"
+                            assert q != -1, "q is -1"
+                            assert p != q
+
+                            pq = shared.p * shared.q
+                            ic(p, q, pq)
+
+                            # print(f"server {p=}")
+                            # print(f"server {q=}")
+                            # print(f"server {pq=}")
+
+                            shared.server_nonce = int.from_bytes(
+                                secrets.token_bytes(128 // 8), byteorder="big", signed=False
+                            )
+
+                            res_pq = TL.encode(
+                                {
+                                    "_": "resPQ",
+                                    "nonce": req_pq_multi.nonce,
+                                    "server_nonce": shared.server_nonce,
+                                    "pq": pq.to_bytes(64 // 8, "big", signed=False),
+                                    "server_public_key_fingerprints": [
+                                        self.server.fingerprint
+                                    ],
+                                }
+                            )
+
+                            await self.conn.send(
+                                bytes(8)
+                                + Int64.serialize(get_msg_id())
+                                + Int32.serialize(len(res_pq))
+                                + res_pq
+                            )
+                        case "req_DH_params":
+                            req_dh_params = obj
+
+                            assert len(req_dh_params.p) == 4, f"client_p size must be 4 bytes, not {len(req_dh_params.p)}"
+                            assert len(req_dh_params.q) == 4, f"client_q size must be 4 bytes, not {len(req_dh_params.q)}"
+                            client_p = int.from_bytes(req_dh_params.p, "big", signed=False)
+                            client_q = int.from_bytes(req_dh_params.q, "big", signed=False)
+                            assert client_p == shared.p, "client_p is different than server_p"
+                            assert client_q == shared.q, "client_q is different than server_q"
+
+                            assert shared.server_nonce == req_dh_params.server_nonce
+                            # TODO: check server_nonce in other places too
+
+                            # print(f"{client_p=} {client_q=}")
+
+                            encrypted_data = req_dh_params.encrypted_data
+                            assert len(encrypted_data) == 256, "Invalid encrypted data"
+
+                            if old:
+                                key_aes_encrypted = rsa_decrypt(
+                                    encrypted_data,
+                                    public_key=self.server.public_key,
+                                    private_key=self.server.private_key,
+                                ).lstrip(b"\0")
+                            else:
+                                key_aes_encrypted = rsa_pad_inverse(
+                                    encrypted_data,
+                                    public_key=self.server.public_key,
+                                    private_key=self.server.private_key,
+                                ).lstrip(b"\0")
+
+                            # idk TODO: restart generation with dh_fail instead
+                            # assert key_aes_encrypted >= public.n, "key_aes_encrypted greater than RSA modulus, aborting..."
+
+                            # print(key_aes_encrypted)
+                            # ic(key_aes_encrypted.hex())
+
+                            if old:
+                                p_q_inner_data = TL.decode(BytesIO(key_aes_encrypted[20:]))
+
+                                assert (
+                                    hashlib.sha1(TL.encode(p_q_inner_data)).digest()
+                                    == key_aes_encrypted[:20]
+                                ), "sha1 of data doesn't match"
+                            else:
+                                p_q_inner_data = TL.decode(BytesIO(key_aes_encrypted))
+                            
+                            assert p_q_inner_data._ in [
+                                "p_q_inner_data",
+                                "p_q_inner_data_dc",
+                                "p_q_inner_data_temp_dc",
+                            ], f"Expected p_q_inner_data_*, got instead {p_q_inner_data._}"
+
+                            new_nonce: bytes = p_q_inner_data.new_nonce.to_bytes(
+                                256 // 8, "little", signed=False
+                            )
+                            shared.new_nonce = new_nonce
+
+                            # new_nonce_hash = hashlib.sha1(new_nonce).digest()[:128 // 8]
+                            logger.info("Generating safe prime...")
+                            shared.dh_prime, g = gen_safe_prime(2048)
+
+                            # ic(dh_prime, g)
+                            logger.info("Prime successfully generated")
+
+                            shared.a = int.from_bytes(secrets.token_bytes(256), "big")
+                            g_a = pow(g, shared.a, shared.dh_prime).to_bytes(256, "big")
+
+                            # https://core.telegram.org/mtproto/auth_key#dh-key-exchange-complete
+                            # IMPORTANT: Apart from the conditions on the Diffie-Hellman
+                            # prime dh_prime and generator g, both sides are to check
+                            # that g, g_a and g_b are greater than 1 and less than dh_prime - 1.
+                            # We recommend checking that g_a and g_b are between 2^{2048-64} and dh_prime - 2^{2048-64} as well.
+                            # TODO
+
+                            answer = TL.encode(
+                                {
+                                    "_": "server_DH_inner_data",
+                                    "nonce": p_q_inner_data.nonce,
+                                    "server_nonce": shared.server_nonce,
+                                    "g": g,
+                                    "dh_prime": shared.dh_prime.to_bytes(
+                                        2048 // 8, "big", signed=False
+                                    ),
+                                    "g_a": g_a,
+                                    "server_time": int(time.time()),
+                                }
+                            )
+                            shared.server_nonce_bytes = (
+                                server_nonce_bytes
+                            ) = shared.server_nonce.to_bytes(
+                                128 // 8, "little", signed=False
+                            )
+
+                            answer_with_hash = hashlib.sha1(answer).digest() + answer
+                            answer_with_hash += secrets.token_bytes(
+                                -len(answer_with_hash) % 16
+                            )
+                            shared.tmp_aes_key = (
+                                hashlib.sha1(new_nonce + server_nonce_bytes).digest()
+                                + hashlib.sha1(server_nonce_bytes + new_nonce).digest()[:12]
+                            )
+                            shared.tmp_aes_iv = (
+                                hashlib.sha1(server_nonce_bytes + new_nonce).digest()[12:]
+                                + hashlib.sha1(new_nonce + new_nonce).digest()
+                                + new_nonce[:4]
+                            )
+                            encrypted_answer = tgcrypto.ige256_encrypt(
+                                answer_with_hash,
+                                shared.tmp_aes_key,
+                                shared.tmp_aes_iv,
+                            )
+
+                            server_dh_params_ok = TL.encode(
+                                {
+                                    "_": "server_DH_params_ok",
+                                    "nonce": p_q_inner_data.nonce,
+                                    "server_nonce": p_q_inner_data.server_nonce,
+                                    "encrypted_answer": encrypted_answer,
+                                }
+                            )
+
+                            await self.conn.send(
+                                bytes(8)
+                                + Int64.serialize(get_msg_id())
+                                + Int32.serialize(len(server_dh_params_ok))
+                                + server_dh_params_ok
+                            )
+                        case "set_client_DH_params":
+                            set_client_DH_params = obj
+                            decrypted_params = tgcrypto.ige256_decrypt(
+                                set_client_DH_params.encrypted_data,
+                                shared.tmp_aes_key,
+                                shared.tmp_aes_iv,
+                            )
+                            client_DH_inner_data = TL.decode(BytesIO(decrypted_params[20:]))
+                            assert (
+                                hashlib.sha1(TL.encode(client_DH_inner_data)).digest()
+                                == decrypted_params[:20]
+                            ), "sha1 hash mismatch for client_DH_inner_data"
+
+                            shared.auth_key = auth_key = (
+                                pow(
+                                    int.from_bytes(
+                                        client_DH_inner_data.g_b, "big", signed=False
+                                    ),
+                                    shared.a,
+                                    shared.dh_prime,
+                                )
+                            ).to_bytes(256, "big", signed=False)
+
+                            auth_key_hash = hashlib.sha1(auth_key).digest()[-64 // 8 :]
+                            auth_key_aux_hash = hashlib.sha1(auth_key).digest()[: 64 // 8]
+
+                            # ic(shared.server_nonce_bytes, auth_key, auth_key_hash)
+                            # print("AUTH KEY:", auth_key.hex())
+                            # print("SHA1(auth_key) =", hashlib.sha1(auth_key).hexdigest())
+                            # ic(shared.new_nonce.hex())
+                            # ic(auth_key_aux_hash.hex())
+
+                            dh_gen_ok = TL.encode(
+                                {
+                                    "_": "dh_gen_ok",
+                                    "nonce": client_DH_inner_data.nonce,
+                                    "server_nonce": shared.server_nonce,
+                                    "new_nonce_hash1": int.from_bytes(
+                                        hashlib.sha1(
+                                            shared.new_nonce
+                                            + bytes([1])
+                                            + auth_key_aux_hash
+                                        ).digest()[-16:],
+                                        "little",
+                                        signed=False,
+                                    ),
+                                }
+                            )
+
+                            await self.conn.send(
+                                bytes(8)
+                                + Int64.serialize(get_msg_id())
+                                + Int32.serialize(len(dh_gen_ok))
+                                + dh_gen_ok
+                            )
+                            return True
+                        case "msgs_ack":
+                            pass
+                        case _:
+                            assert False, "Unreachable"
+                    return False
+
+                await handle(ic(req_pq_multi))
+
+                try:
+                    while True:
+                        try:
+                            msg, data = await self.read_auth_msg()
+
+                            if msg.session_id != 0:
+                                logger.debug("Returning data: client sent an mtproto message")
+                                if not hasattr(shared, "auth_key"):
+                                    self.auth_key_id = msg.session_id
+
+                                    answer = await self.server.get_auth_key(auth_key_id=self.auth_key_id)
+                                    if answer is None:
+                                        logger.warning("Invalid auth key id provided, disconnecting...")
+                                        raise Disconnection()
+
+                                    self.auth_key, self.shared = answer
+                                return data
+
+                            obj = TL.decode(BytesIO(msg.data))
+                            msg_id = msg.msg_id
+
+                            await handle(ic(obj))
+                            logger.debug("Sent answer")
+                        except Disconnection:
+                            logger.warning("Client disconnected during generation")
+                            break
+                finally:
+                    # TODO: server salt
+                    # self.server_salt = shared.new_nonce[0:8] ^ shared.server_nonce[0:8]
+
+                    if hasattr(shared, "auth_key"):
+                        auth_key_id = read_int(hashlib.sha1(shared.auth_key).digest()[-8:])
+
+                        await self.server.register_auth_key(
+                            auth_key_id=auth_key_id,
+                            auth_key=shared.auth_key,
+                            shared=shared,
+                        )
+                        logger.info("Auth key generation successfully completed!")
+
+                        self.auth_key = shared.auth_key
+                        self.auth_key_id = auth_key_id
+            except AssertionError:
+                logger.exception("Closing connection due to invalid parameters during auth key generation")
+                await self.conn.send(Int32.serialize(-404, signed=True))
+                raise Disconnection()
         else:
             answer = await self.server.get_auth_key(auth_key_id=auth_key_id)
             if answer is None:
@@ -678,13 +677,13 @@ class Client:
         try:
             try:
                 self.conn = await self.conn.init()
+
                 data = await self.authorize()
                 if data is not None:
                     ic(data.getvalue())
                     data.seek(8)
                     msg = await self.decrypt(data=data)
                     ic(msg)
-
                     await self.propagate(Request.from_msg(self, msg))
 
                 while True:
