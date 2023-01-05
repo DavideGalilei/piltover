@@ -218,7 +218,7 @@ class Client:
                 # Whether to use or not the new RSA_PAD algorithm
                 # TODO: handle different server public key
                 # with req_dh_params.public_key_fingerprint
-                old = True
+                old = False
 
                 async def handle(obj: TL) -> bool:
                     match obj._:
@@ -724,8 +724,8 @@ class Client:
                 if not handlers:
                     logger.warning("No handler found for obj:")
                     logger.debug("{obj}", obj=msg.obj)
-                    break
-                
+                    continue
+
                 result = None
                 for rpc in handlers:
                     result = await rpc(self, Request(
