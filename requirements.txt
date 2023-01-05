@@ -3,3 +3,4 @@ jurigged
 tgcrypto
 uvloop
 loguru
+httpx
