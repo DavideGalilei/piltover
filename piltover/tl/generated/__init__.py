@@ -24,6 +24,8 @@ from piltover.tl.types import (
     BOOL_FALSE,
     MSG_CONTAINER_CID,
     RPC_RESULT_CID,
+    RPC_ERROR_CID,
+    Int32,
     Int64,
     TLType,
 )
@@ -65,6 +67,14 @@ MAP |= {
             "result": TLType,
         },
         "is": "RpcResult",
+    },
+    RPC_ERROR_CID: {
+        "_": "rpc_error",
+        "params": {
+            "error_code": Int32,
+            "error_message": str,
+        },
+        "is": "RpcError",
     },
 }
 

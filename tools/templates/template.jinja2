@@ -42,7 +42,12 @@ MAP = {
             {% endfor %}
         },
         {% endif %}
-        {% if type["switch"] == "functions" %}"ret"{% else %}"is"{% endif %}: {{type["ret"]["typ"]}},
+        {% if type["switch"] == "functions" %}"ret"{% else %}"is"{% endif %}:
+            {% if "original" in type["ret"] %}
+                "{{ type["ret"]["original"] }}"
+            {% else %}
+                {{ type["ret"]["typ"] }}
+            {% endif %},
     },
     {% endfor %}
 }

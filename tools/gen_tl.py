@@ -57,7 +57,7 @@ class Parser(StringIO):
         newlines = result.count("\n")
         self.line += newlines
         if newlines:
-            self.pos = len(result[result.rindex("\n"):]) - 1
+            self.pos = len(result[result.rindex("\n") :]) - 1
         else:
             self.pos += size
         if not result:
@@ -112,7 +112,7 @@ def typeinfo(typ: str, bytes_str: bool = False) -> dict:
         info = typeinfo(typ, bytes_str=bytes_str)
         if info["optional"]:
             raise TypeError(f"Vector elements cannot be optional: {typ!r}")
-        
+
         typ = repr(info["original"]) if "original" in info else info["typ"]
 
         return {
@@ -168,9 +168,11 @@ def parse(file: Path, output: Path, bytes_str: bool = False):
                     stream.read(1)
                     while stream.peek() in ["/", " "]:
                         stream.read(1)
-                    
+
                     comment = stream.readuntil("\n")
-                    if match := re.match(r"LAYER (?P<layer>[0-9]+)", comment, re.IGNORECASE):
+                    if match := re.match(
+                        r"LAYER (?P<layer>[0-9]+)", comment, re.IGNORECASE
+                    ):
                         layer = int(match.group("layer"))
                         logger.info("Found layer: {layer}", layer=layer)
                 case "-":
@@ -179,11 +181,16 @@ def parse(file: Path, output: Path, bytes_str: bool = False):
                     if not match:
                         continue
                     switch = match.group("switch")
-                    assert switch in ["types", "functions"], f"Found invalid switch: {line!r}"
+                    assert switch in [
+                        "types",
+                        "functions",
+                    ], f"Found invalid switch: {line!r}"
                 case _:
                     type_info = stream.readuntil(" ")
                     if "#" not in type_info:
-                        logger.debug("Skipping {name}, no constructor found", name=type_info)
+                        logger.debug(
+                            "Skipping {name}, no constructor found", name=type_info
+                        )
                         stream.readuntil(";")
                         continue
 
@@ -192,7 +199,9 @@ def parse(file: Path, output: Path, bytes_str: bool = False):
                     formatted = f"{namespace}.{type_name}" if namespace else type_name
 
                     if not constructor:
-                        logger.debug("Skipping {name}, no constructor found", name=formatted)
+                        logger.debug(
+                            "Skipping {name}, no constructor found", name=formatted
+                        )
                         stream.readuntil(";")
                         continue
 
@@ -231,7 +240,7 @@ def parse(file: Path, output: Path, bytes_str: bool = False):
                                 "type": type,
                             }
                         )
-                    
+
                     while (token := stream.peek()) in whitespace:
                         stream.read(1)  # discard whitespace
                     return_type = stream.readuntil(";")
@@ -262,12 +271,18 @@ def parse(file: Path, output: Path, bytes_str: bool = False):
     result: dict[str, Any] = dict(tl)
     result["layer"] = layer
 
-    VECTOR_CID = 0x1cb5c415
-    BOOL_FALSE = 0xbc799737
-    BOOL_TRUE = 0x997275b5
+    VECTOR_CID = 0x1CB5C415
+    BOOL_FALSE = 0xBC799737
+    BOOL_TRUE = 0x997275B5
     MSG_CONTAINER_CID = 0x73F1F8DC
+    RPC_ERROR_CID = 0x2144CA19
 
-    to_skip = list(map(lambda cid: hex(cid)[2:], [VECTOR_CID, BOOL_FALSE, BOOL_TRUE, MSG_CONTAINER_CID]))
+    to_skip = list(
+        map(
+            lambda cid: hex(cid)[2:],
+            [VECTOR_CID, BOOL_FALSE, BOOL_TRUE, MSG_CONTAINER_CID, RPC_ERROR_CID],
+        )
+    )
 
     # clean result
     clean = []

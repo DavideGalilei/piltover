@@ -37,26 +37,26 @@ MAP = {
             "code": Int32,
             "text": str,
         },
-        "is": TLType,
+        "is": "Error",
     },
     0x56730BCC: {
         "_": "null",
-        "is": TLType,
+        "is": "Null",
     },
     0x7F3B18EA: {
         "_": "inputPeerEmpty",
-        "is": TLType,
+        "is": "InputPeer",
     },
     0x7DA07EC9: {
         "_": "inputPeerSelf",
-        "is": TLType,
+        "is": "InputPeer",
     },
     0x35A95CB9: {
         "_": "inputPeerChat",
         "params": {
             "chat_id": Int64,
         },
-        "is": TLType,
+        "is": "InputPeer",
     },
     0xDDE8A54C: {
         "_": "inputPeerUser",
@@ -64,7 +64,7 @@ MAP = {
             "user_id": Int64,
             "access_hash": Int64,
         },
-        "is": TLType,
+        "is": "InputPeer",
     },
     0x27BCBBFC: {
         "_": "inputPeerChannel",
@@ -72,7 +72,7 @@ MAP = {
             "channel_id": Int64,
             "access_hash": Int64,
         },
-        "is": TLType,
+        "is": "InputPeer",
     },
     0xA87B0A1C: {
         "_": "inputPeerUserFromMessage",
@@ -81,7 +81,7 @@ MAP = {
             "msg_id": Int32,
             "user_id": Int64,
         },
-        "is": TLType,
+        "is": "InputPeer",
     },
     0xBD2A0840: {
         "_": "inputPeerChannelFromMessage",
@@ -90,15 +90,15 @@ MAP = {
             "msg_id": Int32,
             "channel_id": Int64,
         },
-        "is": TLType,
+        "is": "InputPeer",
     },
     0xB98886CF: {
         "_": "inputUserEmpty",
-        "is": TLType,
+        "is": "InputUser",
     },
     0xF7C1B13F: {
         "_": "inputUserSelf",
-        "is": TLType,
+        "is": "InputUser",
     },
     0xF21158C6: {
         "_": "inputUser",
@@ -106,7 +106,7 @@ MAP = {
             "user_id": Int64,
             "access_hash": Int64,
         },
-        "is": TLType,
+        "is": "InputUser",
     },
     0x1DA448E2: {
         "_": "inputUserFromMessage",
@@ -115,7 +115,7 @@ MAP = {
             "msg_id": Int32,
             "user_id": Int64,
         },
-        "is": TLType,
+        "is": "InputUser",
     },
     0xF392B7F4: {
         "_": "inputPhoneContact",
@@ -125,7 +125,7 @@ MAP = {
             "first_name": str,
             "last_name": str,
         },
-        "is": TLType,
+        "is": "InputContact",
     },
     0xF52FF27F: {
         "_": "inputFile",
@@ -135,7 +135,7 @@ MAP = {
             "name": str,
             "md5_checksum": str,
         },
-        "is": TLType,
+        "is": "InputFile",
     },
     0xFA4F0BB5: {
         "_": "inputFileBig",
@@ -144,11 +144,11 @@ MAP = {
             "parts": Int32,
             "name": str,
         },
-        "is": TLType,
+        "is": "InputFile",
     },
     0x9664F57F: {
         "_": "inputMediaEmpty",
-        "is": TLType,
+        "is": "InputMedia",
     },
     0x1E287D04: {
         "_": "inputMediaUploadedPhoto",
@@ -159,7 +159,7 @@ MAP = {
             "stickers": FlagsOf("flags", 0, list["InputDocument"]),
             "ttl_seconds": FlagsOf("flags", 1, Int32),
         },
-        "is": TLType,
+        "is": "InputMedia",
     },
     0xB3BA0635: {
         "_": "inputMediaPhoto",
@@ -169,14 +169,14 @@ MAP = {
             "id": TLType,
             "ttl_seconds": FlagsOf("flags", 0, Int32),
         },
-        "is": TLType,
+        "is": "InputMedia",
     },
     0xF9C44144: {
         "_": "inputMediaGeoPoint",
         "params": {
             "geo_point": TLType,
         },
-        "is": TLType,
+        "is": "InputMedia",
     },
     0xF8AB7DFB: {
         "_": "inputMediaContact",
@@ -186,7 +186,7 @@ MAP = {
             "last_name": str,
             "vcard": str,
         },
-        "is": TLType,
+        "is": "InputMedia",
     },
     0x5B38C6C1: {
         "_": "inputMediaUploadedDocument",
@@ -202,7 +202,7 @@ MAP = {
             "stickers": FlagsOf("flags", 0, list["InputDocument"]),
             "ttl_seconds": FlagsOf("flags", 1, Int32),
         },
-        "is": TLType,
+        "is": "InputMedia",
     },
     0x33473058: {
         "_": "inputMediaDocument",
@@ -213,7 +213,7 @@ MAP = {
             "ttl_seconds": FlagsOf("flags", 0, Int32),
             "query": FlagsOf("flags", 1, str),
         },
-        "is": TLType,
+        "is": "InputMedia",
     },
     0xC13D1C11: {
         "_": "inputMediaVenue",
@@ -225,7 +225,7 @@ MAP = {
             "venue_id": str,
             "venue_type": str,
         },
-        "is": TLType,
+        "is": "InputMedia",
     },
     0xE5BBFE1A: {
         "_": "inputMediaPhotoExternal",
@@ -235,7 +235,7 @@ MAP = {
             "url": str,
             "ttl_seconds": FlagsOf("flags", 0, Int32),
         },
-        "is": TLType,
+        "is": "InputMedia",
     },
     0xFB52DC99: {
         "_": "inputMediaDocumentExternal",
@@ -245,14 +245,14 @@ MAP = {
             "url": str,
             "ttl_seconds": FlagsOf("flags", 0, Int32),
         },
-        "is": TLType,
+        "is": "InputMedia",
     },
     0xD33F43F3: {
         "_": "inputMediaGame",
         "params": {
             "id": TLType,
         },
-        "is": TLType,
+        "is": "InputMedia",
     },
     0x8EB5A6D5: {
         "_": "inputMediaInvoice",
@@ -268,7 +268,7 @@ MAP = {
             "start_param": FlagsOf("flags", 1, str),
             "extended_media": FlagsOf("flags", 2, TLType),
         },
-        "is": TLType,
+        "is": "InputMedia",
     },
     0x971FA843: {
         "_": "inputMediaGeoLive",
@@ -280,7 +280,7 @@ MAP = {
             "period": FlagsOf("flags", 1, Int32),
             "proximity_notification_radius": FlagsOf("flags", 3, Int32),
         },
-        "is": TLType,
+        "is": "InputMedia",
     },
     0xF94E5F1: {
         "_": "inputMediaPoll",
@@ -291,18 +291,18 @@ MAP = {
             "solution": FlagsOf("flags", 1, str),
             "solution_entities": FlagsOf("flags", 1, list["MessageEntity"]),
         },
-        "is": TLType,
+        "is": "InputMedia",
     },
     0xE66FBF7B: {
         "_": "inputMediaDice",
         "params": {
             "emoticon": str,
         },
-        "is": TLType,
+        "is": "InputMedia",
     },
     0x1CA48F57: {
         "_": "inputChatPhotoEmpty",
-        "is": TLType,
+        "is": "InputChatPhoto",
     },
     0xC642724E: {
         "_": "inputChatUploadedPhoto",
@@ -312,18 +312,18 @@ MAP = {
             "video": FlagsOf("flags", 1, TLType),
             "video_start_ts": FlagsOf("flags", 2, TLType),
         },
-        "is": TLType,
+        "is": "InputChatPhoto",
     },
     0x8953AD37: {
         "_": "inputChatPhoto",
         "params": {
             "id": TLType,
         },
-        "is": TLType,
+        "is": "InputChatPhoto",
     },
     0xE4C123D6: {
         "_": "inputGeoPointEmpty",
-        "is": TLType,
+        "is": "InputGeoPoint",
     },
     0x48222FAF: {
         "_": "inputGeoPoint",
@@ -333,11 +333,11 @@ MAP = {
             "long": TLType,
             "accuracy_radius": FlagsOf("flags", 0, Int32),
         },
-        "is": TLType,
+        "is": "InputGeoPoint",
     },
     0x1CD7BF0D: {
         "_": "inputPhotoEmpty",
-        "is": TLType,
+        "is": "InputPhoto",
     },
     0x3BB3B94A: {
         "_": "inputPhoto",
@@ -346,7 +346,7 @@ MAP = {
             "access_hash": Int64,
             "file_reference": bytes,
         },
-        "is": TLType,
+        "is": "InputPhoto",
     },
     0xDFDAABE1: {
         "_": "inputFileLocation",
@@ -356,7 +356,7 @@ MAP = {
             "secret": Int64,
             "file_reference": bytes,
         },
-        "is": TLType,
+        "is": "InputFileLocation",
     },
     0xF5235D55: {
         "_": "inputEncryptedFileLocation",
@@ -364,7 +364,7 @@ MAP = {
             "id": Int64,
             "access_hash": Int64,
         },
-        "is": TLType,
+        "is": "InputFileLocation",
     },
     0xBAD07584: {
         "_": "inputDocumentFileLocation",
@@ -374,7 +374,7 @@ MAP = {
             "file_reference": bytes,
             "thumb_size": str,
         },
-        "is": TLType,
+        "is": "InputFileLocation",
     },
     0xCBC7EE28: {
         "_": "inputSecureFileLocation",
@@ -382,11 +382,11 @@ MAP = {
             "id": Int64,
             "access_hash": Int64,
         },
-        "is": TLType,
+        "is": "InputFileLocation",
     },
     0x29BE5899: {
         "_": "inputTakeoutFileLocation",
-        "is": TLType,
+        "is": "InputFileLocation",
     },
     0x40181FFE: {
         "_": "inputPhotoFileLocation",
@@ -396,7 +396,7 @@ MAP = {
             "file_reference": bytes,
             "thumb_size": str,
         },
-        "is": TLType,
+        "is": "InputFileLocation",
     },
     0xD83466F3: {
         "_": "inputPhotoLegacyFileLocation",
@@ -408,7 +408,7 @@ MAP = {
             "local_id": Int32,
             "secret": Int64,
         },
-        "is": TLType,
+        "is": "InputFileLocation",
     },
     0x37257E99: {
         "_": "inputPeerPhotoFileLocation",
@@ -418,7 +418,7 @@ MAP = {
             "peer": TLType,
             "photo_id": Int64,
         },
-        "is": TLType,
+        "is": "InputFileLocation",
     },
     0x9D84F3DB: {
         "_": "inputStickerSetThumb",
@@ -426,7 +426,7 @@ MAP = {
             "stickerset": TLType,
             "thumb_version": Int32,
         },
-        "is": TLType,
+        "is": "InputFileLocation",
     },
     0x598A92A: {
         "_": "inputGroupCallStream",
@@ -438,75 +438,75 @@ MAP = {
             "video_channel": FlagsOf("flags", 0, Int32),
             "video_quality": FlagsOf("flags", 0, Int32),
         },
-        "is": TLType,
+        "is": "InputFileLocation",
     },
     0x59511722: {
         "_": "peerUser",
         "params": {
             "user_id": Int64,
         },
-        "is": TLType,
+        "is": "Peer",
     },
     0x36C6019A: {
         "_": "peerChat",
         "params": {
             "chat_id": Int64,
         },
-        "is": TLType,
+        "is": "Peer",
     },
     0xA2A5371E: {
         "_": "peerChannel",
         "params": {
             "channel_id": Int64,
         },
-        "is": TLType,
+        "is": "Peer",
     },
     0xAA963B05: {
         "_": "storage.fileUnknown",
-        "is": TLType,
+        "is": "storage.FileType",
     },
     0x40BC6F52: {
         "_": "storage.filePartial",
-        "is": TLType,
+        "is": "storage.FileType",
     },
     0x7EFE0E: {
         "_": "storage.fileJpeg",
-        "is": TLType,
+        "is": "storage.FileType",
     },
     0xCAE1AADF: {
         "_": "storage.fileGif",
-        "is": TLType,
+        "is": "storage.FileType",
     },
     0xA4F63C0: {
         "_": "storage.filePng",
-        "is": TLType,
+        "is": "storage.FileType",
     },
     0xAE1E508D: {
         "_": "storage.filePdf",
-        "is": TLType,
+        "is": "storage.FileType",
     },
     0x528A0677: {
         "_": "storage.fileMp3",
-        "is": TLType,
+        "is": "storage.FileType",
     },
     0x4B09EBBC: {
         "_": "storage.fileMov",
-        "is": TLType,
+        "is": "storage.FileType",
     },
     0xB3CEA0E4: {
         "_": "storage.fileMp4",
-        "is": TLType,
+        "is": "storage.FileType",
     },
     0x1081464C: {
         "_": "storage.fileWebp",
-        "is": TLType,
+        "is": "storage.FileType",
     },
     0xD3BC4B7A: {
         "_": "userEmpty",
         "params": {
             "id": Int64,
         },
-        "is": TLType,
+        "is": "User",
     },
     0x8F97C628: {
         "_": "user",
@@ -546,11 +546,11 @@ MAP = {
             "emoji_status": FlagsOf("flags", 30, TLType),
             "usernames": FlagsOf("flags2", 0, list["Username"]),
         },
-        "is": TLType,
+        "is": "User",
     },
     0x4F11BAE1: {
         "_": "userProfilePhotoEmpty",
-        "is": TLType,
+        "is": "UserProfilePhoto",
     },
     0x82D1F706: {
         "_": "userProfilePhoto",
@@ -562,44 +562,44 @@ MAP = {
             "stripped_thumb": FlagsOf("flags", 1, bytes),
             "dc_id": Int32,
         },
-        "is": TLType,
+        "is": "UserProfilePhoto",
     },
     0x9D05049: {
         "_": "userStatusEmpty",
-        "is": TLType,
+        "is": "UserStatus",
     },
     0xEDB93949: {
         "_": "userStatusOnline",
         "params": {
             "expires": Int32,
         },
-        "is": TLType,
+        "is": "UserStatus",
     },
     0x8C703F: {
         "_": "userStatusOffline",
         "params": {
             "was_online": Int32,
         },
-        "is": TLType,
+        "is": "UserStatus",
     },
     0xE26F42F1: {
         "_": "userStatusRecently",
-        "is": TLType,
+        "is": "UserStatus",
     },
     0x7BF09FC: {
         "_": "userStatusLastWeek",
-        "is": TLType,
+        "is": "UserStatus",
     },
     0x77EBC742: {
         "_": "userStatusLastMonth",
-        "is": TLType,
+        "is": "UserStatus",
     },
     0x29562865: {
         "_": "chatEmpty",
         "params": {
             "id": Int64,
         },
-        "is": TLType,
+        "is": "Chat",
     },
     0x41CBF256: {
         "_": "chat",
@@ -621,7 +621,7 @@ MAP = {
             "admin_rights": FlagsOf("flags", 14, TLType),
             "default_banned_rights": FlagsOf("flags", 18, TLType),
         },
-        "is": TLType,
+        "is": "Chat",
     },
     0x6592A1A7: {
         "_": "chatForbidden",
@@ -629,7 +629,7 @@ MAP = {
             "id": Int64,
             "title": str,
         },
-        "is": TLType,
+        "is": "Chat",
     },
     0x83259464: {
         "_": "channel",
@@ -669,7 +669,7 @@ MAP = {
             "participants_count": FlagsOf("flags", 17, Int32),
             "usernames": FlagsOf("flags2", 0, list["Username"]),
         },
-        "is": TLType,
+        "is": "Chat",
     },
     0x17D493D5: {
         "_": "channelForbidden",
@@ -682,7 +682,7 @@ MAP = {
             "title": str,
             "until_date": FlagsOf("flags", 16, Int32),
         },
-        "is": TLType,
+        "is": "Chat",
     },
     0xC9D31138: {
         "_": "chatFull",
@@ -707,7 +707,7 @@ MAP = {
             "recent_requesters": FlagsOf("flags", 17, list[Int64]),
             "available_reactions": FlagsOf("flags", 18, TLType),
         },
-        "is": TLType,
+        "is": "ChatFull",
     },
     0xF2355507: {
         "_": "channelFull",
@@ -761,7 +761,7 @@ MAP = {
             "default_send_as": FlagsOf("flags", 29, TLType),
             "available_reactions": FlagsOf("flags", 30, TLType),
         },
-        "is": TLType,
+        "is": "ChatFull",
     },
     0xC02D4007: {
         "_": "chatParticipant",
@@ -770,14 +770,14 @@ MAP = {
             "inviter_id": Int64,
             "date": Int32,
         },
-        "is": TLType,
+        "is": "ChatParticipant",
     },
     0xE46BCEE4: {
         "_": "chatParticipantCreator",
         "params": {
             "user_id": Int64,
         },
-        "is": TLType,
+        "is": "ChatParticipant",
     },
     0xA0933F5B: {
         "_": "chatParticipantAdmin",
@@ -786,7 +786,7 @@ MAP = {
             "inviter_id": Int64,
             "date": Int32,
         },
-        "is": TLType,
+        "is": "ChatParticipant",
     },
     0x8763D3E1: {
         "_": "chatParticipantsForbidden",
@@ -795,7 +795,7 @@ MAP = {
             "chat_id": Int64,
             "self_participant": FlagsOf("flags", 0, TLType),
         },
-        "is": TLType,
+        "is": "ChatParticipants",
     },
     0x3CBC93F8: {
         "_": "chatParticipants",
@@ -804,11 +804,11 @@ MAP = {
             "participants": list["ChatParticipant"],
             "version": Int32,
         },
-        "is": TLType,
+        "is": "ChatParticipants",
     },
     0x37C1011C: {
         "_": "chatPhotoEmpty",
-        "is": TLType,
+        "is": "ChatPhoto",
     },
     0x1C6E1C11: {
         "_": "chatPhoto",
@@ -819,7 +819,7 @@ MAP = {
             "stripped_thumb": FlagsOf("flags", 1, bytes),
             "dc_id": Int32,
         },
-        "is": TLType,
+        "is": "ChatPhoto",
     },
     0x90A6CA84: {
         "_": "messageEmpty",
@@ -828,7 +828,7 @@ MAP = {
             "id": Int32,
             "peer_id": FlagsOf("flags", 0, TLType),
         },
-        "is": TLType,
+        "is": "Message",
     },
     0x38116EE0: {
         "_": "message",
@@ -865,7 +865,7 @@ MAP = {
             "restriction_reason": FlagsOf("flags", 22, list["RestrictionReason"]),
             "ttl_period": FlagsOf("flags", 25, Int32),
         },
-        "is": TLType,
+        "is": "Message",
     },
     0x2B085862: {
         "_": "messageService",
@@ -885,11 +885,11 @@ MAP = {
             "action": TLType,
             "ttl_period": FlagsOf("flags", 25, Int32),
         },
-        "is": TLType,
+        "is": "Message",
     },
     0x3DED6320: {
         "_": "messageMediaEmpty",
-        "is": TLType,
+        "is": "MessageMedia",
     },
     0x695150D7: {
         "_": "messageMediaPhoto",
@@ -899,14 +899,14 @@ MAP = {
             "photo": FlagsOf("flags", 0, TLType),
             "ttl_seconds": FlagsOf("flags", 2, Int32),
         },
-        "is": TLType,
+        "is": "MessageMedia",
     },
     0x56E0D474: {
         "_": "messageMediaGeo",
         "params": {
             "geo": TLType,
         },
-        "is": TLType,
+        "is": "MessageMedia",
     },
     0x70322949: {
         "_": "messageMediaContact",
@@ -917,11 +917,11 @@ MAP = {
             "vcard": str,
             "user_id": Int64,
         },
-        "is": TLType,
+        "is": "MessageMedia",
     },
     0x9F84F49E: {
         "_": "messageMediaUnsupported",
-        "is": TLType,
+        "is": "MessageMedia",
     },
     0x9CB070D7: {
         "_": "messageMediaDocument",
@@ -932,14 +932,14 @@ MAP = {
             "document": FlagsOf("flags", 0, TLType),
             "ttl_seconds": FlagsOf("flags", 2, Int32),
         },
-        "is": TLType,
+        "is": "MessageMedia",
     },
     0xA32DD600: {
         "_": "messageMediaWebPage",
         "params": {
             "webpage": TLType,
         },
-        "is": TLType,
+        "is": "MessageMedia",
     },
     0x2EC0533F: {
         "_": "messageMediaVenue",
@@ -951,14 +951,14 @@ MAP = {
             "venue_id": str,
             "venue_type": str,
         },
-        "is": TLType,
+        "is": "MessageMedia",
     },
     0xFDB19008: {
         "_": "messageMediaGame",
         "params": {
             "game": TLType,
         },
-        "is": TLType,
+        "is": "MessageMedia",
     },
     0xF6A548D3: {
         "_": "messageMediaInvoice",
@@ -975,7 +975,7 @@ MAP = {
             "start_param": str,
             "extended_media": FlagsOf("flags", 4, TLType),
         },
-        "is": TLType,
+        "is": "MessageMedia",
     },
     0xB940C666: {
         "_": "messageMediaGeoLive",
@@ -986,7 +986,7 @@ MAP = {
             "period": Int32,
             "proximity_notification_radius": FlagsOf("flags", 1, Int32),
         },
-        "is": TLType,
+        "is": "MessageMedia",
     },
     0x4BD6E798: {
         "_": "messageMediaPoll",
@@ -994,7 +994,7 @@ MAP = {
             "poll": TLType,
             "results": TLType,
         },
-        "is": TLType,
+        "is": "MessageMedia",
     },
     0x3F7EE58B: {
         "_": "messageMediaDice",
@@ -1002,11 +1002,11 @@ MAP = {
             "value": Int32,
             "emoticon": str,
         },
-        "is": TLType,
+        "is": "MessageMedia",
     },
     0xB6AEF7B0: {
         "_": "messageActionEmpty",
-        "is": TLType,
+        "is": "MessageAction",
     },
     0xBD47CBAD: {
         "_": "messageActionChatCreate",
@@ -1014,60 +1014,60 @@ MAP = {
             "title": str,
             "users": list[Int64],
         },
-        "is": TLType,
+        "is": "MessageAction",
     },
     0xB5A1CE5A: {
         "_": "messageActionChatEditTitle",
         "params": {
             "title": str,
         },
-        "is": TLType,
+        "is": "MessageAction",
     },
     0x7FCB13A8: {
         "_": "messageActionChatEditPhoto",
         "params": {
             "photo": TLType,
         },
-        "is": TLType,
+        "is": "MessageAction",
     },
     0x95E3FBEF: {
         "_": "messageActionChatDeletePhoto",
-        "is": TLType,
+        "is": "MessageAction",
     },
     0x15CEFD00: {
         "_": "messageActionChatAddUser",
         "params": {
             "users": list[Int64],
         },
-        "is": TLType,
+        "is": "MessageAction",
     },
     0xA43F30CC: {
         "_": "messageActionChatDeleteUser",
         "params": {
             "user_id": Int64,
         },
-        "is": TLType,
+        "is": "MessageAction",
     },
     0x31224C3: {
         "_": "messageActionChatJoinedByLink",
         "params": {
             "inviter_id": Int64,
         },
-        "is": TLType,
+        "is": "MessageAction",
     },
     0x95D2AC92: {
         "_": "messageActionChannelCreate",
         "params": {
             "title": str,
         },
-        "is": TLType,
+        "is": "MessageAction",
     },
     0xE1037F92: {
         "_": "messageActionChatMigrateTo",
         "params": {
             "channel_id": Int64,
         },
-        "is": TLType,
+        "is": "MessageAction",
     },
     0xEA3948E9: {
         "_": "messageActionChannelMigrateFrom",
@@ -1075,15 +1075,15 @@ MAP = {
             "title": str,
             "chat_id": Int64,
         },
-        "is": TLType,
+        "is": "MessageAction",
     },
     0x94BD38ED: {
         "_": "messageActionPinMessage",
-        "is": TLType,
+        "is": "MessageAction",
     },
     0x9FBAB604: {
         "_": "messageActionHistoryClear",
-        "is": TLType,
+        "is": "MessageAction",
     },
     0x92A72876: {
         "_": "messageActionGameScore",
@@ -1091,7 +1091,7 @@ MAP = {
             "game_id": Int64,
             "score": Int32,
         },
-        "is": TLType,
+        "is": "MessageAction",
     },
     0x8F31B327: {
         "_": "messageActionPaymentSentMe",
@@ -1106,7 +1106,7 @@ MAP = {
             "shipping_option_id": FlagsOf("flags", 1, str),
             "charge": TLType,
         },
-        "is": TLType,
+        "is": "MessageAction",
     },
     0x96163F56: {
         "_": "messageActionPaymentSent",
@@ -1118,7 +1118,7 @@ MAP = {
             "total_amount": Int64,
             "invoice_slug": FlagsOf("flags", 0, str),
         },
-        "is": TLType,
+        "is": "MessageAction",
     },
     0x80E11A7F: {
         "_": "messageActionPhoneCall",
@@ -1129,25 +1129,25 @@ MAP = {
             "reason": FlagsOf("flags", 0, TLType),
             "duration": FlagsOf("flags", 1, Int32),
         },
-        "is": TLType,
+        "is": "MessageAction",
     },
     0x4792929B: {
         "_": "messageActionScreenshotTaken",
-        "is": TLType,
+        "is": "MessageAction",
     },
     0xFAE69F56: {
         "_": "messageActionCustomAction",
         "params": {
             "message": str,
         },
-        "is": TLType,
+        "is": "MessageAction",
     },
     0xABE9AFFE: {
         "_": "messageActionBotAllowed",
         "params": {
             "domain": str,
         },
-        "is": TLType,
+        "is": "MessageAction",
     },
     0x1B287353: {
         "_": "messageActionSecureValuesSentMe",
@@ -1155,18 +1155,18 @@ MAP = {
             "values": list["SecureValue"],
             "credentials": TLType,
         },
-        "is": TLType,
+        "is": "MessageAction",
     },
     0xD95C6154: {
         "_": "messageActionSecureValuesSent",
         "params": {
             "types": list["SecureValueType"],
         },
-        "is": TLType,
+        "is": "MessageAction",
     },
     0xF3F25F76: {
         "_": "messageActionContactSignUp",
-        "is": TLType,
+        "is": "MessageAction",
     },
     0x98E0D697: {
         "_": "messageActionGeoProximityReached",
@@ -1175,7 +1175,7 @@ MAP = {
             "to_id": TLType,
             "distance": Int32,
         },
-        "is": TLType,
+        "is": "MessageAction",
     },
     0x7A0D7F42: {
         "_": "messageActionGroupCall",
@@ -1184,7 +1184,7 @@ MAP = {
             "call": TLType,
             "duration": FlagsOf("flags", 0, Int32),
         },
-        "is": TLType,
+        "is": "MessageAction",
     },
     0x502F92F7: {
         "_": "messageActionInviteToGroupCall",
@@ -1192,7 +1192,7 @@ MAP = {
             "call": TLType,
             "users": list[Int64],
         },
-        "is": TLType,
+        "is": "MessageAction",
     },
     0x3C134D7B: {
         "_": "messageActionSetMessagesTTL",
@@ -1201,7 +1201,7 @@ MAP = {
             "period": Int32,
             "auto_setting_from": FlagsOf("flags", 0, Int64),
         },
-        "is": TLType,
+        "is": "MessageAction",
     },
     0xB3A07661: {
         "_": "messageActionGroupCallScheduled",
@@ -1209,18 +1209,18 @@ MAP = {
             "call": TLType,
             "schedule_date": Int32,
         },
-        "is": TLType,
+        "is": "MessageAction",
     },
     0xAA786345: {
         "_": "messageActionSetChatTheme",
         "params": {
             "emoticon": str,
         },
-        "is": TLType,
+        "is": "MessageAction",
     },
     0xEBBCA3CB: {
         "_": "messageActionChatJoinedByRequest",
-        "is": TLType,
+        "is": "MessageAction",
     },
     0x47DD8079: {
         "_": "messageActionWebViewDataSentMe",
@@ -1228,14 +1228,14 @@ MAP = {
             "text": str,
             "data": str,
         },
-        "is": TLType,
+        "is": "MessageAction",
     },
     0xB4C38CB5: {
         "_": "messageActionWebViewDataSent",
         "params": {
             "text": str,
         },
-        "is": TLType,
+        "is": "MessageAction",
     },
     0xABA0F5C6: {
         "_": "messageActionGiftPremium",
@@ -1244,7 +1244,7 @@ MAP = {
             "amount": Int64,
             "months": Int32,
         },
-        "is": TLType,
+        "is": "MessageAction",
     },
     0xD999256: {
         "_": "messageActionTopicCreate",
@@ -1254,7 +1254,7 @@ MAP = {
             "icon_color": Int32,
             "icon_emoji_id": FlagsOf("flags", 0, Int64),
         },
-        "is": TLType,
+        "is": "MessageAction",
     },
     0xC0944820: {
         "_": "messageActionTopicEdit",
@@ -1265,18 +1265,18 @@ MAP = {
             "closed": FlagsOf("flags", 2, bool),
             "hidden": FlagsOf("flags", 3, bool),
         },
-        "is": TLType,
+        "is": "MessageAction",
     },
     0x57DE635E: {
         "_": "messageActionSuggestProfilePhoto",
         "params": {
             "photo": TLType,
         },
-        "is": TLType,
+        "is": "MessageAction",
     },
     0xE7E75F97: {
         "_": "messageActionAttachMenuBotAllowed",
-        "is": TLType,
+        "is": "MessageAction",
     },
     0xD58A08C6: {
         "_": "dialog",
@@ -1297,7 +1297,7 @@ MAP = {
             "folder_id": FlagsOf("flags", 4, Int32),
             "ttl_period": FlagsOf("flags", 5, Int32),
         },
-        "is": TLType,
+        "is": "Dialog",
     },
     0x71BD134C: {
         "_": "dialogFolder",
@@ -1312,14 +1312,14 @@ MAP = {
             "unread_muted_messages_count": Int32,
             "unread_unmuted_messages_count": Int32,
         },
-        "is": TLType,
+        "is": "Dialog",
     },
     0x2331B22D: {
         "_": "photoEmpty",
         "params": {
             "id": Int64,
         },
-        "is": TLType,
+        "is": "Photo",
     },
     0xFB197A65: {
         "_": "photo",
@@ -1334,14 +1334,14 @@ MAP = {
             "video_sizes": FlagsOf("flags", 1, list["VideoSize"]),
             "dc_id": Int32,
         },
-        "is": TLType,
+        "is": "Photo",
     },
     0xE17E23C: {
         "_": "photoSizeEmpty",
         "params": {
             "type": str,
         },
-        "is": TLType,
+        "is": "PhotoSize",
     },
     0x75C78E60: {
         "_": "photoSize",
@@ -1351,7 +1351,7 @@ MAP = {
             "h": Int32,
             "size": Int32,
         },
-        "is": TLType,
+        "is": "PhotoSize",
     },
     0x21E1AD6: {
         "_": "photoCachedSize",
@@ -1361,7 +1361,7 @@ MAP = {
             "h": Int32,
             "bytes": bytes,
         },
-        "is": TLType,
+        "is": "PhotoSize",
     },
     0xE0B0BC2E: {
         "_": "photoStrippedSize",
@@ -1369,7 +1369,7 @@ MAP = {
             "type": str,
             "bytes": bytes,
         },
-        "is": TLType,
+        "is": "PhotoSize",
     },
     0xFA3EFB95: {
         "_": "photoSizeProgressive",
@@ -1379,7 +1379,7 @@ MAP = {
             "h": Int32,
             "sizes": list[Int32],
         },
-        "is": TLType,
+        "is": "PhotoSize",
     },
     0xD8214D41: {
         "_": "photoPathSize",
@@ -1387,11 +1387,11 @@ MAP = {
             "type": str,
             "bytes": bytes,
         },
-        "is": TLType,
+        "is": "PhotoSize",
     },
     0x1117DD5F: {
         "_": "geoPointEmpty",
-        "is": TLType,
+        "is": "GeoPoint",
     },
     0xB2A2F663: {
         "_": "geoPoint",
@@ -1402,7 +1402,7 @@ MAP = {
             "access_hash": Int64,
             "accuracy_radius": FlagsOf("flags", 0, Int32),
         },
-        "is": TLType,
+        "is": "GeoPoint",
     },
     0x5E002502: {
         "_": "auth.sentCode",
@@ -1413,7 +1413,7 @@ MAP = {
             "next_type": FlagsOf("flags", 1, TLType),
             "timeout": FlagsOf("flags", 2, Int32),
         },
-        "is": TLType,
+        "is": "auth.SentCode",
     },
     0x33FB7BB8: {
         "_": "auth.authorization",
@@ -1424,7 +1424,7 @@ MAP = {
             "tmp_sessions": FlagsOf("flags", 0, Int32),
             "user": TLType,
         },
-        "is": TLType,
+        "is": "auth.Authorization",
     },
     0x44747E9A: {
         "_": "auth.authorizationSignUpRequired",
@@ -1432,7 +1432,7 @@ MAP = {
             "flags": Int32,
             "terms_of_service": FlagsOf("flags", 0, TLType),
         },
-        "is": TLType,
+        "is": "auth.Authorization",
     },
     0xB434E2B8: {
         "_": "auth.exportedAuthorization",
@@ -1440,26 +1440,26 @@ MAP = {
             "id": Int64,
             "bytes": bytes,
         },
-        "is": TLType,
+        "is": "auth.ExportedAuthorization",
     },
     0xB8BC5B0C: {
         "_": "inputNotifyPeer",
         "params": {
             "peer": TLType,
         },
-        "is": TLType,
+        "is": "InputNotifyPeer",
     },
     0x193B4417: {
         "_": "inputNotifyUsers",
-        "is": TLType,
+        "is": "InputNotifyPeer",
     },
     0x4A95E84E: {
         "_": "inputNotifyChats",
-        "is": TLType,
+        "is": "InputNotifyPeer",
     },
     0xB1DB7C7E: {
         "_": "inputNotifyBroadcasts",
-        "is": TLType,
+        "is": "InputNotifyPeer",
     },
     0x5C467992: {
         "_": "inputNotifyForumTopic",
@@ -1467,7 +1467,7 @@ MAP = {
             "peer": TLType,
             "top_msg_id": Int32,
         },
-        "is": TLType,
+        "is": "InputNotifyPeer",
     },
     0xDF1F002B: {
         "_": "inputPeerNotifySettings",
@@ -1478,7 +1478,7 @@ MAP = {
             "mute_until": FlagsOf("flags", 2, Int32),
             "sound": FlagsOf("flags", 3, TLType),
         },
-        "is": TLType,
+        "is": "InputPeerNotifySettings",
     },
     0xA83B0426: {
         "_": "peerNotifySettings",
@@ -1491,7 +1491,7 @@ MAP = {
             "android_sound": FlagsOf("flags", 4, TLType),
             "other_sound": FlagsOf("flags", 5, TLType),
         },
-        "is": TLType,
+        "is": "PeerNotifySettings",
     },
     0xA518110D: {
         "_": "peerSettings",
@@ -1510,7 +1510,7 @@ MAP = {
             "request_chat_title": FlagsOf("flags", 9, str),
             "request_chat_date": FlagsOf("flags", 9, Int32),
         },
-        "is": TLType,
+        "is": "PeerSettings",
     },
     0xA437C3ED: {
         "_": "wallPaper",
@@ -1526,7 +1526,7 @@ MAP = {
             "document": TLType,
             "settings": FlagsOf("flags", 2, TLType),
         },
-        "is": TLType,
+        "is": "WallPaper",
     },
     0xE0804116: {
         "_": "wallPaperNoFile",
@@ -1537,47 +1537,47 @@ MAP = {
             "dark": FlagsOf("flags", 4, Bit),
             "settings": FlagsOf("flags", 2, TLType),
         },
-        "is": TLType,
+        "is": "WallPaper",
     },
     0x58DBCAB8: {
         "_": "inputReportReasonSpam",
-        "is": TLType,
+        "is": "ReportReason",
     },
     0x1E22C78D: {
         "_": "inputReportReasonViolence",
-        "is": TLType,
+        "is": "ReportReason",
     },
     0x2E59D922: {
         "_": "inputReportReasonPornography",
-        "is": TLType,
+        "is": "ReportReason",
     },
     0xADF44EE3: {
         "_": "inputReportReasonChildAbuse",
-        "is": TLType,
+        "is": "ReportReason",
     },
     0xC1E4A2B1: {
         "_": "inputReportReasonOther",
-        "is": TLType,
+        "is": "ReportReason",
     },
     0x9B89F93A: {
         "_": "inputReportReasonCopyright",
-        "is": TLType,
+        "is": "ReportReason",
     },
     0xDBD4FEED: {
         "_": "inputReportReasonGeoIrrelevant",
-        "is": TLType,
+        "is": "ReportReason",
     },
     0xF5DDD6E7: {
         "_": "inputReportReasonFake",
-        "is": TLType,
+        "is": "ReportReason",
     },
     0xA8EB2BE: {
         "_": "inputReportReasonIllegalDrugs",
-        "is": TLType,
+        "is": "ReportReason",
     },
     0x9EC7863D: {
         "_": "inputReportReasonPersonalDetails",
-        "is": TLType,
+        "is": "ReportReason",
     },
     0xF8D32AED: {
         "_": "userFull",
@@ -1608,7 +1608,7 @@ MAP = {
             "bot_broadcast_admin_rights": FlagsOf("flags", 18, TLType),
             "premium_gifts": FlagsOf("flags", 19, list["PremiumGiftOption"]),
         },
-        "is": TLType,
+        "is": "UserFull",
     },
     0x145ADE0B: {
         "_": "contact",
@@ -1616,7 +1616,7 @@ MAP = {
             "user_id": Int64,
             "mutual": bool,
         },
-        "is": TLType,
+        "is": "Contact",
     },
     0xC13E3C50: {
         "_": "importedContact",
@@ -1624,7 +1624,7 @@ MAP = {
             "user_id": Int64,
             "client_id": Int64,
         },
-        "is": TLType,
+        "is": "ImportedContact",
     },
     0x16D9703B: {
         "_": "contactStatus",
@@ -1632,11 +1632,11 @@ MAP = {
             "user_id": Int64,
             "status": TLType,
         },
-        "is": TLType,
+        "is": "ContactStatus",
     },
     0xB74BA9D2: {
         "_": "contacts.contactsNotModified",
-        "is": TLType,
+        "is": "contacts.Contacts",
     },
     0xEAE87E42: {
         "_": "contacts.contacts",
@@ -1645,7 +1645,7 @@ MAP = {
             "saved_count": Int32,
             "users": list["User"],
         },
-        "is": TLType,
+        "is": "contacts.Contacts",
     },
     0x77D01C3B: {
         "_": "contacts.importedContacts",
@@ -1655,7 +1655,7 @@ MAP = {
             "retry_contacts": list[Int64],
             "users": list["User"],
         },
-        "is": TLType,
+        "is": "contacts.ImportedContacts",
     },
     0xADE1591: {
         "_": "contacts.blocked",
@@ -1664,7 +1664,7 @@ MAP = {
             "chats": list["Chat"],
             "users": list["User"],
         },
-        "is": TLType,
+        "is": "contacts.Blocked",
     },
     0xE1664194: {
         "_": "contacts.blockedSlice",
@@ -1674,7 +1674,7 @@ MAP = {
             "chats": list["Chat"],
             "users": list["User"],
         },
-        "is": TLType,
+        "is": "contacts.Blocked",
     },
     0x15BA6C40: {
         "_": "messages.dialogs",
@@ -1684,7 +1684,7 @@ MAP = {
             "chats": list["Chat"],
             "users": list["User"],
         },
-        "is": TLType,
+        "is": "messages.Dialogs",
     },
     0x71E094F3: {
         "_": "messages.dialogsSlice",
@@ -1695,14 +1695,14 @@ MAP = {
             "chats": list["Chat"],
             "users": list["User"],
         },
-        "is": TLType,
+        "is": "messages.Dialogs",
     },
     0xF0E3E596: {
         "_": "messages.dialogsNotModified",
         "params": {
             "count": Int32,
         },
-        "is": TLType,
+        "is": "messages.Dialogs",
     },
     0x8C718E87: {
         "_": "messages.messages",
@@ -1711,7 +1711,7 @@ MAP = {
             "chats": list["Chat"],
             "users": list["User"],
         },
-        "is": TLType,
+        "is": "messages.Messages",
     },
     0x3A54685E: {
         "_": "messages.messagesSlice",
@@ -1725,7 +1725,7 @@ MAP = {
             "chats": list["Chat"],
             "users": list["User"],
         },
-        "is": TLType,
+        "is": "messages.Messages",
     },
     0xC776BA4E: {
         "_": "messages.channelMessages",
@@ -1740,21 +1740,21 @@ MAP = {
             "chats": list["Chat"],
             "users": list["User"],
         },
-        "is": TLType,
+        "is": "messages.Messages",
     },
     0x74535F21: {
         "_": "messages.messagesNotModified",
         "params": {
             "count": Int32,
         },
-        "is": TLType,
+        "is": "messages.Messages",
     },
     0x64FF9FD5: {
         "_": "messages.chats",
         "params": {
             "chats": list["Chat"],
         },
-        "is": TLType,
+        "is": "messages.Chats",
     },
     0x9CD81144: {
         "_": "messages.chatsSlice",
@@ -1762,7 +1762,7 @@ MAP = {
             "count": Int32,
             "chats": list["Chat"],
         },
-        "is": TLType,
+        "is": "messages.Chats",
     },
     0xE5D7D19C: {
         "_": "messages.chatFull",
@@ -1771,7 +1771,7 @@ MAP = {
             "chats": list["Chat"],
             "users": list["User"],
         },
-        "is": TLType,
+        "is": "messages.ChatFull",
     },
     0xB45C69D1: {
         "_": "messages.affectedHistory",
@@ -1780,47 +1780,47 @@ MAP = {
             "pts_count": Int32,
             "offset": Int32,
         },
-        "is": TLType,
+        "is": "messages.AffectedHistory",
     },
     0x57E2F66C: {
         "_": "inputMessagesFilterEmpty",
-        "is": TLType,
+        "is": "MessagesFilter",
     },
     0x9609A51C: {
         "_": "inputMessagesFilterPhotos",
-        "is": TLType,
+        "is": "MessagesFilter",
     },
     0x9FC00E65: {
         "_": "inputMessagesFilterVideo",
-        "is": TLType,
+        "is": "MessagesFilter",
     },
     0x56E9F0E4: {
         "_": "inputMessagesFilterPhotoVideo",
-        "is": TLType,
+        "is": "MessagesFilter",
     },
     0x9EDDF188: {
         "_": "inputMessagesFilterDocument",
-        "is": TLType,
+        "is": "MessagesFilter",
     },
     0x7EF0DD87: {
         "_": "inputMessagesFilterUrl",
-        "is": TLType,
+        "is": "MessagesFilter",
     },
     0xFFC86587: {
         "_": "inputMessagesFilterGif",
-        "is": TLType,
+        "is": "MessagesFilter",
     },
     0x50F5C392: {
         "_": "inputMessagesFilterVoice",
-        "is": TLType,
+        "is": "MessagesFilter",
     },
     0x3751B49E: {
         "_": "inputMessagesFilterMusic",
-        "is": TLType,
+        "is": "MessagesFilter",
     },
     0x3A20ECB8: {
         "_": "inputMessagesFilterChatPhotos",
-        "is": TLType,
+        "is": "MessagesFilter",
     },
     0x80C99768: {
         "_": "inputMessagesFilterPhoneCalls",
@@ -1828,31 +1828,31 @@ MAP = {
             "flags": Int32,
             "missed": FlagsOf("flags", 0, Bit),
         },
-        "is": TLType,
+        "is": "MessagesFilter",
     },
     0x7A7C17A4: {
         "_": "inputMessagesFilterRoundVoice",
-        "is": TLType,
+        "is": "MessagesFilter",
     },
     0xB549DA53: {
         "_": "inputMessagesFilterRoundVideo",
-        "is": TLType,
+        "is": "MessagesFilter",
     },
     0xC1F8E69A: {
         "_": "inputMessagesFilterMyMentions",
-        "is": TLType,
+        "is": "MessagesFilter",
     },
     0xE7026D0D: {
         "_": "inputMessagesFilterGeo",
-        "is": TLType,
+        "is": "MessagesFilter",
     },
     0xE062DB83: {
         "_": "inputMessagesFilterContacts",
-        "is": TLType,
+        "is": "MessagesFilter",
     },
     0x1BB00451: {
         "_": "inputMessagesFilterPinned",
-        "is": TLType,
+        "is": "MessagesFilter",
     },
     0x1F2B0AFD: {
         "_": "updateNewMessage",
@@ -1861,7 +1861,7 @@ MAP = {
             "pts": Int32,
             "pts_count": Int32,
         },
-        "is": TLType,
+        "is": "Update",
     },
     0x4E90BFD6: {
         "_": "updateMessageID",
@@ -1869,7 +1869,7 @@ MAP = {
             "id": Int32,
             "random_id": Int64,
         },
-        "is": TLType,
+        "is": "Update",
     },
     0xA20DB0E5: {
         "_": "updateDeleteMessages",
@@ -1878,7 +1878,7 @@ MAP = {
             "pts": Int32,
             "pts_count": Int32,
         },
-        "is": TLType,
+        "is": "Update",
     },
     0xC01E857F: {
         "_": "updateUserTyping",
@@ -1886,7 +1886,7 @@ MAP = {
             "user_id": Int64,
             "action": TLType,
         },
-        "is": TLType,
+        "is": "Update",
     },
     0x83487AF0: {
         "_": "updateChatUserTyping",
@@ -1895,14 +1895,14 @@ MAP = {
             "from_id": TLType,
             "action": TLType,
         },
-        "is": TLType,
+        "is": "Update",
     },
     0x7761198: {
         "_": "updateChatParticipants",
         "params": {
             "participants": TLType,
         },
-        "is": TLType,
+        "is": "Update",
     },
     0xE5BDF8DE: {
         "_": "updateUserStatus",
@@ -1910,7 +1910,7 @@ MAP = {
             "user_id": Int64,
             "status": TLType,
         },
-        "is": TLType,
+        "is": "Update",
     },
     0xA7848924: {
         "_": "updateUserName",
@@ -1920,7 +1920,7 @@ MAP = {
             "last_name": str,
             "usernames": list["Username"],
         },
-        "is": TLType,
+        "is": "Update",
     },
     0x12BCBD9A: {
         "_": "updateNewEncryptedMessage",
@@ -1928,14 +1928,14 @@ MAP = {
             "message": TLType,
             "qts": Int32,
         },
-        "is": TLType,
+        "is": "Update",
     },
     0x1710F156: {
         "_": "updateEncryptedChatTyping",
         "params": {
             "chat_id": Int32,
         },
-        "is": TLType,
+        "is": "Update",
     },
     0xB4A2E88D: {
         "_": "updateEncryption",
@@ -1943,7 +1943,7 @@ MAP = {
             "chat": TLType,
             "date": Int32,
         },
-        "is": TLType,
+        "is": "Update",
     },
     0x38FE25B7: {
         "_": "updateEncryptedMessagesRead",
@@ -1952,7 +1952,7 @@ MAP = {
             "max_date": Int32,
             "date": Int32,
         },
-        "is": TLType,
+        "is": "Update",
     },
     0x3DDA5451: {
         "_": "updateChatParticipantAdd",
@@ -1963,7 +1963,7 @@ MAP = {
             "date": Int32,
             "version": Int32,
         },
-        "is": TLType,
+        "is": "Update",
     },
     0xE32F3D77: {
         "_": "updateChatParticipantDelete",
@@ -1972,14 +1972,14 @@ MAP = {
             "user_id": Int64,
             "version": Int32,
         },
-        "is": TLType,
+        "is": "Update",
     },
     0x8E5E9873: {
         "_": "updateDcOptions",
         "params": {
             "dc_options": list["DcOption"],
         },
-        "is": TLType,
+        "is": "Update",
     },
     0xBEC268EF: {
         "_": "updateNotifySettings",
@@ -1987,7 +1987,7 @@ MAP = {
             "peer": TLType,
             "notify_settings": TLType,
         },
-        "is": TLType,
+        "is": "Update",
     },
     0xEBE46819: {
         "_": "updateServiceNotification",
@@ -2000,7 +2000,7 @@ MAP = {
             "media": TLType,
             "entities": list["MessageEntity"],
         },
-        "is": TLType,
+        "is": "Update",
     },
     0xEE3B272A: {
         "_": "updatePrivacy",
@@ -2008,7 +2008,7 @@ MAP = {
             "key": TLType,
             "rules": list["PrivacyRule"],
         },
-        "is": TLType,
+        "is": "Update",
     },
     0x5492A13: {
         "_": "updateUserPhone",
@@ -2016,7 +2016,7 @@ MAP = {
             "user_id": Int64,
             "phone": str,
         },
-        "is": TLType,
+        "is": "Update",
     },
     0x9C974FDF: {
         "_": "updateReadHistoryInbox",
@@ -2029,7 +2029,7 @@ MAP = {
             "pts": Int32,
             "pts_count": Int32,
         },
-        "is": TLType,
+        "is": "Update",
     },
     0x2F2F21BF: {
         "_": "updateReadHistoryOutbox",
@@ -2039,7 +2039,7 @@ MAP = {
             "pts": Int32,
             "pts_count": Int32,
         },
-        "is": TLType,
+        "is": "Update",
     },
     0x7F891213: {
         "_": "updateWebPage",
@@ -2048,7 +2048,7 @@ MAP = {
             "pts": Int32,
             "pts_count": Int32,
         },
-        "is": TLType,
+        "is": "Update",
     },
     0x68C13933: {
         "_": "updateReadMessagesContents",
@@ -2057,7 +2057,7 @@ MAP = {
             "pts": Int32,
             "pts_count": Int32,
         },
-        "is": TLType,
+        "is": "Update",
     },
     0x108D941F: {
         "_": "updateChannelTooLong",
@@ -2066,14 +2066,14 @@ MAP = {
             "channel_id": Int64,
             "pts": FlagsOf("flags", 0, Int32),
         },
-        "is": TLType,
+        "is": "Update",
     },
     0x635B4C09: {
         "_": "updateChannel",
         "params": {
             "channel_id": Int64,
         },
-        "is": TLType,
+        "is": "Update",
     },
     0x62BA04D9: {
         "_": "updateNewChannelMessage",
@@ -2082,7 +2082,7 @@ MAP = {
             "pts": Int32,
             "pts_count": Int32,
         },
-        "is": TLType,
+        "is": "Update",
     },
     0x922E6E10: {
         "_": "updateReadChannelInbox",
@@ -2094,7 +2094,7 @@ MAP = {
             "still_unread_count": Int32,
             "pts": Int32,
         },
-        "is": TLType,
+        "is": "Update",
     },
     0xC32D5B12: {
         "_": "updateDeleteChannelMessages",
@@ -2104,7 +2104,7 @@ MAP = {
             "pts": Int32,
             "pts_count": Int32,
         },
-        "is": TLType,
+        "is": "Update",
     },
     0xF226AC08: {
         "_": "updateChannelMessageViews",
@@ -2113,7 +2113,7 @@ MAP = {
             "id": Int32,
             "views": Int32,
         },
-        "is": TLType,
+        "is": "Update",
     },
     0xD7CA61A2: {
         "_": "updateChatParticipantAdmin",
@@ -2123,14 +2123,14 @@ MAP = {
             "is_admin": bool,
             "version": Int32,
         },
-        "is": TLType,
+        "is": "Update",
     },
     0x688A30AA: {
         "_": "updateNewStickerSet",
         "params": {
             "stickerset": TLType,
         },
-        "is": TLType,
+        "is": "Update",
     },
     0xBB2D201: {
         "_": "updateStickerSetsOrder",
@@ -2140,7 +2140,7 @@ MAP = {
             "emojis": FlagsOf("flags", 1, Bit),
             "order": list[Int64],
         },
-        "is": TLType,
+        "is": "Update",
     },
     0x31C24808: {
         "_": "updateStickerSets",
@@ -2149,11 +2149,11 @@ MAP = {
             "masks": FlagsOf("flags", 0, Bit),
             "emojis": FlagsOf("flags", 1, Bit),
         },
-        "is": TLType,
+        "is": "Update",
     },
     0x9375341E: {
         "_": "updateSavedGifs",
-        "is": TLType,
+        "is": "Update",
     },
     0x496F379C: {
         "_": "updateBotInlineQuery",
@@ -2166,7 +2166,7 @@ MAP = {
             "peer_type": FlagsOf("flags", 1, TLType),
             "offset": str,
         },
-        "is": TLType,
+        "is": "Update",
     },
     0x12F12A07: {
         "_": "updateBotInlineSend",
@@ -2178,7 +2178,7 @@ MAP = {
             "id": str,
             "msg_id": FlagsOf("flags", 1, TLType),
         },
-        "is": TLType,
+        "is": "Update",
     },
     0x1B3F4DF7: {
         "_": "updateEditChannelMessage",
@@ -2187,7 +2187,7 @@ MAP = {
             "pts": Int32,
             "pts_count": Int32,
         },
-        "is": TLType,
+        "is": "Update",
     },
     0xB9CFC48D: {
         "_": "updateBotCallbackQuery",
@@ -2201,7 +2201,7 @@ MAP = {
             "data": FlagsOf("flags", 0, bytes),
             "game_short_name": FlagsOf("flags", 1, str),
         },
-        "is": TLType,
+        "is": "Update",
     },
     0xE40370A3: {
         "_": "updateEditMessage",
@@ -2210,7 +2210,7 @@ MAP = {
             "pts": Int32,
             "pts_count": Int32,
         },
-        "is": TLType,
+        "is": "Update",
     },
     0x691E9052: {
         "_": "updateInlineBotCallbackQuery",
@@ -2223,7 +2223,7 @@ MAP = {
             "data": FlagsOf("flags", 0, bytes),
             "game_short_name": FlagsOf("flags", 1, str),
         },
-        "is": TLType,
+        "is": "Update",
     },
     0xB75F99A9: {
         "_": "updateReadChannelOutbox",
@@ -2231,7 +2231,7 @@ MAP = {
             "channel_id": Int64,
             "max_id": Int32,
         },
-        "is": TLType,
+        "is": "Update",
     },
     0x1B49EC6D: {
         "_": "updateDraftMessage",
@@ -2241,23 +2241,23 @@ MAP = {
             "top_msg_id": FlagsOf("flags", 0, Int32),
             "draft": TLType,
         },
-        "is": TLType,
+        "is": "Update",
     },
     0x571D2742: {
         "_": "updateReadFeaturedStickers",
-        "is": TLType,
+        "is": "Update",
     },
     0x9A422C20: {
         "_": "updateRecentStickers",
-        "is": TLType,
+        "is": "Update",
     },
     0xA229DD06: {
         "_": "updateConfig",
-        "is": TLType,
+        "is": "Update",
     },
     0x3354678F: {
         "_": "updatePtsChanged",
-        "is": TLType,
+        "is": "Update",
     },
     0x2F2BA99F: {
         "_": "updateChannelWebPage",
@@ -2267,7 +2267,7 @@ MAP = {
             "pts": Int32,
             "pts_count": Int32,
         },
-        "is": TLType,
+        "is": "Update",
     },
     0x6E6FE51C: {
         "_": "updateDialogPinned",
@@ -2277,7 +2277,7 @@ MAP = {
             "folder_id": FlagsOf("flags", 1, Int32),
             "peer": TLType,
         },
-        "is": TLType,
+        "is": "Update",
     },
     0xFA0F3CA2: {
         "_": "updatePinnedDialogs",
@@ -2286,14 +2286,14 @@ MAP = {
             "folder_id": FlagsOf("flags", 1, Int32),
             "order": FlagsOf("flags", 0, list["DialogPeer"]),
         },
-        "is": TLType,
+        "is": "Update",
     },
     0x8317C0C3: {
         "_": "updateBotWebhookJSON",
         "params": {
             "data": TLType,
         },
-        "is": TLType,
+        "is": "Update",
     },
     0x9B9240A6: {
         "_": "updateBotWebhookJSONQuery",
@@ -2302,7 +2302,7 @@ MAP = {
             "data": TLType,
             "timeout": Int32,
         },
-        "is": TLType,
+        "is": "Update",
     },
     0xB5AEFD7D: {
         "_": "updateBotShippingQuery",
@@ -2312,7 +2312,7 @@ MAP = {
             "payload": bytes,
             "shipping_address": TLType,
         },
-        "is": TLType,
+        "is": "Update",
     },
     0x8CAA9A96: {
         "_": "updateBotPrecheckoutQuery",
@@ -2326,32 +2326,32 @@ MAP = {
             "currency": str,
             "total_amount": Int64,
         },
-        "is": TLType,
+        "is": "Update",
     },
     0xAB0F6B1E: {
         "_": "updatePhoneCall",
         "params": {
             "phone_call": TLType,
         },
-        "is": TLType,
+        "is": "Update",
     },
     0x46560264: {
         "_": "updateLangPackTooLong",
         "params": {
             "lang_code": str,
         },
-        "is": TLType,
+        "is": "Update",
     },
     0x56022F4D: {
         "_": "updateLangPack",
         "params": {
             "difference": TLType,
         },
-        "is": TLType,
+        "is": "Update",
     },
     0xE511996D: {
         "_": "updateFavedStickers",
-        "is": TLType,
+        "is": "Update",
     },
     0xEA29055D: {
         "_": "updateChannelReadMessagesContents",
@@ -2361,11 +2361,11 @@ MAP = {
             "top_msg_id": FlagsOf("flags", 0, Int32),
             "messages": list[Int32],
         },
-        "is": TLType,
+        "is": "Update",
     },
     0x7084A7BE: {
         "_": "updateContactsReset",
-        "is": TLType,
+        "is": "Update",
     },
     0xB23FC698: {
         "_": "updateChannelAvailableMessages",
@@ -2373,7 +2373,7 @@ MAP = {
             "channel_id": Int64,
             "available_min_id": Int32,
         },
-        "is": TLType,
+        "is": "Update",
     },
     0xE16459C3: {
         "_": "updateDialogUnreadMark",
@@ -2382,7 +2382,7 @@ MAP = {
             "unread": FlagsOf("flags", 0, Bit),
             "peer": TLType,
         },
-        "is": TLType,
+        "is": "Update",
     },
     0xACA1657B: {
         "_": "updateMessagePoll",
@@ -2392,7 +2392,7 @@ MAP = {
             "poll": FlagsOf("flags", 0, TLType),
             "results": TLType,
         },
-        "is": TLType,
+        "is": "Update",
     },
     0x54C01850: {
         "_": "updateChatDefaultBannedRights",
@@ -2401,7 +2401,7 @@ MAP = {
             "default_banned_rights": TLType,
             "version": Int32,
         },
-        "is": TLType,
+        "is": "Update",
     },
     0x19360DC0: {
         "_": "updateFolderPeers",
@@ -2410,7 +2410,7 @@ MAP = {
             "pts": Int32,
             "pts_count": Int32,
         },
-        "is": TLType,
+        "is": "Update",
     },
     0x6A7E7366: {
         "_": "updatePeerSettings",
@@ -2418,21 +2418,21 @@ MAP = {
             "peer": TLType,
             "settings": TLType,
         },
-        "is": TLType,
+        "is": "Update",
     },
     0xB4AFCFB0: {
         "_": "updatePeerLocated",
         "params": {
             "peers": list["PeerLocated"],
         },
-        "is": TLType,
+        "is": "Update",
     },
     0x39A51DFB: {
         "_": "updateNewScheduledMessage",
         "params": {
             "message": TLType,
         },
-        "is": TLType,
+        "is": "Update",
     },
     0x90866CEE: {
         "_": "updateDeleteScheduledMessages",
@@ -2440,14 +2440,14 @@ MAP = {
             "peer": TLType,
             "messages": list[Int32],
         },
-        "is": TLType,
+        "is": "Update",
     },
     0x8216FBA3: {
         "_": "updateTheme",
         "params": {
             "theme": TLType,
         },
-        "is": TLType,
+        "is": "Update",
     },
     0x871FB939: {
         "_": "updateGeoLiveViewed",
@@ -2455,11 +2455,11 @@ MAP = {
             "peer": TLType,
             "msg_id": Int32,
         },
-        "is": TLType,
+        "is": "Update",
     },
     0x564FE691: {
         "_": "updateLoginToken",
-        "is": TLType,
+        "is": "Update",
     },
     0x106395C9: {
         "_": "updateMessagePollVote",
@@ -2469,7 +2469,7 @@ MAP = {
             "options": list[bytes],
             "qts": Int32,
         },
-        "is": TLType,
+        "is": "Update",
     },
     0x26FFDE7D: {
         "_": "updateDialogFilter",
@@ -2478,18 +2478,18 @@ MAP = {
             "id": Int32,
             "filter": FlagsOf("flags", 0, TLType),
         },
-        "is": TLType,
+        "is": "Update",
     },
     0xA5D72105: {
         "_": "updateDialogFilterOrder",
         "params": {
             "order": list[Int32],
         },
-        "is": TLType,
+        "is": "Update",
     },
     0x3504914F: {
         "_": "updateDialogFilters",
-        "is": TLType,
+        "is": "Update",
     },
     0x2661BF09: {
         "_": "updatePhoneCallSignalingData",
@@ -2497,7 +2497,7 @@ MAP = {
             "phone_call_id": Int64,
             "data": bytes,
         },
-        "is": TLType,
+        "is": "Update",
     },
     0xD29A27F4: {
         "_": "updateChannelMessageForwards",
@@ -2506,7 +2506,7 @@ MAP = {
             "id": Int32,
             "forwards": Int32,
         },
-        "is": TLType,
+        "is": "Update",
     },
     0xD6B19546: {
         "_": "updateReadChannelDiscussionInbox",
@@ -2518,7 +2518,7 @@ MAP = {
             "broadcast_id": FlagsOf("flags", 0, Int64),
             "broadcast_post": FlagsOf("flags", 0, Int32),
         },
-        "is": TLType,
+        "is": "Update",
     },
     0x695C9E7C: {
         "_": "updateReadChannelDiscussionOutbox",
@@ -2527,7 +2527,7 @@ MAP = {
             "top_msg_id": Int32,
             "read_max_id": Int32,
         },
-        "is": TLType,
+        "is": "Update",
     },
     0x246A4B22: {
         "_": "updatePeerBlocked",
@@ -2535,7 +2535,7 @@ MAP = {
             "peer_id": TLType,
             "blocked": bool,
         },
-        "is": TLType,
+        "is": "Update",
     },
     0x8C88C923: {
         "_": "updateChannelUserTyping",
@@ -2546,7 +2546,7 @@ MAP = {
             "from_id": TLType,
             "action": TLType,
         },
-        "is": TLType,
+        "is": "Update",
     },
     0xED85EAB5: {
         "_": "updatePinnedMessages",
@@ -2558,7 +2558,7 @@ MAP = {
             "pts": Int32,
             "pts_count": Int32,
         },
-        "is": TLType,
+        "is": "Update",
     },
     0x5BB98608: {
         "_": "updatePinnedChannelMessages",
@@ -2570,14 +2570,14 @@ MAP = {
             "pts": Int32,
             "pts_count": Int32,
         },
-        "is": TLType,
+        "is": "Update",
     },
     0xF89A6A4E: {
         "_": "updateChat",
         "params": {
             "chat_id": Int64,
         },
-        "is": TLType,
+        "is": "Update",
     },
     0xF2EBDB4E: {
         "_": "updateGroupCallParticipants",
@@ -2586,7 +2586,7 @@ MAP = {
             "participants": list["GroupCallParticipant"],
             "version": Int32,
         },
-        "is": TLType,
+        "is": "Update",
     },
     0x14B24500: {
         "_": "updateGroupCall",
@@ -2594,7 +2594,7 @@ MAP = {
             "chat_id": Int64,
             "call": TLType,
         },
-        "is": TLType,
+        "is": "Update",
     },
     0xBB9BB9A5: {
         "_": "updatePeerHistoryTTL",
@@ -2603,7 +2603,7 @@ MAP = {
             "peer": TLType,
             "ttl_period": FlagsOf("flags", 0, Int32),
         },
-        "is": TLType,
+        "is": "Update",
     },
     0xD087663A: {
         "_": "updateChatParticipant",
@@ -2618,7 +2618,7 @@ MAP = {
             "invite": FlagsOf("flags", 2, TLType),
             "qts": Int32,
         },
-        "is": TLType,
+        "is": "Update",
     },
     0x985D3ABB: {
         "_": "updateChannelParticipant",
@@ -2633,7 +2633,7 @@ MAP = {
             "invite": FlagsOf("flags", 2, TLType),
             "qts": Int32,
         },
-        "is": TLType,
+        "is": "Update",
     },
     0xC4870A49: {
         "_": "updateBotStopped",
@@ -2643,7 +2643,7 @@ MAP = {
             "stopped": bool,
             "qts": Int32,
         },
-        "is": TLType,
+        "is": "Update",
     },
     0xB783982: {
         "_": "updateGroupCallConnection",
@@ -2652,7 +2652,7 @@ MAP = {
             "presentation": FlagsOf("flags", 0, Bit),
             "params": TLType,
         },
-        "is": TLType,
+        "is": "Update",
     },
     0x4D712F2E: {
         "_": "updateBotCommands",
@@ -2661,7 +2661,7 @@ MAP = {
             "bot_id": Int64,
             "commands": list["BotCommand"],
         },
-        "is": TLType,
+        "is": "Update",
     },
     0x7063C3DB: {
         "_": "updatePendingJoinRequests",
@@ -2670,7 +2670,7 @@ MAP = {
             "requests_pending": Int32,
             "recent_requesters": list[Int64],
         },
-        "is": TLType,
+        "is": "Update",
     },
     0x11DFA986: {
         "_": "updateBotChatInviteRequester",
@@ -2682,7 +2682,7 @@ MAP = {
             "invite": TLType,
             "qts": Int32,
         },
-        "is": TLType,
+        "is": "Update",
     },
     0x5E1B3CB8: {
         "_": "updateMessageReactions",
@@ -2693,18 +2693,18 @@ MAP = {
             "top_msg_id": FlagsOf("flags", 0, Int32),
             "reactions": TLType,
         },
-        "is": TLType,
+        "is": "Update",
     },
     0x17B7A20B: {
         "_": "updateAttachMenuBots",
-        "is": TLType,
+        "is": "Update",
     },
     0x1592B79D: {
         "_": "updateWebViewResultSent",
         "params": {
             "query_id": Int64,
         },
-        "is": TLType,
+        "is": "Update",
     },
     0x14B85813: {
         "_": "updateBotMenuButton",
@@ -2712,11 +2712,11 @@ MAP = {
             "bot_id": Int64,
             "button": TLType,
         },
-        "is": TLType,
+        "is": "Update",
     },
     0x74D8BE99: {
         "_": "updateSavedRingtones",
-        "is": TLType,
+        "is": "Update",
     },
     0x84CD5A: {
         "_": "updateTranscribedAudio",
@@ -2728,11 +2728,11 @@ MAP = {
             "transcription_id": Int64,
             "text": str,
         },
-        "is": TLType,
+        "is": "Update",
     },
     0xFB4C496C: {
         "_": "updateReadFeaturedEmojiStickers",
-        "is": TLType,
+        "is": "Update",
     },
     0x28373599: {
         "_": "updateUserEmojiStatus",
@@ -2740,15 +2740,15 @@ MAP = {
             "user_id": Int64,
             "emoji_status": TLType,
         },
-        "is": TLType,
+        "is": "Update",
     },
     0x30F443DB: {
         "_": "updateRecentEmojiStatuses",
-        "is": TLType,
+        "is": "Update",
     },
     0x6F7863F4: {
         "_": "updateRecentReactions",
-        "is": TLType,
+        "is": "Update",
     },
     0x86FCCF85: {
         "_": "updateMoveStickerSetToTop",
@@ -2758,7 +2758,7 @@ MAP = {
             "emojis": FlagsOf("flags", 1, Bit),
             "stickerset": Int64,
         },
-        "is": TLType,
+        "is": "Update",
     },
     0x5A73A98C: {
         "_": "updateMessageExtendedMedia",
@@ -2767,7 +2767,7 @@ MAP = {
             "msg_id": Int32,
             "extended_media": TLType,
         },
-        "is": TLType,
+        "is": "Update",
     },
     0x192EFBE3: {
         "_": "updateChannelPinnedTopic",
@@ -2777,7 +2777,7 @@ MAP = {
             "channel_id": Int64,
             "topic_id": Int32,
         },
-        "is": TLType,
+        "is": "Update",
     },
     0xFE198602: {
         "_": "updateChannelPinnedTopics",
@@ -2786,14 +2786,14 @@ MAP = {
             "channel_id": Int64,
             "order": FlagsOf("flags", 0, list[Int32]),
         },
-        "is": TLType,
+        "is": "Update",
     },
     0x20529438: {
         "_": "updateUser",
         "params": {
             "user_id": Int64,
         },
-        "is": TLType,
+        "is": "Update",
     },
     0xA56C2A3E: {
         "_": "updates.state",
@@ -2804,7 +2804,7 @@ MAP = {
             "seq": Int32,
             "unread_count": Int32,
         },
-        "is": TLType,
+        "is": "updates.State",
     },
     0x5D75A138: {
         "_": "updates.differenceEmpty",
@@ -2812,7 +2812,7 @@ MAP = {
             "date": Int32,
             "seq": Int32,
         },
-        "is": TLType,
+        "is": "updates.Difference",
     },
     0xF49CA0: {
         "_": "updates.difference",
@@ -2824,7 +2824,7 @@ MAP = {
             "users": list["User"],
             "state": TLType,
         },
-        "is": TLType,
+        "is": "updates.Difference",
     },
     0xA8FB1981: {
         "_": "updates.differenceSlice",
@@ -2836,18 +2836,18 @@ MAP = {
             "users": list["User"],
             "intermediate_state": TLType,
         },
-        "is": TLType,
+        "is": "updates.Difference",
     },
     0x4AFE8F6D: {
         "_": "updates.differenceTooLong",
         "params": {
             "pts": Int32,
         },
-        "is": TLType,
+        "is": "updates.Difference",
     },
     0xE317AF7E: {
         "_": "updatesTooLong",
-        "is": TLType,
+        "is": "Updates",
     },
     0x313BC7F8: {
         "_": "updateShortMessage",
@@ -2869,7 +2869,7 @@ MAP = {
             "entities": FlagsOf("flags", 7, list["MessageEntity"]),
             "ttl_period": FlagsOf("flags", 25, Int32),
         },
-        "is": TLType,
+        "is": "Updates",
     },
     0x4D6DEEA5: {
         "_": "updateShortChatMessage",
@@ -2892,7 +2892,7 @@ MAP = {
             "entities": FlagsOf("flags", 7, list["MessageEntity"]),
             "ttl_period": FlagsOf("flags", 25, Int32),
         },
-        "is": TLType,
+        "is": "Updates",
     },
     0x78D4DEC1: {
         "_": "updateShort",
@@ -2900,7 +2900,7 @@ MAP = {
             "update": TLType,
             "date": Int32,
         },
-        "is": TLType,
+        "is": "Updates",
     },
     0x725B04C3: {
         "_": "updatesCombined",
@@ -2912,7 +2912,7 @@ MAP = {
             "seq_start": Int32,
             "seq": Int32,
         },
-        "is": TLType,
+        "is": "Updates",
     },
     0x74AE4240: {
         "_": "updates",
@@ -2923,7 +2923,7 @@ MAP = {
             "date": Int32,
             "seq": Int32,
         },
-        "is": TLType,
+        "is": "Updates",
     },
     0x9015E101: {
         "_": "updateShortSentMessage",
@@ -2938,7 +2938,7 @@ MAP = {
             "entities": FlagsOf("flags", 7, list["MessageEntity"]),
             "ttl_period": FlagsOf("flags", 25, Int32),
         },
-        "is": TLType,
+        "is": "Updates",
     },
     0x8DCA6AA5: {
         "_": "photos.photos",
@@ -2946,7 +2946,7 @@ MAP = {
             "photos": list["Photo"],
             "users": list["User"],
         },
-        "is": TLType,
+        "is": "photos.Photos",
     },
     0x15051F54: {
         "_": "photos.photosSlice",
@@ -2955,7 +2955,7 @@ MAP = {
             "photos": list["Photo"],
             "users": list["User"],
         },
-        "is": TLType,
+        "is": "photos.Photos",
     },
     0x20212CA8: {
         "_": "photos.photo",
@@ -2963,7 +2963,7 @@ MAP = {
             "photo": TLType,
             "users": list["User"],
         },
-        "is": TLType,
+        "is": "photos.Photo",
     },
     0x96A18D5: {
         "_": "upload.file",
@@ -2972,7 +2972,7 @@ MAP = {
             "mtime": Int32,
             "bytes": bytes,
         },
-        "is": TLType,
+        "is": "upload.File",
     },
     0xF18CDA44: {
         "_": "upload.fileCdnRedirect",
@@ -2983,7 +2983,7 @@ MAP = {
             "encryption_iv": bytes,
             "file_hashes": list["FileHash"],
         },
-        "is": TLType,
+        "is": "upload.File",
     },
     0x18B7A10D: {
         "_": "dcOption",
@@ -3000,7 +3000,7 @@ MAP = {
             "port": Int32,
             "secret": FlagsOf("flags", 10, bytes),
         },
-        "is": TLType,
+        "is": "DcOption",
     },
     0x232566AC: {
         "_": "config",
@@ -3060,7 +3060,7 @@ MAP = {
             "base_lang_pack_version": FlagsOf("flags", 2, Int32),
             "reactions_default": FlagsOf("flags", 15, TLType),
         },
-        "is": TLType,
+        "is": "Config",
     },
     0x8E1A1775: {
         "_": "nearestDc",
@@ -3069,7 +3069,7 @@ MAP = {
             "this_dc": Int32,
             "nearest_dc": Int32,
         },
-        "is": TLType,
+        "is": "NearestDc",
     },
     0xCCBBCE30: {
         "_": "help.appUpdate",
@@ -3084,25 +3084,25 @@ MAP = {
             "url": FlagsOf("flags", 2, str),
             "sticker": FlagsOf("flags", 3, TLType),
         },
-        "is": TLType,
+        "is": "help.AppUpdate",
     },
     0xC45A6536: {
         "_": "help.noAppUpdate",
-        "is": TLType,
+        "is": "help.AppUpdate",
     },
     0x18CB9F78: {
         "_": "help.inviteText",
         "params": {
             "message": str,
         },
-        "is": TLType,
+        "is": "help.InviteText",
     },
     0xAB7EC0A0: {
         "_": "encryptedChatEmpty",
         "params": {
             "id": Int32,
         },
-        "is": TLType,
+        "is": "EncryptedChat",
     },
     0x66B25953: {
         "_": "encryptedChatWaiting",
@@ -3113,7 +3113,7 @@ MAP = {
             "admin_id": Int64,
             "participant_id": Int64,
         },
-        "is": TLType,
+        "is": "EncryptedChat",
     },
     0x48F1D94C: {
         "_": "encryptedChatRequested",
@@ -3127,7 +3127,7 @@ MAP = {
             "participant_id": Int64,
             "g_a": bytes,
         },
-        "is": TLType,
+        "is": "EncryptedChat",
     },
     0x61F0D4C7: {
         "_": "encryptedChat",
@@ -3140,7 +3140,7 @@ MAP = {
             "g_a_or_b": bytes,
             "key_fingerprint": Int64,
         },
-        "is": TLType,
+        "is": "EncryptedChat",
     },
     0x1E1C7C45: {
         "_": "encryptedChatDiscarded",
@@ -3149,7 +3149,7 @@ MAP = {
             "history_deleted": FlagsOf("flags", 0, Bit),
             "id": Int32,
         },
-        "is": TLType,
+        "is": "EncryptedChat",
     },
     0xF141B5E1: {
         "_": "inputEncryptedChat",
@@ -3157,11 +3157,11 @@ MAP = {
             "chat_id": Int32,
             "access_hash": Int64,
         },
-        "is": TLType,
+        "is": "InputEncryptedChat",
     },
     0xC21F497E: {
         "_": "encryptedFileEmpty",
-        "is": TLType,
+        "is": "EncryptedFile",
     },
     0xA8008CD8: {
         "_": "encryptedFile",
@@ -3172,11 +3172,11 @@ MAP = {
             "dc_id": Int32,
             "key_fingerprint": Int32,
         },
-        "is": TLType,
+        "is": "EncryptedFile",
     },
     0x1837C364: {
         "_": "inputEncryptedFileEmpty",
-        "is": TLType,
+        "is": "InputEncryptedFile",
     },
     0x64BD0306: {
         "_": "inputEncryptedFileUploaded",
@@ -3186,7 +3186,7 @@ MAP = {
             "md5_checksum": str,
             "key_fingerprint": Int32,
         },
-        "is": TLType,
+        "is": "InputEncryptedFile",
     },
     0x5A17B5E5: {
         "_": "inputEncryptedFile",
@@ -3194,7 +3194,7 @@ MAP = {
             "id": Int64,
             "access_hash": Int64,
         },
-        "is": TLType,
+        "is": "InputEncryptedFile",
     },
     0x2DC173C8: {
         "_": "inputEncryptedFileBigUploaded",
@@ -3203,7 +3203,7 @@ MAP = {
             "parts": Int32,
             "key_fingerprint": Int32,
         },
-        "is": TLType,
+        "is": "InputEncryptedFile",
     },
     0xED18C118: {
         "_": "encryptedMessage",
@@ -3214,7 +3214,7 @@ MAP = {
             "bytes": bytes,
             "file": TLType,
         },
-        "is": TLType,
+        "is": "EncryptedMessage",
     },
     0x23734B06: {
         "_": "encryptedMessageService",
@@ -3224,14 +3224,14 @@ MAP = {
             "date": Int32,
             "bytes": bytes,
         },
-        "is": TLType,
+        "is": "EncryptedMessage",
     },
     0xC0E24635: {
         "_": "messages.dhConfigNotModified",
         "params": {
             "random": bytes,
         },
-        "is": TLType,
+        "is": "messages.DhConfig",
     },
     0x2C221EDD: {
         "_": "messages.dhConfig",
@@ -3241,14 +3241,14 @@ MAP = {
             "version": Int32,
             "random": bytes,
         },
-        "is": TLType,
+        "is": "messages.DhConfig",
     },
     0x560F8935: {
         "_": "messages.sentEncryptedMessage",
         "params": {
             "date": Int32,
         },
-        "is": TLType,
+        "is": "messages.SentEncryptedMessage",
     },
     0x9493FF32: {
         "_": "messages.sentEncryptedFile",
@@ -3256,11 +3256,11 @@ MAP = {
             "date": Int32,
             "file": TLType,
         },
-        "is": TLType,
+        "is": "messages.SentEncryptedMessage",
     },
     0x72F0EAAE: {
         "_": "inputDocumentEmpty",
-        "is": TLType,
+        "is": "InputDocument",
     },
     0x1ABFB575: {
         "_": "inputDocument",
@@ -3269,14 +3269,14 @@ MAP = {
             "access_hash": Int64,
             "file_reference": bytes,
         },
-        "is": TLType,
+        "is": "InputDocument",
     },
     0x36F8C871: {
         "_": "documentEmpty",
         "params": {
             "id": Int64,
         },
-        "is": TLType,
+        "is": "Document",
     },
     0x8FD4C4D8: {
         "_": "document",
@@ -3293,7 +3293,7 @@ MAP = {
             "dc_id": Int32,
             "attributes": list["DocumentAttribute"],
         },
-        "is": TLType,
+        "is": "Document",
     },
     0x17C6B5F6: {
         "_": "help.support",
@@ -3301,26 +3301,26 @@ MAP = {
             "phone_number": str,
             "user": TLType,
         },
-        "is": TLType,
+        "is": "help.Support",
     },
     0x9FD40BD8: {
         "_": "notifyPeer",
         "params": {
             "peer": TLType,
         },
-        "is": TLType,
+        "is": "NotifyPeer",
     },
     0xB4C83B4C: {
         "_": "notifyUsers",
-        "is": TLType,
+        "is": "NotifyPeer",
     },
     0xC007CEC3: {
         "_": "notifyChats",
-        "is": TLType,
+        "is": "NotifyPeer",
     },
     0xD612E8EF: {
         "_": "notifyBroadcasts",
-        "is": TLType,
+        "is": "NotifyPeer",
     },
     0x226E6308: {
         "_": "notifyForumTopic",
@@ -3328,89 +3328,89 @@ MAP = {
             "peer": TLType,
             "top_msg_id": Int32,
         },
-        "is": TLType,
+        "is": "NotifyPeer",
     },
     0x16BF744E: {
         "_": "sendMessageTypingAction",
-        "is": TLType,
+        "is": "SendMessageAction",
     },
     0xFD5EC8F5: {
         "_": "sendMessageCancelAction",
-        "is": TLType,
+        "is": "SendMessageAction",
     },
     0xA187D66F: {
         "_": "sendMessageRecordVideoAction",
-        "is": TLType,
+        "is": "SendMessageAction",
     },
     0xE9763AEC: {
         "_": "sendMessageUploadVideoAction",
         "params": {
             "progress": Int32,
         },
-        "is": TLType,
+        "is": "SendMessageAction",
     },
     0xD52F73F7: {
         "_": "sendMessageRecordAudioAction",
-        "is": TLType,
+        "is": "SendMessageAction",
     },
     0xF351D7AB: {
         "_": "sendMessageUploadAudioAction",
         "params": {
             "progress": Int32,
         },
-        "is": TLType,
+        "is": "SendMessageAction",
     },
     0xD1D34A26: {
         "_": "sendMessageUploadPhotoAction",
         "params": {
             "progress": Int32,
         },
-        "is": TLType,
+        "is": "SendMessageAction",
     },
     0xAA0CD9E4: {
         "_": "sendMessageUploadDocumentAction",
         "params": {
             "progress": Int32,
         },
-        "is": TLType,
+        "is": "SendMessageAction",
     },
     0x176F8BA1: {
         "_": "sendMessageGeoLocationAction",
-        "is": TLType,
+        "is": "SendMessageAction",
     },
     0x628CBC6F: {
         "_": "sendMessageChooseContactAction",
-        "is": TLType,
+        "is": "SendMessageAction",
     },
     0xDD6A8F48: {
         "_": "sendMessageGamePlayAction",
-        "is": TLType,
+        "is": "SendMessageAction",
     },
     0x88F27FBC: {
         "_": "sendMessageRecordRoundAction",
-        "is": TLType,
+        "is": "SendMessageAction",
     },
     0x243E1C66: {
         "_": "sendMessageUploadRoundAction",
         "params": {
             "progress": Int32,
         },
-        "is": TLType,
+        "is": "SendMessageAction",
     },
     0xD92C2285: {
         "_": "speakingInGroupCallAction",
-        "is": TLType,
+        "is": "SendMessageAction",
     },
     0xDBDA9246: {
         "_": "sendMessageHistoryImportAction",
         "params": {
             "progress": Int32,
         },
-        "is": TLType,
+        "is": "SendMessageAction",
     },
     0xB05AC6B1: {
         "_": "sendMessageChooseStickerAction",
-        "is": TLType,
+        "is": "SendMessageAction",
     },
     0x25972BCB: {
         "_": "sendMessageEmojiInteraction",
@@ -3419,14 +3419,14 @@ MAP = {
             "msg_id": Int32,
             "interaction": TLType,
         },
-        "is": TLType,
+        "is": "SendMessageAction",
     },
     0xB665902E: {
         "_": "sendMessageEmojiInteractionSeen",
         "params": {
             "emoticon": str,
         },
-        "is": TLType,
+        "is": "SendMessageAction",
     },
     0xB3134D9D: {
         "_": "contacts.found",
@@ -3436,167 +3436,167 @@ MAP = {
             "chats": list["Chat"],
             "users": list["User"],
         },
-        "is": TLType,
+        "is": "contacts.Found",
     },
     0x4F96CB18: {
         "_": "inputPrivacyKeyStatusTimestamp",
-        "is": TLType,
+        "is": "InputPrivacyKey",
     },
     0xBDFB0426: {
         "_": "inputPrivacyKeyChatInvite",
-        "is": TLType,
+        "is": "InputPrivacyKey",
     },
     0xFABADC5F: {
         "_": "inputPrivacyKeyPhoneCall",
-        "is": TLType,
+        "is": "InputPrivacyKey",
     },
     0xDB9E70D2: {
         "_": "inputPrivacyKeyPhoneP2P",
-        "is": TLType,
+        "is": "InputPrivacyKey",
     },
     0xA4DD4C08: {
         "_": "inputPrivacyKeyForwards",
-        "is": TLType,
+        "is": "InputPrivacyKey",
     },
     0x5719BACC: {
         "_": "inputPrivacyKeyProfilePhoto",
-        "is": TLType,
+        "is": "InputPrivacyKey",
     },
     0x352DAFA: {
         "_": "inputPrivacyKeyPhoneNumber",
-        "is": TLType,
+        "is": "InputPrivacyKey",
     },
     0xD1219BDD: {
         "_": "inputPrivacyKeyAddedByPhone",
-        "is": TLType,
+        "is": "InputPrivacyKey",
     },
     0xAEE69D68: {
         "_": "inputPrivacyKeyVoiceMessages",
-        "is": TLType,
+        "is": "InputPrivacyKey",
     },
     0xBC2EAB30: {
         "_": "privacyKeyStatusTimestamp",
-        "is": TLType,
+        "is": "PrivacyKey",
     },
     0x500E6DFA: {
         "_": "privacyKeyChatInvite",
-        "is": TLType,
+        "is": "PrivacyKey",
     },
     0x3D662B7B: {
         "_": "privacyKeyPhoneCall",
-        "is": TLType,
+        "is": "PrivacyKey",
     },
     0x39491CC8: {
         "_": "privacyKeyPhoneP2P",
-        "is": TLType,
+        "is": "PrivacyKey",
     },
     0x69EC56A3: {
         "_": "privacyKeyForwards",
-        "is": TLType,
+        "is": "PrivacyKey",
     },
     0x96151FED: {
         "_": "privacyKeyProfilePhoto",
-        "is": TLType,
+        "is": "PrivacyKey",
     },
     0xD19AE46D: {
         "_": "privacyKeyPhoneNumber",
-        "is": TLType,
+        "is": "PrivacyKey",
     },
     0x42FFD42B: {
         "_": "privacyKeyAddedByPhone",
-        "is": TLType,
+        "is": "PrivacyKey",
     },
     0x697F414: {
         "_": "privacyKeyVoiceMessages",
-        "is": TLType,
+        "is": "PrivacyKey",
     },
     0xD09E07B: {
         "_": "inputPrivacyValueAllowContacts",
-        "is": TLType,
+        "is": "InputPrivacyRule",
     },
     0x184B35CE: {
         "_": "inputPrivacyValueAllowAll",
-        "is": TLType,
+        "is": "InputPrivacyRule",
     },
     0x131CC67F: {
         "_": "inputPrivacyValueAllowUsers",
         "params": {
             "users": list["InputUser"],
         },
-        "is": TLType,
+        "is": "InputPrivacyRule",
     },
     0xBA52007: {
         "_": "inputPrivacyValueDisallowContacts",
-        "is": TLType,
+        "is": "InputPrivacyRule",
     },
     0xD66B66C9: {
         "_": "inputPrivacyValueDisallowAll",
-        "is": TLType,
+        "is": "InputPrivacyRule",
     },
     0x90110467: {
         "_": "inputPrivacyValueDisallowUsers",
         "params": {
             "users": list["InputUser"],
         },
-        "is": TLType,
+        "is": "InputPrivacyRule",
     },
     0x840649CF: {
         "_": "inputPrivacyValueAllowChatParticipants",
         "params": {
             "chats": list[Int64],
         },
-        "is": TLType,
+        "is": "InputPrivacyRule",
     },
     0xE94F0F86: {
         "_": "inputPrivacyValueDisallowChatParticipants",
         "params": {
             "chats": list[Int64],
         },
-        "is": TLType,
+        "is": "InputPrivacyRule",
     },
     0xFFFE1BAC: {
         "_": "privacyValueAllowContacts",
-        "is": TLType,
+        "is": "PrivacyRule",
     },
     0x65427B82: {
         "_": "privacyValueAllowAll",
-        "is": TLType,
+        "is": "PrivacyRule",
     },
     0xB8905FB2: {
         "_": "privacyValueAllowUsers",
         "params": {
             "users": list[Int64],
         },
-        "is": TLType,
+        "is": "PrivacyRule",
     },
     0xF888FA1A: {
         "_": "privacyValueDisallowContacts",
-        "is": TLType,
+        "is": "PrivacyRule",
     },
     0x8B73E763: {
         "_": "privacyValueDisallowAll",
-        "is": TLType,
+        "is": "PrivacyRule",
     },
     0xE4621141: {
         "_": "privacyValueDisallowUsers",
         "params": {
             "users": list[Int64],
         },
-        "is": TLType,
+        "is": "PrivacyRule",
     },
     0x6B134E8E: {
         "_": "privacyValueAllowChatParticipants",
         "params": {
             "chats": list[Int64],
         },
-        "is": TLType,
+        "is": "PrivacyRule",
     },
     0x41C87565: {
         "_": "privacyValueDisallowChatParticipants",
         "params": {
             "chats": list[Int64],
         },
-        "is": TLType,
+        "is": "PrivacyRule",
     },
     0x50A04E45: {
         "_": "account.privacyRules",
@@ -3605,14 +3605,14 @@ MAP = {
             "chats": list["Chat"],
             "users": list["User"],
         },
-        "is": TLType,
+        "is": "account.PrivacyRules",
     },
     0xB8D0AFDF: {
         "_": "accountDaysTTL",
         "params": {
             "days": Int32,
         },
-        "is": TLType,
+        "is": "AccountDaysTTL",
     },
     0x6C37C15C: {
         "_": "documentAttributeImageSize",
@@ -3620,11 +3620,11 @@ MAP = {
             "w": Int32,
             "h": Int32,
         },
-        "is": TLType,
+        "is": "DocumentAttribute",
     },
     0x11B58939: {
         "_": "documentAttributeAnimated",
-        "is": TLType,
+        "is": "DocumentAttribute",
     },
     0x6319D612: {
         "_": "documentAttributeSticker",
@@ -3635,7 +3635,7 @@ MAP = {
             "stickerset": TLType,
             "mask_coords": FlagsOf("flags", 0, TLType),
         },
-        "is": TLType,
+        "is": "DocumentAttribute",
     },
     0xEF02CE6: {
         "_": "documentAttributeVideo",
@@ -3647,7 +3647,7 @@ MAP = {
             "w": Int32,
             "h": Int32,
         },
-        "is": TLType,
+        "is": "DocumentAttribute",
     },
     0x9852F9C6: {
         "_": "documentAttributeAudio",
@@ -3659,18 +3659,18 @@ MAP = {
             "performer": FlagsOf("flags", 1, str),
             "waveform": FlagsOf("flags", 2, bytes),
         },
-        "is": TLType,
+        "is": "DocumentAttribute",
     },
     0x15590068: {
         "_": "documentAttributeFilename",
         "params": {
             "file_name": str,
         },
-        "is": TLType,
+        "is": "DocumentAttribute",
     },
     0x9801D2F7: {
         "_": "documentAttributeHasStickers",
-        "is": TLType,
+        "is": "DocumentAttribute",
     },
     0xFD149899: {
         "_": "documentAttributeCustomEmoji",
@@ -3681,11 +3681,11 @@ MAP = {
             "alt": str,
             "stickerset": TLType,
         },
-        "is": TLType,
+        "is": "DocumentAttribute",
     },
     0xF1749A22: {
         "_": "messages.stickersNotModified",
-        "is": TLType,
+        "is": "messages.Stickers",
     },
     0x30A6EC7E: {
         "_": "messages.stickers",
@@ -3693,7 +3693,7 @@ MAP = {
             "hash": Int64,
             "stickers": list["Document"],
         },
-        "is": TLType,
+        "is": "messages.Stickers",
     },
     0x12B299D4: {
         "_": "stickerPack",
@@ -3701,11 +3701,11 @@ MAP = {
             "emoticon": str,
             "documents": list[Int64],
         },
-        "is": TLType,
+        "is": "StickerPack",
     },
     0xE86602C3: {
         "_": "messages.allStickersNotModified",
-        "is": TLType,
+        "is": "messages.AllStickers",
     },
     0xCDBBCEBB: {
         "_": "messages.allStickers",
@@ -3713,7 +3713,7 @@ MAP = {
             "hash": Int64,
             "sets": list["StickerSet"],
         },
-        "is": TLType,
+        "is": "messages.AllStickers",
     },
     0x84D19185: {
         "_": "messages.affectedMessages",
@@ -3721,14 +3721,14 @@ MAP = {
             "pts": Int32,
             "pts_count": Int32,
         },
-        "is": TLType,
+        "is": "messages.AffectedMessages",
     },
     0xEB1477E8: {
         "_": "webPageEmpty",
         "params": {
             "id": Int64,
         },
-        "is": TLType,
+        "is": "WebPage",
     },
     0xC586DA1C: {
         "_": "webPagePending",
@@ -3736,7 +3736,7 @@ MAP = {
             "id": Int64,
             "date": Int32,
         },
-        "is": TLType,
+        "is": "WebPage",
     },
     0xE89C45B2: {
         "_": "webPage",
@@ -3761,7 +3761,7 @@ MAP = {
             "cached_page": FlagsOf("flags", 10, TLType),
             "attributes": FlagsOf("flags", 12, list["WebPageAttribute"]),
         },
-        "is": TLType,
+        "is": "WebPage",
     },
     0x7311CA11: {
         "_": "webPageNotModified",
@@ -3769,7 +3769,7 @@ MAP = {
             "flags": Int32,
             "cached_page_views": FlagsOf("flags", 0, Int32),
         },
-        "is": TLType,
+        "is": "WebPage",
     },
     0xAD01D61D: {
         "_": "authorization",
@@ -3793,7 +3793,7 @@ MAP = {
             "country": str,
             "region": str,
         },
-        "is": TLType,
+        "is": "Authorization",
     },
     0x4BFF8EA0: {
         "_": "account.authorizations",
@@ -3801,7 +3801,7 @@ MAP = {
             "authorization_ttl_days": Int32,
             "authorizations": list["Authorization"],
         },
-        "is": TLType,
+        "is": "account.Authorizations",
     },
     0x957B50FB: {
         "_": "account.password",
@@ -3821,7 +3821,7 @@ MAP = {
             "pending_reset_date": FlagsOf("flags", 5, Int32),
             "login_email_pattern": FlagsOf("flags", 6, str),
         },
-        "is": TLType,
+        "is": "account.Password",
     },
     0x9A5C33E5: {
         "_": "account.passwordSettings",
@@ -3830,7 +3830,7 @@ MAP = {
             "email": FlagsOf("flags", 0, str),
             "secure_settings": FlagsOf("flags", 1, TLType),
         },
-        "is": TLType,
+        "is": "account.PasswordSettings",
     },
     0xC23727C9: {
         "_": "account.passwordInputSettings",
@@ -3842,14 +3842,14 @@ MAP = {
             "email": FlagsOf("flags", 1, str),
             "new_secure_settings": FlagsOf("flags", 2, TLType),
         },
-        "is": TLType,
+        "is": "account.PasswordInputSettings",
     },
     0x137948A5: {
         "_": "auth.passwordRecovery",
         "params": {
             "email_pattern": str,
         },
-        "is": TLType,
+        "is": "auth.PasswordRecovery",
     },
     0xA384B779: {
         "_": "receivedNotifyMessage",
@@ -3857,7 +3857,7 @@ MAP = {
             "id": Int32,
             "flags": Int32,
         },
-        "is": TLType,
+        "is": "ReceivedNotifyMessage",
     },
     0xAB4A819: {
         "_": "chatInviteExported",
@@ -3876,18 +3876,18 @@ MAP = {
             "requested": FlagsOf("flags", 7, Int32),
             "title": FlagsOf("flags", 8, str),
         },
-        "is": TLType,
+        "is": "ExportedChatInvite",
     },
     0xED107AB7: {
         "_": "chatInvitePublicJoinRequests",
-        "is": TLType,
+        "is": "ExportedChatInvite",
     },
     0x5A686D7C: {
         "_": "chatInviteAlready",
         "params": {
             "chat": TLType,
         },
-        "is": TLType,
+        "is": "ChatInvite",
     },
     0x300C44C1: {
         "_": "chatInvite",
@@ -3904,7 +3904,7 @@ MAP = {
             "participants_count": Int32,
             "participants": FlagsOf("flags", 4, list["User"]),
         },
-        "is": TLType,
+        "is": "ChatInvite",
     },
     0x61695CB0: {
         "_": "chatInvitePeek",
@@ -3912,11 +3912,11 @@ MAP = {
             "chat": TLType,
             "expires": Int32,
         },
-        "is": TLType,
+        "is": "ChatInvite",
     },
     0xFFB62B95: {
         "_": "inputStickerSetEmpty",
-        "is": TLType,
+        "is": "InputStickerSet",
     },
     0x9DE7A269: {
         "_": "inputStickerSetID",
@@ -3924,45 +3924,45 @@ MAP = {
             "id": Int64,
             "access_hash": Int64,
         },
-        "is": TLType,
+        "is": "InputStickerSet",
     },
     0x861CC8A0: {
         "_": "inputStickerSetShortName",
         "params": {
             "short_name": str,
         },
-        "is": TLType,
+        "is": "InputStickerSet",
     },
     0x28703C8: {
         "_": "inputStickerSetAnimatedEmoji",
-        "is": TLType,
+        "is": "InputStickerSet",
     },
     0xE67F520E: {
         "_": "inputStickerSetDice",
         "params": {
             "emoticon": str,
         },
-        "is": TLType,
+        "is": "InputStickerSet",
     },
     0xCDE3739: {
         "_": "inputStickerSetAnimatedEmojiAnimations",
-        "is": TLType,
+        "is": "InputStickerSet",
     },
     0xC88B3B02: {
         "_": "inputStickerSetPremiumGifts",
-        "is": TLType,
+        "is": "InputStickerSet",
     },
     0x4C4D4CE: {
         "_": "inputStickerSetEmojiGenericAnimations",
-        "is": TLType,
+        "is": "InputStickerSet",
     },
     0x29D0F5EE: {
         "_": "inputStickerSetEmojiDefaultStatuses",
-        "is": TLType,
+        "is": "InputStickerSet",
     },
     0x44C1F8E9: {
         "_": "inputStickerSetEmojiDefaultTopicIcons",
-        "is": TLType,
+        "is": "InputStickerSet",
     },
     0x2DD14EDC: {
         "_": "stickerSet",
@@ -3986,7 +3986,7 @@ MAP = {
             "count": Int32,
             "hash": Int32,
         },
-        "is": TLType,
+        "is": "StickerSet",
     },
     0x6E153F16: {
         "_": "messages.stickerSet",
@@ -3996,11 +3996,11 @@ MAP = {
             "keywords": list["StickerKeyword"],
             "documents": list["Document"],
         },
-        "is": TLType,
+        "is": "messages.StickerSet",
     },
     0xD3F924EB: {
         "_": "messages.stickerSetNotModified",
-        "is": TLType,
+        "is": "messages.StickerSet",
     },
     0xC27AC8C7: {
         "_": "botCommand",
@@ -4008,7 +4008,7 @@ MAP = {
             "command": str,
             "description": str,
         },
-        "is": TLType,
+        "is": "BotCommand",
     },
     0x8F300B57: {
         "_": "botInfo",
@@ -4021,14 +4021,14 @@ MAP = {
             "commands": FlagsOf("flags", 2, list["BotCommand"]),
             "menu_button": FlagsOf("flags", 3, TLType),
         },
-        "is": TLType,
+        "is": "BotInfo",
     },
     0xA2FA4880: {
         "_": "keyboardButton",
         "params": {
             "text": str,
         },
-        "is": TLType,
+        "is": "KeyboardButton",
     },
     0x258AFF05: {
         "_": "keyboardButtonUrl",
@@ -4036,7 +4036,7 @@ MAP = {
             "text": str,
             "url": str,
         },
-        "is": TLType,
+        "is": "KeyboardButton",
     },
     0x35BBDB6B: {
         "_": "keyboardButtonCallback",
@@ -4046,21 +4046,21 @@ MAP = {
             "text": str,
             "data": bytes,
         },
-        "is": TLType,
+        "is": "KeyboardButton",
     },
     0xB16A6C29: {
         "_": "keyboardButtonRequestPhone",
         "params": {
             "text": str,
         },
-        "is": TLType,
+        "is": "KeyboardButton",
     },
     0xFC796B3F: {
         "_": "keyboardButtonRequestGeoLocation",
         "params": {
             "text": str,
         },
-        "is": TLType,
+        "is": "KeyboardButton",
     },
     0x568A748: {
         "_": "keyboardButtonSwitchInline",
@@ -4070,21 +4070,21 @@ MAP = {
             "text": str,
             "query": str,
         },
-        "is": TLType,
+        "is": "KeyboardButton",
     },
     0x50F41CCF: {
         "_": "keyboardButtonGame",
         "params": {
             "text": str,
         },
-        "is": TLType,
+        "is": "KeyboardButton",
     },
     0xAFD93FBB: {
         "_": "keyboardButtonBuy",
         "params": {
             "text": str,
         },
-        "is": TLType,
+        "is": "KeyboardButton",
     },
     0x10B78D29: {
         "_": "keyboardButtonUrlAuth",
@@ -4095,7 +4095,7 @@ MAP = {
             "url": str,
             "button_id": Int32,
         },
-        "is": TLType,
+        "is": "KeyboardButton",
     },
     0xD02E7FD4: {
         "_": "inputKeyboardButtonUrlAuth",
@@ -4107,7 +4107,7 @@ MAP = {
             "url": str,
             "bot": TLType,
         },
-        "is": TLType,
+        "is": "KeyboardButton",
     },
     0xBBC7515D: {
         "_": "keyboardButtonRequestPoll",
@@ -4116,7 +4116,7 @@ MAP = {
             "quiz": FlagsOf("flags", 0, bool),
             "text": str,
         },
-        "is": TLType,
+        "is": "KeyboardButton",
     },
     0xE988037B: {
         "_": "inputKeyboardButtonUserProfile",
@@ -4124,7 +4124,7 @@ MAP = {
             "text": str,
             "user_id": TLType,
         },
-        "is": TLType,
+        "is": "KeyboardButton",
     },
     0x308660C1: {
         "_": "keyboardButtonUserProfile",
@@ -4132,7 +4132,7 @@ MAP = {
             "text": str,
             "user_id": Int64,
         },
-        "is": TLType,
+        "is": "KeyboardButton",
     },
     0x13767230: {
         "_": "keyboardButtonWebView",
@@ -4140,7 +4140,7 @@ MAP = {
             "text": str,
             "url": str,
         },
-        "is": TLType,
+        "is": "KeyboardButton",
     },
     0xA0C0505C: {
         "_": "keyboardButtonSimpleWebView",
@@ -4148,14 +4148,14 @@ MAP = {
             "text": str,
             "url": str,
         },
-        "is": TLType,
+        "is": "KeyboardButton",
     },
     0x77608B83: {
         "_": "keyboardButtonRow",
         "params": {
             "buttons": list["KeyboardButton"],
         },
-        "is": TLType,
+        "is": "KeyboardButtonRow",
     },
     0xA03E5B85: {
         "_": "replyKeyboardHide",
@@ -4163,7 +4163,7 @@ MAP = {
             "flags": Int32,
             "selective": FlagsOf("flags", 2, Bit),
         },
-        "is": TLType,
+        "is": "ReplyMarkup",
     },
     0x86B40B08: {
         "_": "replyKeyboardForceReply",
@@ -4173,7 +4173,7 @@ MAP = {
             "selective": FlagsOf("flags", 2, Bit),
             "placeholder": FlagsOf("flags", 3, str),
         },
-        "is": TLType,
+        "is": "ReplyMarkup",
     },
     0x85DD99D1: {
         "_": "replyKeyboardMarkup",
@@ -4186,14 +4186,14 @@ MAP = {
             "rows": list["KeyboardButtonRow"],
             "placeholder": FlagsOf("flags", 3, str),
         },
-        "is": TLType,
+        "is": "ReplyMarkup",
     },
     0x48A30254: {
         "_": "replyInlineMarkup",
         "params": {
             "rows": list["KeyboardButtonRow"],
         },
-        "is": TLType,
+        "is": "ReplyMarkup",
     },
     0xBB92BA95: {
         "_": "messageEntityUnknown",
@@ -4201,7 +4201,7 @@ MAP = {
             "offset": Int32,
             "length": Int32,
         },
-        "is": TLType,
+        "is": "MessageEntity",
     },
     0xFA04579D: {
         "_": "messageEntityMention",
@@ -4209,7 +4209,7 @@ MAP = {
             "offset": Int32,
             "length": Int32,
         },
-        "is": TLType,
+        "is": "MessageEntity",
     },
     0x6F635B0D: {
         "_": "messageEntityHashtag",
@@ -4217,7 +4217,7 @@ MAP = {
             "offset": Int32,
             "length": Int32,
         },
-        "is": TLType,
+        "is": "MessageEntity",
     },
     0x6CEF8AC7: {
         "_": "messageEntityBotCommand",
@@ -4225,7 +4225,7 @@ MAP = {
             "offset": Int32,
             "length": Int32,
         },
-        "is": TLType,
+        "is": "MessageEntity",
     },
     0x6ED02538: {
         "_": "messageEntityUrl",
@@ -4233,7 +4233,7 @@ MAP = {
             "offset": Int32,
             "length": Int32,
         },
-        "is": TLType,
+        "is": "MessageEntity",
     },
     0x64E475C2: {
         "_": "messageEntityEmail",
@@ -4241,7 +4241,7 @@ MAP = {
             "offset": Int32,
             "length": Int32,
         },
-        "is": TLType,
+        "is": "MessageEntity",
     },
     0xBD610BC9: {
         "_": "messageEntityBold",
@@ -4249,7 +4249,7 @@ MAP = {
             "offset": Int32,
             "length": Int32,
         },
-        "is": TLType,
+        "is": "MessageEntity",
     },
     0x826F8B60: {
         "_": "messageEntityItalic",
@@ -4257,7 +4257,7 @@ MAP = {
             "offset": Int32,
             "length": Int32,
         },
-        "is": TLType,
+        "is": "MessageEntity",
     },
     0x28A20571: {
         "_": "messageEntityCode",
@@ -4265,7 +4265,7 @@ MAP = {
             "offset": Int32,
             "length": Int32,
         },
-        "is": TLType,
+        "is": "MessageEntity",
     },
     0x73924BE0: {
         "_": "messageEntityPre",
@@ -4274,7 +4274,7 @@ MAP = {
             "length": Int32,
             "language": str,
         },
-        "is": TLType,
+        "is": "MessageEntity",
     },
     0x76A6D327: {
         "_": "messageEntityTextUrl",
@@ -4283,7 +4283,7 @@ MAP = {
             "length": Int32,
             "url": str,
         },
-        "is": TLType,
+        "is": "MessageEntity",
     },
     0xDC7B1140: {
         "_": "messageEntityMentionName",
@@ -4292,7 +4292,7 @@ MAP = {
             "length": Int32,
             "user_id": Int64,
         },
-        "is": TLType,
+        "is": "MessageEntity",
     },
     0x208E68C9: {
         "_": "inputMessageEntityMentionName",
@@ -4301,7 +4301,7 @@ MAP = {
             "length": Int32,
             "user_id": TLType,
         },
-        "is": TLType,
+        "is": "MessageEntity",
     },
     0x9B69E34B: {
         "_": "messageEntityPhone",
@@ -4309,7 +4309,7 @@ MAP = {
             "offset": Int32,
             "length": Int32,
         },
-        "is": TLType,
+        "is": "MessageEntity",
     },
     0x4C4E743F: {
         "_": "messageEntityCashtag",
@@ -4317,7 +4317,7 @@ MAP = {
             "offset": Int32,
             "length": Int32,
         },
-        "is": TLType,
+        "is": "MessageEntity",
     },
     0x9C4E7E8B: {
         "_": "messageEntityUnderline",
@@ -4325,7 +4325,7 @@ MAP = {
             "offset": Int32,
             "length": Int32,
         },
-        "is": TLType,
+        "is": "MessageEntity",
     },
     0xBF0693D4: {
         "_": "messageEntityStrike",
@@ -4333,7 +4333,7 @@ MAP = {
             "offset": Int32,
             "length": Int32,
         },
-        "is": TLType,
+        "is": "MessageEntity",
     },
     0x20DF5D0: {
         "_": "messageEntityBlockquote",
@@ -4341,7 +4341,7 @@ MAP = {
             "offset": Int32,
             "length": Int32,
         },
-        "is": TLType,
+        "is": "MessageEntity",
     },
     0x761E6AF4: {
         "_": "messageEntityBankCard",
@@ -4349,7 +4349,7 @@ MAP = {
             "offset": Int32,
             "length": Int32,
         },
-        "is": TLType,
+        "is": "MessageEntity",
     },
     0x32CA960F: {
         "_": "messageEntitySpoiler",
@@ -4357,7 +4357,7 @@ MAP = {
             "offset": Int32,
             "length": Int32,
         },
-        "is": TLType,
+        "is": "MessageEntity",
     },
     0xC8CF05F8: {
         "_": "messageEntityCustomEmoji",
@@ -4366,11 +4366,11 @@ MAP = {
             "length": Int32,
             "document_id": Int64,
         },
-        "is": TLType,
+        "is": "MessageEntity",
     },
     0xEE8C1E86: {
         "_": "inputChannelEmpty",
-        "is": TLType,
+        "is": "InputChannel",
     },
     0xF35AEC28: {
         "_": "inputChannel",
@@ -4378,7 +4378,7 @@ MAP = {
             "channel_id": Int64,
             "access_hash": Int64,
         },
-        "is": TLType,
+        "is": "InputChannel",
     },
     0x5B934F9D: {
         "_": "inputChannelFromMessage",
@@ -4387,7 +4387,7 @@ MAP = {
             "msg_id": Int32,
             "channel_id": Int64,
         },
-        "is": TLType,
+        "is": "InputChannel",
     },
     0x7F077AD9: {
         "_": "contacts.resolvedPeer",
@@ -4396,7 +4396,7 @@ MAP = {
             "chats": list["Chat"],
             "users": list["User"],
         },
-        "is": TLType,
+        "is": "contacts.ResolvedPeer",
     },
     0xAE30253: {
         "_": "messageRange",
@@ -4404,7 +4404,7 @@ MAP = {
             "min_id": Int32,
             "max_id": Int32,
         },
-        "is": TLType,
+        "is": "MessageRange",
     },
     0x3E11AFFB: {
         "_": "updates.channelDifferenceEmpty",
@@ -4414,7 +4414,7 @@ MAP = {
             "pts": Int32,
             "timeout": FlagsOf("flags", 1, Int32),
         },
-        "is": TLType,
+        "is": "updates.ChannelDifference",
     },
     0xA4BCC6FE: {
         "_": "updates.channelDifferenceTooLong",
@@ -4427,7 +4427,7 @@ MAP = {
             "chats": list["Chat"],
             "users": list["User"],
         },
-        "is": TLType,
+        "is": "updates.ChannelDifference",
     },
     0x2064674E: {
         "_": "updates.channelDifference",
@@ -4441,11 +4441,11 @@ MAP = {
             "chats": list["Chat"],
             "users": list["User"],
         },
-        "is": TLType,
+        "is": "updates.ChannelDifference",
     },
     0x94D42EE7: {
         "_": "channelMessagesFilterEmpty",
-        "is": TLType,
+        "is": "ChannelMessagesFilter",
     },
     0xCD77D957: {
         "_": "channelMessagesFilter",
@@ -4454,7 +4454,7 @@ MAP = {
             "exclude_new_messages": FlagsOf("flags", 1, Bit),
             "ranges": list["MessageRange"],
         },
-        "is": TLType,
+        "is": "ChannelMessagesFilter",
     },
     0xC00C07C0: {
         "_": "channelParticipant",
@@ -4462,7 +4462,7 @@ MAP = {
             "user_id": Int64,
             "date": Int32,
         },
-        "is": TLType,
+        "is": "ChannelParticipant",
     },
     0x35A8BFA7: {
         "_": "channelParticipantSelf",
@@ -4473,7 +4473,7 @@ MAP = {
             "inviter_id": Int64,
             "date": Int32,
         },
-        "is": TLType,
+        "is": "ChannelParticipant",
     },
     0x2FE601D3: {
         "_": "channelParticipantCreator",
@@ -4483,7 +4483,7 @@ MAP = {
             "admin_rights": TLType,
             "rank": FlagsOf("flags", 0, str),
         },
-        "is": TLType,
+        "is": "ChannelParticipant",
     },
     0x34C3BB53: {
         "_": "channelParticipantAdmin",
@@ -4498,7 +4498,7 @@ MAP = {
             "admin_rights": TLType,
             "rank": FlagsOf("flags", 2, str),
         },
-        "is": TLType,
+        "is": "ChannelParticipant",
     },
     0x6DF8014E: {
         "_": "channelParticipantBanned",
@@ -4510,54 +4510,54 @@ MAP = {
             "date": Int32,
             "banned_rights": TLType,
         },
-        "is": TLType,
+        "is": "ChannelParticipant",
     },
     0x1B03F006: {
         "_": "channelParticipantLeft",
         "params": {
             "peer": TLType,
         },
-        "is": TLType,
+        "is": "ChannelParticipant",
     },
     0xDE3F3C79: {
         "_": "channelParticipantsRecent",
-        "is": TLType,
+        "is": "ChannelParticipantsFilter",
     },
     0xB4608969: {
         "_": "channelParticipantsAdmins",
-        "is": TLType,
+        "is": "ChannelParticipantsFilter",
     },
     0xA3B54985: {
         "_": "channelParticipantsKicked",
         "params": {
             "q": str,
         },
-        "is": TLType,
+        "is": "ChannelParticipantsFilter",
     },
     0xB0D1865B: {
         "_": "channelParticipantsBots",
-        "is": TLType,
+        "is": "ChannelParticipantsFilter",
     },
     0x1427A5E1: {
         "_": "channelParticipantsBanned",
         "params": {
             "q": str,
         },
-        "is": TLType,
+        "is": "ChannelParticipantsFilter",
     },
     0x656AC4B: {
         "_": "channelParticipantsSearch",
         "params": {
             "q": str,
         },
-        "is": TLType,
+        "is": "ChannelParticipantsFilter",
     },
     0xBB6AE88D: {
         "_": "channelParticipantsContacts",
         "params": {
             "q": str,
         },
-        "is": TLType,
+        "is": "ChannelParticipantsFilter",
     },
     0xE04B5CEB: {
         "_": "channelParticipantsMentions",
@@ -4566,7 +4566,7 @@ MAP = {
             "q": FlagsOf("flags", 0, str),
             "top_msg_id": FlagsOf("flags", 1, Int32),
         },
-        "is": TLType,
+        "is": "ChannelParticipantsFilter",
     },
     0x9AB0FEAF: {
         "_": "channels.channelParticipants",
@@ -4576,11 +4576,11 @@ MAP = {
             "chats": list["Chat"],
             "users": list["User"],
         },
-        "is": TLType,
+        "is": "channels.ChannelParticipants",
     },
     0xF0173FE9: {
         "_": "channels.channelParticipantsNotModified",
-        "is": TLType,
+        "is": "channels.ChannelParticipants",
     },
     0xDFB80317: {
         "_": "channels.channelParticipant",
@@ -4589,7 +4589,7 @@ MAP = {
             "chats": list["Chat"],
             "users": list["User"],
         },
-        "is": TLType,
+        "is": "channels.ChannelParticipant",
     },
     0x780A0310: {
         "_": "help.termsOfService",
@@ -4601,11 +4601,11 @@ MAP = {
             "entities": list["MessageEntity"],
             "min_age_confirm": FlagsOf("flags", 1, Int32),
         },
-        "is": TLType,
+        "is": "help.TermsOfService",
     },
     0xE8025CA2: {
         "_": "messages.savedGifsNotModified",
-        "is": TLType,
+        "is": "messages.SavedGifs",
     },
     0x84A02A0D: {
         "_": "messages.savedGifs",
@@ -4613,7 +4613,7 @@ MAP = {
             "hash": Int64,
             "gifs": list["Document"],
         },
-        "is": TLType,
+        "is": "messages.SavedGifs",
     },
     0x3380C786: {
         "_": "inputBotInlineMessageMediaAuto",
@@ -4623,7 +4623,7 @@ MAP = {
             "entities": FlagsOf("flags", 1, list["MessageEntity"]),
             "reply_markup": FlagsOf("flags", 2, TLType),
         },
-        "is": TLType,
+        "is": "InputBotInlineMessage",
     },
     0x3DCD7A87: {
         "_": "inputBotInlineMessageText",
@@ -4634,7 +4634,7 @@ MAP = {
             "entities": FlagsOf("flags", 1, list["MessageEntity"]),
             "reply_markup": FlagsOf("flags", 2, TLType),
         },
-        "is": TLType,
+        "is": "InputBotInlineMessage",
     },
     0x96929A85: {
         "_": "inputBotInlineMessageMediaGeo",
@@ -4646,7 +4646,7 @@ MAP = {
             "proximity_notification_radius": FlagsOf("flags", 3, Int32),
             "reply_markup": FlagsOf("flags", 2, TLType),
         },
-        "is": TLType,
+        "is": "InputBotInlineMessage",
     },
     0x417BBF11: {
         "_": "inputBotInlineMessageMediaVenue",
@@ -4660,7 +4660,7 @@ MAP = {
             "venue_type": str,
             "reply_markup": FlagsOf("flags", 2, TLType),
         },
-        "is": TLType,
+        "is": "InputBotInlineMessage",
     },
     0xA6EDBFFD: {
         "_": "inputBotInlineMessageMediaContact",
@@ -4672,7 +4672,7 @@ MAP = {
             "vcard": str,
             "reply_markup": FlagsOf("flags", 2, TLType),
         },
-        "is": TLType,
+        "is": "InputBotInlineMessage",
     },
     0x4B425864: {
         "_": "inputBotInlineMessageGame",
@@ -4680,7 +4680,7 @@ MAP = {
             "flags": Int32,
             "reply_markup": FlagsOf("flags", 2, TLType),
         },
-        "is": TLType,
+        "is": "InputBotInlineMessage",
     },
     0xD7E78225: {
         "_": "inputBotInlineMessageMediaInvoice",
@@ -4695,7 +4695,7 @@ MAP = {
             "provider_data": TLType,
             "reply_markup": FlagsOf("flags", 2, TLType),
         },
-        "is": TLType,
+        "is": "InputBotInlineMessage",
     },
     0x88BF9319: {
         "_": "inputBotInlineResult",
@@ -4710,7 +4710,7 @@ MAP = {
             "content": FlagsOf("flags", 5, TLType),
             "send_message": TLType,
         },
-        "is": TLType,
+        "is": "InputBotInlineResult",
     },
     0xA8D864A7: {
         "_": "inputBotInlineResultPhoto",
@@ -4720,7 +4720,7 @@ MAP = {
             "photo": TLType,
             "send_message": TLType,
         },
-        "is": TLType,
+        "is": "InputBotInlineResult",
     },
     0xFFF8FDC4: {
         "_": "inputBotInlineResultDocument",
@@ -4733,7 +4733,7 @@ MAP = {
             "document": TLType,
             "send_message": TLType,
         },
-        "is": TLType,
+        "is": "InputBotInlineResult",
     },
     0x4FA417F2: {
         "_": "inputBotInlineResultGame",
@@ -4742,7 +4742,7 @@ MAP = {
             "short_name": str,
             "send_message": TLType,
         },
-        "is": TLType,
+        "is": "InputBotInlineResult",
     },
     0x764CF810: {
         "_": "botInlineMessageMediaAuto",
@@ -4752,7 +4752,7 @@ MAP = {
             "entities": FlagsOf("flags", 1, list["MessageEntity"]),
             "reply_markup": FlagsOf("flags", 2, TLType),
         },
-        "is": TLType,
+        "is": "BotInlineMessage",
     },
     0x8C7F65E2: {
         "_": "botInlineMessageText",
@@ -4763,7 +4763,7 @@ MAP = {
             "entities": FlagsOf("flags", 1, list["MessageEntity"]),
             "reply_markup": FlagsOf("flags", 2, TLType),
         },
-        "is": TLType,
+        "is": "BotInlineMessage",
     },
     0x51846FD: {
         "_": "botInlineMessageMediaGeo",
@@ -4775,7 +4775,7 @@ MAP = {
             "proximity_notification_radius": FlagsOf("flags", 3, Int32),
             "reply_markup": FlagsOf("flags", 2, TLType),
         },
-        "is": TLType,
+        "is": "BotInlineMessage",
     },
     0x8A86659C: {
         "_": "botInlineMessageMediaVenue",
@@ -4789,7 +4789,7 @@ MAP = {
             "venue_type": str,
             "reply_markup": FlagsOf("flags", 2, TLType),
         },
-        "is": TLType,
+        "is": "BotInlineMessage",
     },
     0x18D1CDC2: {
         "_": "botInlineMessageMediaContact",
@@ -4801,7 +4801,7 @@ MAP = {
             "vcard": str,
             "reply_markup": FlagsOf("flags", 2, TLType),
         },
-        "is": TLType,
+        "is": "BotInlineMessage",
     },
     0x354A9B09: {
         "_": "botInlineMessageMediaInvoice",
@@ -4816,7 +4816,7 @@ MAP = {
             "total_amount": Int64,
             "reply_markup": FlagsOf("flags", 2, TLType),
         },
-        "is": TLType,
+        "is": "BotInlineMessage",
     },
     0x11965F3A: {
         "_": "botInlineResult",
@@ -4831,7 +4831,7 @@ MAP = {
             "content": FlagsOf("flags", 5, TLType),
             "send_message": TLType,
         },
-        "is": TLType,
+        "is": "BotInlineResult",
     },
     0x17DB940B: {
         "_": "botInlineMediaResult",
@@ -4845,7 +4845,7 @@ MAP = {
             "description": FlagsOf("flags", 3, str),
             "send_message": TLType,
         },
-        "is": TLType,
+        "is": "BotInlineResult",
     },
     0x947CA848: {
         "_": "messages.botResults",
@@ -4859,7 +4859,7 @@ MAP = {
             "cache_time": Int32,
             "users": list["User"],
         },
-        "is": TLType,
+        "is": "messages.BotResults",
     },
     0x5DAB1AF4: {
         "_": "exportedMessageLink",
@@ -4867,7 +4867,7 @@ MAP = {
             "link": str,
             "html": str,
         },
-        "is": TLType,
+        "is": "ExportedMessageLink",
     },
     0x5F777DCE: {
         "_": "messageFwdHeader",
@@ -4883,55 +4883,55 @@ MAP = {
             "saved_from_msg_id": FlagsOf("flags", 4, Int32),
             "psa_type": FlagsOf("flags", 6, str),
         },
-        "is": TLType,
+        "is": "MessageFwdHeader",
     },
     0x72A3158C: {
         "_": "auth.codeTypeSms",
-        "is": TLType,
+        "is": "auth.CodeType",
     },
     0x741CD3E3: {
         "_": "auth.codeTypeCall",
-        "is": TLType,
+        "is": "auth.CodeType",
     },
     0x226CCEFB: {
         "_": "auth.codeTypeFlashCall",
-        "is": TLType,
+        "is": "auth.CodeType",
     },
     0xD61AD6EE: {
         "_": "auth.codeTypeMissedCall",
-        "is": TLType,
+        "is": "auth.CodeType",
     },
     0x6ED998C: {
         "_": "auth.codeTypeFragmentSms",
-        "is": TLType,
+        "is": "auth.CodeType",
     },
     0x3DBB5986: {
         "_": "auth.sentCodeTypeApp",
         "params": {
             "length": Int32,
         },
-        "is": TLType,
+        "is": "auth.SentCodeType",
     },
     0xC000BBA2: {
         "_": "auth.sentCodeTypeSms",
         "params": {
             "length": Int32,
         },
-        "is": TLType,
+        "is": "auth.SentCodeType",
     },
     0x5353E5A7: {
         "_": "auth.sentCodeTypeCall",
         "params": {
             "length": Int32,
         },
-        "is": TLType,
+        "is": "auth.SentCodeType",
     },
     0xAB03C6D9: {
         "_": "auth.sentCodeTypeFlashCall",
         "params": {
             "pattern": str,
         },
-        "is": TLType,
+        "is": "auth.SentCodeType",
     },
     0x82006484: {
         "_": "auth.sentCodeTypeMissedCall",
@@ -4939,7 +4939,7 @@ MAP = {
             "prefix": str,
             "length": Int32,
         },
-        "is": TLType,
+        "is": "auth.SentCodeType",
     },
     0x5A159841: {
         "_": "auth.sentCodeTypeEmailCode",
@@ -4951,7 +4951,7 @@ MAP = {
             "length": Int32,
             "next_phone_login_date": FlagsOf("flags", 2, Int32),
         },
-        "is": TLType,
+        "is": "auth.SentCodeType",
     },
     0xA5491DEA: {
         "_": "auth.sentCodeTypeSetUpEmailRequired",
@@ -4960,7 +4960,7 @@ MAP = {
             "apple_signin_allowed": FlagsOf("flags", 0, Bit),
             "google_signin_allowed": FlagsOf("flags", 1, Bit),
         },
-        "is": TLType,
+        "is": "auth.SentCodeType",
     },
     0xD9565C39: {
         "_": "auth.sentCodeTypeFragmentSms",
@@ -4968,7 +4968,7 @@ MAP = {
             "url": str,
             "length": Int32,
         },
-        "is": TLType,
+        "is": "auth.SentCodeType",
     },
     0x36585EA4: {
         "_": "messages.botCallbackAnswer",
@@ -4981,7 +4981,7 @@ MAP = {
             "url": FlagsOf("flags", 2, str),
             "cache_time": Int32,
         },
-        "is": TLType,
+        "is": "messages.BotCallbackAnswer",
     },
     0x26B5DDE6: {
         "_": "messages.messageEditData",
@@ -4989,7 +4989,7 @@ MAP = {
             "flags": Int32,
             "caption": FlagsOf("flags", 0, Bit),
         },
-        "is": TLType,
+        "is": "messages.MessageEditData",
     },
     0x890C3D89: {
         "_": "inputBotInlineMessageID",
@@ -4998,7 +4998,7 @@ MAP = {
             "id": Int64,
             "access_hash": Int64,
         },
-        "is": TLType,
+        "is": "InputBotInlineMessageID",
     },
     0xB6D915D7: {
         "_": "inputBotInlineMessageID64",
@@ -5008,7 +5008,7 @@ MAP = {
             "id": Int32,
             "access_hash": Int64,
         },
-        "is": TLType,
+        "is": "InputBotInlineMessageID",
     },
     0x3C20629F: {
         "_": "inlineBotSwitchPM",
@@ -5016,7 +5016,7 @@ MAP = {
             "text": str,
             "start_param": str,
         },
-        "is": TLType,
+        "is": "InlineBotSwitchPM",
     },
     0x3371C354: {
         "_": "messages.peerDialogs",
@@ -5027,7 +5027,7 @@ MAP = {
             "users": list["User"],
             "state": TLType,
         },
-        "is": TLType,
+        "is": "messages.PeerDialogs",
     },
     0xEDCDC05B: {
         "_": "topPeer",
@@ -5035,39 +5035,39 @@ MAP = {
             "peer": TLType,
             "rating": TLType,
         },
-        "is": TLType,
+        "is": "TopPeer",
     },
     0xAB661B5B: {
         "_": "topPeerCategoryBotsPM",
-        "is": TLType,
+        "is": "TopPeerCategory",
     },
     0x148677E2: {
         "_": "topPeerCategoryBotsInline",
-        "is": TLType,
+        "is": "TopPeerCategory",
     },
     0x637B7ED: {
         "_": "topPeerCategoryCorrespondents",
-        "is": TLType,
+        "is": "TopPeerCategory",
     },
     0xBD17A14A: {
         "_": "topPeerCategoryGroups",
-        "is": TLType,
+        "is": "TopPeerCategory",
     },
     0x161D9628: {
         "_": "topPeerCategoryChannels",
-        "is": TLType,
+        "is": "TopPeerCategory",
     },
     0x1E76A78C: {
         "_": "topPeerCategoryPhoneCalls",
-        "is": TLType,
+        "is": "TopPeerCategory",
     },
     0xA8406CA9: {
         "_": "topPeerCategoryForwardUsers",
-        "is": TLType,
+        "is": "TopPeerCategory",
     },
     0xFBEEC0F0: {
         "_": "topPeerCategoryForwardChats",
-        "is": TLType,
+        "is": "TopPeerCategory",
     },
     0xFB834291: {
         "_": "topPeerCategoryPeers",
@@ -5076,11 +5076,11 @@ MAP = {
             "count": Int32,
             "peers": list["TopPeer"],
         },
-        "is": TLType,
+        "is": "TopPeerCategoryPeers",
     },
     0xDE266EF5: {
         "_": "contacts.topPeersNotModified",
-        "is": TLType,
+        "is": "contacts.TopPeers",
     },
     0x70B772A8: {
         "_": "contacts.topPeers",
@@ -5089,11 +5089,11 @@ MAP = {
             "chats": list["Chat"],
             "users": list["User"],
         },
-        "is": TLType,
+        "is": "contacts.TopPeers",
     },
     0xB52C939D: {
         "_": "contacts.topPeersDisabled",
-        "is": TLType,
+        "is": "contacts.TopPeers",
     },
     0x1B0C841A: {
         "_": "draftMessageEmpty",
@@ -5101,7 +5101,7 @@ MAP = {
             "flags": Int32,
             "date": FlagsOf("flags", 0, Int32),
         },
-        "is": TLType,
+        "is": "DraftMessage",
     },
     0xFD8E711F: {
         "_": "draftMessage",
@@ -5113,14 +5113,14 @@ MAP = {
             "entities": FlagsOf("flags", 3, list["MessageEntity"]),
             "date": Int32,
         },
-        "is": TLType,
+        "is": "DraftMessage",
     },
     0xC6DC0C66: {
         "_": "messages.featuredStickersNotModified",
         "params": {
             "count": Int32,
         },
-        "is": TLType,
+        "is": "messages.FeaturedStickers",
     },
     0xBE382906: {
         "_": "messages.featuredStickers",
@@ -5132,11 +5132,11 @@ MAP = {
             "sets": list["StickerSetCovered"],
             "unread": list[Int64],
         },
-        "is": TLType,
+        "is": "messages.FeaturedStickers",
     },
     0xB17F890: {
         "_": "messages.recentStickersNotModified",
-        "is": TLType,
+        "is": "messages.RecentStickers",
     },
     0x88D37C56: {
         "_": "messages.recentStickers",
@@ -5146,7 +5146,7 @@ MAP = {
             "stickers": list["Document"],
             "dates": list[Int32],
         },
-        "is": TLType,
+        "is": "messages.RecentStickers",
     },
     0x4FCBA9C8: {
         "_": "messages.archivedStickers",
@@ -5154,18 +5154,18 @@ MAP = {
             "count": Int32,
             "sets": list["StickerSetCovered"],
         },
-        "is": TLType,
+        "is": "messages.ArchivedStickers",
     },
     0x38641628: {
         "_": "messages.stickerSetInstallResultSuccess",
-        "is": TLType,
+        "is": "messages.StickerSetInstallResult",
     },
     0x35E410A8: {
         "_": "messages.stickerSetInstallResultArchive",
         "params": {
             "sets": list["StickerSetCovered"],
         },
-        "is": TLType,
+        "is": "messages.StickerSetInstallResult",
     },
     0x6410A5D2: {
         "_": "stickerSetCovered",
@@ -5173,7 +5173,7 @@ MAP = {
             "set": TLType,
             "cover": TLType,
         },
-        "is": TLType,
+        "is": "StickerSetCovered",
     },
     0x3407E51B: {
         "_": "stickerSetMultiCovered",
@@ -5181,7 +5181,7 @@ MAP = {
             "set": TLType,
             "covers": list["Document"],
         },
-        "is": TLType,
+        "is": "StickerSetCovered",
     },
     0x40D13C0E: {
         "_": "stickerSetFullCovered",
@@ -5191,14 +5191,14 @@ MAP = {
             "keywords": list["StickerKeyword"],
             "documents": list["Document"],
         },
-        "is": TLType,
+        "is": "StickerSetCovered",
     },
     0x77B15D1C: {
         "_": "stickerSetNoCovered",
         "params": {
             "set": TLType,
         },
-        "is": TLType,
+        "is": "StickerSetCovered",
     },
     0xAED6DBB2: {
         "_": "maskCoords",
@@ -5208,21 +5208,21 @@ MAP = {
             "y": TLType,
             "zoom": TLType,
         },
-        "is": TLType,
+        "is": "MaskCoords",
     },
     0x4A992157: {
         "_": "inputStickeredMediaPhoto",
         "params": {
             "id": TLType,
         },
-        "is": TLType,
+        "is": "InputStickeredMedia",
     },
     0x438865B: {
         "_": "inputStickeredMediaDocument",
         "params": {
             "id": TLType,
         },
-        "is": TLType,
+        "is": "InputStickeredMedia",
     },
     0xBDF9653B: {
         "_": "game",
@@ -5236,7 +5236,7 @@ MAP = {
             "photo": TLType,
             "document": FlagsOf("flags", 0, TLType),
         },
-        "is": TLType,
+        "is": "Game",
     },
     0x32C3E77: {
         "_": "inputGameID",
@@ -5244,7 +5244,7 @@ MAP = {
             "id": Int64,
             "access_hash": Int64,
         },
-        "is": TLType,
+        "is": "InputGame",
     },
     0xC331E80A: {
         "_": "inputGameShortName",
@@ -5252,7 +5252,7 @@ MAP = {
             "bot_id": TLType,
             "short_name": str,
         },
-        "is": TLType,
+        "is": "InputGame",
     },
     0x73A379EB: {
         "_": "highScore",
@@ -5261,7 +5261,7 @@ MAP = {
             "user_id": Int64,
             "score": Int32,
         },
-        "is": TLType,
+        "is": "HighScore",
     },
     0x9A3BFD99: {
         "_": "messages.highScores",
@@ -5269,53 +5269,53 @@ MAP = {
             "scores": list["HighScore"],
             "users": list["User"],
         },
-        "is": TLType,
+        "is": "messages.HighScores",
     },
     0xDC3D824F: {
         "_": "textEmpty",
-        "is": TLType,
+        "is": "RichText",
     },
     0x744694E0: {
         "_": "textPlain",
         "params": {
             "text": str,
         },
-        "is": TLType,
+        "is": "RichText",
     },
     0x6724ABC4: {
         "_": "textBold",
         "params": {
             "text": TLType,
         },
-        "is": TLType,
+        "is": "RichText",
     },
     0xD912A59C: {
         "_": "textItalic",
         "params": {
             "text": TLType,
         },
-        "is": TLType,
+        "is": "RichText",
     },
     0xC12622C4: {
         "_": "textUnderline",
         "params": {
             "text": TLType,
         },
-        "is": TLType,
+        "is": "RichText",
     },
     0x9BF8BB95: {
         "_": "textStrike",
         "params": {
             "text": TLType,
         },
-        "is": TLType,
+        "is": "RichText",
     },
     0x6C3F19B9: {
         "_": "textFixed",
         "params": {
             "text": TLType,
         },
-        "is": TLType,
+        "is": "RichText",
     },
     0x3C2884C1: {
         "_": "textUrl",
@@ -5324,7 +5324,7 @@ MAP = {
             "url": str,
             "webpage_id": Int64,
         },
-        "is": TLType,
+        "is": "RichText",
     },
     0xDE5A0DD6: {
         "_": "textEmail",
@@ -5332,35 +5332,35 @@ MAP = {
             "text": TLType,
             "email": str,
         },
-        "is": TLType,
+        "is": "RichText",
     },
     0x7E6260D7: {
         "_": "textConcat",
         "params": {
             "texts": list["RichText"],
         },
-        "is": TLType,
+        "is": "RichText",
     },
     0xED6A8504: {
         "_": "textSubscript",
         "params": {
             "text": TLType,
         },
-        "is": TLType,
+        "is": "RichText",
     },
     0xC7FB5E01: {
         "_": "textSuperscript",
         "params": {
             "text": TLType,
         },
-        "is": TLType,
+        "is": "RichText",
     },
     0x34B8621: {
         "_": "textMarked",
         "params": {
             "text": TLType,
         },
-        "is": TLType,
+        "is": "RichText",
     },
     0x1CCB966A: {
         "_": "textPhone",
@@ -5368,7 +5368,7 @@ MAP = {
             "text": TLType,
             "phone": str,
         },
-        "is": TLType,
+        "is": "RichText",
     },
     0x81CCF4F: {
         "_": "textImage",
@@ -5377,7 +5377,7 @@ MAP = {
             "w": Int32,
             "h": Int32,
         },
-        "is": TLType,
+        "is": "RichText",
     },
     0x35553762: {
         "_": "textAnchor",
@@ -5385,25 +5385,25 @@ MAP = {
             "text": TLType,
             "name": str,
         },
-        "is": TLType,
+        "is": "RichText",
     },
     0x13567E8A: {
         "_": "pageBlockUnsupported",
-        "is": TLType,
+        "is": "PageBlock",
     },
     0x70ABC3FD: {
         "_": "pageBlockTitle",
         "params": {
             "text": TLType,
         },
-        "is": TLType,
+        "is": "PageBlock",
     },
     0x8FFA9A1F: {
         "_": "pageBlockSubtitle",
         "params": {
             "text": TLType,
         },
-        "is": TLType,
+        "is": "PageBlock",
     },
     0xBAAFE5E0: {
         "_": "pageBlockAuthorDate",
@@ -5411,28 +5411,28 @@ MAP = {
             "author": TLType,
             "published_date": Int32,
         },
-        "is": TLType,
+        "is": "PageBlock",
     },
     0xBFD064EC: {
         "_": "pageBlockHeader",
         "params": {
             "text": TLType,
         },
-        "is": TLType,
+        "is": "PageBlock",
     },
     0xF12BB6E1: {
         "_": "pageBlockSubheader",
         "params": {
             "text": TLType,
         },
-        "is": TLType,
+        "is": "PageBlock",
     },
     0x467A0766: {
         "_": "pageBlockParagraph",
         "params": {
             "text": TLType,
         },
-        "is": TLType,
+        "is": "PageBlock",
     },
     0xC070D93E: {
         "_": "pageBlockPreformatted",
@@ -5440,32 +5440,32 @@ MAP = {
             "text": TLType,
             "language": str,
         },
-        "is": TLType,
+        "is": "PageBlock",
     },
     0x48870999: {
         "_": "pageBlockFooter",
         "params": {
             "text": TLType,
         },
-        "is": TLType,
+        "is": "PageBlock",
     },
     0xDB20B188: {
         "_": "pageBlockDivider",
-        "is": TLType,
+        "is": "PageBlock",
     },
     0xCE0D37B0: {
         "_": "pageBlockAnchor",
         "params": {
             "name": str,
         },
-        "is": TLType,
+        "is": "PageBlock",
     },
     0xE4E88011: {
         "_": "pageBlockList",
         "params": {
             "items": list["PageListItem"],
         },
-        "is": TLType,
+        "is": "PageBlock",
     },
     0x263D7C26: {
         "_": "pageBlockBlockquote",
@@ -5473,7 +5473,7 @@ MAP = {
             "text": TLType,
             "caption": TLType,
         },
-        "is": TLType,
+        "is": "PageBlock",
     },
     0x4F4456D3: {
         "_": "pageBlockPullquote",
@@ -5481,7 +5481,7 @@ MAP = {
             "text": TLType,
             "caption": TLType,
         },
-        "is": TLType,
+        "is": "PageBlock",
     },
     0x1759C560: {
         "_": "pageBlockPhoto",
@@ -5492,7 +5492,7 @@ MAP = {
             "url": FlagsOf("flags", 0, str),
             "webpage_id": FlagsOf("flags", 0, Int64),
         },
-        "is": TLType,
+        "is": "PageBlock",
     },
     0x7C8FE7B6: {
         "_": "pageBlockVideo",
@@ -5503,14 +5503,14 @@ MAP = {
             "video_id": Int64,
             "caption": TLType,
         },
-        "is": TLType,
+        "is": "PageBlock",
     },
     0x39F23300: {
         "_": "pageBlockCover",
         "params": {
             "cover": TLType,
         },
-        "is": TLType,
+        "is": "PageBlock",
     },
     0xA8718DC5: {
         "_": "pageBlockEmbed",
@@ -5525,7 +5525,7 @@ MAP = {
             "h": FlagsOf("flags", 5, Int32),
             "caption": TLType,
         },
-        "is": TLType,
+        "is": "PageBlock",
     },
     0xF259A80B: {
         "_": "pageBlockEmbedPost",
@@ -5538,7 +5538,7 @@ MAP = {
             "blocks": list["PageBlock"],
             "caption": TLType,
         },
-        "is": TLType,
+        "is": "PageBlock",
     },
     0x65A0FA4D: {
         "_": "pageBlockCollage",
@@ -5546,7 +5546,7 @@ MAP = {
             "items": list["PageBlock"],
             "caption": TLType,
         },
-        "is": TLType,
+        "is": "PageBlock",
     },
     0x31F9590: {
         "_": "pageBlockSlideshow",
@@ -5554,14 +5554,14 @@ MAP = {
             "items": list["PageBlock"],
             "caption": TLType,
         },
-        "is": TLType,
+        "is": "PageBlock",
     },
     0xEF1751B5: {
         "_": "pageBlockChannel",
         "params": {
             "channel": TLType,
         },
-        "is": TLType,
+        "is": "PageBlock",
     },
     0x804361EA: {
         "_": "pageBlockAudio",
@@ -5569,14 +5569,14 @@ MAP = {
             "audio_id": Int64,
             "caption": TLType,
         },
-        "is": TLType,
+        "is": "PageBlock",
     },
     0x1E148390: {
         "_": "pageBlockKicker",
         "params": {
             "text": TLType,
         },
-        "is": TLType,
+        "is": "PageBlock",
     },
     0xBF4DEA82: {
         "_": "pageBlockTable",
@@ -5587,14 +5587,14 @@ MAP = {
             "title": TLType,
             "rows": list["PageTableRow"],
         },
-        "is": TLType,
+        "is": "PageBlock",
     },
     0x9A8AE1E1: {
         "_": "pageBlockOrderedList",
         "params": {
             "items": list["PageListOrderedItem"],
         },
-        "is": TLType,
+        "is": "PageBlock",
     },
     0x76768BED: {
         "_": "pageBlockDetails",
@@ -5604,7 +5604,7 @@ MAP = {
             "blocks": list["PageBlock"],
             "title": TLType,
         },
-        "is": TLType,
+        "is": "PageBlock",
     },
     0x16115A96: {
         "_": "pageBlockRelatedArticles",
@@ -5612,7 +5612,7 @@ MAP = {
             "title": TLType,
             "articles": list["PageRelatedArticle"],
         },
-        "is": TLType,
+        "is": "PageBlock",
     },
     0xA44F3EF6: {
         "_": "pageBlockMap",
@@ -5623,30 +5623,30 @@ MAP = {
             "h": Int32,
             "caption": TLType,
         },
-        "is": TLType,
+        "is": "PageBlock",
     },
     0x85E42301: {
         "_": "phoneCallDiscardReasonMissed",
-        "is": TLType,
+        "is": "PhoneCallDiscardReason",
     },
     0xE095C1A0: {
         "_": "phoneCallDiscardReasonDisconnect",
-        "is": TLType,
+        "is": "PhoneCallDiscardReason",
     },
     0x57ADC690: {
         "_": "phoneCallDiscardReasonHangup",
-        "is": TLType,
+        "is": "PhoneCallDiscardReason",
     },
     0xFAF7E8C9: {
         "_": "phoneCallDiscardReasonBusy",
-        "is": TLType,
+        "is": "PhoneCallDiscardReason",
     },
     0x7D748D04: {
         "_": "dataJSON",
         "params": {
             "data": str,
         },
-        "is": TLType,
+        "is": "DataJSON",
     },
     0xCB296BF8: {
         "_": "labeledPrice",
@@ -5654,7 +5654,7 @@ MAP = {
             "label": str,
             "amount": Int64,
         },
-        "is": TLType,
+        "is": "LabeledPrice",
     },
     0x3E85A91B: {
         "_": "invoice",
@@ -5675,7 +5675,7 @@ MAP = {
             "suggested_tip_amounts": FlagsOf("flags", 8, list[Int64]),
             "recurring_terms_url": FlagsOf("flags", 9, str),
         },
-        "is": TLType,
+        "is": "Invoice",
     },
     0xEA02C27E: {
         "_": "paymentCharge",
@@ -5683,7 +5683,7 @@ MAP = {
             "id": str,
             "provider_charge_id": str,
         },
-        "is": TLType,
+        "is": "PaymentCharge",
     },
     0x1E8CAAEB: {
         "_": "postAddress",
@@ -5695,7 +5695,7 @@ MAP = {
             "country_iso2": str,
             "post_code": str,
         },
-        "is": TLType,
+        "is": "PostAddress",
     },
     0x909C3F94: {
         "_": "paymentRequestedInfo",
@@ -5706,7 +5706,7 @@ MAP = {
             "email": FlagsOf("flags", 2, str),
             "shipping_address": FlagsOf("flags", 3, TLType),
         },
-        "is": TLType,
+        "is": "PaymentRequestedInfo",
     },
     0xCDC27A1F: {
         "_": "paymentSavedCredentialsCard",
@@ -5714,7 +5714,7 @@ MAP = {
             "id": str,
             "title": str,
         },
-        "is": TLType,
+        "is": "PaymentSavedCredentials",
     },
     0x1C570ED1: {
         "_": "webDocument",
@@ -5725,7 +5725,7 @@ MAP = {
             "mime_type": str,
             "attributes": list["DocumentAttribute"],
         },
-        "is": TLType,
+        "is": "WebDocument",
     },
     0xF9C8BCC6: {
         "_": "webDocumentNoProxy",
@@ -5735,7 +5735,7 @@ MAP = {
             "mime_type": str,
             "attributes": list["DocumentAttribute"],
         },
-        "is": TLType,
+        "is": "WebDocument",
     },
     0x9BED434D: {
         "_": "inputWebDocument",
@@ -5745,7 +5745,7 @@ MAP = {
             "mime_type": str,
             "attributes": list["DocumentAttribute"],
         },
-        "is": TLType,
+        "is": "InputWebDocument",
     },
     0xC239D686: {
         "_": "inputWebFileLocation",
@@ -5753,7 +5753,7 @@ MAP = {
             "url": str,
             "access_hash": Int64,
         },
-        "is": TLType,
+        "is": "InputWebFileLocation",
     },
     0x9F2221C9: {
         "_": "inputWebFileGeoPointLocation",
@@ -5765,7 +5765,7 @@ MAP = {
             "zoom": Int32,
             "scale": Int32,
         },
-        "is": TLType,
+        "is": "InputWebFileLocation",
     },
     0xF46FE924: {
         "_": "inputWebFileAudioAlbumThumbLocation",
@@ -5776,7 +5776,7 @@ MAP = {
             "title": FlagsOf("flags", 1, str),
             "performer": FlagsOf("flags", 1, str),
         },
-        "is": TLType,
+        "is": "InputWebFileLocation",
     },
     0x21E753BC: {
         "_": "upload.webFile",
@@ -5787,7 +5787,7 @@ MAP = {
             "mtime": Int32,
             "bytes": bytes,
         },
-        "is": TLType,
+        "is": "upload.WebFile",
     },
     0xA0058751: {
         "_": "payments.paymentForm",
@@ -5810,7 +5810,7 @@ MAP = {
             "saved_credentials": FlagsOf("flags", 1, list["PaymentSavedCredentials"]),
             "users": list["User"],
         },
-        "is": TLType,
+        "is": "payments.PaymentForm",
     },
     0xD1451883: {
         "_": "payments.validatedRequestedInfo",
@@ -5819,21 +5819,21 @@ MAP = {
             "id": FlagsOf("flags", 0, str),
             "shipping_options": FlagsOf("flags", 1, list["ShippingOption"]),
         },
-        "is": TLType,
+        "is": "payments.ValidatedRequestedInfo",
     },
     0x4E5F810D: {
         "_": "payments.paymentResult",
         "params": {
             "updates": TLType,
         },
-        "is": TLType,
+        "is": "payments.PaymentResult",
     },
     0xD8411139: {
         "_": "payments.paymentVerificationNeeded",
         "params": {
             "url": str,
         },
-        "is": TLType,
+        "is": "payments.PaymentResult",
     },
     0x70C4FE03: {
         "_": "payments.paymentReceipt",
@@ -5854,7 +5854,7 @@ MAP = {
             "credentials_title": str,
             "users": list["User"],
         },
-        "is": TLType,
+        "is": "payments.PaymentReceipt",
     },
     0xFB8FE43C: {
         "_": "payments.savedInfo",
@@ -5863,7 +5863,7 @@ MAP = {
             "has_saved_credentials": FlagsOf("flags", 1, Bit),
             "saved_info": FlagsOf("flags", 0, TLType),
         },
-        "is": TLType,
+        "is": "payments.SavedInfo",
     },
     0xC10EB2CF: {
         "_": "inputPaymentCredentialsSaved",
@@ -5871,7 +5871,7 @@ MAP = {
             "id": str,
             "tmp_password": bytes,
         },
-        "is": TLType,
+        "is": "InputPaymentCredentials",
     },
     0x3417D728: {
         "_": "inputPaymentCredentials",
@@ -5880,21 +5880,21 @@ MAP = {
             "save": FlagsOf("flags", 0, Bit),
             "data": TLType,
         },
-        "is": TLType,
+        "is": "InputPaymentCredentials",
     },
     0xAA1C39F: {
         "_": "inputPaymentCredentialsApplePay",
         "params": {
             "payment_data": TLType,
         },
-        "is": TLType,
+        "is": "InputPaymentCredentials",
     },
     0x8AC32801: {
         "_": "inputPaymentCredentialsGooglePay",
         "params": {
             "payment_token": TLType,
         },
-        "is": TLType,
+        "is": "InputPaymentCredentials",
     },
     0xDB64FD34: {
         "_": "account.tmpPassword",
@@ -5902,7 +5902,7 @@ MAP = {
             "tmp_password": bytes,
             "valid_until": Int32,
         },
-        "is": TLType,
+        "is": "account.TmpPassword",
     },
     0xB6213CDF: {
         "_": "shippingOption",
@@ -5911,7 +5911,7 @@ MAP = {
             "title": str,
             "prices": list["LabeledPrice"],
         },
-        "is": TLType,
+        "is": "ShippingOption",
     },
     0xFFA0A496: {
         "_": "inputStickerSetItem",
@@ -5921,7 +5921,7 @@ MAP = {
             "emoji": str,
             "mask_coords": FlagsOf("flags", 0, TLType),
         },
-        "is": TLType,
+        "is": "InputStickerSetItem",
     },
     0x1E36FDED: {
         "_": "inputPhoneCall",
@@ -5929,14 +5929,14 @@ MAP = {
             "id": Int64,
             "access_hash": Int64,
         },
-        "is": TLType,
+        "is": "InputPhoneCall",
     },
     0x5366C915: {
         "_": "phoneCallEmpty",
         "params": {
             "id": Int64,
         },
-        "is": TLType,
+        "is": "PhoneCall",
     },
     0xC5226F17: {
         "_": "phoneCallWaiting",
@@ -5951,7 +5951,7 @@ MAP = {
             "protocol": TLType,
             "receive_date": FlagsOf("flags", 0, Int32),
         },
-        "is": TLType,
+        "is": "PhoneCall",
     },
     0x14B0ED0C: {
         "_": "phoneCallRequested",
@@ -5966,7 +5966,7 @@ MAP = {
             "g_a_hash": bytes,
             "protocol": TLType,
         },
-        "is": TLType,
+        "is": "PhoneCall",
     },
     0x3660C311: {
         "_": "phoneCallAccepted",
@@ -5981,7 +5981,7 @@ MAP = {
             "g_b": bytes,
             "protocol": TLType,
         },
-        "is": TLType,
+        "is": "PhoneCall",
     },
     0x967F7C67: {
         "_": "phoneCall",
@@ -6000,7 +6000,7 @@ MAP = {
             "connections": list["PhoneConnection"],
             "start_date": Int32,
         },
-        "is": TLType,
+        "is": "PhoneCall",
     },
     0x50CA4DE1: {
         "_": "phoneCallDiscarded",
@@ -6013,7 +6013,7 @@ MAP = {
             "reason": FlagsOf("flags", 0, TLType),
             "duration": FlagsOf("flags", 1, Int32),
         },
-        "is": TLType,
+        "is": "PhoneCall",
     },
     0x9CC123C7: {
         "_": "phoneConnection",
@@ -6026,7 +6026,7 @@ MAP = {
             "port": Int32,
             "peer_tag": bytes,
         },
-        "is": TLType,
+        "is": "PhoneConnection",
     },
     0x635FE375: {
         "_": "phoneConnectionWebrtc",
@@ -6041,7 +6041,7 @@ MAP = {
             "username": str,
             "password": str,
         },
-        "is": TLType,
+        "is": "PhoneConnection",
     },
     0xFC878FC8: {
         "_": "phoneCallProtocol",
@@ -6053,7 +6053,7 @@ MAP = {
             "max_layer": Int32,
             "library_versions": list[str],
         },
-        "is": TLType,
+        "is": "PhoneCallProtocol",
     },
     0xEC82E140: {
         "_": "phone.phoneCall",
@@ -6061,21 +6061,21 @@ MAP = {
             "phone_call": TLType,
             "users": list["User"],
         },
-        "is": TLType,
+        "is": "phone.PhoneCall",
     },
     0xEEA8E46E: {
         "_": "upload.cdnFileReuploadNeeded",
         "params": {
             "request_token": bytes,
         },
-        "is": TLType,
+        "is": "upload.CdnFile",
     },
     0xA99FCA4F: {
         "_": "upload.cdnFile",
         "params": {
             "bytes": bytes,
         },
-        "is": TLType,
+        "is": "upload.CdnFile",
     },
     0xC982EABA: {
         "_": "cdnPublicKey",
@@ -6083,14 +6083,14 @@ MAP = {
             "dc_id": Int32,
             "public_key": str,
         },
-        "is": TLType,
+        "is": "CdnPublicKey",
     },
     0x5725E40A: {
         "_": "cdnConfig",
         "params": {
             "public_keys": list["CdnPublicKey"],
         },
-        "is": TLType,
+        "is": "CdnConfig",
     },
     0xCAD181F6: {
         "_": "langPackString",
@@ -6098,7 +6098,7 @@ MAP = {
             "key": str,
             "value": str,
         },
-        "is": TLType,
+        "is": "LangPackString",
     },
     0x6C47AC9F: {
         "_": "langPackStringPluralized",
@@ -6112,14 +6112,14 @@ MAP = {
             "many_value": FlagsOf("flags", 4, str),
             "other_value": str,
         },
-        "is": TLType,
+        "is": "LangPackString",
     },
     0x2979EEB2: {
         "_": "langPackStringDeleted",
         "params": {
             "key": str,
         },
-        "is": TLType,
+        "is": "LangPackString",
     },
     0xF385C1F6: {
         "_": "langPackDifference",
@@ -6129,7 +6129,7 @@ MAP = {
             "version": Int32,
             "strings": list["LangPackString"],
         },
-        "is": TLType,
+        "is": "LangPackDifference",
     },
     0xEECA5CE3: {
         "_": "langPackLanguage",
@@ -6147,7 +6147,7 @@ MAP = {
             "translated_count": Int32,
             "translations_url": str,
         },
-        "is": TLType,
+        "is": "LangPackLanguage",
     },
     0xE6DFB825: {
         "_": "channelAdminLogEventActionChangeTitle",
@@ -6155,7 +6155,7 @@ MAP = {
             "prev_value": str,
             "new_value": str,
         },
-        "is": TLType,
+        "is": "ChannelAdminLogEventAction",
     },
     0x55188A2E: {
         "_": "channelAdminLogEventActionChangeAbout",
@@ -6163,7 +6163,7 @@ MAP = {
             "prev_value": str,
             "new_value": str,
         },
-        "is": TLType,
+        "is": "ChannelAdminLogEventAction",
     },
     0x6A4AFC38: {
         "_": "channelAdminLogEventActionChangeUsername",
@@ -6171,7 +6171,7 @@ MAP = {
             "prev_value": str,
             "new_value": str,
         },
-        "is": TLType,
+        "is": "ChannelAdminLogEventAction",
     },
     0x434BD2AF: {
         "_": "channelAdminLogEventActionChangePhoto",
@@ -6179,28 +6179,28 @@ MAP = {
             "prev_photo": TLType,
             "new_photo": TLType,
         },
-        "is": TLType,
+        "is": "ChannelAdminLogEventAction",
     },
     0x1B7907AE: {
         "_": "channelAdminLogEventActionToggleInvites",
         "params": {
             "new_value": bool,
         },
-        "is": TLType,
+        "is": "ChannelAdminLogEventAction",
     },
     0x26AE0971: {
         "_": "channelAdminLogEventActionToggleSignatures",
         "params": {
             "new_value": bool,
         },
-        "is": TLType,
+        "is": "ChannelAdminLogEventAction",
     },
     0xE9E82C18: {
         "_": "channelAdminLogEventActionUpdatePinned",
         "params": {
             "message": TLType,
         },
-        "is": TLType,
+        "is": "ChannelAdminLogEventAction",
     },
     0x709B2405: {
         "_": "channelAdminLogEventActionEditMessage",
@@ -6208,29 +6208,29 @@ MAP = {
             "prev_message": TLType,
             "new_message": TLType,
         },
-        "is": TLType,
+        "is": "ChannelAdminLogEventAction",
     },
     0x42E047BB: {
         "_": "channelAdminLogEventActionDeleteMessage",
         "params": {
             "message": TLType,
         },
-        "is": TLType,
+        "is": "ChannelAdminLogEventAction",
     },
     0x183040D3: {
         "_": "channelAdminLogEventActionParticipantJoin",
-        "is": TLType,
+        "is": "ChannelAdminLogEventAction",
     },
     0xF89777F2: {
         "_": "channelAdminLogEventActionParticipantLeave",
-        "is": TLType,
+        "is": "ChannelAdminLogEventAction",
     },
     0xE31C34D8: {
         "_": "channelAdminLogEventActionParticipantInvite",
         "params": {
             "participant": TLType,
         },
-        "is": TLType,
+        "is": "ChannelAdminLogEventAction",
     },
     0xE6D83D7E: {
         "_": "channelAdminLogEventActionParticipantToggleBan",
@@ -6238,7 +6238,7 @@ MAP = {
             "prev_participant": TLType,
             "new_participant": TLType,
         },
-        "is": TLType,
+        "is": "ChannelAdminLogEventAction",
     },
     0xD5676710: {
         "_": "channelAdminLogEventActionParticipantToggleAdmin",
@@ -6246,7 +6246,7 @@ MAP = {
             "prev_participant": TLType,
             "new_participant": TLType,
         },
-        "is": TLType,
+        "is": "ChannelAdminLogEventAction",
     },
     0xB1C3CAA7: {
         "_": "channelAdminLogEventActionChangeStickerSet",
@@ -6254,14 +6254,14 @@ MAP = {
             "prev_stickerset": TLType,
             "new_stickerset": TLType,
         },
-        "is": TLType,
+        "is": "ChannelAdminLogEventAction",
     },
     0x5F5C95F1: {
         "_": "channelAdminLogEventActionTogglePreHistoryHidden",
         "params": {
             "new_value": bool,
         },
-        "is": TLType,
+        "is": "ChannelAdminLogEventAction",
     },
     0x2DF5FC0A: {
         "_": "channelAdminLogEventActionDefaultBannedRights",
@@ -6269,14 +6269,14 @@ MAP = {
             "prev_banned_rights": TLType,
             "new_banned_rights": TLType,
         },
-        "is": TLType,
+        "is": "ChannelAdminLogEventAction",
     },
     0x8F079643: {
         "_": "channelAdminLogEventActionStopPoll",
         "params": {
             "message": TLType,
         },
-        "is": TLType,
+        "is": "ChannelAdminLogEventAction",
     },
     0x50C7AC8: {
         "_": "channelAdminLogEventActionChangeLinkedChat",
@@ -6284,7 +6284,7 @@ MAP = {
             "prev_value": Int64,
             "new_value": Int64,
         },
-        "is": TLType,
+        "is": "ChannelAdminLogEventAction",
     },
     0xE6B76AE: {
         "_": "channelAdminLogEventActionChangeLocation",
@@ -6292,7 +6292,7 @@ MAP = {
             "prev_value": TLType,
             "new_value": TLType,
         },
-        "is": TLType,
+        "is": "ChannelAdminLogEventAction",
     },
     0x53909779: {
         "_": "channelAdminLogEventActionToggleSlowMode",
@@ -6300,63 +6300,63 @@ MAP = {
             "prev_value": Int32,
             "new_value": Int32,
         },
-        "is": TLType,
+        "is": "ChannelAdminLogEventAction",
     },
     0x23209745: {
         "_": "channelAdminLogEventActionStartGroupCall",
         "params": {
             "call": TLType,
         },
-        "is": TLType,
+        "is": "ChannelAdminLogEventAction",
     },
     0xDB9F9140: {
         "_": "channelAdminLogEventActionDiscardGroupCall",
         "params": {
             "call": TLType,
         },
-        "is": TLType,
+        "is": "ChannelAdminLogEventAction",
     },
     0xF92424D2: {
         "_": "channelAdminLogEventActionParticipantMute",
         "params": {
             "participant": TLType,
         },
-        "is": TLType,
+        "is": "ChannelAdminLogEventAction",
     },
     0xE64429C0: {
         "_": "channelAdminLogEventActionParticipantUnmute",
         "params": {
             "participant": TLType,
         },
-        "is": TLType,
+        "is": "ChannelAdminLogEventAction",
     },
     0x56D6A247: {
         "_": "channelAdminLogEventActionToggleGroupCallSetting",
         "params": {
             "join_muted": bool,
         },
-        "is": TLType,
+        "is": "ChannelAdminLogEventAction",
     },
     0x5CDADA77: {
         "_": "channelAdminLogEventActionParticipantJoinByInvite",
         "params": {
             "invite": TLType,
         },
-        "is": TLType,
+        "is": "ChannelAdminLogEventAction",
     },
     0x5A50FCA4: {
         "_": "channelAdminLogEventActionExportedInviteDelete",
         "params": {
             "invite": TLType,
         },
-        "is": TLType,
+        "is": "ChannelAdminLogEventAction",
     },
     0x410A134E: {
         "_": "channelAdminLogEventActionExportedInviteRevoke",
         "params": {
             "invite": TLType,
         },
-        "is": TLType,
+        "is": "ChannelAdminLogEventAction",
     },
     0xE90EBB59: {
         "_": "channelAdminLogEventActionExportedInviteEdit",
@@ -6364,14 +6364,14 @@ MAP = {
             "prev_invite": TLType,
             "new_invite": TLType,
         },
-        "is": TLType,
+        "is": "ChannelAdminLogEventAction",
     },
     0x3E7F6847: {
         "_": "channelAdminLogEventActionParticipantVolume",
         "params": {
             "participant": TLType,
         },
-        "is": TLType,
+        "is": "ChannelAdminLogEventAction",
     },
     0x6E941A38: {
         "_": "channelAdminLogEventActionChangeHistoryTTL",
@@ -6379,7 +6379,7 @@ MAP = {
             "prev_value": Int32,
             "new_value": Int32,
         },
-        "is": TLType,
+        "is": "ChannelAdminLogEventAction",
     },
     0xAFB6144A: {
         "_": "channelAdminLogEventActionParticipantJoinByRequest",
@@ -6387,21 +6387,21 @@ MAP = {
             "invite": TLType,
             "approved_by": Int64,
         },
-        "is": TLType,
+        "is": "ChannelAdminLogEventAction",
     },
     0xCB2AC766: {
         "_": "channelAdminLogEventActionToggleNoForwards",
         "params": {
             "new_value": bool,
         },
-        "is": TLType,
+        "is": "ChannelAdminLogEventAction",
     },
     0x278F2868: {
         "_": "channelAdminLogEventActionSendMessage",
         "params": {
             "message": TLType,
         },
-        "is": TLType,
+        "is": "ChannelAdminLogEventAction",
     },
     0xBE4E0EF8: {
         "_": "channelAdminLogEventActionChangeAvailableReactions",
@@ -6409,7 +6409,7 @@ MAP = {
             "prev_value": TLType,
             "new_value": TLType,
         },
-        "is": TLType,
+        "is": "ChannelAdminLogEventAction",
     },
     0xF04FB3A9: {
         "_": "channelAdminLogEventActionChangeUsernames",
@@ -6417,21 +6417,21 @@ MAP = {
             "prev_value": list[str],
             "new_value": list[str],
         },
-        "is": TLType,
+        "is": "ChannelAdminLogEventAction",
     },
     0x2CC6383: {
         "_": "channelAdminLogEventActionToggleForum",
         "params": {
             "new_value": bool,
         },
-        "is": TLType,
+        "is": "ChannelAdminLogEventAction",
     },
     0x58707D28: {
         "_": "channelAdminLogEventActionCreateTopic",
         "params": {
             "topic": TLType,
         },
-        "is": TLType,
+        "is": "ChannelAdminLogEventAction",
     },
     0xF06FE208: {
         "_": "channelAdminLogEventActionEditTopic",
@@ -6439,14 +6439,14 @@ MAP = {
             "prev_topic": TLType,
             "new_topic": TLType,
         },
-        "is": TLType,
+        "is": "ChannelAdminLogEventAction",
     },
     0xAE168909: {
         "_": "channelAdminLogEventActionDeleteTopic",
         "params": {
             "topic": TLType,
         },
-        "is": TLType,
+        "is": "ChannelAdminLogEventAction",
     },
     0x5D8D353B: {
         "_": "channelAdminLogEventActionPinTopic",
@@ -6455,14 +6455,14 @@ MAP = {
             "prev_topic": FlagsOf("flags", 0, TLType),
             "new_topic": FlagsOf("flags", 1, TLType),
         },
-        "is": TLType,
+        "is": "ChannelAdminLogEventAction",
     },
     0x64F36DFC: {
         "_": "channelAdminLogEventActionToggleAntiSpam",
         "params": {
             "new_value": bool,
         },
-        "is": TLType,
+        "is": "ChannelAdminLogEventAction",
     },
     0x1FAD68CD: {
         "_": "channelAdminLogEvent",
@@ -6472,7 +6472,7 @@ MAP = {
             "user_id": Int64,
             "action": TLType,
         },
-        "is": TLType,
+        "is": "ChannelAdminLogEvent",
     },
     0xED8AF74D: {
         "_": "channels.adminLogResults",
@@ -6481,7 +6481,7 @@ MAP = {
             "chats": list["Chat"],
             "users": list["User"],
         },
-        "is": TLType,
+        "is": "channels.AdminLogResults",
     },
     0xEA107AE4: {
         "_": "channelAdminLogEventsFilter",
@@ -6506,7 +6506,7 @@ MAP = {
             "send": FlagsOf("flags", 16, Bit),
             "forums": FlagsOf("flags", 17, Bit),
         },
-        "is": TLType,
+        "is": "ChannelAdminLogEventsFilter",
     },
     0x5CE14175: {
         "_": "popularContact",
@@ -6514,11 +6514,11 @@ MAP = {
             "client_id": Int64,
             "importers": Int32,
         },
-        "is": TLType,
+        "is": "PopularContact",
     },
     0x9E8FA6D3: {
         "_": "messages.favedStickersNotModified",
-        "is": TLType,
+        "is": "messages.FavedStickers",
     },
     0x2CB51097: {
         "_": "messages.favedStickers",
@@ -6527,14 +6527,14 @@ MAP = {
             "packs": list["StickerPack"],
             "stickers": list["Document"],
         },
-        "is": TLType,
+        "is": "messages.FavedStickers",
     },
     0x46E1D13D: {
         "_": "recentMeUrlUnknown",
         "params": {
             "url": str,
         },
-        "is": TLType,
+        "is": "RecentMeUrl",
     },
     0xB92C09E2: {
         "_": "recentMeUrlUser",
@@ -6542,7 +6542,7 @@ MAP = {
             "url": str,
             "user_id": Int64,
         },
-        "is": TLType,
+        "is": "RecentMeUrl",
     },
     0xB2DA71D2: {
         "_": "recentMeUrlChat",
@@ -6550,7 +6550,7 @@ MAP = {
             "url": str,
             "chat_id": Int64,
         },
-        "is": TLType,
+        "is": "RecentMeUrl",
     },
     0xEB49081D: {
         "_": "recentMeUrlChatInvite",
@@ -6558,7 +6558,7 @@ MAP = {
             "url": str,
             "chat_invite": TLType,
         },
-        "is": TLType,
+        "is": "RecentMeUrl",
     },
     0xBC0A57DC: {
         "_": "recentMeUrlStickerSet",
@@ -6566,7 +6566,7 @@ MAP = {
             "url": str,
             "set": TLType,
         },
-        "is": TLType,
+        "is": "RecentMeUrl",
     },
     0xE0310D7: {
         "_": "help.recentMeUrls",
@@ -6575,7 +6575,7 @@ MAP = {
             "chats": list["Chat"],
             "users": list["User"],
         },
-        "is": TLType,
+        "is": "help.RecentMeUrls",
     },
     0x1CC6E91F: {
         "_": "inputSingleMedia",
@@ -6586,7 +6586,7 @@ MAP = {
             "message": str,
             "entities": FlagsOf("flags", 0, list["MessageEntity"]),
         },
-        "is": TLType,
+        "is": "InputSingleMedia",
     },
     0xA6F8F452: {
         "_": "webAuthorization",
@@ -6601,7 +6601,7 @@ MAP = {
             "ip": str,
             "region": str,
         },
-        "is": TLType,
+        "is": "WebAuthorization",
     },
     0xED56C9FC: {
         "_": "account.webAuthorizations",
@@ -6609,25 +6609,25 @@ MAP = {
             "authorizations": list["WebAuthorization"],
             "users": list["User"],
         },
-        "is": TLType,
+        "is": "account.WebAuthorizations",
     },
     0xA676A322: {
         "_": "inputMessageID",
         "params": {
             "id": Int32,
         },
-        "is": TLType,
+        "is": "InputMessage",
     },
     0xBAD88395: {
         "_": "inputMessageReplyTo",
         "params": {
             "id": Int32,
         },
-        "is": TLType,
+        "is": "InputMessage",
     },
     0x86872538: {
         "_": "inputMessagePinned",
-        "is": TLType,
+        "is": "InputMessage",
     },
     0xACFA1A7E: {
         "_": "inputMessageCallbackQuery",
@@ -6635,39 +6635,39 @@ MAP = {
             "id": Int32,
             "query_id": Int64,
         },
-        "is": TLType,
+        "is": "InputMessage",
     },
     0xFCAAFEB7: {
         "_": "inputDialogPeer",
         "params": {
             "peer": TLType,
         },
-        "is": TLType,
+        "is": "InputDialogPeer",
     },
     0x64600527: {
         "_": "inputDialogPeerFolder",
         "params": {
             "folder_id": Int32,
         },
-        "is": TLType,
+        "is": "InputDialogPeer",
     },
     0xE56DBF05: {
         "_": "dialogPeer",
         "params": {
             "peer": TLType,
         },
-        "is": TLType,
+        "is": "DialogPeer",
     },
     0x514519E2: {
         "_": "dialogPeerFolder",
         "params": {
             "folder_id": Int32,
         },
-        "is": TLType,
+        "is": "DialogPeer",
     },
     0xD54B65D: {
         "_": "messages.foundStickerSetsNotModified",
-        "is": TLType,
+        "is": "messages.FoundStickerSets",
     },
     0x8AF09DD2: {
         "_": "messages.foundStickerSets",
@@ -6675,7 +6675,7 @@ MAP = {
             "hash": Int64,
             "sets": list["StickerSetCovered"],
         },
-        "is": TLType,
+        "is": "messages.FoundStickerSets",
     },
     0xF39B035C: {
         "_": "fileHash",
@@ -6684,7 +6684,7 @@ MAP = {
             "limit": Int32,
             "hash": bytes,
         },
-        "is": TLType,
+        "is": "FileHash",
     },
     0x75588B3F: {
         "_": "inputClientProxy",
@@ -6692,14 +6692,14 @@ MAP = {
             "address": str,
             "port": Int32,
         },
-        "is": TLType,
+        "is": "InputClientProxy",
     },
     0xE3309F7F: {
         "_": "help.termsOfServiceUpdateEmpty",
         "params": {
             "expires": Int32,
         },
-        "is": TLType,
+        "is": "help.TermsOfServiceUpdate",
     },
     0x28ECF961: {
         "_": "help.termsOfServiceUpdate",
@@ -6707,7 +6707,7 @@ MAP = {
             "expires": Int32,
             "terms_of_service": TLType,
         },
-        "is": TLType,
+        "is": "help.TermsOfServiceUpdate",
     },
     0x3334B0F0: {
         "_": "inputSecureFileUploaded",
@@ -6718,7 +6718,7 @@ MAP = {
             "file_hash": bytes,
             "secret": bytes,
         },
-        "is": TLType,
+        "is": "InputSecureFile",
     },
     0x5367E5BE: {
         "_": "inputSecureFile",
@@ -6726,11 +6726,11 @@ MAP = {
             "id": Int64,
             "access_hash": Int64,
         },
-        "is": TLType,
+        "is": "InputSecureFile",
     },
     0x64199744: {
         "_": "secureFileEmpty",
-        "is": TLType,
+        "is": "SecureFile",
     },
     0x7D09C27E: {
         "_": "secureFile",
@@ -6743,7 +6743,7 @@ MAP = {
             "file_hash": bytes,
             "secret": bytes,
         },
-        "is": TLType,
+        "is": "SecureFile",
     },
     0x8AEABEC3: {
         "_": "secureData",
@@ -6752,73 +6752,73 @@ MAP = {
             "data_hash": bytes,
             "secret": bytes,
         },
-        "is": TLType,
+        "is": "SecureData",
     },
     0x7D6099DD: {
         "_": "securePlainPhone",
         "params": {
             "phone": str,
         },
-        "is": TLType,
+        "is": "SecurePlainData",
     },
     0x21EC5A5F: {
         "_": "securePlainEmail",
         "params": {
             "email": str,
         },
-        "is": TLType,
+        "is": "SecurePlainData",
     },
     0x9D2A81E3: {
         "_": "secureValueTypePersonalDetails",
-        "is": TLType,
+        "is": "SecureValueType",
     },
     0x3DAC6A00: {
         "_": "secureValueTypePassport",
-        "is": TLType,
+        "is": "SecureValueType",
     },
     0x6E425C4: {
         "_": "secureValueTypeDriverLicense",
-        "is": TLType,
+        "is": "SecureValueType",
     },
     0xA0D0744B: {
         "_": "secureValueTypeIdentityCard",
-        "is": TLType,
+        "is": "SecureValueType",
     },
     0x99A48F23: {
         "_": "secureValueTypeInternalPassport",
-        "is": TLType,
+        "is": "SecureValueType",
     },
     0xCBE31E26: {
         "_": "secureValueTypeAddress",
-        "is": TLType,
+        "is": "SecureValueType",
     },
     0xFC36954E: {
         "_": "secureValueTypeUtilityBill",
-        "is": TLType,
+        "is": "SecureValueType",
     },
     0x89137C0D: {
         "_": "secureValueTypeBankStatement",
-        "is": TLType,
+        "is": "SecureValueType",
     },
     0x8B883488: {
         "_": "secureValueTypeRentalAgreement",
-        "is": TLType,
+        "is": "SecureValueType",
     },
     0x99E3806A: {
         "_": "secureValueTypePassportRegistration",
-        "is": TLType,
+        "is": "SecureValueType",
     },
     0xEA02EC33: {
         "_": "secureValueTypeTemporaryRegistration",
-        "is": TLType,
+        "is": "SecureValueType",
     },
     0xB320AADB: {
         "_": "secureValueTypePhone",
-        "is": TLType,
+        "is": "SecureValueType",
     },
     0x8E3CA7EE: {
         "_": "secureValueTypeEmail",
-        "is": TLType,
+        "is": "SecureValueType",
     },
     0x187FA0CA: {
         "_": "secureValue",
@@ -6834,7 +6834,7 @@ MAP = {
             "plain_data": FlagsOf("flags", 5, TLType),
             "hash": bytes,
         },
-        "is": TLType,
+        "is": "SecureValue",
     },
     0xDB21D0A7: {
         "_": "inputSecureValue",
@@ -6849,7 +6849,7 @@ MAP = {
             "files": FlagsOf("flags", 4, list["InputSecureFile"]),
             "plain_data": FlagsOf("flags", 5, TLType),
         },
-        "is": TLType,
+        "is": "InputSecureValue",
     },
     0xED1ECDB0: {
         "_": "secureValueHash",
@@ -6857,7 +6857,7 @@ MAP = {
             "type": TLType,
             "hash": bytes,
         },
-        "is": TLType,
+        "is": "SecureValueHash",
     },
     0xE8A40BD9: {
         "_": "secureValueErrorData",
@@ -6867,7 +6867,7 @@ MAP = {
             "field": str,
             "text": str,
         },
-        "is": TLType,
+        "is": "SecureValueError",
     },
     0xBE3DFA: {
         "_": "secureValueErrorFrontSide",
@@ -6876,7 +6876,7 @@ MAP = {
             "file_hash": bytes,
             "text": str,
         },
-        "is": TLType,
+        "is": "SecureValueError",
     },
     0x868A2AA5: {
         "_": "secureValueErrorReverseSide",
@@ -6885,7 +6885,7 @@ MAP = {
             "file_hash": bytes,
             "text": str,
         },
-        "is": TLType,
+        "is": "SecureValueError",
     },
     0xE537CED6: {
         "_": "secureValueErrorSelfie",
@@ -6894,7 +6894,7 @@ MAP = {
             "file_hash": bytes,
             "text": str,
         },
-        "is": TLType,
+        "is": "SecureValueError",
     },
     0x7A700873: {
         "_": "secureValueErrorFile",
@@ -6903,7 +6903,7 @@ MAP = {
             "file_hash": bytes,
             "text": str,
         },
-        "is": TLType,
+        "is": "SecureValueError",
     },
     0x666220E9: {
         "_": "secureValueErrorFiles",
@@ -6912,7 +6912,7 @@ MAP = {
             "file_hash": list[bytes],
             "text": str,
         },
-        "is": TLType,
+        "is": "SecureValueError",
     },
     0x869D758F: {
         "_": "secureValueError",
@@ -6921,7 +6921,7 @@ MAP = {
             "hash": bytes,
             "text": str,
         },
-        "is": TLType,
+        "is": "SecureValueError",
     },
     0xA1144770: {
         "_": "secureValueErrorTranslationFile",
@@ -6930,7 +6930,7 @@ MAP = {
             "file_hash": bytes,
             "text": str,
         },
-        "is": TLType,
+        "is": "SecureValueError",
     },
     0x34636DD8: {
         "_": "secureValueErrorTranslationFiles",
@@ -6939,7 +6939,7 @@ MAP = {
             "file_hash": list[bytes],
             "text": str,
         },
-        "is": TLType,
+        "is": "SecureValueError",
     },
     0x33F0EA47: {
         "_": "secureCredentialsEncrypted",
@@ -6948,7 +6948,7 @@ MAP = {
             "hash": bytes,
             "secret": bytes,
         },
-        "is": TLType,
+        "is": "SecureCredentialsEncrypted",
     },
     0xAD2E1CD8: {
         "_": "account.authorizationForm",
@@ -6960,7 +6960,7 @@ MAP = {
             "users": list["User"],
             "privacy_policy_url": FlagsOf("flags", 0, str),
         },
-        "is": TLType,
+        "is": "account.AuthorizationForm",
     },
     0x811F854F: {
         "_": "account.sentEmailCode",
@@ -6968,11 +6968,11 @@ MAP = {
             "email_pattern": str,
             "length": Int32,
         },
-        "is": TLType,
+        "is": "account.SentEmailCode",
     },
     0x66AFA166: {
         "_": "help.deepLinkInfoEmpty",
-        "is": TLType,
+        "is": "help.DeepLinkInfo",
     },
     0x6A4EE832: {
         "_": "help.deepLinkInfo",
@@ -6982,7 +6982,7 @@ MAP = {
             "message": str,
             "entities": FlagsOf("flags", 1, list["MessageEntity"]),
         },
-        "is": TLType,
+        "is": "help.DeepLinkInfo",
     },
     0x1142BD56: {
         "_": "savedPhoneContact",
@@ -6992,18 +6992,18 @@ MAP = {
             "last_name": str,
             "date": Int32,
         },
-        "is": TLType,
+        "is": "SavedContact",
     },
     0x4DBA4501: {
         "_": "account.takeout",
         "params": {
             "id": Int64,
         },
-        "is": TLType,
+        "is": "account.Takeout",
     },
     0xD45AB096: {
         "_": "passwordKdfAlgoUnknown",
-        "is": TLType,
+        "is": "PasswordKdfAlgo",
     },
     0x3A912D4A: {
         "_": "passwordKdfAlgoSHA256SHA256PBKDF2HMACSHA512iter100000SHA256ModPow",
@@ -7013,25 +7013,25 @@ MAP = {
             "g": Int32,
             "p": bytes,
         },
-        "is": TLType,
+        "is": "PasswordKdfAlgo",
     },
     0x4A8537: {
         "_": "securePasswordKdfAlgoUnknown",
-        "is": TLType,
+        "is": "SecurePasswordKdfAlgo",
     },
     0xBBF2DDA0: {
         "_": "securePasswordKdfAlgoPBKDF2HMACSHA512iter100000",
         "params": {
             "salt": bytes,
         },
-        "is": TLType,
+        "is": "SecurePasswordKdfAlgo",
     },
     0x86471D92: {
         "_": "securePasswordKdfAlgoSHA512",
         "params": {
             "salt": bytes,
         },
-        "is": TLType,
+        "is": "SecurePasswordKdfAlgo",
     },
     0x1527BCAC: {
         "_": "secureSecretSettings",
@@ -7040,11 +7040,11 @@ MAP = {
             "secure_secret": bytes,
             "secure_secret_id": Int64,
         },
-        "is": TLType,
+        "is": "SecureSecretSettings",
     },
     0x9880F658: {
         "_": "inputCheckPasswordEmpty",
-        "is": TLType,
+        "is": "InputCheckPasswordSRP",
     },
     0xD27FF082: {
         "_": "inputCheckPasswordSRP",
@@ -7053,7 +7053,7 @@ MAP = {
             "A": bytes,
             "M1": bytes,
         },
-        "is": TLType,
+        "is": "InputCheckPasswordSRP",
     },
     0x829D99DA: {
         "_": "secureRequiredType",
@@ -7064,18 +7064,18 @@ MAP = {
             "translation_required": FlagsOf("flags", 2, Bit),
             "type": TLType,
         },
-        "is": TLType,
+        "is": "SecureRequiredType",
     },
     0x27477B4: {
         "_": "secureRequiredTypeOneOf",
         "params": {
             "types": list["SecureRequiredType"],
         },
-        "is": TLType,
+        "is": "SecureRequiredType",
     },
     0xBFB9F457: {
         "_": "help.passportConfigNotModified",
-        "is": TLType,
+        "is": "help.PassportConfig",
     },
     0xA098D6AF: {
         "_": "help.passportConfig",
@@ -7083,7 +7083,7 @@ MAP = {
             "hash": Int32,
             "countries_langs": TLType,
         },
-        "is": TLType,
+        "is": "help.PassportConfig",
     },
     0x1D1B1245: {
         "_": "inputAppEvent",
@@ -7093,7 +7093,7 @@ MAP = {
             "peer": Int64,
             "data": TLType,
         },
-        "is": TLType,
+        "is": "InputAppEvent",
     },
     0xC0DE1BD9: {
         "_": "jsonObjectValue",
@@ -7101,46 +7101,46 @@ MAP = {
             "key": str,
             "value": TLType,
         },
-        "is": TLType,
+        "is": "JSONObjectValue",
     },
     0x3F6D7B68: {
         "_": "jsonNull",
-        "is": TLType,
+        "is": "JSONValue",
     },
     0xC7345E6A: {
         "_": "jsonBool",
         "params": {
             "value": bool,
         },
-        "is": TLType,
+        "is": "JSONValue",
     },
     0x2BE0DFA4: {
         "_": "jsonNumber",
         "params": {
             "value": TLType,
         },
-        "is": TLType,
+        "is": "JSONValue",
     },
     0xB71E767A: {
         "_": "jsonString",
         "params": {
             "value": str,
         },
-        "is": TLType,
+        "is": "JSONValue",
     },
     0xF7444763: {
         "_": "jsonArray",
         "params": {
             "value": list["JSONValue"],
         },
-        "is": TLType,
+        "is": "JSONValue",
     },
     0x99C1D49D: {
         "_": "jsonObject",
         "params": {
             "value": list["JSONObjectValue"],
         },
-        "is": TLType,
+        "is": "JSONValue",
     },
     0x34566B6A: {
         "_": "pageTableCell",
@@ -7155,14 +7155,14 @@ MAP = {
             "colspan": FlagsOf("flags", 1, Int32),
             "rowspan": FlagsOf("flags", 2, Int32),
         },
-        "is": TLType,
+        "is": "PageTableCell",
     },
     0xE0C0C5E5: {
         "_": "pageTableRow",
         "params": {
             "cells": list["PageTableCell"],
         },
-        "is": TLType,
+        "is": "PageTableRow",
     },
     0x6F747657: {
         "_": "pageCaption",
@@ -7170,21 +7170,21 @@ MAP = {
             "text": TLType,
             "credit": TLType,
         },
-        "is": TLType,
+        "is": "PageCaption",
     },
     0xB92FB6CD: {
         "_": "pageListItemText",
         "params": {
             "text": TLType,
         },
-        "is": TLType,
+        "is": "PageListItem",
     },
     0x25E073FC: {
         "_": "pageListItemBlocks",
         "params": {
             "blocks": list["PageBlock"],
         },
-        "is": TLType,
+        "is": "PageListItem",
     },
     0x5E068047: {
         "_": "pageListOrderedItemText",
@@ -7192,7 +7192,7 @@ MAP = {
             "num": str,
             "text": TLType,
         },
-        "is": TLType,
+        "is": "PageListOrderedItem",
     },
     0x98DD8936: {
         "_": "pageListOrderedItemBlocks",
@@ -7200,7 +7200,7 @@ MAP = {
             "num": str,
             "blocks": list["PageBlock"],
         },
-        "is": TLType,
+        "is": "PageListOrderedItem",
     },
     0xB390DC08: {
         "_": "pageRelatedArticle",
@@ -7214,7 +7214,7 @@ MAP = {
             "author": FlagsOf("flags", 3, str),
             "published_date": FlagsOf("flags", 4, Int32),
         },
-        "is": TLType,
+        "is": "PageRelatedArticle",
     },
     0x98657F0D: {
         "_": "page",
@@ -7229,18 +7229,18 @@ MAP = {
             "documents": list["Document"],
             "views": FlagsOf("flags", 3, Int32),
         },
-        "is": TLType,
+        "is": "Page",
     },
     0x8C05F1C9: {
         "_": "help.supportName",
         "params": {
             "name": str,
         },
-        "is": TLType,
+        "is": "help.SupportName",
     },
     0xF3AE2EED: {
         "_": "help.userInfoEmpty",
-        "is": TLType,
+        "is": "help.UserInfo",
     },
     0x1EB3758: {
         "_": "help.userInfo",
@@ -7250,7 +7250,7 @@ MAP = {
             "author": str,
             "date": Int32,
         },
-        "is": TLType,
+        "is": "help.UserInfo",
     },
     0x6CA9C2E9: {
         "_": "pollAnswer",
@@ -7258,7 +7258,7 @@ MAP = {
             "text": str,
             "option": bytes,
         },
-        "is": TLType,
+        "is": "PollAnswer",
     },
     0x86E18161: {
         "_": "poll",
@@ -7274,7 +7274,7 @@ MAP = {
             "close_period": FlagsOf("flags", 4, Int32),
             "close_date": FlagsOf("flags", 5, Int32),
         },
-        "is": TLType,
+        "is": "Poll",
     },
     0x3B6DDAD2: {
         "_": "pollAnswerVoters",
@@ -7285,7 +7285,7 @@ MAP = {
             "option": bytes,
             "voters": Int32,
         },
-        "is": TLType,
+        "is": "PollAnswerVoters",
     },
     0xDCB82EA3: {
         "_": "pollResults",
@@ -7298,21 +7298,21 @@ MAP = {
             "solution": FlagsOf("flags", 4, str),
             "solution_entities": FlagsOf("flags", 4, list["MessageEntity"]),
         },
-        "is": TLType,
+        "is": "PollResults",
     },
     0xF041E250: {
         "_": "chatOnlines",
         "params": {
             "onlines": Int32,
         },
-        "is": TLType,
+        "is": "ChatOnlines",
     },
     0x47A971E0: {
         "_": "statsURL",
         "params": {
             "url": str,
         },
-        "is": TLType,
+        "is": "StatsURL",
     },
     0x5FB224D5: {
         "_": "chatAdminRights",
@@ -7331,7 +7331,7 @@ MAP = {
             "other": FlagsOf("flags", 12, Bit),
             "manage_topics": FlagsOf("flags", 13, Bit),
         },
-        "is": TLType,
+        "is": "ChatAdminRights",
     },
     0x9F120418: {
         "_": "chatBannedRights",
@@ -7352,7 +7352,7 @@ MAP = {
             "manage_topics": FlagsOf("flags", 18, Bit),
             "until_date": Int32,
         },
-        "is": TLType,
+        "is": "ChatBannedRights",
     },
     0xE630B979: {
         "_": "inputWallPaper",
@@ -7360,25 +7360,25 @@ MAP = {
             "id": Int64,
             "access_hash": Int64,
         },
-        "is": TLType,
+        "is": "InputWallPaper",
     },
     0x72091C80: {
         "_": "inputWallPaperSlug",
         "params": {
             "slug": str,
         },
-        "is": TLType,
+        "is": "InputWallPaper",
     },
     0x967A462E: {
         "_": "inputWallPaperNoFile",
         "params": {
             "id": Int64,
         },
-        "is": TLType,
+        "is": "InputWallPaper",
     },
     0x1C199183: {
         "_": "account.wallPapersNotModified",
-        "is": TLType,
+        "is": "account.WallPapers",
     },
     0xCDC3858C: {
         "_": "account.wallPapers",
@@ -7386,7 +7386,7 @@ MAP = {
             "hash": Int64,
             "wallpapers": list["WallPaper"],
         },
-        "is": TLType,
+        "is": "account.WallPapers",
     },
     0x8A6469C2: {
         "_": "codeSettings",
@@ -7398,7 +7398,7 @@ MAP = {
             "allow_missed_call": FlagsOf("flags", 5, Bit),
             "logout_tokens": FlagsOf("flags", 6, list[bytes]),
         },
-        "is": TLType,
+        "is": "CodeSettings",
     },
     0x1DC1BCA4: {
         "_": "wallPaperSettings",
@@ -7413,7 +7413,7 @@ MAP = {
             "intensity": FlagsOf("flags", 3, Int32),
             "rotation": FlagsOf("flags", 4, Int32),
         },
-        "is": TLType,
+        "is": "WallPaperSettings",
     },
     0x8EFAB953: {
         "_": "autoDownloadSettings",
@@ -7428,7 +7428,7 @@ MAP = {
             "file_size_max": Int64,
             "video_upload_maxbitrate": Int32,
         },
-        "is": TLType,
+        "is": "AutoDownloadSettings",
     },
     0x63CACF26: {
         "_": "account.autoDownloadSettings",
@@ -7437,7 +7437,7 @@ MAP = {
             "medium": TLType,
             "high": TLType,
         },
-        "is": TLType,
+        "is": "account.AutoDownloadSettings",
     },
     0xD5B3B9F9: {
         "_": "emojiKeyword",
@@ -7445,7 +7445,7 @@ MAP = {
             "keyword": str,
             "emoticons": list[str],
         },
-        "is": TLType,
+        "is": "EmojiKeyword",
     },
     0x236DF622: {
         "_": "emojiKeywordDeleted",
@@ -7453,7 +7453,7 @@ MAP = {
             "keyword": str,
             "emoticons": list[str],
         },
-        "is": TLType,
+        "is": "EmojiKeyword",
     },
     0x5CC761BD: {
         "_": "emojiKeywordsDifference",
@@ -7463,21 +7463,21 @@ MAP = {
             "version": Int32,
             "keywords": list["EmojiKeyword"],
         },
-        "is": TLType,
+        "is": "EmojiKeywordsDifference",
     },
     0xA575739D: {
         "_": "emojiURL",
         "params": {
             "url": str,
         },
-        "is": TLType,
+        "is": "EmojiURL",
     },
     0xB3FB5361: {
         "_": "emojiLanguage",
         "params": {
             "lang_code": str,
         },
-        "is": TLType,
+        "is": "EmojiLanguage",
     },
     0xFF544E65: {
         "_": "folder",
@@ -7490,7 +7490,7 @@ MAP = {
             "title": str,
             "photo": FlagsOf("flags", 3, TLType),
         },
-        "is": TLType,
+        "is": "Folder",
     },
     0xFBD2C296: {
         "_": "inputFolderPeer",
@@ -7498,7 +7498,7 @@ MAP = {
             "peer": TLType,
             "folder_id": Int32,
         },
-        "is": TLType,
+        "is": "InputFolderPeer",
     },
     0xE9BAA668: {
         "_": "folderPeer",
@@ -7506,7 +7506,7 @@ MAP = {
             "peer": TLType,
             "folder_id": Int32,
         },
-        "is": TLType,
+        "is": "FolderPeer",
     },
     0xE844EBFF: {
         "_": "messages.searchCounter",
@@ -7516,7 +7516,7 @@ MAP = {
             "filter": TLType,
             "count": Int32,
         },
-        "is": TLType,
+        "is": "messages.SearchCounter",
     },
     0x92D33A0E: {
         "_": "urlAuthResultRequest",
@@ -7526,22 +7526,22 @@ MAP = {
             "bot": TLType,
             "domain": str,
         },
-        "is": TLType,
+        "is": "UrlAuthResult",
     },
     0x8F8C0E4E: {
         "_": "urlAuthResultAccepted",
         "params": {
             "url": str,
         },
-        "is": TLType,
+        "is": "UrlAuthResult",
     },
     0xA9D6DB1F: {
         "_": "urlAuthResultDefault",
-        "is": TLType,
+        "is": "UrlAuthResult",
     },
     0xBFB5AD8B: {
         "_": "channelLocationEmpty",
-        "is": TLType,
+        "is": "ChannelLocation",
     },
     0x209B82DB: {
         "_": "channelLocation",
@@ -7549,7 +7549,7 @@ MAP = {
             "geo_point": TLType,
             "address": str,
         },
-        "is": TLType,
+        "is": "ChannelLocation",
     },
     0xCA461B5D: {
         "_": "peerLocated",
@@ -7558,14 +7558,14 @@ MAP = {
             "expires": Int32,
             "distance": Int32,
         },
-        "is": TLType,
+        "is": "PeerLocated",
     },
     0xF8EC284B: {
         "_": "peerSelfLocated",
         "params": {
             "expires": Int32,
         },
-        "is": TLType,
+        "is": "PeerLocated",
     },
     0xD072ACB4: {
         "_": "restrictionReason",
@@ -7574,7 +7574,7 @@ MAP = {
             "reason": str,
             "text": str,
         },
-        "is": TLType,
+        "is": "RestrictionReason",
     },
     0x3C5693E9: {
         "_": "inputTheme",
@@ -7582,14 +7582,14 @@ MAP = {
             "id": Int64,
             "access_hash": Int64,
         },
-        "is": TLType,
+        "is": "InputTheme",
     },
     0xF5890DF1: {
         "_": "inputThemeSlug",
         "params": {
             "slug": str,
         },
-        "is": TLType,
+        "is": "InputTheme",
     },
     0xA00E67D6: {
         "_": "theme",
@@ -7607,11 +7607,11 @@ MAP = {
             "emoticon": FlagsOf("flags", 6, str),
             "installs_count": FlagsOf("flags", 4, Int32),
         },
-        "is": TLType,
+        "is": "Theme",
     },
     0xF41EB622: {
         "_": "account.themesNotModified",
-        "is": TLType,
+        "is": "account.Themes",
     },
     0x9A3D8C6D: {
         "_": "account.themes",
@@ -7619,7 +7619,7 @@ MAP = {
             "hash": Int64,
             "themes": list["Theme"],
         },
-        "is": TLType,
+        "is": "account.Themes",
     },
     0x629F1980: {
         "_": "auth.loginToken",
@@ -7627,7 +7627,7 @@ MAP = {
             "expires": Int32,
             "token": bytes,
         },
-        "is": TLType,
+        "is": "auth.LoginToken",
     },
     0x68E9916: {
         "_": "auth.loginTokenMigrateTo",
@@ -7635,14 +7635,14 @@ MAP = {
             "dc_id": Int32,
             "token": bytes,
         },
-        "is": TLType,
+        "is": "auth.LoginToken",
     },
     0x390D5C5E: {
         "_": "auth.loginTokenSuccess",
         "params": {
             "authorization": TLType,
         },
-        "is": TLType,
+        "is": "auth.LoginToken",
     },
     0x57E28221: {
         "_": "account.contentSettings",
@@ -7651,7 +7651,7 @@ MAP = {
             "sensitive_enabled": FlagsOf("flags", 0, Bit),
             "sensitive_can_change": FlagsOf("flags", 1, Bit),
         },
-        "is": TLType,
+        "is": "account.ContentSettings",
     },
     0xA927FEC5: {
         "_": "messages.inactiveChats",
@@ -7660,27 +7660,27 @@ MAP = {
             "chats": list["Chat"],
             "users": list["User"],
         },
-        "is": TLType,
+        "is": "messages.InactiveChats",
     },
     0xC3A12462: {
         "_": "baseThemeClassic",
-        "is": TLType,
+        "is": "BaseTheme",
     },
     0xFBD81688: {
         "_": "baseThemeDay",
-        "is": TLType,
+        "is": "BaseTheme",
     },
     0xB7B31EA8: {
         "_": "baseThemeNight",
-        "is": TLType,
+        "is": "BaseTheme",
     },
     0x6D5F77EE: {
         "_": "baseThemeTinted",
-        "is": TLType,
+        "is": "BaseTheme",
     },
     0x5B11125A: {
         "_": "baseThemeArctic",
-        "is": TLType,
+        "is": "BaseTheme",
     },
     0x8FDE504F: {
         "_": "inputThemeSettings",
@@ -7694,7 +7694,7 @@ MAP = {
             "wallpaper": FlagsOf("flags", 1, TLType),
             "wallpaper_settings": FlagsOf("flags", 1, TLType),
         },
-        "is": TLType,
+        "is": "InputThemeSettings",
     },
     0xFA58B6D4: {
         "_": "themeSettings",
@@ -7707,7 +7707,7 @@ MAP = {
             "message_colors": FlagsOf("flags", 0, list[Int32]),
             "wallpaper": FlagsOf("flags", 1, TLType),
         },
-        "is": TLType,
+        "is": "ThemeSettings",
     },
     0x54B56617: {
         "_": "webPageAttributeTheme",
@@ -7716,7 +7716,7 @@ MAP = {
             "documents": FlagsOf("flags", 0, list["Document"]),
             "settings": FlagsOf("flags", 1, TLType),
         },
-        "is": TLType,
+        "is": "WebPageAttribute",
     },
     0x34D247B4: {
         "_": "messageUserVote",
@@ -7725,7 +7725,7 @@ MAP = {
             "option": bytes,
             "date": Int32,
         },
-        "is": TLType,
+        "is": "MessageUserVote",
     },
     0x3CA5B0EC: {
         "_": "messageUserVoteInputOption",
@@ -7733,7 +7733,7 @@ MAP = {
             "user_id": Int64,
             "date": Int32,
         },
-        "is": TLType,
+        "is": "MessageUserVote",
     },
     0x8A65E557: {
         "_": "messageUserVoteMultiple",
@@ -7742,7 +7742,7 @@ MAP = {
             "options": list[bytes],
             "date": Int32,
         },
-        "is": TLType,
+        "is": "MessageUserVote",
     },
     0x823F649: {
         "_": "messages.votesList",
@@ -7753,7 +7753,7 @@ MAP = {
             "users": list["User"],
             "next_offset": FlagsOf("flags", 0, str),
         },
-        "is": TLType,
+        "is": "messages.VotesList",
     },
     0xF568028A: {
         "_": "bankCardOpenUrl",
@@ -7761,7 +7761,7 @@ MAP = {
             "url": str,
             "name": str,
         },
-        "is": TLType,
+        "is": "BankCardOpenUrl",
     },
     0x3E24E573: {
         "_": "payments.bankCardData",
@@ -7769,7 +7769,7 @@ MAP = {
             "title": str,
             "open_urls": list["BankCardOpenUrl"],
         },
-        "is": TLType,
+        "is": "payments.BankCardData",
     },
     0x7438F7E8: {
         "_": "dialogFilter",
@@ -7790,11 +7790,11 @@ MAP = {
             "include_peers": list["InputPeer"],
             "exclude_peers": list["InputPeer"],
         },
-        "is": TLType,
+        "is": "DialogFilter",
     },
     0x363293AE: {
         "_": "dialogFilterDefault",
-        "is": TLType,
+        "is": "DialogFilter",
     },
     0x77744D4A: {
         "_": "dialogFilterSuggested",
@@ -7802,7 +7802,7 @@ MAP = {
             "filter": TLType,
             "description": str,
         },
-        "is": TLType,
+        "is": "DialogFilterSuggested",
     },
     0xB637EDAF: {
         "_": "statsDateRangeDays",
@@ -7810,7 +7810,7 @@ MAP = {
             "min_date": Int32,
             "max_date": Int32,
         },
-        "is": TLType,
+        "is": "StatsDateRangeDays",
     },
     0xCB43ACDE: {
         "_": "statsAbsValueAndPrev",
@@ -7818,7 +7818,7 @@ MAP = {
             "current": TLType,
             "previous": TLType,
         },
-        "is": TLType,
+        "is": "StatsAbsValueAndPrev",
     },
     0xCBCE2FE0: {
         "_": "statsPercentValue",
@@ -7826,21 +7826,21 @@ MAP = {
             "part": TLType,
             "total": TLType,
         },
-        "is": TLType,
+        "is": "StatsPercentValue",
     },
     0x4A27EB2D: {
         "_": "statsGraphAsync",
         "params": {
             "token": str,
         },
-        "is": TLType,
+        "is": "StatsGraph",
     },
     0xBEDC9822: {
         "_": "statsGraphError",
         "params": {
             "error": str,
         },
-        "is": TLType,
+        "is": "StatsGraph",
     },
     0x8EA464B6: {
         "_": "statsGraph",
@@ -7849,7 +7849,7 @@ MAP = {
             "json": TLType,
             "zoom_token": FlagsOf("flags", 0, str),
         },
-        "is": TLType,
+        "is": "StatsGraph",
     },
     0xAD4FC9BD: {
         "_": "messageInteractionCounters",
@@ -7858,7 +7858,7 @@ MAP = {
             "views": Int32,
             "forwards": Int32,
         },
-        "is": TLType,
+        "is": "MessageInteractionCounters",
     },
     0xBDF78394: {
         "_": "stats.broadcastStats",
@@ -7879,14 +7879,14 @@ MAP = {
             "languages_graph": TLType,
             "recent_message_interactions": list["MessageInteractionCounters"],
         },
-        "is": TLType,
+        "is": "stats.BroadcastStats",
     },
     0x98F6AC75: {
         "_": "help.promoDataEmpty",
         "params": {
             "expires": Int32,
         },
-        "is": TLType,
+        "is": "help.PromoData",
     },
     0x8C39793F: {
         "_": "help.promoData",
@@ -7900,7 +7900,7 @@ MAP = {
             "psa_type": FlagsOf("flags", 1, str),
             "psa_message": FlagsOf("flags", 2, str),
         },
-        "is": TLType,
+        "is": "help.PromoData",
     },
     0xDE33B094: {
         "_": "videoSize",
@@ -7912,7 +7912,7 @@ MAP = {
             "size": Int32,
             "video_start_ts": FlagsOf("flags", 0, TLType),
         },
-        "is": TLType,
+        "is": "VideoSize",
     },
     0x9D04AF9B: {
         "_": "statsGroupTopPoster",
@@ -7921,7 +7921,7 @@ MAP = {
             "messages": Int32,
             "avg_chars": Int32,
         },
-        "is": TLType,
+        "is": "StatsGroupTopPoster",
     },
     0xD7584C87: {
         "_": "statsGroupTopAdmin",
@@ -7931,7 +7931,7 @@ MAP = {
             "kicked": Int32,
             "banned": Int32,
         },
-        "is": TLType,
+        "is": "StatsGroupTopAdmin",
     },
     0x535F779D: {
         "_": "statsGroupTopInviter",
@@ -7939,7 +7939,7 @@ MAP = {
             "user_id": Int64,
             "invitations": Int32,
         },
-        "is": TLType,
+        "is": "StatsGroupTopInviter",
     },
     0xEF7FF916: {
         "_": "stats.megagroupStats",
@@ -7962,7 +7962,7 @@ MAP = {
             "top_inviters": list["StatsGroupTopInviter"],
             "users": list["User"],
         },
-        "is": TLType,
+        "is": "stats.MegagroupStats",
     },
     0xBEA2F424: {
         "_": "globalPrivacySettings",
@@ -7970,7 +7970,7 @@ MAP = {
             "flags": Int32,
             "archive_and_mute_new_noncontact_peers": FlagsOf("flags", 0, bool),
         },
-        "is": TLType,
+        "is": "GlobalPrivacySettings",
     },
     0x4203C5EF: {
         "_": "help.countryCode",
@@ -7980,7 +7980,7 @@ MAP = {
             "prefixes": FlagsOf("flags", 0, list[str]),
             "patterns": FlagsOf("flags", 1, list[str]),
         },
-        "is": TLType,
+        "is": "help.CountryCode",
     },
     0xC3878E23: {
         "_": "help.country",
@@ -7992,11 +7992,11 @@ MAP = {
             "name": FlagsOf("flags", 1, str),
             "country_codes": list["help"],
         },
-        "is": TLType,
+        "is": "help.Country",
     },
     0x93CC1F32: {
         "_": "help.countriesListNotModified",
-        "is": TLType,
+        "is": "help.CountriesList",
     },
     0x87D0759E: {
         "_": "help.countriesList",
@@ -8004,7 +8004,7 @@ MAP = {
             "countries": list["help"],
             "hash": Int32,
         },
-        "is": TLType,
+        "is": "help.CountriesList",
     },
     0x455B853D: {
         "_": "messageViews",
@@ -8014,7 +8014,7 @@ MAP = {
             "forwards": FlagsOf("flags", 1, Int32),
             "replies": FlagsOf("flags", 2, TLType),
         },
-        "is": TLType,
+        "is": "MessageViews",
     },
     0xB6C4F543: {
         "_": "messages.messageViews",
@@ -8023,7 +8023,7 @@ MAP = {
             "chats": list["Chat"],
             "users": list["User"],
         },
-        "is": TLType,
+        "is": "messages.MessageViews",
     },
     0xA6341782: {
         "_": "messages.discussionMessage",
@@ -8037,7 +8037,7 @@ MAP = {
             "chats": list["Chat"],
             "users": list["User"],
         },
-        "is": TLType,
+        "is": "messages.DiscussionMessage",
     },
     0xA6D57763: {
         "_": "messageReplyHeader",
@@ -8049,7 +8049,7 @@ MAP = {
             "reply_to_peer_id": FlagsOf("flags", 0, TLType),
             "reply_to_top_id": FlagsOf("flags", 1, Int32),
         },
-        "is": TLType,
+        "is": "MessageReplyHeader",
     },
     0x83D60FC2: {
         "_": "messageReplies",
@@ -8063,7 +8063,7 @@ MAP = {
             "max_id": FlagsOf("flags", 2, Int32),
             "read_max_id": FlagsOf("flags", 3, Int32),
         },
-        "is": TLType,
+        "is": "MessageReplies",
     },
     0xE8FD8014: {
         "_": "peerBlocked",
@@ -8071,14 +8071,14 @@ MAP = {
             "peer_id": TLType,
             "date": Int32,
         },
-        "is": TLType,
+        "is": "PeerBlocked",
     },
     0x8999F295: {
         "_": "stats.messageStats",
         "params": {
             "views_graph": TLType,
         },
-        "is": TLType,
+        "is": "stats.MessageStats",
     },
     0x7780BCB4: {
         "_": "groupCallDiscarded",
@@ -8087,7 +8087,7 @@ MAP = {
             "access_hash": Int64,
             "duration": Int32,
         },
-        "is": TLType,
+        "is": "GroupCall",
     },
     0xD597650C: {
         "_": "groupCall",
@@ -8112,7 +8112,7 @@ MAP = {
             "unmuted_video_limit": Int32,
             "version": Int32,
         },
-        "is": TLType,
+        "is": "GroupCall",
     },
     0xD8AA840F: {
         "_": "inputGroupCall",
@@ -8120,7 +8120,7 @@ MAP = {
             "id": Int64,
             "access_hash": Int64,
         },
-        "is": TLType,
+        "is": "InputGroupCall",
     },
     0xEBA636FE: {
         "_": "groupCallParticipant",
@@ -8146,7 +8146,7 @@ MAP = {
             "video": FlagsOf("flags", 6, TLType),
             "presentation": FlagsOf("flags", 14, TLType),
         },
-        "is": TLType,
+        "is": "GroupCallParticipant",
     },
     0x9E727AAD: {
         "_": "phone.groupCall",
@@ -8157,7 +8157,7 @@ MAP = {
             "chats": list["Chat"],
             "users": list["User"],
         },
-        "is": TLType,
+        "is": "phone.GroupCall",
     },
     0xF47751B6: {
         "_": "phone.groupParticipants",
@@ -8169,34 +8169,34 @@ MAP = {
             "users": list["User"],
             "version": Int32,
         },
-        "is": TLType,
+        "is": "phone.GroupParticipants",
     },
     0x3081ED9D: {
         "_": "inlineQueryPeerTypeSameBotPM",
-        "is": TLType,
+        "is": "InlineQueryPeerType",
     },
     0x833C0FAC: {
         "_": "inlineQueryPeerTypePM",
-        "is": TLType,
+        "is": "InlineQueryPeerType",
     },
     0xD766C50A: {
         "_": "inlineQueryPeerTypeChat",
-        "is": TLType,
+        "is": "InlineQueryPeerType",
     },
     0x5EC4BE43: {
         "_": "inlineQueryPeerTypeMegagroup",
-        "is": TLType,
+        "is": "InlineQueryPeerType",
     },
     0x6334EE9A: {
         "_": "inlineQueryPeerTypeBroadcast",
-        "is": TLType,
+        "is": "InlineQueryPeerType",
     },
     0x1662AF0B: {
         "_": "messages.historyImport",
         "params": {
             "id": Int64,
         },
-        "is": TLType,
+        "is": "messages.HistoryImport",
     },
     0x5E0FB7B9: {
         "_": "messages.historyImportParsed",
@@ -8206,7 +8206,7 @@ MAP = {
             "group": FlagsOf("flags", 1, Bit),
             "title": FlagsOf("flags", 2, str),
         },
-        "is": TLType,
+        "is": "messages.HistoryImportParsed",
     },
     0xEF8D3E6C: {
         "_": "messages.affectedFoundMessages",
@@ -8216,7 +8216,7 @@ MAP = {
             "offset": Int32,
             "messages": list[Int32],
         },
-        "is": TLType,
+        "is": "messages.AffectedFoundMessages",
     },
     0x8C5ADFD9: {
         "_": "chatInviteImporter",
@@ -8228,7 +8228,7 @@ MAP = {
             "about": FlagsOf("flags", 2, str),
             "approved_by": FlagsOf("flags", 1, Int64),
         },
-        "is": TLType,
+        "is": "ChatInviteImporter",
     },
     0xBDC62DCC: {
         "_": "messages.exportedChatInvites",
@@ -8237,7 +8237,7 @@ MAP = {
             "invites": list["ExportedChatInvite"],
             "users": list["User"],
         },
-        "is": TLType,
+        "is": "messages.ExportedChatInvites",
     },
     0x1871BE50: {
         "_": "messages.exportedChatInvite",
@@ -8245,7 +8245,7 @@ MAP = {
             "invite": TLType,
             "users": list["User"],
         },
-        "is": TLType,
+        "is": "messages.ExportedChatInvite",
     },
     0x222600EF: {
         "_": "messages.exportedChatInviteReplaced",
@@ -8254,7 +8254,7 @@ MAP = {
             "new_invite": TLType,
             "users": list["User"],
         },
-        "is": TLType,
+        "is": "messages.ExportedChatInvite",
     },
     0x81B6B00A: {
         "_": "messages.chatInviteImporters",
@@ -8263,7 +8263,7 @@ MAP = {
             "importers": list["ChatInviteImporter"],
             "users": list["User"],
         },
-        "is": TLType,
+        "is": "messages.ChatInviteImporters",
     },
     0xF2ECEF23: {
         "_": "chatAdminWithInvites",
@@ -8272,7 +8272,7 @@ MAP = {
             "invites_count": Int32,
             "revoked_invites_count": Int32,
         },
-        "is": TLType,
+        "is": "ChatAdminWithInvites",
     },
     0xB69B72D7: {
         "_": "messages.chatAdminsWithInvites",
@@ -8280,14 +8280,14 @@ MAP = {
             "admins": list["ChatAdminWithInvites"],
             "users": list["User"],
         },
-        "is": TLType,
+        "is": "messages.ChatAdminsWithInvites",
     },
     0xA24DE717: {
         "_": "messages.checkedHistoryImportPeer",
         "params": {
             "confirm_text": str,
         },
-        "is": TLType,
+        "is": "messages.CheckedHistoryImportPeer",
     },
     0xAFE5623F: {
         "_": "phone.joinAsPeers",
@@ -8296,14 +8296,14 @@ MAP = {
             "chats": list["Chat"],
             "users": list["User"],
         },
-        "is": TLType,
+        "is": "phone.JoinAsPeers",
     },
     0x204BD158: {
         "_": "phone.exportedGroupCallInvite",
         "params": {
             "link": str,
         },
-        "is": TLType,
+        "is": "phone.ExportedGroupCallInvite",
     },
     0xDCB118B7: {
         "_": "groupCallParticipantVideoSourceGroup",
@@ -8311,7 +8311,7 @@ MAP = {
             "semantics": str,
             "sources": list[Int32],
         },
-        "is": TLType,
+        "is": "GroupCallParticipantVideoSourceGroup",
     },
     0x67753AC8: {
         "_": "groupCallParticipantVideo",
@@ -8322,44 +8322,44 @@ MAP = {
             "source_groups": list["GroupCallParticipantVideoSourceGroup"],
             "audio_source": FlagsOf("flags", 1, Int32),
         },
-        "is": TLType,
+        "is": "GroupCallParticipantVideo",
     },
     0x85FEA03F: {
         "_": "stickers.suggestedShortName",
         "params": {
             "short_name": str,
         },
-        "is": TLType,
+        "is": "stickers.SuggestedShortName",
     },
     0x2F6CB2AB: {
         "_": "botCommandScopeDefault",
-        "is": TLType,
+        "is": "BotCommandScope",
     },
     0x3C4F04D8: {
         "_": "botCommandScopeUsers",
-        "is": TLType,
+        "is": "BotCommandScope",
     },
     0x6FE1A881: {
         "_": "botCommandScopeChats",
-        "is": TLType,
+        "is": "BotCommandScope",
     },
     0xB9AA606A: {
         "_": "botCommandScopeChatAdmins",
-        "is": TLType,
+        "is": "BotCommandScope",
     },
     0xDB9D897D: {
         "_": "botCommandScopePeer",
         "params": {
             "peer": TLType,
         },
-        "is": TLType,
+        "is": "BotCommandScope",
     },
     0x3FD863D1: {
         "_": "botCommandScopePeerAdmins",
         "params": {
             "peer": TLType,
         },
-        "is": TLType,
+        "is": "BotCommandScope",
     },
     0xA1321F3: {
         "_": "botCommandScopePeerUser",
@@ -8367,25 +8367,25 @@ MAP = {
             "peer": TLType,
             "user_id": TLType,
         },
-        "is": TLType,
+        "is": "BotCommandScope",
     },
     0xE3779861: {
         "_": "account.resetPasswordFailedWait",
         "params": {
             "retry_date": Int32,
         },
-        "is": TLType,
+        "is": "account.ResetPasswordResult",
     },
     0xE9EFFC7D: {
         "_": "account.resetPasswordRequestedWait",
         "params": {
             "until_date": Int32,
         },
-        "is": TLType,
+        "is": "account.ResetPasswordResult",
     },
     0xE926D63E: {
         "_": "account.resetPasswordOk",
-        "is": TLType,
+        "is": "account.ResetPasswordResult",
     },
     0x3A836DF8: {
         "_": "sponsoredMessage",
@@ -8402,7 +8402,7 @@ MAP = {
             "message": str,
             "entities": FlagsOf("flags", 1, list["MessageEntity"]),
         },
-        "is": TLType,
+        "is": "SponsoredMessage",
     },
     0xC9EE1D87: {
         "_": "messages.sponsoredMessages",
@@ -8413,11 +8413,11 @@ MAP = {
             "chats": list["Chat"],
             "users": list["User"],
         },
-        "is": TLType,
+        "is": "messages.SponsoredMessages",
     },
     0x1839490F: {
         "_": "messages.sponsoredMessagesEmpty",
-        "is": TLType,
+        "is": "messages.SponsoredMessages",
     },
     0xC9B0539F: {
         "_": "searchResultsCalendarPeriod",
@@ -8427,7 +8427,7 @@ MAP = {
             "max_msg_id": Int32,
             "count": Int32,
         },
-        "is": TLType,
+        "is": "SearchResultsCalendarPeriod",
     },
     0x147EE23C: {
         "_": "messages.searchResultsCalendar",
@@ -8443,7 +8443,7 @@ MAP = {
             "chats": list["Chat"],
             "users": list["User"],
         },
-        "is": TLType,
+        "is": "messages.SearchResultsCalendar",
     },
     0x7F648B67: {
         "_": "searchResultPosition",
@@ -8452,7 +8452,7 @@ MAP = {
             "date": Int32,
             "offset": Int32,
         },
-        "is": TLType,
+        "is": "SearchResultsPosition",
     },
     0x53B22BAF: {
         "_": "messages.searchResultsPositions",
@@ -8460,7 +8460,7 @@ MAP = {
             "count": Int32,
             "positions": list["SearchResultsPosition"],
         },
-        "is": TLType,
+        "is": "messages.SearchResultsPositions",
     },
     0xF496B0C6: {
         "_": "channels.sendAsPeers",
@@ -8469,7 +8469,7 @@ MAP = {
             "chats": list["Chat"],
             "users": list["User"],
         },
-        "is": TLType,
+        "is": "channels.SendAsPeers",
     },
     0x3B6D152E: {
         "_": "users.userFull",
@@ -8478,7 +8478,7 @@ MAP = {
             "chats": list["Chat"],
             "users": list["User"],
         },
-        "is": TLType,
+        "is": "users.UserFull",
     },
     0x6880B94D: {
         "_": "messages.peerSettings",
@@ -8487,7 +8487,7 @@ MAP = {
             "chats": list["Chat"],
             "users": list["User"],
         },
-        "is": TLType,
+        "is": "messages.PeerSettings",
     },
     0xC3A2835F: {
         "_": "auth.loggedOut",
@@ -8495,7 +8495,7 @@ MAP = {
             "flags": Int32,
             "future_auth_token": FlagsOf("flags", 0, bytes),
         },
-        "is": TLType,
+        "is": "auth.LoggedOut",
     },
     0xA3D1CB80: {
         "_": "reactionCount",
@@ -8505,7 +8505,7 @@ MAP = {
             "reaction": TLType,
             "count": Int32,
         },
-        "is": TLType,
+        "is": "ReactionCount",
     },
     0x4F2B9479: {
         "_": "messageReactions",
@@ -8516,7 +8516,7 @@ MAP = {
             "results": list["ReactionCount"],
             "recent_reactions": FlagsOf("flags", 1, list["MessagePeerReaction"]),
         },
-        "is": TLType,
+        "is": "MessageReactions",
     },
     0x31BD492D: {
         "_": "messages.messageReactionsList",
@@ -8528,7 +8528,7 @@ MAP = {
             "users": list["User"],
             "next_offset": FlagsOf("flags", 0, str),
         },
-        "is": TLType,
+        "is": "messages.MessageReactionsList",
     },
     0xC077EC01: {
         "_": "availableReaction",
@@ -8546,11 +8546,11 @@ MAP = {
             "around_animation": FlagsOf("flags", 1, TLType),
             "center_icon": FlagsOf("flags", 1, TLType),
         },
-        "is": TLType,
+        "is": "AvailableReaction",
     },
     0x9F071957: {
         "_": "messages.availableReactionsNotModified",
-        "is": TLType,
+        "is": "messages.AvailableReactions",
     },
     0x768E3AAD: {
         "_": "messages.availableReactions",
@@ -8558,18 +8558,18 @@ MAP = {
             "hash": Int32,
             "reactions": list["AvailableReaction"],
         },
-        "is": TLType,
+        "is": "messages.AvailableReactions",
     },
     0x67CA4737: {
         "_": "messages.translateNoResult",
-        "is": TLType,
+        "is": "messages.TranslatedText",
     },
     0xA214F7D0: {
         "_": "messages.translateResultText",
         "params": {
             "text": str,
         },
-        "is": TLType,
+        "is": "messages.TranslatedText",
     },
     0xB156FE9C: {
         "_": "messagePeerReaction",
@@ -8580,7 +8580,7 @@ MAP = {
             "peer_id": TLType,
             "reaction": TLType,
         },
-        "is": TLType,
+        "is": "MessagePeerReaction",
     },
     0x80EB48AF: {
         "_": "groupCallStreamChannel",
@@ -8589,14 +8589,14 @@ MAP = {
             "scale": Int32,
             "last_timestamp_ms": Int64,
         },
-        "is": TLType,
+        "is": "GroupCallStreamChannel",
     },
     0xD0E482B2: {
         "_": "phone.groupCallStreamChannels",
         "params": {
             "channels": list["GroupCallStreamChannel"],
         },
-        "is": TLType,
+        "is": "phone.GroupCallStreamChannels",
     },
     0x2DBF3432: {
         "_": "phone.groupCallStreamRtmpUrl",
@@ -8604,7 +8604,7 @@ MAP = {
             "url": str,
             "key": str,
         },
-        "is": TLType,
+        "is": "phone.GroupCallStreamRtmpUrl",
     },
     0x4576F3F0: {
         "_": "attachMenuBotIconColor",
@@ -8612,7 +8612,7 @@ MAP = {
             "name": str,
             "color": Int32,
         },
-        "is": TLType,
+        "is": "AttachMenuBotIconColor",
     },
     0xB2A7386B: {
         "_": "attachMenuBotIcon",
@@ -8622,7 +8622,7 @@ MAP = {
             "icon": TLType,
             "colors": FlagsOf("flags", 0, list["AttachMenuBotIconColor"]),
         },
-        "is": TLType,
+        "is": "AttachMenuBotIcon",
     },
     0xC8AA2CD2: {
         "_": "attachMenuBot",
@@ -8636,11 +8636,11 @@ MAP = {
             "peer_types": list["AttachMenuPeerType"],
             "icons": list["AttachMenuBotIcon"],
         },
-        "is": TLType,
+        "is": "AttachMenuBot",
     },
     0xF1D88A5C: {
         "_": "attachMenuBotsNotModified",
-        "is": TLType,
+        "is": "AttachMenuBots",
     },
     0x3C4301C0: {
         "_": "attachMenuBots",
@@ -8649,7 +8649,7 @@ MAP = {
             "bots": list["AttachMenuBot"],
             "users": list["User"],
         },
-        "is": TLType,
+        "is": "AttachMenuBots",
     },
     0x93BF667F: {
         "_": "attachMenuBotsBot",
@@ -8657,7 +8657,7 @@ MAP = {
             "bot": TLType,
             "users": list["User"],
         },
-        "is": TLType,
+        "is": "AttachMenuBotsBot",
     },
     0xC14557C: {
         "_": "webViewResultUrl",
@@ -8665,14 +8665,14 @@ MAP = {
             "query_id": Int64,
             "url": str,
         },
-        "is": TLType,
+        "is": "WebViewResult",
     },
     0x882F76BB: {
         "_": "simpleWebViewResultUrl",
         "params": {
             "url": str,
         },
-        "is": TLType,
+        "is": "SimpleWebViewResult",
     },
     0xC94511C: {
         "_": "webViewMessageSent",
@@ -8680,15 +8680,15 @@ MAP = {
             "flags": Int32,
             "msg_id": FlagsOf("flags", 0, TLType),
         },
-        "is": TLType,
+        "is": "WebViewMessageSent",
     },
     0x7533A588: {
         "_": "botMenuButtonDefault",
-        "is": TLType,
+        "is": "BotMenuButton",
     },
     0x4258C205: {
         "_": "botMenuButtonCommands",
-        "is": TLType,
+        "is": "BotMenuButton",
     },
     0xC7B57CE6: {
         "_": "botMenuButton",
@@ -8696,11 +8696,11 @@ MAP = {
             "text": str,
             "url": str,
         },
-        "is": TLType,
+        "is": "BotMenuButton",
     },
     0xFBF6E8B1: {
         "_": "account.savedRingtonesNotModified",
-        "is": TLType,
+        "is": "account.SavedRingtones",
     },
     0xC1E92CC5: {
         "_": "account.savedRingtones",
@@ -8708,15 +8708,15 @@ MAP = {
             "hash": Int64,
             "ringtones": list["Document"],
         },
-        "is": TLType,
+        "is": "account.SavedRingtones",
     },
     0x97E8BEBE: {
         "_": "notificationSoundDefault",
-        "is": TLType,
+        "is": "NotificationSound",
     },
     0x6F0C34DF: {
         "_": "notificationSoundNone",
-        "is": TLType,
+        "is": "NotificationSound",
     },
     0x830B9AE4: {
         "_": "notificationSoundLocal",
@@ -8724,45 +8724,45 @@ MAP = {
             "title": str,
             "data": str,
         },
-        "is": TLType,
+        "is": "NotificationSound",
     },
     0xFF6C8049: {
         "_": "notificationSoundRingtone",
         "params": {
             "id": Int64,
         },
-        "is": TLType,
+        "is": "NotificationSound",
     },
     0xB7263F6D: {
         "_": "account.savedRingtone",
-        "is": TLType,
+        "is": "account.SavedRingtone",
     },
     0x1F307EB7: {
         "_": "account.savedRingtoneConverted",
         "params": {
             "document": TLType,
         },
-        "is": TLType,
+        "is": "account.SavedRingtone",
     },
     0x7D6BE90E: {
         "_": "attachMenuPeerTypeSameBotPM",
-        "is": TLType,
+        "is": "AttachMenuPeerType",
     },
     0xC32BFA1A: {
         "_": "attachMenuPeerTypeBotPM",
-        "is": TLType,
+        "is": "AttachMenuPeerType",
     },
     0xF146D31F: {
         "_": "attachMenuPeerTypePM",
-        "is": TLType,
+        "is": "AttachMenuPeerType",
     },
     0x509113F: {
         "_": "attachMenuPeerTypeChat",
-        "is": TLType,
+        "is": "AttachMenuPeerType",
     },
     0x7BFBDEFC: {
         "_": "attachMenuPeerTypeBroadcast",
-        "is": TLType,
+        "is": "AttachMenuPeerType",
     },
     0xC5B56859: {
         "_": "inputInvoiceMessage",
@@ -8770,21 +8770,21 @@ MAP = {
             "peer": TLType,
             "msg_id": Int32,
         },
-        "is": TLType,
+        "is": "InputInvoice",
     },
     0xC326CAEF: {
         "_": "inputInvoiceSlug",
         "params": {
             "slug": str,
         },
-        "is": TLType,
+        "is": "InputInvoice",
     },
     0xAED0CBD9: {
         "_": "payments.exportedInvoice",
         "params": {
             "url": str,
         },
-        "is": TLType,
+        "is": "payments.ExportedInvoice",
     },
     0x93752C52: {
         "_": "messages.transcribedAudio",
@@ -8794,7 +8794,7 @@ MAP = {
             "transcription_id": Int64,
             "text": str,
         },
-        "is": TLType,
+        "is": "messages.TranscribedAudio",
     },
     0x5334759C: {
         "_": "help.premiumPromo",
@@ -8806,7 +8806,7 @@ MAP = {
             "period_options": list["PremiumSubscriptionOption"],
             "users": list["User"],
         },
-        "is": TLType,
+        "is": "help.PremiumPromo",
     },
     0xA6751E66: {
         "_": "inputStorePaymentPremiumSubscription",
@@ -8814,7 +8814,7 @@ MAP = {
             "flags": Int32,
             "restore": FlagsOf("flags", 0, Bit),
         },
-        "is": TLType,
+        "is": "InputStorePaymentPurpose",
     },
     0x616F7FE8: {
         "_": "inputStorePaymentGiftPremium",
@@ -8823,7 +8823,7 @@ MAP = {
             "currency": str,
             "amount": Int64,
         },
-        "is": TLType,
+        "is": "InputStorePaymentPurpose",
     },
     0x74C34319: {
         "_": "premiumGiftOption",
@@ -8835,7 +8835,7 @@ MAP = {
             "bot_url": str,
             "store_product": FlagsOf("flags", 0, str),
         },
-        "is": TLType,
+        "is": "PremiumGiftOption",
     },
     0x88F8F21B: {
         "_": "paymentFormMethod",
@@ -8843,18 +8843,18 @@ MAP = {
             "url": str,
             "title": str,
         },
-        "is": TLType,
+        "is": "PaymentFormMethod",
     },
     0x2DE11AAE: {
         "_": "emojiStatusEmpty",
-        "is": TLType,
+        "is": "EmojiStatus",
     },
     0x929B619D: {
         "_": "emojiStatus",
         "params": {
             "document_id": Int64,
         },
-        "is": TLType,
+        "is": "EmojiStatus",
     },
     0xFA30A8C7: {
         "_": "emojiStatusUntil",
@@ -8862,11 +8862,11 @@ MAP = {
             "document_id": Int64,
             "until": Int32,
         },
-        "is": TLType,
+        "is": "EmojiStatus",
     },
     0xD08CE645: {
         "_": "account.emojiStatusesNotModified",
-        "is": TLType,
+        "is": "account.EmojiStatuses",
     },
     0x90C467D1: {
         "_": "account.emojiStatuses",
@@ -8874,29 +8874,29 @@ MAP = {
             "hash": Int64,
             "statuses": list["EmojiStatus"],
         },
-        "is": TLType,
+        "is": "account.EmojiStatuses",
     },
     0x79F5D419: {
         "_": "reactionEmpty",
-        "is": TLType,
+        "is": "Reaction",
     },
     0x1B2286B8: {
         "_": "reactionEmoji",
         "params": {
             "emoticon": str,
         },
-        "is": TLType,
+        "is": "Reaction",
     },
     0x8935FC73: {
         "_": "reactionCustomEmoji",
         "params": {
             "document_id": Int64,
         },
-        "is": TLType,
+        "is": "Reaction",
     },
     0xEAFC32BC: {
         "_": "chatReactionsNone",
-        "is": TLType,
+        "is": "ChatReactions",
     },
     0x52928BCA: {
         "_": "chatReactionsAll",
@@ -8904,18 +8904,18 @@ MAP = {
             "flags": Int32,
             "allow_custom": FlagsOf("flags", 0, Bit),
         },
-        "is": TLType,
+        "is": "ChatReactions",
     },
     0x661D4037: {
         "_": "chatReactionsSome",
         "params": {
             "reactions": list["Reaction"],
         },
-        "is": TLType,
+        "is": "ChatReactions",
     },
     0xB06FDBDF: {
         "_": "messages.reactionsNotModified",
-        "is": TLType,
+        "is": "messages.Reactions",
     },
     0xEAFDF716: {
         "_": "messages.reactions",
@@ -8923,7 +8923,7 @@ MAP = {
             "hash": Int64,
             "reactions": list["Reaction"],
         },
-        "is": TLType,
+        "is": "messages.Reactions",
     },
     0x4345BE73: {
         "_": "emailVerifyPurposeLoginSetup",
@@ -8931,43 +8931,43 @@ MAP = {
             "phone_number": str,
             "phone_code_hash": str,
         },
-        "is": TLType,
+        "is": "EmailVerifyPurpose",
     },
     0x527D22EB: {
         "_": "emailVerifyPurposeLoginChange",
-        "is": TLType,
+        "is": "EmailVerifyPurpose",
     },
     0xBBF51685: {
         "_": "emailVerifyPurposePassport",
-        "is": TLType,
+        "is": "EmailVerifyPurpose",
     },
     0x922E55A9: {
         "_": "emailVerificationCode",
         "params": {
             "code": str,
         },
-        "is": TLType,
+        "is": "EmailVerification",
     },
     0xDB909EC2: {
         "_": "emailVerificationGoogle",
         "params": {
             "token": str,
         },
-        "is": TLType,
+        "is": "EmailVerification",
     },
     0x96D074FD: {
         "_": "emailVerificationApple",
         "params": {
             "token": str,
         },
-        "is": TLType,
+        "is": "EmailVerification",
     },
     0x2B96CD1B: {
         "_": "account.emailVerified",
         "params": {
             "email": str,
         },
-        "is": TLType,
+        "is": "account.EmailVerified",
     },
     0xE1BB0D61: {
         "_": "account.emailVerifiedLogin",
@@ -8975,7 +8975,7 @@ MAP = {
             "email": str,
             "sent_code": TLType,
         },
-        "is": TLType,
+        "is": "account.EmailVerified",
     },
     0xB6F11EBE: {
         "_": "premiumSubscriptionOption",
@@ -8989,7 +8989,7 @@ MAP = {
             "bot_url": str,
             "store_product": FlagsOf("flags", 0, str),
         },
-        "is": TLType,
+        "is": "PremiumSubscriptionOption",
     },
     0xB81C7034: {
         "_": "sendAsPeer",
@@ -8998,7 +8998,7 @@ MAP = {
             "premium_required": FlagsOf("flags", 0, Bit),
             "peer": TLType,
         },
-        "is": TLType,
+        "is": "SendAsPeer",
     },
     0xAD628CC8: {
         "_": "messageExtendedMediaPreview",
@@ -9009,14 +9009,14 @@ MAP = {
             "thumb": FlagsOf("flags", 1, TLType),
             "video_duration": FlagsOf("flags", 2, Int32),
         },
-        "is": TLType,
+        "is": "MessageExtendedMedia",
     },
     0xEE479C64: {
         "_": "messageExtendedMedia",
         "params": {
             "media": TLType,
         },
-        "is": TLType,
+        "is": "MessageExtendedMedia",
     },
     0xFCFEB29C: {
         "_": "stickerKeyword",
@@ -9024,7 +9024,7 @@ MAP = {
             "document_id": Int64,
             "keyword": list[str],
         },
-        "is": TLType,
+        "is": "StickerKeyword",
     },
     0xB4073647: {
         "_": "username",
@@ -9034,14 +9034,14 @@ MAP = {
             "active": FlagsOf("flags", 1, Bit),
             "username": str,
         },
-        "is": TLType,
+        "is": "Username",
     },
     0x23F109B: {
         "_": "forumTopicDeleted",
         "params": {
             "id": Int32,
         },
-        "is": TLType,
+        "is": "ForumTopic",
     },
     0x71701DA9: {
         "_": "forumTopic",
@@ -9067,7 +9067,7 @@ MAP = {
             "notify_settings": TLType,
             "draft": FlagsOf("flags", 4, TLType),
         },
-        "is": TLType,
+        "is": "ForumTopic",
     },
     0x367617D3: {
         "_": "messages.forumTopics",
@@ -9081,14 +9081,14 @@ MAP = {
             "users": list["User"],
             "pts": Int32,
         },
-        "is": TLType,
+        "is": "messages.ForumTopics",
     },
     0x43B46B20: {
         "_": "defaultHistoryTTL",
         "params": {
             "period": Int32,
         },
-        "is": TLType,
+        "is": "DefaultHistoryTTL",
     },
     0x41BF109B: {
         "_": "exportedContactToken",
@@ -9096,7 +9096,7 @@ MAP = {
             "url": str,
             "expires": Int32,
         },
-        "is": TLType,
+        "is": "ExportedContactToken",
     },
     0xCB9F372D: {
         "_": "invokeAfterMsg",
@@ -9170,7 +9170,7 @@ MAP = {
             "api_hash": str,
             "settings": TLType,
         },
-        "ret": TLType,
+        "ret": "auth.SentCode",
     },
     0x80EEE427: {
         "_": "auth.signUp",
@@ -9180,7 +9180,7 @@ MAP = {
             "first_name": str,
             "last_name": str,
         },
-        "ret": TLType,
+        "ret": "auth.Authorization",
     },
     0x8D52A951: {
         "_": "auth.signIn",
@@ -9191,11 +9191,11 @@ MAP = {
             "phone_code": FlagsOf("flags", 0, str),
             "email_verification": FlagsOf("flags", 1, TLType),
         },
-        "ret": TLType,
+        "ret": "auth.Authorization",
     },
     0x3E72BA19: {
         "_": "auth.logOut",
-        "ret": TLType,
+        "ret": "auth.LoggedOut",
     },
     0x9FAB0D1A: {
         "_": "auth.resetAuthorizations",
@@ -9206,7 +9206,7 @@ MAP = {
         "params": {
             "dc_id": Int32,
         },
-        "ret": TLType,
+        "ret": "auth.ExportedAuthorization",
     },
     0xA57A7DAD: {
         "_": "auth.importAuthorization",
@@ -9214,7 +9214,7 @@ MAP = {
             "id": Int64,
             "bytes": bytes,
         },
-        "ret": TLType,
+        "ret": "auth.Authorization",
     },
     0xCDD42A05: {
         "_": "auth.bindTempAuthKey",
@@ -9234,18 +9234,18 @@ MAP = {
             "api_hash": str,
             "bot_auth_token": str,
         },
-        "ret": TLType,
+        "ret": "auth.Authorization",
     },
     0xD18B4D16: {
         "_": "auth.checkPassword",
         "params": {
             "password": TLType,
         },
-        "ret": TLType,
+        "ret": "auth.Authorization",
     },
     0xD897BC66: {
         "_": "auth.requestPasswordRecovery",
-        "ret": TLType,
+        "ret": "auth.PasswordRecovery",
     },
     0x37096C70: {
         "_": "auth.recoverPassword",
@@ -9254,7 +9254,7 @@ MAP = {
             "code": str,
             "new_settings": FlagsOf("flags", 0, TLType),
         },
-        "ret": TLType,
+        "ret": "auth.Authorization",
     },
     0x3EF1A9BF: {
         "_": "auth.resendCode",
@@ -9262,7 +9262,7 @@ MAP = {
             "phone_number": str,
             "phone_code_hash": str,
         },
-        "ret": TLType,
+        "ret": "auth.SentCode",
     },
     0x1F040578: {
         "_": "auth.cancelCode",
@@ -9286,21 +9286,21 @@ MAP = {
             "api_hash": str,
             "except_ids": list[Int64],
         },
-        "ret": TLType,
+        "ret": "auth.LoginToken",
     },
     0x95AC5CE4: {
         "_": "auth.importLoginToken",
         "params": {
             "token": bytes,
         },
-        "ret": TLType,
+        "ret": "auth.LoginToken",
     },
     0xE894AD4D: {
         "_": "auth.acceptLoginToken",
         "params": {
             "token": bytes,
         },
-        "ret": TLType,
+        "ret": "Authorization",
     },
     0xD36BF79: {
         "_": "auth.checkRecoveryPassword",
@@ -9316,7 +9316,7 @@ MAP = {
             "api_hash": str,
             "web_auth_token": str,
         },
-        "ret": TLType,
+        "ret": "auth.Authorization",
     },
     0xEC86017A: {
         "_": "account.registerDevice",
@@ -9353,7 +9353,7 @@ MAP = {
         "params": {
             "peer": TLType,
         },
-        "ret": TLType,
+        "ret": "PeerNotifySettings",
     },
     0xDB7E1747: {
         "_": "account.resetNotifySettings",
@@ -9367,7 +9367,7 @@ MAP = {
             "last_name": FlagsOf("flags", 1, str),
             "about": FlagsOf("flags", 2, str),
         },
-        "ret": TLType,
+        "ret": "User",
     },
     0x6628562C: {
         "_": "account.updateStatus",
@@ -9381,7 +9381,7 @@ MAP = {
         "params": {
             "hash": Int64,
         },
-        "ret": TLType,
+        "ret": "account.WallPapers",
     },
     0xC5BA3D86: {
         "_": "account.reportPeer",
@@ -9404,14 +9404,14 @@ MAP = {
         "params": {
             "username": str,
         },
-        "ret": TLType,
+        "ret": "User",
     },
     0xDADBC950: {
         "_": "account.getPrivacy",
         "params": {
             "key": TLType,
         },
-        "ret": TLType,
+        "ret": "account.PrivacyRules",
     },
     0xC9F81CE8: {
         "_": "account.setPrivacy",
@@ -9419,7 +9419,7 @@ MAP = {
             "key": TLType,
             "rules": list["InputPrivacyRule"],
         },
-        "ret": TLType,
+        "ret": "account.PrivacyRules",
     },
     0xA2C0CF74: {
         "_": "account.deleteAccount",
@@ -9432,7 +9432,7 @@ MAP = {
     },
     0x8FC711D: {
         "_": "account.getAccountTTL",
-        "ret": TLType,
+        "ret": "AccountDaysTTL",
     },
     0x2442485E: {
         "_": "account.setAccountTTL",
@@ -9447,7 +9447,7 @@ MAP = {
             "phone_number": str,
             "settings": TLType,
         },
-        "ret": TLType,
+        "ret": "auth.SentCode",
     },
     0x70C32EDB: {
         "_": "account.changePhone",
@@ -9456,7 +9456,7 @@ MAP = {
             "phone_code_hash": str,
             "phone_code": str,
         },
-        "ret": TLType,
+        "ret": "User",
     },
     0x38DF3532: {
         "_": "account.updateDeviceLocked",
@@ -9467,7 +9467,7 @@ MAP = {
     },
     0xE320C158: {
         "_": "account.getAuthorizations",
-        "ret": TLType,
+        "ret": "account.Authorizations",
     },
     0xDF77F3BC: {
         "_": "account.resetAuthorization",
@@ -9478,14 +9478,14 @@ MAP = {
     },
     0x548A30F5: {
         "_": "account.getPassword",
-        "ret": TLType,
+        "ret": "account.Password",
     },
     0x9CD4EAF9: {
         "_": "account.getPasswordSettings",
         "params": {
             "password": TLType,
         },
-        "ret": TLType,
+        "ret": "account.PasswordSettings",
     },
     0xA59B102F: {
         "_": "account.updatePasswordSettings",
@@ -9501,7 +9501,7 @@ MAP = {
             "hash": str,
             "settings": TLType,
         },
-        "ret": TLType,
+        "ret": "auth.SentCode",
     },
     0x5F2178C3: {
         "_": "account.confirmPhone",
@@ -9517,11 +9517,11 @@ MAP = {
             "password": TLType,
             "period": Int32,
         },
-        "ret": TLType,
+        "ret": "account.TmpPassword",
     },
     0x182E6D6F: {
         "_": "account.getWebAuthorizations",
-        "ret": TLType,
+        "ret": "account.WebAuthorizations",
     },
     0x2D01B9EF: {
         "_": "account.resetWebAuthorization",
@@ -9551,7 +9551,7 @@ MAP = {
             "value": TLType,
             "secure_secret_id": Int64,
         },
-        "ret": TLType,
+        "ret": "SecureValue",
     },
     0xB880BC4B: {
         "_": "account.deleteSecureValue",
@@ -9567,7 +9567,7 @@ MAP = {
             "scope": str,
             "public_key": str,
         },
-        "ret": TLType,
+        "ret": "account.AuthorizationForm",
     },
     0xF3ED4C73: {
         "_": "account.acceptAuthorization",
@@ -9586,7 +9586,7 @@ MAP = {
             "phone_number": str,
             "settings": TLType,
         },
-        "ret": TLType,
+        "ret": "auth.SentCode",
     },
     0x4DD3A7F6: {
         "_": "account.verifyPhone",
@@ -9603,7 +9603,7 @@ MAP = {
             "purpose": TLType,
             "email": str,
         },
-        "ret": TLType,
+        "ret": "account.SentEmailCode",
     },
     0x32DA4CF: {
         "_": "account.verifyEmail",
@@ -9611,7 +9611,7 @@ MAP = {
             "purpose": TLType,
             "verification": TLType,
         },
-        "ret": TLType,
+        "ret": "account.EmailVerified",
     },
     0x8EF3EAB0: {
         "_": "account.initTakeoutSession",
@@ -9625,7 +9625,7 @@ MAP = {
             "files": FlagsOf("flags", 5, Bit),
             "file_max_size": FlagsOf("flags", 5, Int64),
         },
-        "ret": TLType,
+        "ret": "account.Takeout",
     },
     0x1D2652EE: {
         "_": "account.finishTakeoutSession",
@@ -9668,14 +9668,14 @@ MAP = {
             "compare_sound": FlagsOf("flags", 1, Bit),
             "peer": FlagsOf("flags", 0, TLType),
         },
-        "ret": TLType,
+        "ret": "Updates",
     },
     0xFC8DDBEA: {
         "_": "account.getWallPaper",
         "params": {
             "wallpaper": TLType,
         },
-        "ret": TLType,
+        "ret": "WallPaper",
     },
     0xDD853661: {
         "_": "account.uploadWallPaper",
@@ -9684,7 +9684,7 @@ MAP = {
             "mime_type": str,
             "settings": TLType,
         },
-        "ret": TLType,
+        "ret": "WallPaper",
     },
     0x6C5A5B37: {
         "_": "account.saveWallPaper",
@@ -9709,7 +9709,7 @@ MAP = {
     },
     0x56DA0B3F: {
         "_": "account.getAutoDownloadSettings",
-        "ret": TLType,
+        "ret": "account.AutoDownloadSettings",
     },
     0x76F36233: {
         "_": "account.saveAutoDownloadSettings",
@@ -9730,7 +9730,7 @@ MAP = {
             "file_name": str,
             "mime_type": str,
         },
-        "ret": TLType,
+        "ret": "Document",
     },
     0x652E4400: {
         "_": "account.createTheme",
@@ -9741,7 +9741,7 @@ MAP = {
             "document": FlagsOf("flags", 2, TLType),
             "settings": FlagsOf("flags", 3, list["InputThemeSettings"]),
         },
-        "ret": TLType,
+        "ret": "Theme",
     },
     0x2BF40CCC: {
         "_": "account.updateTheme",
@@ -9754,7 +9754,7 @@ MAP = {
             "document": FlagsOf("flags", 2, TLType),
             "settings": FlagsOf("flags", 3, list["InputThemeSettings"]),
         },
-        "ret": TLType,
+        "ret": "Theme",
     },
     0xF257106C: {
         "_": "account.saveTheme",
@@ -9781,7 +9781,7 @@ MAP = {
             "format": str,
             "theme": TLType,
         },
-        "ret": TLType,
+        "ret": "Theme",
     },
     0x7206E458: {
         "_": "account.getThemes",
@@ -9789,7 +9789,7 @@ MAP = {
             "format": str,
             "hash": Int64,
         },
-        "ret": TLType,
+        "ret": "account.Themes",
     },
     0xB574B16B: {
         "_": "account.setContentSettings",
@@ -9801,7 +9801,7 @@ MAP = {
     },
     0x8B9B4DAE: {
         "_": "account.getContentSettings",
-        "ret": TLType,
+        "ret": "account.ContentSettings",
     },
     0x65AD71DC: {
         "_": "account.getMultiWallPapers",
@@ -9812,14 +9812,14 @@ MAP = {
     },
     0xEB2B4CF6: {
         "_": "account.getGlobalPrivacySettings",
-        "ret": TLType,
+        "ret": "GlobalPrivacySettings",
     },
     0x1EDAAAC2: {
         "_": "account.setGlobalPrivacySettings",
         "params": {
             "settings": TLType,
         },
-        "ret": TLType,
+        "ret": "GlobalPrivacySettings",
     },
     0xFA8CC6F5: {
         "_": "account.reportProfilePhoto",
@@ -9833,7 +9833,7 @@ MAP = {
     },
     0x9308CE1B: {
         "_": "account.resetPassword",
-        "ret": TLType,
+        "ret": "account.ResetPasswordResult",
     },
     0x4C9409F6: {
         "_": "account.declinePasswordReset",
@@ -9844,7 +9844,7 @@ MAP = {
         "params": {
             "hash": Int64,
         },
-        "ret": TLType,
+        "ret": "account.Themes",
     },
     0xBF899AA0: {
         "_": "account.setAuthorizationTTL",
@@ -9868,7 +9868,7 @@ MAP = {
         "params": {
             "hash": Int64,
         },
-        "ret": TLType,
+        "ret": "account.SavedRingtones",
     },
     0x3DEA5B03: {
         "_": "account.saveRingtone",
@@ -9876,7 +9876,7 @@ MAP = {
             "id": TLType,
             "unsave": bool,
         },
-        "ret": TLType,
+        "ret": "account.SavedRingtone",
     },
     0x831A83A2: {
         "_": "account.uploadRingtone",
@@ -9885,7 +9885,7 @@ MAP = {
             "file_name": str,
             "mime_type": str,
         },
-        "ret": TLType,
+        "ret": "Document",
     },
     0xFBD3DE6B: {
         "_": "account.updateEmojiStatus",
@@ -9899,14 +9899,14 @@ MAP = {
         "params": {
             "hash": Int64,
         },
-        "ret": TLType,
+        "ret": "account.EmojiStatuses",
     },
     0xF578105: {
         "_": "account.getRecentEmojiStatuses",
         "params": {
             "hash": Int64,
         },
-        "ret": TLType,
+        "ret": "account.EmojiStatuses",
     },
     0x18201AAE: {
         "_": "account.clearRecentEmojiStatuses",
@@ -9939,7 +9939,7 @@ MAP = {
         "params": {
             "id": TLType,
         },
-        "ret": TLType,
+        "ret": "users.UserFull",
     },
     0x90C894B5: {
         "_": "users.setSecureValueErrors",
@@ -9965,21 +9965,21 @@ MAP = {
         "params": {
             "hash": Int64,
         },
-        "ret": TLType,
+        "ret": "contacts.Contacts",
     },
     0x2C800BE5: {
         "_": "contacts.importContacts",
         "params": {
             "contacts": list["InputContact"],
         },
-        "ret": TLType,
+        "ret": "contacts.ImportedContacts",
     },
     0x96A0E00: {
         "_": "contacts.deleteContacts",
         "params": {
             "id": list["InputUser"],
         },
-        "ret": TLType,
+        "ret": "Updates",
     },
     0x1013FD9E: {
         "_": "contacts.deleteByPhones",
@@ -10008,7 +10008,7 @@ MAP = {
             "offset": Int32,
             "limit": Int32,
         },
-        "ret": TLType,
+        "ret": "contacts.Blocked",
     },
     0x11F812D8: {
         "_": "contacts.search",
@@ -10016,14 +10016,14 @@ MAP = {
             "q": str,
             "limit": Int32,
         },
-        "ret": TLType,
+        "ret": "contacts.Found",
     },
     0xF93CCBA3: {
         "_": "contacts.resolveUsername",
         "params": {
             "username": str,
         },
-        "ret": TLType,
+        "ret": "contacts.ResolvedPeer",
     },
     0x973478B6: {
         "_": "contacts.getTopPeers",
@@ -10041,7 +10041,7 @@ MAP = {
             "limit": Int32,
             "hash": Int64,
         },
-        "ret": TLType,
+        "ret": "contacts.TopPeers",
     },
     0x1AE373AC: {
         "_": "contacts.resetTopPeerRating",
@@ -10076,14 +10076,14 @@ MAP = {
             "last_name": str,
             "phone": str,
         },
-        "ret": TLType,
+        "ret": "Updates",
     },
     0xF831A20F: {
         "_": "contacts.acceptContact",
         "params": {
             "id": TLType,
         },
-        "ret": TLType,
+        "ret": "Updates",
     },
     0xD348BC44: {
         "_": "contacts.getLocated",
@@ -10093,7 +10093,7 @@ MAP = {
             "geo_point": TLType,
             "self_expires": FlagsOf("flags", 0, Int32),
         },
-        "ret": TLType,
+        "ret": "Updates",
     },
     0x29A8962C: {
         "_": "contacts.blockFromReplies",
@@ -10104,32 +10104,32 @@ MAP = {
             "report_spam": FlagsOf("flags", 2, Bit),
             "msg_id": Int32,
         },
-        "ret": TLType,
+        "ret": "Updates",
     },
     0x8AF94344: {
         "_": "contacts.resolvePhone",
         "params": {
             "phone": str,
         },
-        "ret": TLType,
+        "ret": "contacts.ResolvedPeer",
     },
     0xF8654027: {
         "_": "contacts.exportContactToken",
-        "ret": TLType,
+        "ret": "ExportedContactToken",
     },
     0x13005788: {
         "_": "contacts.importContactToken",
         "params": {
             "token": str,
         },
-        "ret": TLType,
+        "ret": "User",
     },
     0x63C66506: {
         "_": "messages.getMessages",
         "params": {
             "id": list["InputMessage"],
         },
-        "ret": TLType,
+        "ret": "messages.Messages",
     },
     0xA0F4CB4F: {
         "_": "messages.getDialogs",
@@ -10143,7 +10143,7 @@ MAP = {
             "limit": Int32,
             "hash": Int64,
         },
-        "ret": TLType,
+        "ret": "messages.Dialogs",
     },
     0x4423E6C5: {
         "_": "messages.getHistory",
@@ -10157,7 +10157,7 @@ MAP = {
             "min_id": Int32,
             "hash": Int64,
         },
-        "ret": TLType,
+        "ret": "messages.Messages",
     },
     0xA0FDA762: {
         "_": "messages.search",
@@ -10177,7 +10177,7 @@ MAP = {
             "min_id": Int32,
             "hash": Int64,
         },
-        "ret": TLType,
+        "ret": "messages.Messages",
     },
     0xE306D3A: {
         "_": "messages.readHistory",
@@ -10185,7 +10185,7 @@ MAP = {
             "peer": TLType,
             "max_id": Int32,
         },
-        "ret": TLType,
+        "ret": "messages.AffectedMessages",
     },
     0xB08F922A: {
         "_": "messages.deleteHistory",
@@ -10198,7 +10198,7 @@ MAP = {
             "min_date": FlagsOf("flags", 2, Int32),
             "max_date": FlagsOf("flags", 3, Int32),
         },
-        "ret": TLType,
+        "ret": "messages.AffectedHistory",
     },
     0xE58E95D2: {
         "_": "messages.deleteMessages",
@@ -10207,7 +10207,7 @@ MAP = {
             "revoke": FlagsOf("flags", 0, Bit),
             "id": list[Int32],
         },
-        "ret": TLType,
+        "ret": "messages.AffectedMessages",
     },
     0x5A954C0: {
         "_": "messages.receivedMessages",
@@ -10246,7 +10246,7 @@ MAP = {
             "schedule_date": FlagsOf("flags", 10, Int32),
             "send_as": FlagsOf("flags", 13, TLType),
         },
-        "ret": TLType,
+        "ret": "Updates",
     },
     0x7547C966: {
         "_": "messages.sendMedia",
@@ -10268,7 +10268,7 @@ MAP = {
             "schedule_date": FlagsOf("flags", 10, Int32),
             "send_as": FlagsOf("flags", 13, TLType),
         },
-        "ret": TLType,
+        "ret": "Updates",
     },
     0xC661BBC4: {
         "_": "messages.forwardMessages",
@@ -10288,7 +10288,7 @@ MAP = {
             "schedule_date": FlagsOf("flags", 10, Int32),
             "send_as": FlagsOf("flags", 13, TLType),
         },
-        "ret": TLType,
+        "ret": "Updates",
     },
     0xCF1592DB: {
         "_": "messages.reportSpam",
@@ -10302,7 +10302,7 @@ MAP = {
         "params": {
             "peer": TLType,
         },
-        "ret": TLType,
+        "ret": "messages.PeerSettings",
     },
     0x8953AB4E: {
         "_": "messages.report",
@@ -10319,14 +10319,14 @@ MAP = {
         "params": {
             "id": list[Int64],
         },
-        "ret": TLType,
+        "ret": "messages.Chats",
     },
     0xAEB00B34: {
         "_": "messages.getFullChat",
         "params": {
             "chat_id": Int64,
         },
-        "ret": TLType,
+        "ret": "messages.ChatFull",
     },
     0x73783FFD: {
         "_": "messages.editChatTitle",
@@ -10334,7 +10334,7 @@ MAP = {
             "chat_id": Int64,
             "title": str,
         },
-        "ret": TLType,
+        "ret": "Updates",
     },
     0x35DDD674: {
         "_": "messages.editChatPhoto",
@@ -10342,7 +10342,7 @@ MAP = {
             "chat_id": Int64,
             "photo": TLType,
         },
-        "ret": TLType,
+        "ret": "Updates",
     },
     0xF24753E3: {
         "_": "messages.addChatUser",
@@ -10351,7 +10351,7 @@ MAP = {
             "user_id": TLType,
             "fwd_limit": Int32,
         },
-        "ret": TLType,
+        "ret": "Updates",
     },
     0xA2185CAB: {
         "_": "messages.deleteChatUser",
@@ -10361,7 +10361,7 @@ MAP = {
             "chat_id": Int64,
             "user_id": TLType,
         },
-        "ret": TLType,
+        "ret": "Updates",
     },
     0x34A818: {
         "_": "messages.createChat",
@@ -10371,7 +10371,7 @@ MAP = {
             "title": str,
             "ttl_period": FlagsOf("flags", 0, Int32),
         },
-        "ret": TLType,
+        "ret": "Updates",
     },
     0x26CF8950: {
         "_": "messages.getDhConfig",
@@ -10379,7 +10379,7 @@ MAP = {
             "version": Int32,
             "random_length": Int32,
         },
-        "ret": TLType,
+        "ret": "messages.DhConfig",
     },
     0xF64DAF43: {
         "_": "messages.requestEncryption",
@@ -10388,7 +10388,7 @@ MAP = {
             "random_id": Int32,
             "g_a": bytes,
         },
-        "ret": TLType,
+        "ret": "EncryptedChat",
     },
     0x3DBC0415: {
         "_": "messages.acceptEncryption",
@@ -10397,7 +10397,7 @@ MAP = {
             "g_b": bytes,
             "key_fingerprint": Int64,
         },
-        "ret": TLType,
+        "ret": "EncryptedChat",
     },
     0xF393AEA0: {
         "_": "messages.discardEncryption",
@@ -10433,7 +10433,7 @@ MAP = {
             "random_id": Int64,
             "data": bytes,
         },
-        "ret": TLType,
+        "ret": "messages.SentEncryptedMessage",
     },
     0x5559481D: {
         "_": "messages.sendEncryptedFile",
@@ -10445,7 +10445,7 @@ MAP = {
             "data": bytes,
             "file": TLType,
         },
-        "ret": TLType,
+        "ret": "messages.SentEncryptedMessage",
     },
     0x32D439A4: {
         "_": "messages.sendEncryptedService",
@@ -10454,7 +10454,7 @@ MAP = {
             "random_id": Int64,
             "data": bytes,
         },
-        "ret": TLType,
+        "ret": "messages.SentEncryptedMessage",
     },
     0x55A5BB66: {
         "_": "messages.receivedQueue",
@@ -10475,7 +10475,7 @@ MAP = {
         "params": {
             "id": list[Int32],
         },
-        "ret": TLType,
+        "ret": "messages.AffectedMessages",
     },
     0xD5A5D3A1: {
         "_": "messages.getStickers",
@@ -10483,14 +10483,14 @@ MAP = {
             "emoticon": str,
             "hash": Int64,
         },
-        "ret": TLType,
+        "ret": "messages.Stickers",
     },
     0xB8A0A1A8: {
         "_": "messages.getAllStickers",
         "params": {
             "hash": Int64,
         },
-        "ret": TLType,
+        "ret": "messages.AllStickers",
     },
     0x8B68B0CC: {
         "_": "messages.getWebPagePreview",
@@ -10499,7 +10499,7 @@ MAP = {
             "message": str,
             "entities": FlagsOf("flags", 3, list["MessageEntity"]),
         },
-        "ret": TLType,
+        "ret": "MessageMedia",
     },
     0xA02CE5D5: {
         "_": "messages.exportChatInvite",
@@ -10512,21 +10512,21 @@ MAP = {
             "usage_limit": FlagsOf("flags", 1, Int32),
             "title": FlagsOf("flags", 4, str),
         },
-        "ret": TLType,
+        "ret": "ExportedChatInvite",
     },
     0x3EADB1BB: {
         "_": "messages.checkChatInvite",
         "params": {
             "hash": str,
         },
-        "ret": TLType,
+        "ret": "ChatInvite",
     },
     0x6C50051C: {
         "_": "messages.importChatInvite",
         "params": {
             "hash": str,
         },
-        "ret": TLType,
+        "ret": "Updates",
     },
     0xC8A0EC74: {
         "_": "messages.getStickerSet",
@@ -10534,7 +10534,7 @@ MAP = {
             "stickerset": TLType,
             "hash": Int32,
         },
-        "ret": TLType,
+        "ret": "messages.StickerSet",
     },
     0xC78FE460: {
         "_": "messages.installStickerSet",
@@ -10542,7 +10542,7 @@ MAP = {
             "stickerset": TLType,
             "archived": bool,
         },
-        "ret": TLType,
+        "ret": "messages.StickerSetInstallResult",
     },
     0xF96E55DE: {
         "_": "messages.uninstallStickerSet",
@@ -10559,7 +10559,7 @@ MAP = {
             "random_id": Int64,
             "start_param": str,
         },
-        "ret": TLType,
+        "ret": "Updates",
     },
     0x5784D3E1: {
         "_": "messages.getMessagesViews",
@@ -10568,7 +10568,7 @@ MAP = {
             "id": list[Int32],
             "increment": bool,
         },
-        "ret": TLType,
+        "ret": "messages.MessageViews",
     },
     0xA85BD1C2: {
         "_": "messages.editChatAdmin",
@@ -10584,7 +10584,7 @@ MAP = {
         "params": {
             "chat_id": Int64,
         },
-        "ret": TLType,
+        "ret": "Updates",
     },
     0x4BC6589A: {
         "_": "messages.searchGlobal",
@@ -10600,7 +10600,7 @@ MAP = {
             "offset_id": Int32,
             "limit": Int32,
         },
-        "ret": TLType,
+        "ret": "messages.Messages",
     },
     0x78337739: {
         "_": "messages.reorderStickerSets",
@@ -10619,14 +10619,14 @@ MAP = {
             "size": Int64,
             "mime_type": str,
         },
-        "ret": TLType,
+        "ret": "Document",
     },
     0x5CF09635: {
         "_": "messages.getSavedGifs",
         "params": {
             "hash": Int64,
         },
-        "ret": TLType,
+        "ret": "messages.SavedGifs",
     },
     0x327A30CB: {
         "_": "messages.saveGif",
@@ -10646,7 +10646,7 @@ MAP = {
             "query": str,
             "offset": str,
         },
-        "ret": TLType,
+        "ret": "messages.BotResults",
     },
     0xEB5EA206: {
         "_": "messages.setInlineBotResults",
@@ -10679,7 +10679,7 @@ MAP = {
             "schedule_date": FlagsOf("flags", 10, Int32),
             "send_as": FlagsOf("flags", 13, TLType),
         },
-        "ret": TLType,
+        "ret": "Updates",
     },
     0xFDA68D36: {
         "_": "messages.getMessageEditData",
@@ -10687,7 +10687,7 @@ MAP = {
             "peer": TLType,
             "id": Int32,
         },
-        "ret": TLType,
+        "ret": "messages.MessageEditData",
     },
     0x48F71778: {
         "_": "messages.editMessage",
@@ -10702,7 +10702,7 @@ MAP = {
             "entities": FlagsOf("flags", 3, list["MessageEntity"]),
             "schedule_date": FlagsOf("flags", 15, Int32),
         },
-        "ret": TLType,
+        "ret": "Updates",
     },
     0x83557DBA: {
         "_": "messages.editInlineBotMessage",
@@ -10727,7 +10727,7 @@ MAP = {
             "data": FlagsOf("flags", 0, bytes),
             "password": FlagsOf("flags", 2, TLType),
         },
-        "ret": TLType,
+        "ret": "messages.BotCallbackAnswer",
     },
     0xD58F130A: {
         "_": "messages.setBotCallbackAnswer",
@@ -10746,7 +10746,7 @@ MAP = {
         "params": {
             "peers": list["InputDialogPeer"],
         },
-        "ret": TLType,
+        "ret": "messages.PeerDialogs",
     },
     0xB4331E3F: {
         "_": "messages.saveDraft",
@@ -10763,14 +10763,14 @@ MAP = {
     },
     0x6A3F8D65: {
         "_": "messages.getAllDrafts",
-        "ret": TLType,
+        "ret": "Updates",
     },
     0x64780B14: {
         "_": "messages.getFeaturedStickers",
         "params": {
             "hash": Int64,
         },
-        "ret": TLType,
+        "ret": "messages.FeaturedStickers",
     },
     0x5B118126: {
         "_": "messages.readFeaturedStickers",
@@ -10786,7 +10786,7 @@ MAP = {
             "attached": FlagsOf("flags", 0, Bit),
             "hash": Int64,
         },
-        "ret": TLType,
+        "ret": "messages.RecentStickers",
     },
     0x392718F8: {
         "_": "messages.saveRecentSticker",
@@ -10815,14 +10815,14 @@ MAP = {
             "offset_id": Int64,
             "limit": Int32,
         },
-        "ret": TLType,
+        "ret": "messages.ArchivedStickers",
     },
     0x640F82B8: {
         "_": "messages.getMaskStickers",
         "params": {
             "hash": Int64,
         },
-        "ret": TLType,
+        "ret": "messages.AllStickers",
     },
     0xCC5B67CC: {
         "_": "messages.getAttachedStickers",
@@ -10842,7 +10842,7 @@ MAP = {
             "user_id": TLType,
             "score": Int32,
         },
-        "ret": TLType,
+        "ret": "Updates",
     },
     0x15AD9F64: {
         "_": "messages.setInlineGameScore",
@@ -10863,7 +10863,7 @@ MAP = {
             "id": Int32,
             "user_id": TLType,
         },
-        "ret": TLType,
+        "ret": "messages.HighScores",
     },
     0xF635E1B: {
         "_": "messages.getInlineGameHighScores",
@@ -10871,7 +10871,7 @@ MAP = {
             "id": TLType,
             "user_id": TLType,
         },
-        "ret": TLType,
+        "ret": "messages.HighScores",
     },
     0xE40CA104: {
         "_": "messages.getCommonChats",
@@ -10880,14 +10880,14 @@ MAP = {
             "max_id": Int64,
             "limit": Int32,
         },
-        "ret": TLType,
+        "ret": "messages.Chats",
     },
     0x875F74BE: {
         "_": "messages.getAllChats",
         "params": {
             "except_ids": list[Int64],
         },
-        "ret": TLType,
+        "ret": "messages.Chats",
     },
     0x32CA8F91: {
         "_": "messages.getWebPage",
@@ -10895,7 +10895,7 @@ MAP = {
             "url": str,
             "hash": Int32,
         },
-        "ret": TLType,
+        "ret": "WebPage",
     },
     0xA731E257: {
         "_": "messages.toggleDialogPin",
@@ -10921,7 +10921,7 @@ MAP = {
         "params": {
             "folder_id": Int32,
         },
-        "ret": TLType,
+        "ret": "messages.PeerDialogs",
     },
     0xE5F672FA: {
         "_": "messages.setBotShippingResults",
@@ -10949,7 +10949,7 @@ MAP = {
             "peer": TLType,
             "media": TLType,
         },
-        "ret": TLType,
+        "ret": "MessageMedia",
     },
     0xC97DF020: {
         "_": "messages.sendScreenshotNotification",
@@ -10958,14 +10958,14 @@ MAP = {
             "reply_to_msg_id": Int32,
             "random_id": Int64,
         },
-        "ret": TLType,
+        "ret": "Updates",
     },
     0x4F1AAA9: {
         "_": "messages.getFavedStickers",
         "params": {
             "hash": Int64,
         },
-        "ret": TLType,
+        "ret": "messages.FavedStickers",
     },
     0xB9FFC55B: {
         "_": "messages.faveSticker",
@@ -10987,7 +10987,7 @@ MAP = {
             "max_id": Int32,
             "min_id": Int32,
         },
-        "ret": TLType,
+        "ret": "messages.Messages",
     },
     0x36E5BF4D: {
         "_": "messages.readMentions",
@@ -10996,7 +10996,7 @@ MAP = {
             "peer": TLType,
             "top_msg_id": FlagsOf("flags", 0, Int32),
         },
-        "ret": TLType,
+        "ret": "messages.AffectedHistory",
     },
     0x702A40E0: {
         "_": "messages.getRecentLocations",
@@ -11005,7 +11005,7 @@ MAP = {
             "limit": Int32,
             "hash": Int64,
         },
-        "ret": TLType,
+        "ret": "messages.Messages",
     },
     0xB6F11A1C: {
         "_": "messages.sendMultiMedia",
@@ -11023,7 +11023,7 @@ MAP = {
             "schedule_date": FlagsOf("flags", 10, Int32),
             "send_as": FlagsOf("flags", 13, TLType),
         },
-        "ret": TLType,
+        "ret": "Updates",
     },
     0x5057C497: {
         "_": "messages.uploadEncryptedFile",
@@ -11031,7 +11031,7 @@ MAP = {
             "peer": TLType,
             "file": TLType,
         },
-        "ret": TLType,
+        "ret": "EncryptedFile",
     },
     0x35705B8A: {
         "_": "messages.searchStickerSets",
@@ -11041,7 +11041,7 @@ MAP = {
             "q": str,
             "hash": Int64,
         },
-        "ret": TLType,
+        "ret": "messages.FoundStickerSets",
     },
     0x1CFF7E08: {
         "_": "messages.getSplitRanges",
@@ -11074,7 +11074,7 @@ MAP = {
             "peer": TLType,
             "id": Int32,
         },
-        "ret": TLType,
+        "ret": "Updates",
     },
     0x10EA6184: {
         "_": "messages.sendVote",
@@ -11083,7 +11083,7 @@ MAP = {
             "msg_id": Int32,
             "options": list[bytes],
         },
-        "ret": TLType,
+        "ret": "Updates",
     },
     0x73BB643B: {
         "_": "messages.getPollResults",
@@ -11091,14 +11091,14 @@ MAP = {
             "peer": TLType,
             "msg_id": Int32,
         },
-        "ret": TLType,
+        "ret": "Updates",
     },
     0x6E2BE050: {
         "_": "messages.getOnlines",
         "params": {
             "peer": TLType,
         },
-        "ret": TLType,
+        "ret": "ChatOnlines",
     },
     0xDEF60797: {
         "_": "messages.editChatAbout",
@@ -11114,14 +11114,14 @@ MAP = {
             "peer": TLType,
             "banned_rights": TLType,
         },
-        "ret": TLType,
+        "ret": "Updates",
     },
     0x35A0E062: {
         "_": "messages.getEmojiKeywords",
         "params": {
             "lang_code": str,
         },
-        "ret": TLType,
+        "ret": "EmojiKeywordsDifference",
     },
     0x1508B6AF: {
         "_": "messages.getEmojiKeywordsDifference",
@@ -11129,7 +11129,7 @@ MAP = {
             "lang_code": str,
             "from_version": Int32,
         },
-        "ret": TLType,
+        "ret": "EmojiKeywordsDifference",
     },
     0x4E9963B2: {
         "_": "messages.getEmojiKeywordsLanguages",
@@ -11143,7 +11143,7 @@ MAP = {
         "params": {
             "lang_code": str,
         },
-        "ret": TLType,
+        "ret": "EmojiURL",
     },
     0xAE7CC1: {
         "_": "messages.getSearchCounters",
@@ -11164,7 +11164,7 @@ MAP = {
             "button_id": FlagsOf("flags", 1, Int32),
             "url": FlagsOf("flags", 2, str),
         },
-        "ret": TLType,
+        "ret": "UrlAuthResult",
     },
     0xB12C7125: {
         "_": "messages.acceptUrlAuth",
@@ -11176,7 +11176,7 @@ MAP = {
             "button_id": FlagsOf("flags", 1, Int32),
             "url": FlagsOf("flags", 2, str),
         },
-        "ret": TLType,
+        "ret": "UrlAuthResult",
     },
     0x4FACB138: {
         "_": "messages.hidePeerSettingsBar",
@@ -11191,7 +11191,7 @@ MAP = {
             "peer": TLType,
             "hash": Int64,
         },
-        "ret": TLType,
+        "ret": "messages.Messages",
     },
     0xBDBB0464: {
         "_": "messages.getScheduledMessages",
@@ -11199,7 +11199,7 @@ MAP = {
             "peer": TLType,
             "id": list[Int32],
         },
-        "ret": TLType,
+        "ret": "messages.Messages",
     },
     0xBD38850A: {
         "_": "messages.sendScheduledMessages",
@@ -11207,7 +11207,7 @@ MAP = {
             "peer": TLType,
             "id": list[Int32],
         },
-        "ret": TLType,
+        "ret": "Updates",
     },
     0x59AE2B16: {
         "_": "messages.deleteScheduledMessages",
@@ -11215,7 +11215,7 @@ MAP = {
             "peer": TLType,
             "id": list[Int32],
         },
-        "ret": TLType,
+        "ret": "Updates",
     },
     0xB86E380E: {
         "_": "messages.getPollVotes",
@@ -11227,7 +11227,7 @@ MAP = {
             "offset": FlagsOf("flags", 1, str),
             "limit": Int32,
         },
-        "ret": TLType,
+        "ret": "messages.VotesList",
     },
     0xB5052FEA: {
         "_": "messages.toggleStickerSets",
@@ -11271,7 +11271,7 @@ MAP = {
             "limit": Int32,
             "hash": Int64,
         },
-        "ret": TLType,
+        "ret": "messages.FeaturedStickers",
     },
     0x22DDD30C: {
         "_": "messages.getReplies",
@@ -11286,7 +11286,7 @@ MAP = {
             "min_id": Int32,
             "hash": Int64,
         },
-        "ret": TLType,
+        "ret": "messages.Messages",
     },
     0x446972FD: {
         "_": "messages.getDiscussionMessage",
@@ -11294,7 +11294,7 @@ MAP = {
             "peer": TLType,
             "msg_id": Int32,
         },
-        "ret": TLType,
+        "ret": "messages.DiscussionMessage",
     },
     0xF731A9F4: {
         "_": "messages.readDiscussion",
@@ -11312,7 +11312,7 @@ MAP = {
             "peer": TLType,
             "top_msg_id": FlagsOf("flags", 0, Int32),
         },
-        "ret": TLType,
+        "ret": "messages.AffectedHistory",
     },
     0x5BD0EE50: {
         "_": "messages.deleteChat",
@@ -11327,14 +11327,14 @@ MAP = {
             "flags": Int32,
             "revoke": FlagsOf("flags", 0, Bit),
         },
-        "ret": TLType,
+        "ret": "messages.AffectedFoundMessages",
     },
     0x43FE19F3: {
         "_": "messages.checkHistoryImport",
         "params": {
             "import_head": str,
         },
-        "ret": TLType,
+        "ret": "messages.HistoryImportParsed",
     },
     0x34090C3B: {
         "_": "messages.initHistoryImport",
@@ -11343,7 +11343,7 @@ MAP = {
             "file": TLType,
             "media_count": Int32,
         },
-        "ret": TLType,
+        "ret": "messages.HistoryImport",
     },
     0x2A862092: {
         "_": "messages.uploadImportedMedia",
@@ -11353,7 +11353,7 @@ MAP = {
             "file_name": str,
             "media": TLType,
         },
-        "ret": TLType,
+        "ret": "MessageMedia",
     },
     0xB43DF344: {
         "_": "messages.startHistoryImport",
@@ -11374,7 +11374,7 @@ MAP = {
             "offset_link": FlagsOf("flags", 2, str),
             "limit": Int32,
         },
-        "ret": TLType,
+        "ret": "messages.ExportedChatInvites",
     },
     0x73746F5C: {
         "_": "messages.getExportedChatInvite",
@@ -11382,7 +11382,7 @@ MAP = {
             "peer": TLType,
             "link": str,
         },
-        "ret": TLType,
+        "ret": "messages.ExportedChatInvite",
     },
     0xBDCA2F75: {
         "_": "messages.editExportedChatInvite",
@@ -11396,7 +11396,7 @@ MAP = {
             "request_needed": FlagsOf("flags", 3, bool),
             "title": FlagsOf("flags", 4, str),
         },
-        "ret": TLType,
+        "ret": "messages.ExportedChatInvite",
     },
     0x56987BD5: {
         "_": "messages.deleteRevokedExportedChatInvites",
@@ -11419,7 +11419,7 @@ MAP = {
         "params": {
             "peer": TLType,
         },
-        "ret": TLType,
+        "ret": "messages.ChatAdminsWithInvites",
     },
     0xDF04DD4E: {
         "_": "messages.getChatInviteImporters",
@@ -11433,7 +11433,7 @@ MAP = {
             "offset_user": TLType,
             "limit": Int32,
         },
-        "ret": TLType,
+        "ret": "messages.ChatInviteImporters",
     },
     0xB80E5FE4: {
         "_": "messages.setHistoryTTL",
@@ -11441,14 +11441,14 @@ MAP = {
             "peer": TLType,
             "period": Int32,
         },
-        "ret": TLType,
+        "ret": "Updates",
     },
     0x5DC60F03: {
         "_": "messages.checkHistoryImportPeer",
         "params": {
             "peer": TLType,
         },
-        "ret": TLType,
+        "ret": "messages.CheckedHistoryImportPeer",
     },
     0xE63BE13F: {
         "_": "messages.setChatTheme",
@@ -11456,7 +11456,7 @@ MAP = {
             "peer": TLType,
             "emoticon": str,
         },
-        "ret": TLType,
+        "ret": "Updates",
     },
     0x2C6F97B7: {
         "_": "messages.getMessageReadParticipants",
@@ -11474,7 +11474,7 @@ MAP = {
             "offset_id": Int32,
             "offset_date": Int32,
         },
-        "ret": TLType,
+        "ret": "messages.SearchResultsCalendar",
     },
     0x6E9583A3: {
         "_": "messages.getSearchResultsPositions",
@@ -11484,7 +11484,7 @@ MAP = {
             "offset_id": Int32,
             "limit": Int32,
         },
-        "ret": TLType,
+        "ret": "messages.SearchResultsPositions",
     },
     0x7FE7E815: {
         "_": "messages.hideChatJoinRequest",
@@ -11494,7 +11494,7 @@ MAP = {
             "peer": TLType,
             "user_id": TLType,
         },
-        "ret": TLType,
+        "ret": "Updates",
     },
     0xE085F4EA: {
         "_": "messages.hideAllChatJoinRequests",
@@ -11504,7 +11504,7 @@ MAP = {
             "peer": TLType,
             "link": FlagsOf("flags", 1, str),
         },
-        "ret": TLType,
+        "ret": "Updates",
     },
     0xB11EAFA2: {
         "_": "messages.toggleNoForwards",
@@ -11512,7 +11512,7 @@ MAP = {
             "peer": TLType,
             "enabled": bool,
         },
-        "ret": TLType,
+        "ret": "Updates",
     },
     0xCCFDDF96: {
         "_": "messages.saveDefaultSendAs",
@@ -11532,7 +11532,7 @@ MAP = {
             "msg_id": Int32,
             "reaction": FlagsOf("flags", 0, list["Reaction"]),
         },
-        "ret": TLType,
+        "ret": "Updates",
     },
     0x8BBA90E6: {
         "_": "messages.getMessagesReactions",
@@ -11540,7 +11540,7 @@ MAP = {
             "peer": TLType,
             "id": list[Int32],
         },
-        "ret": TLType,
+        "ret": "Updates",
     },
     0x461B3F48: {
         "_": "messages.getMessageReactionsList",
@@ -11552,7 +11552,7 @@ MAP = {
             "offset": FlagsOf("flags", 1, str),
             "limit": Int32,
         },
-        "ret": TLType,
+        "ret": "messages.MessageReactionsList",
     },
     0xFEB16771: {
         "_": "messages.setChatAvailableReactions",
@@ -11560,14 +11560,14 @@ MAP = {
             "peer": TLType,
             "available_reactions": TLType,
         },
-        "ret": TLType,
+        "ret": "Updates",
     },
     0x18DEA0AC: {
         "_": "messages.getAvailableReactions",
         "params": {
             "hash": Int32,
         },
-        "ret": TLType,
+        "ret": "messages.AvailableReactions",
     },
     0x4F47A016: {
         "_": "messages.setDefaultReaction",
@@ -11586,7 +11586,7 @@ MAP = {
             "from_lang": FlagsOf("flags", 2, str),
             "to_lang": str,
         },
-        "ret": TLType,
+        "ret": "messages.TranslatedText",
     },
     0x3223495B: {
         "_": "messages.getUnreadReactions",
@@ -11600,7 +11600,7 @@ MAP = {
             "max_id": Int32,
             "min_id": Int32,
         },
-        "ret": TLType,
+        "ret": "messages.Messages",
     },
     0x54AA7F8E: {
         "_": "messages.readReactions",
@@ -11609,7 +11609,7 @@ MAP = {
             "peer": TLType,
             "top_msg_id": FlagsOf("flags", 0, Int32),
         },
-        "ret": TLType,
+        "ret": "messages.AffectedHistory",
     },
     0x107E31A0: {
         "_": "messages.searchSentMedia",
@@ -11618,21 +11618,21 @@ MAP = {
             "filter": TLType,
             "limit": Int32,
         },
-        "ret": TLType,
+        "ret": "messages.Messages",
     },
     0x16FCC2CB: {
         "_": "messages.getAttachMenuBots",
         "params": {
             "hash": Int64,
         },
-        "ret": TLType,
+        "ret": "AttachMenuBots",
     },
     0x77216192: {
         "_": "messages.getAttachMenuBot",
         "params": {
             "bot": TLType,
         },
-        "ret": TLType,
+        "ret": "AttachMenuBotsBot",
     },
     0x69F59D69: {
         "_": "messages.toggleBotInAttachMenu",
@@ -11660,7 +11660,7 @@ MAP = {
             "top_msg_id": FlagsOf("flags", 9, Int32),
             "send_as": FlagsOf("flags", 13, TLType),
         },
-        "ret": TLType,
+        "ret": "WebViewResult",
     },
     0x7FF34309: {
         "_": "messages.prolongWebView",
@@ -11685,7 +11685,7 @@ MAP = {
             "theme_params": FlagsOf("flags", 0, TLType),
             "platform": str,
         },
-        "ret": TLType,
+        "ret": "SimpleWebViewResult",
     },
     0xA4314F5: {
         "_": "messages.sendWebViewResultMessage",
@@ -11693,7 +11693,7 @@ MAP = {
             "bot_query_id": str,
             "result": TLType,
         },
-        "ret": TLType,
+        "ret": "WebViewMessageSent",
     },
     0xDC0242C8: {
         "_": "messages.sendWebViewData",
@@ -11703,7 +11703,7 @@ MAP = {
             "button_text": str,
             "data": str,
         },
-        "ret": TLType,
+        "ret": "Updates",
     },
     0x269E9A49: {
         "_": "messages.transcribeAudio",
@@ -11711,7 +11711,7 @@ MAP = {
             "peer": TLType,
             "msg_id": Int32,
         },
-        "ret": TLType,
+        "ret": "messages.TranscribedAudio",
     },
     0x7F1D072F: {
         "_": "messages.rateTranscribedAudio",
@@ -11735,14 +11735,14 @@ MAP = {
         "params": {
             "hash": Int64,
         },
-        "ret": TLType,
+        "ret": "messages.AllStickers",
     },
     0xECF6736: {
         "_": "messages.getFeaturedEmojiStickers",
         "params": {
             "hash": Int64,
         },
-        "ret": TLType,
+        "ret": "messages.FeaturedStickers",
     },
     0x3F64C076: {
         "_": "messages.reportReaction",
@@ -11759,7 +11759,7 @@ MAP = {
             "limit": Int32,
             "hash": Int64,
         },
-        "ret": TLType,
+        "ret": "messages.Reactions",
     },
     0x39461DB2: {
         "_": "messages.getRecentReactions",
@@ -11767,7 +11767,7 @@ MAP = {
             "limit": Int32,
             "hash": Int64,
         },
-        "ret": TLType,
+        "ret": "messages.Reactions",
     },
     0x9DFEEFB4: {
         "_": "messages.clearRecentReactions",
@@ -11779,7 +11779,7 @@ MAP = {
             "peer": TLType,
             "id": list[Int32],
         },
-        "ret": TLType,
+        "ret": "Updates",
     },
     0x9EB51445: {
         "_": "messages.setDefaultHistoryTTL",
@@ -11790,11 +11790,11 @@ MAP = {
     },
     0x658B7188: {
         "_": "messages.getDefaultHistoryTTL",
-        "ret": TLType,
+        "ret": "DefaultHistoryTTL",
     },
     0xEDD4882A: {
         "_": "updates.getState",
-        "ret": TLType,
+        "ret": "updates.State",
     },
     0x25939651: {
         "_": "updates.getDifference",
@@ -11805,7 +11805,7 @@ MAP = {
             "date": Int32,
             "qts": Int32,
         },
-        "ret": TLType,
+        "ret": "updates.Difference",
     },
     0x3173D78: {
         "_": "updates.getChannelDifference",
@@ -11817,7 +11817,7 @@ MAP = {
             "pts": Int32,
             "limit": Int32,
         },
-        "ret": TLType,
+        "ret": "updates.ChannelDifference",
     },
     0x1C3D5956: {
         "_": "photos.updateProfilePhoto",
@@ -11826,7 +11826,7 @@ MAP = {
             "fallback": FlagsOf("flags", 0, Bit),
             "id": TLType,
         },
-        "ret": TLType,
+        "ret": "photos.Photo",
     },
     0x89F30F69: {
         "_": "photos.uploadProfilePhoto",
@@ -11837,7 +11837,7 @@ MAP = {
             "video": FlagsOf("flags", 1, TLType),
             "video_start_ts": FlagsOf("flags", 2, TLType),
         },
-        "ret": TLType,
+        "ret": "photos.Photo",
     },
     0x87CF7F2F: {
         "_": "photos.deletePhotos",
@@ -11854,7 +11854,7 @@ MAP = {
             "max_id": Int64,
             "limit": Int32,
         },
-        "ret": TLType,
+        "ret": "photos.Photos",
     },
     0xB91A83BF: {
         "_": "photos.uploadContactProfilePhoto",
@@ -11867,7 +11867,7 @@ MAP = {
             "video": FlagsOf("flags", 1, TLType),
             "video_start_ts": FlagsOf("flags", 2, TLType),
         },
-        "ret": TLType,
+        "ret": "photos.Photo",
     },
     0xB304A621: {
         "_": "upload.saveFilePart",
@@ -11888,7 +11888,7 @@ MAP = {
             "offset": Int64,
             "limit": Int32,
         },
-        "ret": TLType,
+        "ret": "upload.File",
     },
     0xDE7B673D: {
         "_": "upload.saveBigFilePart",
@@ -11907,7 +11907,7 @@ MAP = {
             "offset": Int32,
             "limit": Int32,
         },
-        "ret": TLType,
+        "ret": "upload.WebFile",
     },
     0x395F69DA: {
         "_": "upload.getCdnFile",
@@ -11916,7 +11916,7 @@ MAP = {
             "offset": Int64,
             "limit": Int32,
         },
-        "ret": TLType,
+        "ret": "upload.CdnFile",
     },
     0x9B2754A8: {
         "_": "upload.reuploadCdnFile",
@@ -11944,33 +11944,33 @@ MAP = {
     },
     0xC4F9186B: {
         "_": "help.getConfig",
-        "ret": TLType,
+        "ret": "Config",
     },
     0x1FB33026: {
         "_": "help.getNearestDc",
-        "ret": TLType,
+        "ret": "NearestDc",
     },
     0x522D5A7D: {
         "_": "help.getAppUpdate",
         "params": {
             "source": str,
         },
-        "ret": TLType,
+        "ret": "help.AppUpdate",
     },
     0x4D392343: {
         "_": "help.getInviteText",
-        "ret": TLType,
+        "ret": "help.InviteText",
     },
     0x9CDF08CD: {
         "_": "help.getSupport",
-        "ret": TLType,
+        "ret": "help.Support",
     },
     0x9010EF6F: {
         "_": "help.getAppChangelog",
         "params": {
             "prev_app_version": str,
         },
-        "ret": TLType,
+        "ret": "Updates",
     },
     0xEC22CFCD: {
         "_": "help.setBotUpdatesStatus",
@@ -11982,18 +11982,18 @@ MAP = {
     },
     0x52029342: {
         "_": "help.getCdnConfig",
-        "ret": TLType,
+        "ret": "CdnConfig",
     },
     0x3DC0F114: {
         "_": "help.getRecentMeUrls",
         "params": {
             "referer": str,
         },
-        "ret": TLType,
+        "ret": "help.RecentMeUrls",
     },
     0x2CA51FD1: {
         "_": "help.getTermsOfServiceUpdate",
-        "ret": TLType,
+        "ret": "help.TermsOfServiceUpdate",
     },
     0xEE72F79A: {
         "_": "help.acceptTermsOfService",
@@ -12007,11 +12007,11 @@ MAP = {
         "params": {
             "path": str,
         },
-        "ret": TLType,
+        "ret": "help.DeepLinkInfo",
     },
     0x98914110: {
         "_": "help.getAppConfig",
-        "ret": TLType,
+        "ret": "JSONValue",
     },
     0x6F02F748: {
         "_": "help.saveAppLog",
@@ -12025,18 +12025,18 @@ MAP = {
         "params": {
             "hash": Int32,
         },
-        "ret": TLType,
+        "ret": "help.PassportConfig",
     },
     0xD360E72C: {
         "_": "help.getSupportName",
-        "ret": TLType,
+        "ret": "help.SupportName",
     },
     0x38A08D3: {
         "_": "help.getUserInfo",
         "params": {
             "user_id": TLType,
         },
-        "ret": TLType,
+        "ret": "help.UserInfo",
     },
     0x66B91B70: {
         "_": "help.editUserInfo",
@@ -12045,11 +12045,11 @@ MAP = {
             "message": str,
             "entities": list["MessageEntity"],
         },
-        "ret": TLType,
+        "ret": "help.UserInfo",
     },
     0xC0977421: {
         "_": "help.getPromoData",
-        "ret": TLType,
+        "ret": "help.PromoData",
     },
     0x1E251C95: {
         "_": "help.hidePromoData",
@@ -12072,11 +12072,11 @@ MAP = {
             "lang_code": str,
             "hash": Int32,
         },
-        "ret": TLType,
+        "ret": "help.CountriesList",
     },
     0xB81B93D4: {
         "_": "help.getPremiumPromo",
-        "ret": TLType,
+        "ret": "help.PremiumPromo",
     },
     0xCC104937: {
         "_": "channels.readHistory",
@@ -12092,7 +12092,7 @@ MAP = {
             "channel": TLType,
             "id": list[Int32],
         },
-        "ret": TLType,
+        "ret": "messages.AffectedMessages",
     },
     0xF44A8315: {
         "_": "channels.reportSpam",
@@ -12109,7 +12109,7 @@ MAP = {
             "channel": TLType,
             "id": list["InputMessage"],
         },
-        "ret": TLType,
+        "ret": "messages.Messages",
     },
     0x77CED9D0: {
         "_": "channels.getParticipants",
@@ -12120,7 +12120,7 @@ MAP = {
             "limit": Int32,
             "hash": Int64,
         },
-        "ret": TLType,
+        "ret": "channels.ChannelParticipants",
     },
     0xA0AB6CC6: {
         "_": "channels.getParticipant",
@@ -12128,21 +12128,21 @@ MAP = {
             "channel": TLType,
             "participant": TLType,
         },
-        "ret": TLType,
+        "ret": "channels.ChannelParticipant",
     },
     0xA7F6BBB: {
         "_": "channels.getChannels",
         "params": {
             "id": list["InputChannel"],
         },
-        "ret": TLType,
+        "ret": "messages.Chats",
     },
     0x8736A09: {
         "_": "channels.getFullChannel",
         "params": {
             "channel": TLType,
         },
-        "ret": TLType,
+        "ret": "messages.ChatFull",
     },
     0x91006707: {
         "_": "channels.createChannel",
@@ -12157,7 +12157,7 @@ MAP = {
             "address": FlagsOf("flags", 2, str),
             "ttl_period": FlagsOf("flags", 4, Int32),
         },
-        "ret": TLType,
+        "ret": "Updates",
     },
     0xD33C8902: {
         "_": "channels.editAdmin",
@@ -12167,7 +12167,7 @@ MAP = {
             "admin_rights": TLType,
             "rank": str,
         },
-        "ret": TLType,
+        "ret": "Updates",
     },
     0x566DECD0: {
         "_": "channels.editTitle",
@@ -12175,7 +12175,7 @@ MAP = {
             "channel": TLType,
             "title": str,
         },
-        "ret": TLType,
+        "ret": "Updates",
     },
     0xF12E57C9: {
         "_": "channels.editPhoto",
@@ -12183,7 +12183,7 @@ MAP = {
             "channel": TLType,
             "photo": TLType,
         },
-        "ret": TLType,
+        "ret": "Updates",
     },
     0x10E6BD2C: {
         "_": "channels.checkUsername",
@@ -12206,14 +12206,14 @@ MAP = {
         "params": {
             "channel": TLType,
         },
-        "ret": TLType,
+        "ret": "Updates",
     },
     0xF836AA95: {
         "_": "channels.leaveChannel",
         "params": {
             "channel": TLType,
         },
-        "ret": TLType,
+        "ret": "Updates",
     },
     0x199F3A6C: {
         "_": "channels.inviteToChannel",
@@ -12221,14 +12221,14 @@ MAP = {
             "channel": TLType,
             "users": list["InputUser"],
         },
-        "ret": TLType,
+        "ret": "Updates",
     },
     0xC0111FE3: {
         "_": "channels.deleteChannel",
         "params": {
             "channel": TLType,
         },
-        "ret": TLType,
+        "ret": "Updates",
     },
     0xE63FADEB: {
         "_": "channels.exportMessageLink",
@@ -12239,7 +12239,7 @@ MAP = {
             "channel": TLType,
             "id": Int32,
         },
-        "ret": TLType,
+        "ret": "ExportedMessageLink",
     },
     0x1F69B606: {
         "_": "channels.toggleSignatures",
@@ -12247,7 +12247,7 @@ MAP = {
             "channel": TLType,
             "enabled": bool,
         },
-        "ret": TLType,
+        "ret": "Updates",
     },
     0xF8B036AF: {
         "_": "channels.getAdminedPublicChannels",
@@ -12256,7 +12256,7 @@ MAP = {
             "by_location": FlagsOf("flags", 0, Bit),
             "check_limit": FlagsOf("flags", 1, Bit),
         },
-        "ret": TLType,
+        "ret": "messages.Chats",
     },
     0x96E6CD81: {
         "_": "channels.editBanned",
@@ -12265,7 +12265,7 @@ MAP = {
             "participant": TLType,
             "banned_rights": TLType,
         },
-        "ret": TLType,
+        "ret": "Updates",
     },
     0x33DDF480: {
         "_": "channels.getAdminLog",
@@ -12279,7 +12279,7 @@ MAP = {
             "min_id": Int64,
             "limit": Int32,
         },
-        "ret": TLType,
+        "ret": "channels.AdminLogResults",
     },
     0xEA8CA4F9: {
         "_": "channels.setStickers",
@@ -12305,7 +12305,7 @@ MAP = {
             "channel": TLType,
             "max_id": Int32,
         },
-        "ret": TLType,
+        "ret": "Updates",
     },
     0xEABBB94C: {
         "_": "channels.togglePreHistoryHidden",
@@ -12313,18 +12313,18 @@ MAP = {
             "channel": TLType,
             "enabled": bool,
         },
-        "ret": TLType,
+        "ret": "Updates",
     },
     0x8341ECC0: {
         "_": "channels.getLeftChannels",
         "params": {
             "offset": Int32,
         },
-        "ret": TLType,
+        "ret": "messages.Chats",
     },
     0xF5DAD378: {
         "_": "channels.getGroupsForDiscussion",
-        "ret": TLType,
+        "ret": "messages.Chats",
     },
     0x40582BB2: {
         "_": "channels.setDiscussionGroup",
@@ -12341,7 +12341,7 @@ MAP = {
             "user_id": TLType,
             "password": TLType,
         },
-        "ret": TLType,
+        "ret": "Updates",
     },
     0x58E63F6D: {
         "_": "channels.editLocation",
@@ -12358,18 +12358,18 @@ MAP = {
             "channel": TLType,
             "seconds": Int32,
         },
-        "ret": TLType,
+        "ret": "Updates",
     },
     0x11E831EE: {
         "_": "channels.getInactiveChannels",
-        "ret": TLType,
+        "ret": "messages.InactiveChats",
     },
     0xB290C69: {
         "_": "channels.convertToGigagroup",
         "params": {
             "channel": TLType,
         },
-        "ret": TLType,
+        "ret": "Updates",
     },
     0xBEAEDB94: {
         "_": "channels.viewSponsoredMessage",
@@ -12384,14 +12384,14 @@ MAP = {
         "params": {
             "channel": TLType,
         },
-        "ret": TLType,
+        "ret": "messages.SponsoredMessages",
     },
     0xDC770EE: {
         "_": "channels.getSendAs",
         "params": {
             "peer": TLType,
         },
-        "ret": TLType,
+        "ret": "channels.SendAsPeers",
     },
     0x367544DB: {
         "_": "channels.deleteParticipantHistory",
@@ -12399,7 +12399,7 @@ MAP = {
             "channel": TLType,
             "participant": TLType,
         },
-        "ret": TLType,
+        "ret": "messages.AffectedHistory",
     },
     0xE4CB9580: {
         "_": "channels.toggleJoinToSend",
@@ -12407,7 +12407,7 @@ MAP = {
             "channel": TLType,
             "enabled": bool,
         },
-        "ret": TLType,
+        "ret": "Updates",
     },
     0x4C2985B6: {
         "_": "channels.toggleJoinRequest",
@@ -12415,7 +12415,7 @@ MAP = {
             "channel": TLType,
             "enabled": bool,
         },
-        "ret": TLType,
+        "ret": "Updates",
     },
     0xB45CED1D: {
         "_": "channels.reorderUsernames",
@@ -12447,7 +12447,7 @@ MAP = {
             "channel": TLType,
             "enabled": bool,
         },
-        "ret": TLType,
+        "ret": "Updates",
     },
     0xF40C0224: {
         "_": "channels.createForumTopic",
@@ -12460,7 +12460,7 @@ MAP = {
             "random_id": Int64,
             "send_as": FlagsOf("flags", 2, TLType),
         },
-        "ret": TLType,
+        "ret": "Updates",
     },
     0xDE560D1: {
         "_": "channels.getForumTopics",
@@ -12473,7 +12473,7 @@ MAP = {
             "offset_topic": Int32,
             "limit": Int32,
         },
-        "ret": TLType,
+        "ret": "messages.ForumTopics",
     },
     0xB0831EB9: {
         "_": "channels.getForumTopicsByID",
@@ -12481,7 +12481,7 @@ MAP = {
             "channel": TLType,
             "topics": list[Int32],
         },
-        "ret": TLType,
+        "ret": "messages.ForumTopics",
     },
     0xF4DFA185: {
         "_": "channels.editForumTopic",
@@ -12494,7 +12494,7 @@ MAP = {
             "closed": FlagsOf("flags", 2, bool),
             "hidden": FlagsOf("flags", 3, bool),
         },
-        "ret": TLType,
+        "ret": "Updates",
     },
     0x6C2D9026: {
         "_": "channels.updatePinnedForumTopic",
@@ -12503,7 +12503,7 @@ MAP = {
             "topic_id": Int32,
             "pinned": bool,
         },
-        "ret": TLType,
+        "ret": "Updates",
     },
     0x34435F2D: {
         "_": "channels.deleteTopicHistory",
@@ -12511,7 +12511,7 @@ MAP = {
             "channel": TLType,
             "top_msg_id": Int32,
         },
-        "ret": TLType,
+        "ret": "messages.AffectedHistory",
     },
     0x2950A18F: {
         "_": "channels.reorderPinnedForumTopics",
@@ -12521,7 +12521,7 @@ MAP = {
             "channel": TLType,
             "order": list[Int32],
         },
-        "ret": TLType,
+        "ret": "Updates",
     },
     0x68F3E4EB: {
         "_": "channels.toggleAntiSpam",
@@ -12529,7 +12529,7 @@ MAP = {
             "channel": TLType,
             "enabled": bool,
         },
-        "ret": TLType,
+        "ret": "Updates",
     },
     0xA850A693: {
         "_": "channels.reportAntiSpamFalsePositive",
@@ -12545,7 +12545,7 @@ MAP = {
             "channel": TLType,
             "enabled": bool,
         },
-        "ret": TLType,
+        "ret": "Updates",
     },
     0xAA2769ED: {
         "_": "bots.sendCustomRequest",
@@ -12553,7 +12553,7 @@ MAP = {
             "custom_method": str,
             "params": TLType,
         },
-        "ret": TLType,
+        "ret": "DataJSON",
     },
     0xE6213F4D: {
         "_": "bots.answerWebhookJSONQuery",
@@ -12601,7 +12601,7 @@ MAP = {
         "params": {
             "user_id": TLType,
         },
-        "ret": TLType,
+        "ret": "BotMenuButton",
     },
     0x788464E1: {
         "_": "bots.setBotBroadcastDefaultAdminRights",
@@ -12624,7 +12624,7 @@ MAP = {
             "invoice": TLType,
             "theme_params": FlagsOf("flags", 0, TLType),
         },
-        "ret": TLType,
+        "ret": "payments.PaymentForm",
     },
     0x2478D1CC: {
         "_": "payments.getPaymentReceipt",
@@ -12632,7 +12632,7 @@ MAP = {
             "peer": TLType,
             "msg_id": Int32,
         },
-        "ret": TLType,
+        "ret": "payments.PaymentReceipt",
     },
     0xB6C8F12B: {
         "_": "payments.validateRequestedInfo",
@@ -12642,7 +12642,7 @@ MAP = {
             "invoice": TLType,
             "info": TLType,
         },
-        "ret": TLType,
+        "ret": "payments.ValidatedRequestedInfo",
     },
     0x2D03522F: {
         "_": "payments.sendPaymentForm",
@@ -12655,11 +12655,11 @@ MAP = {
             "credentials": TLType,
             "tip_amount": FlagsOf("flags", 2, Int64),
         },
-        "ret": TLType,
+        "ret": "payments.PaymentResult",
     },
     0x227D824B: {
         "_": "payments.getSavedInfo",
-        "ret": TLType,
+        "ret": "payments.SavedInfo",
     },
     0xD83D70C1: {
         "_": "payments.clearSavedInfo",
@@ -12675,14 +12675,14 @@ MAP = {
         "params": {
             "number": str,
         },
-        "ret": TLType,
+        "ret": "payments.BankCardData",
     },
     0xF91B065: {
         "_": "payments.exportInvoice",
         "params": {
             "invoice_media": TLType,
         },
-        "ret": TLType,
+        "ret": "payments.ExportedInvoice",
     },
     0x80ED747D: {
         "_": "payments.assignAppStoreTransaction",
@@ -12690,7 +12690,7 @@ MAP = {
             "receipt": bytes,
             "purpose": TLType,
         },
-        "ret": TLType,
+        "ret": "Updates",
     },
     0xDFFD50D3: {
         "_": "payments.assignPlayMarketTransaction",
@@ -12698,7 +12698,7 @@ MAP = {
             "receipt": TLType,
             "purpose": TLType,
         },
-        "ret": TLType,
+        "ret": "Updates",
     },
     0x9FC19EB6: {
         "_": "payments.canPurchasePremium",
@@ -12721,14 +12721,14 @@ MAP = {
             "stickers": list["InputStickerSetItem"],
             "software": FlagsOf("flags", 3, str),
         },
-        "ret": TLType,
+        "ret": "messages.StickerSet",
     },
     0xF7760F51: {
         "_": "stickers.removeStickerFromSet",
         "params": {
             "sticker": TLType,
         },
-        "ret": TLType,
+        "ret": "messages.StickerSet",
     },
     0xFFB6D4CA: {
         "_": "stickers.changeStickerPosition",
@@ -12736,7 +12736,7 @@ MAP = {
             "sticker": TLType,
             "position": Int32,
         },
-        "ret": TLType,
+        "ret": "messages.StickerSet",
     },
     0x8653FEBE: {
         "_": "stickers.addStickerToSet",
@@ -12744,7 +12744,7 @@ MAP = {
             "stickerset": TLType,
             "sticker": TLType,
         },
-        "ret": TLType,
+        "ret": "messages.StickerSet",
     },
     0x9A364E30: {
         "_": "stickers.setStickerSetThumb",
@@ -12752,7 +12752,7 @@ MAP = {
             "stickerset": TLType,
             "thumb": TLType,
         },
-        "ret": TLType,
+        "ret": "messages.StickerSet",
     },
     0x284B3639: {
         "_": "stickers.checkShortName",
@@ -12766,11 +12766,11 @@ MAP = {
         "params": {
             "title": str,
         },
-        "ret": TLType,
+        "ret": "stickers.SuggestedShortName",
     },
     0x55451FA9: {
         "_": "phone.getCallConfig",
-        "ret": TLType,
+        "ret": "DataJSON",
     },
     0x42FF96ED: {
         "_": "phone.requestCall",
@@ -12782,7 +12782,7 @@ MAP = {
             "g_a_hash": bytes,
             "protocol": TLType,
         },
-        "ret": TLType,
+        "ret": "phone.PhoneCall",
     },
     0x3BD2B4A0: {
         "_": "phone.acceptCall",
@@ -12791,7 +12791,7 @@ MAP = {
             "g_b": bytes,
             "protocol": TLType,
         },
-        "ret": TLType,
+        "ret": "phone.PhoneCall",
     },
     0x2EFE1722: {
         "_": "phone.confirmCall",
@@ -12801,7 +12801,7 @@ MAP = {
             "key_fingerprint": Int64,
             "protocol": TLType,
         },
-        "ret": TLType,
+        "ret": "phone.PhoneCall",
     },
     0x17D54F61: {
         "_": "phone.receivedCall",
@@ -12820,7 +12820,7 @@ MAP = {
             "reason": TLType,
             "connection_id": Int64,
         },
-        "ret": TLType,
+        "ret": "Updates",
     },
     0x59EAD627: {
         "_": "phone.setCallRating",
@@ -12831,7 +12831,7 @@ MAP = {
             "rating": Int32,
             "comment": str,
         },
-        "ret": TLType,
+        "ret": "Updates",
     },
     0x277ADD7E: {
         "_": "phone.saveCallDebug",
@@ -12859,7 +12859,7 @@ MAP = {
             "title": FlagsOf("flags", 0, str),
             "schedule_date": FlagsOf("flags", 1, Int32),
         },
-        "ret": TLType,
+        "ret": "Updates",
     },
     0xB132FF7B: {
         "_": "phone.joinGroupCall",
@@ -12872,7 +12872,7 @@ MAP = {
             "invite_hash": FlagsOf("flags", 1, str),
             "params": TLType,
         },
-        "ret": TLType,
+        "ret": "Updates",
     },
     0x500377F9: {
         "_": "phone.leaveGroupCall",
@@ -12880,7 +12880,7 @@ MAP = {
             "call": TLType,
             "source": Int32,
         },
-        "ret": TLType,
+        "ret": "Updates",
     },
     0x7B393160: {
         "_": "phone.inviteToGroupCall",
@@ -12888,14 +12888,14 @@ MAP = {
             "call": TLType,
             "users": list["InputUser"],
         },
-        "ret": TLType,
+        "ret": "Updates",
     },
     0x7A777135: {
         "_": "phone.discardGroupCall",
         "params": {
             "call": TLType,
         },
-        "ret": TLType,
+        "ret": "Updates",
     },
     0x74BBB43D: {
         "_": "phone.toggleGroupCallSettings",
@@ -12905,7 +12905,7 @@ MAP = {
             "call": TLType,
             "join_muted": FlagsOf("flags", 0, bool),
         },
-        "ret": TLType,
+        "ret": "Updates",
     },
     0x41845DB: {
         "_": "phone.getGroupCall",
@@ -12913,7 +12913,7 @@ MAP = {
             "call": TLType,
             "limit": Int32,
         },
-        "ret": TLType,
+        "ret": "phone.GroupCall",
     },
     0xC558D8AB: {
         "_": "phone.getGroupParticipants",
@@ -12924,7 +12924,7 @@ MAP = {
             "offset": str,
             "limit": Int32,
         },
-        "ret": TLType,
+        "ret": "phone.GroupParticipants",
     },
     0xB59CF977: {
         "_": "phone.checkGroupCall",
@@ -12944,7 +12944,7 @@ MAP = {
             "title": FlagsOf("flags", 1, str),
             "video_portrait": FlagsOf("flags", 2, bool),
         },
-        "ret": TLType,
+        "ret": "Updates",
     },
     0xA5273ABF: {
         "_": "phone.editGroupCallParticipant",
@@ -12959,7 +12959,7 @@ MAP = {
             "video_paused": FlagsOf("flags", 4, bool),
             "presentation_paused": FlagsOf("flags", 5, bool),
         },
-        "ret": TLType,
+        "ret": "Updates",
     },
     0x1CA6AC0A: {
         "_": "phone.editGroupCallTitle",
@@ -12967,14 +12967,14 @@ MAP = {
             "call": TLType,
             "title": str,
         },
-        "ret": TLType,
+        "ret": "Updates",
     },
     0xEF7C213A: {
         "_": "phone.getGroupCallJoinAs",
         "params": {
             "peer": TLType,
         },
-        "ret": TLType,
+        "ret": "phone.JoinAsPeers",
     },
     0xE6AA647F: {
         "_": "phone.exportGroupCallInvite",
@@ -12983,7 +12983,7 @@ MAP = {
             "can_self_unmute": FlagsOf("flags", 0, Bit),
             "call": TLType,
         },
-        "ret": TLType,
+        "ret": "phone.ExportedGroupCallInvite",
     },
     0x219C34E6: {
         "_": "phone.toggleGroupCallStartSubscription",
@@ -12991,14 +12991,14 @@ MAP = {
             "call": TLType,
             "subscribed": bool,
         },
-        "ret": TLType,
+        "ret": "Updates",
     },
     0x5680E342: {
         "_": "phone.startScheduledGroupCall",
         "params": {
             "call": TLType,
         },
-        "ret": TLType,
+        "ret": "Updates",
     },
     0x575E1F8C: {
         "_": "phone.saveDefaultGroupCallJoinAs",
@@ -13014,21 +13014,21 @@ MAP = {
             "call": TLType,
             "params": TLType,
         },
-        "ret": TLType,
+        "ret": "Updates",
     },
     0x1C50D144: {
         "_": "phone.leaveGroupCallPresentation",
         "params": {
             "call": TLType,
         },
-        "ret": TLType,
+        "ret": "Updates",
     },
     0x1AB21940: {
         "_": "phone.getGroupCallStreamChannels",
         "params": {
             "call": TLType,
         },
-        "ret": TLType,
+        "ret": "phone.GroupCallStreamChannels",
     },
     0xDEB3ABBF: {
         "_": "phone.getGroupCallStreamRtmpUrl",
@@ -13036,7 +13036,7 @@ MAP = {
             "peer": TLType,
             "revoke": bool,
         },
-        "ret": TLType,
+        "ret": "phone.GroupCallStreamRtmpUrl",
     },
     0x41248786: {
         "_": "phone.saveCallLog",
@@ -13052,7 +13052,7 @@ MAP = {
             "lang_pack": str,
             "lang_code": str,
         },
-        "ret": TLType,
+        "ret": "LangPackDifference",
     },
     0xEFEA3803: {
         "_": "langpack.getStrings",
@@ -13070,7 +13070,7 @@ MAP = {
             "lang_code": str,
             "from_version": Int32,
         },
-        "ret": TLType,
+        "ret": "LangPackDifference",
     },
     0x42C6978F: {
         "_": "langpack.getLanguages",
@@ -13085,21 +13085,21 @@ MAP = {
             "lang_pack": str,
             "lang_code": str,
         },
-        "ret": TLType,
+        "ret": "LangPackLanguage",
     },
     0x6847D0AB: {
         "_": "folders.editPeerFolders",
         "params": {
             "folder_peers": list["InputFolderPeer"],
         },
-        "ret": TLType,
+        "ret": "Updates",
     },
     0x1C295881: {
         "_": "folders.deleteFolder",
         "params": {
             "folder_id": Int32,
         },
-        "ret": TLType,
+        "ret": "Updates",
     },
     0xAB42441A: {
         "_": "stats.getBroadcastStats",
@@ -13108,7 +13108,7 @@ MAP = {
             "dark": FlagsOf("flags", 0, Bit),
             "channel": TLType,
         },
-        "ret": TLType,
+        "ret": "stats.BroadcastStats",
     },
     0x621D5FA0: {
         "_": "stats.loadAsyncGraph",
@@ -13117,7 +13117,7 @@ MAP = {
             "token": str,
             "x": FlagsOf("flags", 0, Int64),
         },
-        "ret": TLType,
+        "ret": "StatsGraph",
     },
     0xDCDF8607: {
         "_": "stats.getMegagroupStats",
@@ -13126,7 +13126,7 @@ MAP = {
             "dark": FlagsOf("flags", 0, Bit),
             "channel": TLType,
         },
-        "ret": TLType,
+        "ret": "stats.MegagroupStats",
     },
     0x5630281B: {
         "_": "stats.getMessagePublicForwards",
@@ -13138,7 +13138,7 @@ MAP = {
             "offset_id": Int32,
             "limit": Int32,
         },
-        "ret": TLType,
+        "ret": "messages.Messages",
     },
     0xB6E0A3F5: {
         "_": "stats.getMessageStats",
@@ -13148,6 +13148,6 @@ MAP = {
             "channel": TLType,
             "msg_id": Int32,
         },
-        "ret": TLType,
+        "ret": "stats.MessageStats",
     },
 }

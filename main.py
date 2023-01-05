@@ -512,6 +512,152 @@ async def main():
             "session_id": request.obj.session_id,
         }
 
+    @pilt.on_message("messages.getStickerSet")
+    async def get_sticker_set(client: Client, request: Request):
+        import random
+
+        return {
+            "_": "messages.stickerSet",
+            "set": TL.from_dict(
+                {
+                    "_": "stickerSet",
+                    "official": True,
+                    "id": random.randint(1000000, 9000000),
+                    "access_hash": random.randint(1000000, 9000000),
+                    "title": "Picker Stack",
+                    "short_name": random.randbytes(5).hex(),
+                    "count": 0,
+                    "hash": 0,
+                }
+            ),
+            "packs": [],
+            "keywords": [],
+            "documents": [],
+        }
+
+    @pilt.on_message("account.updateProfile")
+    async def update_profile(client: Client, request: Request):
+        if request.obj.first_name is not None:
+            user["first_name"] = request.obj.first_name
+        if request.obj.last_name is not None:
+            user["last_name"] = request.obj.last_name
+        if request.obj.about is not None:
+            user["about"] = request.obj.about
+        return user
+
+    @pilt.on_message("messages.getTopReactions")
+    async def get_top_reactions(client: Client, request: Request):
+        return {
+            "_": "messages.reactions",
+            "hash": 0,
+            "reactions": [],
+        }
+
+    @pilt.on_message("messages.getRecentReactions")
+    async def get_recent_reactions(client: Client, request: Request):
+        return {
+            "_": "messages.reactions",
+            "hash": 0,
+            "reactions": [],
+        }
+
+    @pilt.on_message("messages.getDialogs")
+    async def get_dialogs(client: Client, request: Request):
+        return {
+            "_": "messages.dialogs",
+            "dialogs": [],
+            "messages": [],
+            "chats": [],
+            "users": [],
+        }
+
+    @pilt.on_message("messages.getAttachMenuBots")
+    async def get_attach_menu_bots(client: Client, request: Request):
+        return {
+            "_": "attachMenuBots",
+            "hash": 0,
+            "bots": [],
+            "users": [],
+        }
+
+    @pilt.on_message("account.getNotifySettings")
+    async def get_notify_settings(client: Client, request: Request):
+        return {
+            "_": "peerNotifySettings",
+            "show_previews": True,
+            "silent": False,
+        }
+
+    @pilt.on_message("contacts.getContacts")
+    async def get_contacts(client: Client, request: Request):
+        return {
+            "_": "contacts.contacts",
+            "contacts": [],
+            "saved_count": 0,
+            "users": [],
+        }
+
+    @pilt.on_message("help.getTermsOfServiceUpdate")
+    async def get_terms_of_service_update(client: Client, request: Request):
+        import time
+
+        return {
+            "_": "help.termsOfServiceUpdateEmpty",
+            "expires": int(time.time() + 9000),
+        }
+
+    @pilt.on_message("messages.getPinnedDialogs")
+    async def get_pinned_dialogs(client: Client, request: Request):
+        return {
+            "_": "messages.peerDialogs",
+            "dialogs": [],
+            "messages": [],
+            "chats": [],
+            "users": [],
+            "state": await get_state(client, request),
+        }
+
+    @pilt.on_message("help.getPromoData")
+    async def get_promo_data(client: Client, request: Request):
+        import time
+
+        return {
+            "_": "help.promoDataEmpty",
+            "expires": int(time.time() + 9000),
+        }
+
+    @pilt.on_message("messages.getStickers")
+    async def get_stickers(client: Client, request: Request):
+        return {
+            "_": "messages.stickers",
+            "hash": 0,
+            "stickers": [],
+        }
+
+    @pilt.on_message("contacts.resolveUsername")
+    async def resolve_username(client: Client, request: Request):
+        return {
+            "_": "rpc_error",
+            "error_code": 400,
+            "error_message": "USERNAME_NOT_OCCUPIED",
+        }
+
+    """
+    Crashes for some reason
+
+    @pilt.on_message("help.getPremiumPromo")
+    async def get_premium_promo(client: Client, request: Request):
+        return {
+            "_": "help.premiumPromo",
+            "status_text": "Premium Lol",
+            "status_entities": [],
+            "video_sections": [],
+            "videos": [],
+            "period_options": [],
+            "users": [],
+        }
+    """
+
     await pilt.serve()
 
 

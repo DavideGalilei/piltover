@@ -35,7 +35,7 @@ MAP = {
             "pq": bytes,
             "server_public_key_fingerprints": list[Int64],
         },
-        "is": TLType,
+        "is": "ResPQ",
     },
     0x83C95AEC: {
         "_": "p_q_inner_data",
@@ -47,7 +47,7 @@ MAP = {
             "server_nonce": Int128,
             "new_nonce": Int256,
         },
-        "is": TLType,
+        "is": "P_Q_inner_data",
     },
     0xA9F55F95: {
         "_": "p_q_inner_data_dc",
@@ -60,7 +60,7 @@ MAP = {
             "new_nonce": Int256,
             "dc": Int32,
         },
-        "is": TLType,
+        "is": "P_Q_inner_data",
     },
     0x3C6A84D4: {
         "_": "p_q_inner_data_temp",
@@ -73,7 +73,7 @@ MAP = {
             "new_nonce": Int256,
             "expires_in": Int32,
         },
-        "is": TLType,
+        "is": "P_Q_inner_data",
     },
     0x56FDDF88: {
         "_": "p_q_inner_data_temp_dc",
@@ -87,7 +87,7 @@ MAP = {
             "dc": Int32,
             "expires_in": Int32,
         },
-        "is": TLType,
+        "is": "P_Q_inner_data",
     },
     0x75A3F765: {
         "_": "bind_auth_key_inner",
@@ -98,7 +98,7 @@ MAP = {
             "temp_session_id": Int64,
             "expires_at": Int32,
         },
-        "is": TLType,
+        "is": "BindAuthKeyInner",
     },
     0x79CB045D: {
         "_": "server_DH_params_fail",
@@ -107,7 +107,7 @@ MAP = {
             "server_nonce": Int128,
             "new_nonce_hash": Int128,
         },
-        "is": TLType,
+        "is": "Server_DH_Params",
     },
     0xD0E8075C: {
         "_": "server_DH_params_ok",
@@ -116,7 +116,7 @@ MAP = {
             "server_nonce": Int128,
             "encrypted_answer": bytes,
         },
-        "is": TLType,
+        "is": "Server_DH_Params",
     },
     0xB5890DBA: {
         "_": "server_DH_inner_data",
@@ -128,7 +128,7 @@ MAP = {
             "g_a": bytes,
             "server_time": Int32,
         },
-        "is": TLType,
+        "is": "Server_DH_inner_data",
     },
     0x6643B654: {
         "_": "client_DH_inner_data",
@@ -138,7 +138,7 @@ MAP = {
             "retry_id": Int64,
             "g_b": bytes,
         },
-        "is": TLType,
+        "is": "Client_DH_Inner_Data",
     },
     0x3BCBF734: {
         "_": "dh_gen_ok",
@@ -147,7 +147,7 @@ MAP = {
             "server_nonce": Int128,
             "new_nonce_hash1": Int128,
         },
-        "is": TLType,
+        "is": "Set_client_DH_params_answer",
     },
     0x46DC1FB9: {
         "_": "dh_gen_retry",
@@ -156,7 +156,7 @@ MAP = {
             "server_nonce": Int128,
             "new_nonce_hash2": Int128,
         },
-        "is": TLType,
+        "is": "Set_client_DH_params_answer",
     },
     0xA69DAE02: {
         "_": "dh_gen_fail",
@@ -165,26 +165,26 @@ MAP = {
             "server_nonce": Int128,
             "new_nonce_hash3": Int128,
         },
-        "is": TLType,
+        "is": "Set_client_DH_params_answer",
     },
     0xF660E1D4: {
         "_": "destroy_auth_key_ok",
-        "is": TLType,
+        "is": "DestroyAuthKeyRes",
     },
     0x0A9F2259: {
         "_": "destroy_auth_key_none",
-        "is": TLType,
+        "is": "DestroyAuthKeyRes",
     },
     0xEA109B13: {
         "_": "destroy_auth_key_fail",
-        "is": TLType,
+        "is": "DestroyAuthKeyRes",
     },
     0x62D6B459: {
         "_": "msgs_ack",
         "params": {
             "msg_ids": list[Int64],
         },
-        "is": TLType,
+        "is": "MsgsAck",
     },
     0xA7EFF811: {
         "_": "bad_msg_notification",
@@ -193,7 +193,7 @@ MAP = {
             "bad_msg_seqno": Int32,
             "error_code": Int32,
         },
-        "is": TLType,
+        "is": "BadMsgNotification",
     },
     0xEDAB447B: {
         "_": "bad_server_salt",
@@ -203,14 +203,14 @@ MAP = {
             "error_code": Int32,
             "new_server_salt": Int64,
         },
-        "is": TLType,
+        "is": "BadMsgNotification",
     },
     0xDA69FB52: {
         "_": "msgs_state_req",
         "params": {
             "msg_ids": list[Int64],
         },
-        "is": TLType,
+        "is": "MsgsStateReq",
     },
     0x04DEB57D: {
         "_": "msgs_state_info",
@@ -218,7 +218,7 @@ MAP = {
             "req_msg_id": Int64,
             "info": bytes,
         },
-        "is": TLType,
+        "is": "MsgsStateInfo",
     },
     0x8CC0D131: {
         "_": "msgs_all_info",
@@ -226,7 +226,7 @@ MAP = {
             "msg_ids": list[Int64],
             "info": bytes,
         },
-        "is": TLType,
+        "is": "MsgsAllInfo",
     },
     0x276D3EC6: {
         "_": "msg_detailed_info",
@@ -236,7 +236,7 @@ MAP = {
             "bytes": Int32,
             "status": Int32,
         },
-        "is": TLType,
+        "is": "MsgDetailedInfo",
     },
     0x809DB6DF: {
         "_": "msg_new_detailed_info",
@@ -245,30 +245,22 @@ MAP = {
             "bytes": Int32,
             "status": Int32,
         },
-        "is": TLType,
+        "is": "MsgDetailedInfo",
     },
     0x7D861A08: {
         "_": "msg_resend_req",
         "params": {
             "msg_ids": list[Int64],
         },
-        "is": TLType,
-    },
-    0x2144CA19: {
-        "_": "rpc_error",
-        "params": {
-            "error_code": Int32,
-            "error_message": bytes,
-        },
-        "is": TLType,
+        "is": "MsgResendReq",
     },
     0x5E2AD36E: {
         "_": "rpc_answer_unknown",
-        "is": TLType,
+        "is": "RpcDropAnswer",
     },
     0xCD78E586: {
         "_": "rpc_answer_dropped_running",
-        "is": TLType,
+        "is": "RpcDropAnswer",
     },
     0xA43AD8B7: {
         "_": "rpc_answer_dropped",
@@ -277,7 +269,7 @@ MAP = {
             "seq_no": Int32,
             "bytes": Int32,
         },
-        "is": TLType,
+        "is": "RpcDropAnswer",
     },
     0x0949D9DC: {
         "_": "future_salt",
@@ -286,7 +278,7 @@ MAP = {
             "valid_until": Int32,
             "salt": Int64,
         },
-        "is": TLType,
+        "is": "FutureSalt",
     },
     0xAE500895: {
         "_": "future_salts",
@@ -295,7 +287,7 @@ MAP = {
             "now": Int32,
             "salts": list["future_salt"],
         },
-        "is": TLType,
+        "is": "FutureSalts",
     },
     0x347773C5: {
         "_": "pong",
@@ -303,21 +295,21 @@ MAP = {
             "msg_id": Int64,
             "ping_id": Int64,
         },
-        "is": TLType,
+        "is": "Pong",
     },
     0xE22045FC: {
         "_": "destroy_session_ok",
         "params": {
             "session_id": Int64,
         },
-        "is": TLType,
+        "is": "DestroySessionRes",
     },
     0x62D350C9: {
         "_": "destroy_session_none",
         "params": {
             "session_id": Int64,
         },
-        "is": TLType,
+        "is": "DestroySessionRes",
     },
     0x9EC20908: {
         "_": "new_session_created",
@@ -326,7 +318,7 @@ MAP = {
             "unique_id": Int64,
             "server_salt": Int64,
         },
-        "is": TLType,
+        "is": "NewSession",
     },
     0x9299359F: {
         "_": "http_wait",
@@ -335,7 +327,7 @@ MAP = {
             "wait_after": Int32,
             "max_wait": Int32,
         },
-        "is": TLType,
+        "is": "HttpWait",
     },
     0xD433AD73: {
         "_": "ipPort",
@@ -343,7 +335,7 @@ MAP = {
             "ipv4": Int32,
             "port": Int32,
         },
-        "is": TLType,
+        "is": "IpPort",
     },
     0x37982646: {
         "_": "ipPortSecret",
@@ -352,7 +344,7 @@ MAP = {
             "port": Int32,
             "secret": bytes,
         },
-        "is": TLType,
+        "is": "IpPort",
     },
     0x4679B65F: {
         "_": "accessPointRule",
@@ -361,7 +353,7 @@ MAP = {
             "dc_id": Int32,
             "ips": list["IpPort"],
         },
-        "is": TLType,
+        "is": "AccessPointRule",
     },
     0x5A592A6C: {
         "_": "help.configSimple",
@@ -370,21 +362,21 @@ MAP = {
             "expires": Int32,
             "rules": list["AccessPointRule"],
         },
-        "is": TLType,
+        "is": "help.ConfigSimple",
     },
     0x60469778: {
         "_": "req_pq",
         "params": {
             "nonce": Int128,
         },
-        "ret": TLType,
+        "ret": "ResPQ",
     },
     0xBE7E8EF1: {
         "_": "req_pq_multi",
         "params": {
             "nonce": Int128,
         },
-        "ret": TLType,
+        "ret": "ResPQ",
     },
     0xD712E4BE: {
         "_": "req_DH_params",
@@ -396,7 +388,7 @@ MAP = {
             "public_key_fingerprint": Int64,
             "encrypted_data": bytes,
         },
-        "ret": TLType,
+        "ret": "Server_DH_Params",
     },
     0xF5045F1F: {
         "_": "set_client_DH_params",
@@ -405,32 +397,32 @@ MAP = {
             "server_nonce": Int128,
             "encrypted_data": bytes,
         },
-        "ret": TLType,
+        "ret": "Set_client_DH_params_answer",
     },
     0xD1435160: {
         "_": "destroy_auth_key",
-        "ret": TLType,
+        "ret": "DestroyAuthKeyRes",
     },
     0x58E4A740: {
         "_": "rpc_drop_answer",
         "params": {
             "req_msg_id": Int64,
         },
-        "ret": TLType,
+        "ret": "RpcDropAnswer",
     },
     0xB921BD04: {
         "_": "get_future_salts",
         "params": {
             "num": Int32,
         },
-        "ret": TLType,
+        "ret": "FutureSalts",
     },
     0x7ABE77EC: {
         "_": "ping",
         "params": {
             "ping_id": Int64,
         },
-        "ret": TLType,
+        "ret": "Pong",
     },
     0xF3427B8C: {
         "_": "ping_delay_disconnect",
@@ -438,13 +430,13 @@ MAP = {
             "ping_id": Int64,
             "disconnect_delay": Int32,
         },
-        "ret": TLType,
+        "ret": "Pong",
     },
     0xE7512126: {
         "_": "destroy_session",
         "params": {
             "session_id": Int64,
         },
-        "ret": TLType,
+        "ret": "DestroySessionRes",
     },
 }
