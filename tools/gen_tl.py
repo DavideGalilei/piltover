@@ -76,6 +76,7 @@ TYPES_MAP = {
     "#": "Int32",
     "int": "Int32",
     "long": "Int64",
+    "double": "float",
     "int128": "Int128",
     "int256": "Int256",
     "bool": "bool",
@@ -104,7 +105,7 @@ def typeinfo(typ: str, bytes_str: bool = False) -> dict:
             "typ": typ,
         }
     elif typ.lower().startswith("vector"):
-        inner = re.match(r"vector\s*<?(?P<typ>\w+)>?", typ, re.IGNORECASE)
+        inner = re.match(r"vector\s*<?(?P<typ>[\w\.]+)>?", typ, re.IGNORECASE)
         if not inner:
             raise TypeError(f"Invalid vector type: {typ!r}")
 

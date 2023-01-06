@@ -310,7 +310,7 @@ MAP = {
             "flags": Int32,
             "file": FlagsOf("flags", 0, TLType),
             "video": FlagsOf("flags", 1, TLType),
-            "video_start_ts": FlagsOf("flags", 2, TLType),
+            "video_start_ts": FlagsOf("flags", 2, float),
         },
         "is": "InputChatPhoto",
     },
@@ -329,8 +329,8 @@ MAP = {
         "_": "inputGeoPoint",
         "params": {
             "flags": Int32,
-            "lat": TLType,
-            "long": TLType,
+            "lat": float,
+            "long": float,
             "accuracy_radius": FlagsOf("flags", 0, Int32),
         },
         "is": "InputGeoPoint",
@@ -1397,8 +1397,8 @@ MAP = {
         "_": "geoPoint",
         "params": {
             "flags": Int32,
-            "long": TLType,
-            "lat": TLType,
+            "long": float,
+            "lat": float,
             "access_hash": Int64,
             "accuracy_radius": FlagsOf("flags", 0, Int32),
         },
@@ -5033,7 +5033,7 @@ MAP = {
         "_": "topPeer",
         "params": {
             "peer": TLType,
-            "rating": TLType,
+            "rating": float,
         },
         "is": "TopPeer",
     },
@@ -5204,9 +5204,9 @@ MAP = {
         "_": "maskCoords",
         "params": {
             "n": Int32,
-            "x": TLType,
-            "y": TLType,
-            "zoom": TLType,
+            "x": float,
+            "y": float,
+            "zoom": float,
         },
         "is": "MaskCoords",
     },
@@ -7088,7 +7088,7 @@ MAP = {
     0x1D1B1245: {
         "_": "inputAppEvent",
         "params": {
-            "time": TLType,
+            "time": float,
             "type": str,
             "peer": Int64,
             "data": TLType,
@@ -7117,7 +7117,7 @@ MAP = {
     0x2BE0DFA4: {
         "_": "jsonNumber",
         "params": {
-            "value": TLType,
+            "value": float,
         },
         "is": "JSONValue",
     },
@@ -7815,16 +7815,16 @@ MAP = {
     0xCB43ACDE: {
         "_": "statsAbsValueAndPrev",
         "params": {
-            "current": TLType,
-            "previous": TLType,
+            "current": float,
+            "previous": float,
         },
         "is": "StatsAbsValueAndPrev",
     },
     0xCBCE2FE0: {
         "_": "statsPercentValue",
         "params": {
-            "part": TLType,
-            "total": TLType,
+            "part": float,
+            "total": float,
         },
         "is": "StatsPercentValue",
     },
@@ -7910,7 +7910,7 @@ MAP = {
             "w": Int32,
             "h": Int32,
             "size": Int32,
-            "video_start_ts": FlagsOf("flags", 0, TLType),
+            "video_start_ts": FlagsOf("flags", 0, float),
         },
         "is": "VideoSize",
     },
@@ -7990,7 +7990,7 @@ MAP = {
             "iso2": str,
             "default_name": str,
             "name": FlagsOf("flags", 1, str),
-            "country_codes": list["help"],
+            "country_codes": list["help.CountryCode"],
         },
         "is": "help.Country",
     },
@@ -8001,7 +8001,7 @@ MAP = {
     0x87D0759E: {
         "_": "help.countriesList",
         "params": {
-            "countries": list["help"],
+            "countries": list["help.Country"],
             "hash": Int32,
         },
         "is": "help.CountriesList",
@@ -11153,7 +11153,7 @@ MAP = {
             "top_msg_id": FlagsOf("flags", 0, Int32),
             "filters": list["MessagesFilter"],
         },
-        "ret": list["messages"],
+        "ret": list["messages.SearchCounter"],
     },
     0x198FB446: {
         "_": "messages.requestUrlAuth",
@@ -11835,7 +11835,7 @@ MAP = {
             "fallback": FlagsOf("flags", 3, Bit),
             "file": FlagsOf("flags", 0, TLType),
             "video": FlagsOf("flags", 1, TLType),
-            "video_start_ts": FlagsOf("flags", 2, TLType),
+            "video_start_ts": FlagsOf("flags", 2, float),
         },
         "ret": "photos.Photo",
     },
@@ -11865,7 +11865,7 @@ MAP = {
             "user_id": TLType,
             "file": FlagsOf("flags", 0, TLType),
             "video": FlagsOf("flags", 1, TLType),
-            "video_start_ts": FlagsOf("flags", 2, TLType),
+            "video_start_ts": FlagsOf("flags", 2, float),
         },
         "ret": "photos.Photo",
     },

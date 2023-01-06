@@ -1,6 +1,6 @@
 import logging
 
-from pyrogram import Client
+from pyrogram import Client, idle
 
 logging.basicConfig(level=logging.DEBUG)
 
@@ -16,3 +16,4 @@ app = Client(
 
 with app:
     print(app.get_me())
+    idle()  # sleep forever

@@ -1,3 +1,4 @@
+import asyncio
 import logging
 
 from telethon import TelegramClient
@@ -25,6 +26,7 @@ async def main():
     # "me" is a user object. You can pretty-print
     # any Telegram object with the "stringify" method:
     print(me.stringify())
+    await asyncio.Future()
 
 
 with client:

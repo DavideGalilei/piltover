@@ -70,56 +70,59 @@ class Server:
 
     @logger.catch
     async def handle(self, reader: asyncio.StreamReader, writer: asyncio.StreamWriter):
-        # Check the transport: https://core.telegram.org/mtproto/mtproto-transports
+        try:
+            # Check the transport: https://core.telegram.org/mtproto/mtproto-transports
 
-        stream = BufferedStream(reader=reader, writer=writer)
+            stream = BufferedStream(reader=reader, writer=writer)
 
-        # https://docs.python.org/3/library/asyncio-protocol.html#asyncio.BaseTransport.get_extra_info
-        extra = writer.get_extra_info("peername")
-        header = await stream.peek(1)
+            # https://docs.python.org/3/library/asyncio-protocol.html#asyncio.BaseTransport.get_extra_info
+            extra = writer.get_extra_info("peername")
+            header = await stream.peek(1)
 
-        transport = None
-        if header == b"\xef":
-            await stream.read(1)  # discard
-            # TCP Abridged
-            transport = Transport.Abridged
-        elif header == b"\xee":
-            await stream.read(1)  # discard
-            # TCP Intermediate
-            # 0xeeeeeeee
-            assert (
-                await stream.read(3) == b"\xee\xee\xee"
-            ), "Invalid TCP Intermediate header"
-            transport = Transport.Intermediate
-        elif header == b"\xdd":
-            await stream.read(1)  # discard
-            # Padded Intermediate
-            # 0xdddddddd
-            assert (
-                await stream.read(3) == b"\xdd\xdd\xdd"
-            ), "Invalid TCP Intermediate header"
-            transport = Transport.PaddedIntermediate
-        # else:
-        #     # TCP Full, obfuscation
-        #     assert False, "TCP Full, transport obfuscation not supported"
-        else:
-            # TODO: obfuscation?
-            # The seq_no in TCPFull always starts with 0, so we can recognize
-            # the transport and distinguish it from obfuscated ones (starting with 64 random bytes)
-            # by checking whether the seq_no bytes are zeroed
-            soon = await stream.peek(8)
-            if soon[-4:] == b"\0\0\0\0":
-                transport = Transport.Full
+            transport = None
+            if header == b"\xef":
+                await stream.read(1)  # discard
+                # TCP Abridged
+                transport = Transport.Abridged
+            elif header == b"\xee":
+                await stream.read(1)  # discard
+                # TCP Intermediate
+                # 0xeeeeeeee
+                assert (
+                    await stream.read(3) == b"\xee\xee\xee"
+                ), "Invalid TCP Intermediate header"
+                transport = Transport.Intermediate
+            elif header == b"\xdd":
+                await stream.read(1)  # discard
+                # Padded Intermediate
+                # 0xdddddddd
+                assert (
+                    await stream.read(3) == b"\xdd\xdd\xdd"
+                ), "Invalid TCP Intermediate header"
+                transport = Transport.PaddedIntermediate
+            # else:
+            #     # TCP Full, obfuscation
+            #     assert False, "TCP Full, transport obfuscation not supported"
             else:
-                # Obfuscated Transports
-                transport = Transport.Obfuscated
+                # TODO: obfuscation?
+                # The seq_no in TCPFull always starts with 0, so we can recognize
+                # the transport and distinguish it from obfuscated ones (starting with 64 random bytes)
+                # by checking whether the seq_no bytes are zeroed
+                soon = await stream.peek(8)
+                if soon[-4:] == b"\0\0\0\0":
+                    transport = Transport.Full
+                else:
+                    # Obfuscated Transports
+                    transport = Transport.Obfuscated
 
-        assert (
-            transport is not None
-        ), f"Transport is None, aborting... (header: {header})"
-        logger.info(f"Connected client with {transport} {extra}")
+            assert (
+                transport is not None
+            ), f"Transport is None, aborting... (header: {header})"
+            logger.info(f"Connected client with {transport} {extra}")
 
-        await self.welcome(stream=stream, transport=transport)
+            await self.welcome(stream=stream, transport=transport)
+        except Disconnection:
+            logger.error("Client disconnected before even trying to generate an auth key :(")
 
     async def welcome(
         self,
@@ -218,7 +221,7 @@ class Client:
                 # Whether to use or not the new RSA_PAD algorithm
                 # TODO: handle different server public key
                 # with req_dh_params.public_key_fingerprint
-                old = False
+                old = True
 
                 async def handle(obj: TL) -> bool:
                     match obj._:
@@ -561,14 +564,24 @@ class Client:
             # identifiers modulo 4 yield 1 if the message is a response to
             # a client message, and 3 otherwise.
             if originating_request is None:
-                assert False
-                # is_content_related = originating_request.obj._ in ["ping"]
-            orig_msg_id = originating_request.msg_id
-            msg_id = orig_msg_id + (not orig_msg_id % 2)  # + (not is_content_related)
-            # msg_id += 4 * (orig_msg_id % 4 == msg_id % 4)
-            # ic(msg_id)
-            assert msg_id % 2 != 0
-            seq_no = originating_request.seq_no + 1
+                now = int(time.time())
+                msg_id = (now * 2 ** 32)
+                msg_id += -msg_id % 4 - 1
+                assert msg_id % 4 == 3
+                seq_no = 13
+
+                # TODO: save last msg_id and seq_no
+            else:
+                is_content_related = objects._ in ["ping", "pong", "http_wait", "msgs_ack", "msg_container"]
+                orig_msg_id = originating_request.msg_id
+                # if is_content_related:
+                #     msg_id = orig_msg_id
+                # else:
+                msg_id = orig_msg_id + (not orig_msg_id % 2)  # + (not is_content_related)
+                # msg_id += 4 * (orig_msg_id % 4 == msg_id % 4)
+                # ic(msg_id)
+                assert msg_id % 2 != 0
+                seq_no = originating_request.seq_no + (not is_content_related)
         else:
             container = {
                 "_": "msg_container",
@@ -672,19 +685,38 @@ class Client:
             )
         )
 
+    async def ping_worker(self):
+        while True:
+            await asyncio.sleep(10)
+            logger.debug("Sending ping...")
+
+            await self.send(
+                TL.from_dict(
+                    {
+                        "_": "ping",
+                        "ping_id": int.from_bytes(os.urandom(4), "big"),
+                    }
+                )
+            )
+
     @logger.catch
     async def worker(self):
         try:
+            ping = None
             try:
                 self.conn = await self.conn.init()
+                # ping = asyncio.create_task(self.ping_worker())
 
                 data = await self.authorize()
                 if data is not None:
-                    ic(data.getvalue())
-                    data.seek(8)
+                    # ic(data.getvalue())
+                    data.seek(0)
+                    ic(data.read(8))
                     msg = await self.decrypt(data=data)
-                    ic(msg)
-                    await self.propagate(Request.from_msg(self, msg))
+                    # print(msg)
+                    request = Request.from_msg(self, msg)
+                    ic("RECEIVED:", request.obj)
+                    await self.propagate(request)
 
                 while True:
                     try:
@@ -707,6 +739,9 @@ class Client:
                         logger.exception("Unexpected failed assertion", backtrace=True)
             except Disconnection:
                 logger.info("Client disconnected")
+
+                if ping is not None:
+                    ping.cancel()
                 # import traceback
                 # traceback.print_exc()
             # TODO: except invalid constructor id, raise INPUT_CONSTRUCTOR_INVALID_5EEF0214 (e.g.)
@@ -744,7 +779,10 @@ class Client:
                     # TODO: return rpc_error(500)
                     continue
 
-                if not result._ == "rpc_result":
+                if result._ in ["ping", "pong"]:
+                    print(111111111111111111111111111111111111111)
+                    # TODO: idk
+                if result._ != "rpc_result":  # and result._ not in ["ping", "pong"]:
                     result = TL.from_dict(
                         {
                             "_": "rpc_result",
@@ -788,7 +826,7 @@ class Client:
                 # TODO: return rpc_error(500). or maybe not (invokeWith*)...?
                 return
 
-            if not result._ == "rpc_result":
+            if result._ != "rpc_result" and result._ not in ["ping", "pong"]:
                 result = TL.from_dict(
                     {
                         "_": "rpc_result",

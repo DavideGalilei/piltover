@@ -64,7 +64,6 @@ def read_builtin(TL, typ: type, data: BytesIO):
             #     print(cid, hex(cid))
 
             length = read_int(data.read(4))
-            # ic(length)
 
             result = []
             if is_raw and issubclass(ret, bytes):

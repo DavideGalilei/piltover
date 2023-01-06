@@ -1,4 +1,5 @@
 import asyncio
+import time
 import uvloop
 
 from pathlib import Path
@@ -133,8 +134,6 @@ async def main():
 
     @pilt.on_message("help.getConfig")
     async def get_config(client: Client, request: Request):
-        import time
-
         return {
             "_": "config",
             "date": int(time.time()),
@@ -197,7 +196,7 @@ async def main():
     user = {
         "_": "user",
         "self": True,
-        "contact": True,
+        "contact": False,
         "mutual_contact": False,
         "deleted": False,
         "bot": False,
@@ -221,6 +220,46 @@ async def main():
         "lang_code": "en",
     }
 
+    durov = {
+        "_": "user",
+        "self": True,
+        "contact": False,
+        "mutual_contact": False,
+        "deleted": False,
+        "bot": False,
+        "verified": True,
+        "restricted": False,
+        "min": False,
+        "support": False,
+        "scam": False,
+        "apply_min_photo": False,
+        "fake": False,
+        "bot_attach_menu": False,
+        "premium": False,
+        "attach_menu_enabled": False,
+        "id": 42123,
+        "access_hash": 0,
+        "first_name": "Pavel",
+        "last_name": "Durov",
+        "username": "durov7",
+        "phone": "+4442123",
+        "status": TL.from_dict(
+            {
+                "_": "userStatusOnline",
+                "expires": int(time.time() + 9000),
+            }
+        ),
+        "lang_code": "en",
+    }
+
+    durov_message = {
+        "_": "message",
+        "id": 456,
+        "peer_id": TL.from_dict({"_": "peerUser", "user_id": durov["id"]}),
+        "date": int(time.time() - 150),
+        "message": "Приветик",
+    }
+
     @pilt.on_message("auth.signIn")
     async def sign_in(client: Client, request: Request):
         from binascii import crc32
@@ -236,8 +275,6 @@ async def main():
 
     @pilt.on_message("updates.getState")
     async def get_state(client: Client, request: Request):
-        import time
-
         return {
             "_": "updates.state",
             "pts": 0,
@@ -321,6 +358,22 @@ async def main():
         return {
             "_": "jsonObject",
             "value": [],
+        }
+
+    @pilt.on_message("langpack.getLanguages_72")
+    async def get_languages_72(client: Client, request: Request):
+        return {
+            "_": "vector",
+            "data": [
+                TL.from_dict(
+                    {
+                        "_": "langPackLanguage_72",
+                        "name": "Gramz",
+                        "native_name": "Le Gramz",
+                        "lang_code": "grz",
+                    }
+                )
+            ]
         }
 
     @pilt.on_message("langpack.getLanguages")
@@ -414,9 +467,88 @@ async def main():
         print(client.shared)
         raise
 
+    @pilt.on_message("messages.setTyping")
+    async def set_typing(client: Client, request: Request):
+        return {"_": "boolTrue"}
+
+    @pilt.on_message("messages.getPeerSettings")
+    async def get_peer_settings(client: Client, request: Request):
+        return {
+            "_": "peerSettings",
+        }
+
+    @pilt.on_message("messages.getScheduledHistory")
+    async def get_scheduled_history(client: Client, request: Request):
+        return {
+            "_": "messages.messages",
+            "messages": [],
+            "chats": [],
+            "users": [],
+        }
+
+    @pilt.on_message("messages.getEmojiKeywordsLanguages")
+    async def get_emoji_keywords_languages(client: Client, request: Request):
+        return {
+            "_": "vector",
+            "data": [],
+        }
+
+    @pilt.on_message("messages.getPeerDialogs")
+    async def get_peer_dialogs(client: Client, request: Request):
+        return {
+            "_": "messages.peerDialogs",
+            "dialogs": [
+                TL.from_dict(
+                    {
+                        "_": "dialog",
+                        "peer": TL.from_dict({"_": "peerUser", "user_id": durov["id"]}),
+                        "top_message": 0,
+                        "read_inbox_max_id": 0,
+                        "read_outbox_max_id": 0,
+                        "unread_count": 0,
+                        "unread_mentions_count": 0,
+                        "unread_reactions_count": 0,
+                        "notify_settings": await get_notify_settings(client, request),
+                        # "draft": TL.from_dict(
+                        #     {
+                        #         "_": "draftMessage",
+                        #         "message": "Hii",
+                        #         "date": int(time.time() - 20),
+                        #     }
+                        # ),
+                    }
+                )
+            ],
+            "messages": [
+                TL.from_dict(
+                    # {
+                    #     "_": "messageService",
+                    #     "id": 123,
+                    #     "peer_id": TL.from_dict({"_": "peerUser", "user_id": durov["id"]}),
+                    #     "date": int(time.time()),
+                    #     "action": TL.from_dict({"_": "messageActionContactSignUp"}),
+                    # }
+                    durov_message,
+                )
+            ],
+            "chats": [],
+            "users": [
+                TL.from_dict(durov),
+            ],
+            "state": await get_state(client, request),
+        }
+
     @pilt.on_message("messages.getHistory")
     async def get_history(client: Client, request: Request):
-        import time
+        if request.obj.peer.user_id == durov["id"]:
+            return {
+                "_": "messages.messages",
+                "messages": [
+                    TL.from_dict(durov_message),
+                ],
+                "chats": [],
+                "users": [],
+            }
 
         if request.obj.offset_id != 0:
             return {
@@ -486,8 +618,6 @@ async def main():
 
     @pilt.on_message("messages.sendMessage")
     async def send_message(client: Client, request: Request):
-        import time
-    
         return {
             "_": "updateShortSentMessage",
             "out": True,
@@ -510,6 +640,33 @@ async def main():
         return {
             "_": "destroy_session_ok",
             "session_id": request.obj.session_id,
+        }
+
+    @pilt.on_message("rpc_drop_answer")
+    async def rpc_drop_answer(client: Client, request: Request):
+        return {"_": "rpc_answer_unknown"}
+
+    @pilt.on_message("messages.getWebPage")
+    async def get_web_page(client: Client, request: Request):
+        return {
+            "_": "webPageEmpty",
+            "id": 0,
+        }
+
+    @pilt.on_message("photos.getUserPhotos")
+    async def get_user_photos(client: Client, request: Request):
+        return {
+            "_": "photos.photos",
+            "photos": [],
+            "users": [TL.from_dict(user)],
+        }
+
+    @pilt.on_message("messages.getStickerSet_71")
+    async def get_sticker_set_71(client: Client, request: Request):
+        return {
+            "_": "rpc_error",
+            "error_code": 406,
+            "error_message": "STICKERSET_INVALID",
         }
 
     @pilt.on_message("messages.getStickerSet")
@@ -599,8 +756,6 @@ async def main():
 
     @pilt.on_message("help.getTermsOfServiceUpdate")
     async def get_terms_of_service_update(client: Client, request: Request):
-        import time
-
         return {
             "_": "help.termsOfServiceUpdateEmpty",
             "expires": int(time.time() + 9000),
@@ -617,10 +772,12 @@ async def main():
             "state": await get_state(client, request),
         }
 
+    @pilt.on_message("messages.reorderPinnedDialogs")
+    async def reorder_pinned_dialogs(client: Client, request: Request):
+        return {"_": "boolTrue"}
+
     @pilt.on_message("help.getPromoData")
     async def get_promo_data(client: Client, request: Request):
-        import time
-
         return {
             "_": "help.promoDataEmpty",
             "expires": int(time.time() + 9000),
@@ -642,9 +799,6 @@ async def main():
             "error_message": "USERNAME_NOT_OCCUPIED",
         }
 
-    """
-    Crashes for some reason
-
     @pilt.on_message("help.getPremiumPromo")
     async def get_premium_promo(client: Client, request: Request):
         return {
@@ -653,10 +807,264 @@ async def main():
             "status_entities": [],
             "video_sections": [],
             "videos": [],
-            "period_options": [],
+            "period_options": [
+                TL.from_dict(
+                    {
+                        "_": "premiumSubscriptionOption",
+                        "months": 7,
+                        "currency": "EUR",
+                        "amount": 169,
+                        "bot_url": "t.me/spambot",
+
+                    }
+                )
+            ],
             "users": [],
         }
-    """
+
+    @pilt.on_message("account.getThemes")
+    async def get_themes(client: Client, request: Request):
+        return {
+            "_": "account.themes",
+            "hash": 0,
+            "themes": [],
+        }
+
+    @pilt.on_message("account.getGlobalPrivacySettings")
+    async def get_global_privacy_settings(client: Client, request: Request):
+        return {
+            "_": "globalPrivacySettings",
+            "archive_and_mute_new_noncontact_peers": False,
+        }
+
+    @pilt.on_message("account.getContentSettings")
+    async def get_content_settings(client: Client, request: Request):
+        return {
+            "_": "account.contentSettings",
+            "sensitive_enabled": True,
+            "sensitive_can_change": True,
+        }
+
+    @pilt.on_message("account.getContactSignUpNotification")
+    async def get_contact_sign_up_notification(client: Client, request: Request):
+        return {"_": "boolTrue"}
+
+    @pilt.on_message("account.getPassword")
+    async def get_password(client: Client, request: Request):
+        return {
+            "_": "account.password",
+            "has_password": False,
+            "new_algo": TL.from_dict(
+                {
+                    "_": "passwordKdfAlgoSHA256SHA256PBKDF2HMACSHA512iter100000SHA256ModPow",
+                    "salt1": b"asd",
+                    "salt2": b"asd",
+                    "g": 2,
+                    "p": b"a" * (2048 // 8),
+                }
+            ),
+            "new_secure_algo": TL.from_dict(
+                {
+                    "_": "securePasswordKdfAlgoSHA512",
+                    "salt": b"1234",
+                }
+            ),
+            "secure_random": b"levlam",
+        }
+
+    @pilt.on_message("account.getPrivacy")
+    async def get_privacy(client: Client, request: Request):
+        return {
+            "_": "account.privacyRules",
+            "rules": [],
+            "chats": [],
+            "users": [],
+        }
+
+    @pilt.on_message("contacts.getBlocked")
+    async def get_blocked(client: Client, request: Request):
+        return {
+            "_": "contacts.blocked",
+            "blocked": [],
+            "chats": [],
+            "users": [],
+        }
+
+    @pilt.on_message("account.getAuthorizations")
+    async def get_authorizations(client: Client, request: Request):
+        return {
+            "_": "account.authorizations",
+            "authorization_ttl_days": 15,
+            "authorizations": [
+                TL.from_dict(
+                    {
+                        "_": "authorization",
+                        "current": True,
+                        "official_app": True,
+                        "encrypted_requests_disabled": True,
+                        "call_requests_disabled": True,
+                        "hash": 0,
+                        "device_model": "Blackberry",
+                        "platform": "Desktop",
+                        "system_version": "42.777.3",
+                        "api_id": 12345,
+                        "app_name": "DTeskdop",
+                        "app_version": "1.2.3",
+                        "date_created": int(time.time() - 20),
+                        "date_active": int(time.time()),
+                        "ip": "127.0.0.1",
+                        "country": "Y-Land",
+                        "region": "Telegram HQ",
+                    }
+                )
+            ],
+        }
+
+    @pilt.on_message("account.getAccountTTL")
+    async def get_account_ttl(client: Client, request: Request):
+        return {
+            "_": "accountDaysTTL",
+            "days": 15,
+        }
+
+    @pilt.on_message("messages.getDefaultHistoryTTL")
+    async def get_default_history_ttl(client: Client, request: Request):
+        return {
+            "_": "defaultHistoryTTL",
+            "period": 10,
+        }
+
+    @pilt.on_message("account.registerDevice")
+    async def register_device(client: Client, request: Request):
+        return {"_": "boolTrue"}
+
+    @pilt.on_message("contacts.search")
+    async def contacts_search(client: Client, request: Request):
+        return {
+            "_": "contacts.found",
+            "my_results": [],
+            "results": [],
+            "chats": [],
+            "users": [],
+        }
+
+    @pilt.on_message("messages.getSearchResultsPositions")
+    async def get_search_results_positions(client: Client, request: Request):
+        return {
+            "_": "messages.searchResultsPositions",
+            "count": 0,
+            "positions": [],
+        }
+
+    @pilt.on_message("messages.search")
+    async def messages_search(client: Client, request: Request):
+        return {
+            "_": "messages.messages",
+            "messages": [],
+            "chats": [],
+            "users": [],
+        }
+
+    @pilt.on_message("messages.getSearchCounters")
+    async def get_search_counters(client: Client, request: Request):
+        return {
+            "_": "vector",
+            "data": [
+                TL.from_dict(
+                    {
+                        "_": "messages.searchCounter",
+                        "filter": flt,
+                        "count": 0,
+                    }
+                )
+                for flt
+                in request.obj.filters
+            ]
+        }
+
+    @pilt.on_message("help.getInviteText")
+    async def get_invite_text(client: Client, request: Request):
+        return {
+            "_": "help.inviteText",
+            "message": "🐳",
+        }
+
+    @pilt.on_message("help.saveAppLog")
+    async def save_app_log(client: Client, request: Request):
+        return {"_": "boolTrue"}
+
+    @pilt.on_message("messages.getSuggestedDialogFilters")
+    async def get_suggested_dialog_filters(client: Client, request: Request):
+        return {
+            "_": "vector",
+            "data": [],
+        }
+
+    @pilt.on_message("contacts.getTopPeers")
+    async def get_top_peers(client: Client, request: Request):
+        return {
+            "_": "contacts.topPeers",
+            "categories": [],
+            "chats": [],
+            "users": [],
+        }
+
+    @pilt.on_message("messages.getFeaturedStickers")
+    @pilt.on_message("messages.getFeaturedEmojiStickers")
+    async def get_featured_stickers(client: Client, request: Request):
+        return {
+            "_": "messages.featuredStickers",
+            "hash": 0,
+            "count": 0,
+            "sets": [],
+            "unread": [],
+        }
+
+    @pilt.on_message("messages.getAllDrafts")
+    async def get_all_drafts(client: Client, request: Request):
+        return {
+            "_": "updates",
+            "updates": [],  # list of updateDraftMessage
+            "users": [],
+            "chats": [],
+            "date": int(time.time()),
+            "seq": 0,
+        }
+
+    @pilt.on_message("contacts.getStatuses")
+    async def get_statuses(client: Client, request: Request):
+        return {
+            "_": "vector",
+            "data": [],
+        }
+
+    @pilt.on_message("messages.getFavedStickers")
+    async def get_faved_stickers(client: Client, request: Request):
+        return {
+            "_": "messages.favedStickers",
+            "hash": 0,
+            "packs": [],
+            "stickers": [],
+        }
+
+    @pilt.on_message("messages.searchGlobal")
+    async def search_global(client: Client, request: Request):
+        return {
+            "_": "messages.messages",
+            "messages": [],
+            "chats": [],
+            "users": [],
+        }
+
+    @pilt.on_message("account.checkUsername")
+    async def check_username(client: Client, request: Request):
+        return {"_": "boolTrue"}
+
+    @pilt.on_message("account.updateUsername")
+    async def update_username(client: Client, request: Request):
+        user["username"] = request.obj.username
+        return user
+
 
     await pilt.serve()
 

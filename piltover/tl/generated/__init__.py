@@ -28,6 +28,8 @@ from piltover.tl.types import (
     Int32,
     Int64,
     TLType,
+    FlagsOf,
+    Bit,
 )
 
 from .api_tl import MAP as API_MAP, LAYER
@@ -75,6 +77,57 @@ MAP |= {
             "error_message": str,
         },
         "is": "RpcError",
+    },
+}
+
+# TODO: multiple layers support
+# special cased constructors
+MAP |= {
+    0x2619a90e: {
+        "_": "messages.getStickerSet_71",
+        "params": {
+            "stickerset": TLType,
+        },
+        "ret": "messages.StickerSet",
+    },
+    0xb60a24a6: {
+        "_": "messages.stickerSet_71",
+        "params": {
+            "set": TLType,  # StickerSet_71
+            "packs": list["StickerPack"],
+            "documents": list["Document_71"],
+        },
+        "is": "messages.StickerSet_71",
+    },
+    0xcd303b41: {
+        "_": "stickerSet_71",
+        "params": {
+            "flags": Int32,
+            "installed": FlagsOf("flags", 0, Bit),
+            "archived": FlagsOf("flags", 1, Bit),
+            "official": FlagsOf("flags", 2, Bit),
+            "masks": FlagsOf("flags", 3, Bit),
+            "id": Int64,
+            "access_hash": Int64,
+            "title": str,
+            "short_name": str,
+            "count": int,
+            "hash": int,
+        },
+        "is": "StickerSet_71",
+    },
+    0x800fd57d: {
+        "_": "langpack.getLanguages_72",
+        "ret": list["LangPackLanguage_72"],
+    },
+    0x117698f1: {
+        "_": "langPackLanguage_72",
+        "params": {
+            "name": str,
+            "native_name": str,
+            "lang_code": str,
+        },
+        "is": "LangPackLanguage_72",
     },
 }
 
