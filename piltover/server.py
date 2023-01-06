@@ -779,10 +779,7 @@ class Client:
                     # TODO: return rpc_error(500)
                     continue
 
-                if result._ in ["ping", "pong"]:
-                    print(111111111111111111111111111111111111111)
-                    # TODO: idk
-                if result._ != "rpc_result":  # and result._ not in ["ping", "pong"]:
+                if result._ != "rpc_result" and result._ not in ["ping", "pong"]:
                     result = TL.from_dict(
                         {
                             "_": "rpc_result",
