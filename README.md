@@ -3,8 +3,9 @@ An experimental Telegram server written from scratch in Python.
 
 ## TODO
 - Fix ping issues: TDesktop deadlocks after several minutes
-- Updates handling: give correct `msg_id`/`seq_no` according to the [Telegram specification](https://core.telegram.org/mtproto/description#message-identifier-msg-id)
+- Give correct `msg_id`/`seq_no` according to the [Telegram specification](https://core.telegram.org/mtproto/description#message-identifier-msg-id)
 - A Websocket proxy for Telegram Web (WebZ / WebK). A work in progress temporary implementation is in `tools/websocket_proxy.js`
+- Updates handling: `pts` / `qts` / etc...
 - Refactor the TL de/serialization module, the code is messy (e.g. make custom boxed types for List/int/str/bytes)
 - Refactor the server `authorize()` method
 - Support multiple server keys, to automatically switch to [RSA_PAD](https://core.telegram.org/mtproto/auth_key#presenting-proof-of-work-server-authentication) for official clients, whilst keeping clients like pyrogram/telethon working with the old method. Currently handled manually in `server.py`: `old = False`
