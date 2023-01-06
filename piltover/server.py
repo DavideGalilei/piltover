@@ -562,6 +562,7 @@ class Client:
 
         ic("SENDING:", objects)
         if isinstance(objects, TL):
+            final_obj = objects
             serialized = TL.encode(objects)
 
             if originating_request is None:
@@ -582,28 +583,33 @@ class Client:
             }
             for obj, core_message in objects:
                 serialized = TL.encode(obj)
+
+                if self.is_content_related(obj):
+                    msg_id = self.msg_id()
+                else:
+                    msg_id = core_message.msg_id + 1
+                seq_no = self.seq_no(obj)
+
                 container["messages"].append(
                     (
-                        Int64.serialize(core_message.msg_id + 1)
-                        + Int32.serialize(core_message.seq_no + 1)
+                        Int64.serialize(msg_id)
+                        + Int32.serialize(seq_no)
                         + Int32.serialize(len(serialized))
                         + serialized
                     )
                 )
-            msg_id = objects[-1][1].msg_id + 5
-            seq_no = objects[-1][1].seq_no + 2
-            serialized = TL.encode(container)
+            final_obj = TL.from_dict(container)
+            serialized = TL.encode(final_obj)
 
         # ic(self.session_id, self.auth_key_id)
         data = (
             Int64.serialize(self.server.salt)
             + Int64.serialize(self.session_id)
-            + Int64.serialize(msg_id)
-            + seq_no.to_bytes(4, "little", signed=False)  # b"\0" * 4 # self.seq_no()
+            + Int64.serialize(self.msg_id(in_reply=True))
+            + self.seq_no(final_obj).to_bytes(4, "little", signed=False)
             + len(serialized).to_bytes(4, "little", signed=False)
             + serialized
         )
-        # TODO: check seq_no generation maybe?
 
         padding = os.urandom(-(len(data) + 12) % 16 + 12)
 

@@ -2,22 +2,22 @@
 An experimental Telegram server written from scratch in Python.
 
 ## TODO
-- Fix ping issues: TDesktop deadlocks after several minutes
-- Give correct `msg_id`/`seq_no` according to the [Telegram specification](https://core.telegram.org/mtproto/description#message-identifier-msg-id)
-- A Websocket proxy for Telegram Web (WebZ / WebK). A work in progress temporary implementation is in `tools/websocket_proxy.js`
-- Updates handling: `pts` / `qts` / etc...
-- Refactor the TL de/serialization module, the code is messy (e.g. make custom boxed types for List/int/str/bytes)
-- Refactor the server `authorize()` method
-- Support multiple server keys, to automatically switch to [RSA_PAD](https://core.telegram.org/mtproto/auth_key#presenting-proof-of-work-server-authentication) for official clients, whilst keeping clients like pyrogram/telethon working with the old method. Currently handled manually in `server.py`: `old = False`
-- Support TL from multiple layers, and layer-based handlers. Add fallbacks eventually
-- Add a `tests` folder with patched pyrogram/telethon/* clients and assertions
-- Use custom exceptions instead of python assertions: `assert` statements are disabled in python -O, leading to missing important checks
-- Add missing security checks, e.g. check of `g_a`/`g_b`
-- Refactor the `main.py` code, and use a database for auth keys/messages/users/updates (probably with SQLAlchemy and alambic due to reliable database migrations)
-- Improve README
-- MTProxy support maybe? Obfuscation is already implemented, so why not
-- HTTP/UDP support? Probably Telegram itself forgot those exist
-- Switch to hypercorn for the tcp server maybe?
+- [ ] Fix ping issues: TDesktop and WebK deadlocks after several minutes
+- [x] Done in [b855f70](https://github.com/DavideGalilei/piltover/commit/b855f70037cff84b025087023ef152a0471486ca) ~~Give correct `msg_id`/`seq_no` according to the [Telegram specification](https://core.telegram.org/mtproto/description#message-identifier-msg-id)~~
+- [x] ~~A Websocket proxy for Telegram Web (WebZ / WebK). A work in progress temporary implementation is in `tools/websocket_proxy.js`~~
+- [ ] Updates handling: `pts` / `qts` / etc...
+- [ ] Refactor the TL de/serialization module, the code is messy (e.g. make custom boxed types for List/int/str/bytes)
+- [ ] Refactor the server `authorize()` method
+- [ ] Support multiple server keys, to automatically switch to [RSA_PAD](https://core.telegram.org/mtproto/auth_key#presenting-proof-of-work-server-authentication) for official clients, whilst keeping clients like pyrogram/telethon working with the old method. Currently handled manually in `server.py`: `old = False`
+- [ ] Support TL from multiple layers, and layer-based handlers. Add fallbacks eventually
+- [ ] Add a `tests` folder with patched pyrogram/telethon/* clients and assertions
+- [ ] Use custom exceptions instead of python assertions: `assert` statements are disabled in python -O, leading to missing important checks
+- [ ] Add missing security checks, e.g. check of `g_a`/`g_b`
+- [ ] Refactor the `main.py` code, and use a database for auth keys/messages/users/updates (probably with SQLAlchemy and alambic due to reliable database migrations)
+- [ ] MTProxy support maybe? Obfuscation is already implemented, so why not
+- [ ] HTTP/UDP support? Probably Telegram itself forgot those exist
+- [ ] Switch to hypercorn for the tcp server maybe?
+- [ ] Improve README
 
 # Purpose
 This project is currently not meant to be used to host custom Telegram instances, as most **security measures are <ins>currently</ins> barely in place**. For now, it can be used by MTProto clients developers to understand why their code fails, whereas Telegram just closes the connection with a -404 code.
@@ -158,8 +158,30 @@ An example output would look like this:
   - Remove the existing rsa keys, and replace them with your own, taken from the `data/secrets/pubkey.asc` file on your piltover folder. **Important:** check the newlines thoroughly and make sure they are there, or it won't work. This took me way too much debugging time to realize that the missing newlines was the cause of the app crashes.
 - Build the app, and see if it works.
 
-### **Telegram WebK / WebZ**
-- #TODO: a websocket proxy utility is needed before continuing. The server doesn't support direct websocket connections yet
+### **Telegram WebK**
+- Clone repo and install dependencies:
+  - ```shell
+    $ git clone https://github.com/morethanwords/tweb
+    $ cd tweb
+    $ npm install --force
+    ```
+- Edit the values in this file: https://github.com/morethanwords/tweb/blob/master/src/lib/mtproto/dcConfigurator.ts#L55
+  - Change ``const chosenServer = `wss://...` `` to:
+  - ```typescript
+    const chosenServer = `ws://127.0.0.1:3000/proxy`;
+    ```
+  - Change every datacenter ip and port below, respectively to `127.0.0.1` (localhost) and `3000` (port)
+- Run the websocket proxy from piltover
+  - ```shell
+    $ npm install express express-ws --force
+    $ node tools/websocket_proxy.js
+    ```
+- Run with `npm start`
+- Wait some time for the app to compile
+- Open the app in your browser (usually `http://localhost:8080/`)
+
+### **Telegram WebZ**
+- #TODO: WebZ instructions
 
 ### **NimGram**
 - #TODO: the client is currently under active development and refactoring, so I will wait until a working version is released
