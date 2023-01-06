@@ -187,6 +187,10 @@ class Client:
         self.auth_key: bytes | None = None
         self.auth_key_id: int | None = None
 
+        self._msg_id_last_time = 0
+        self._msg_id_offset = 0
+        self._last_seq_no = 0
+
     async def read_auth_msg(self) -> tuple[Message, BytesIO]:
         data = BytesIO(await self.conn.recv())
         session_id = read_int(data.read(8))
@@ -536,10 +540,12 @@ class Client:
         # assert session_id == self.session_id, "Wrong session id"
 
         decrypted = await self.decrypt(data=data)
+        obj = TL.decode(BytesIO(decrypted.data))
+        self.update_seq_no(obj, decrypted.seq_no)
 
         return Request(
             client=self,
-            obj=TL.decode(BytesIO(decrypted.data)),
+            obj=obj,
             msg_id=decrypted.msg_id,
             seq_no=decrypted.seq_no,
         )
@@ -558,30 +564,17 @@ class Client:
         if isinstance(objects, TL):
             serialized = TL.encode(objects)
 
-            # about msg_id:
-            # https://core.telegram.org/mtproto/description#message-identifier-msg-id
-            # Client message identifiers are divisible by 4, server message
-            # identifiers modulo 4 yield 1 if the message is a response to
-            # a client message, and 3 otherwise.
             if originating_request is None:
-                now = int(time.time())
-                msg_id = (now * 2 ** 32)
-                msg_id += -msg_id % 4 - 1
-                assert msg_id % 4 == 3
-                seq_no = 13
-
-                # TODO: save last msg_id and seq_no
+                msg_id = self.msg_id(in_reply=False)
+                seq_no = self.seq_no(objects)
             else:
-                is_content_related = objects._ in ["ping", "pong", "http_wait", "msgs_ack", "msg_container"]
-                orig_msg_id = originating_request.msg_id
-                # if is_content_related:
-                #     msg_id = orig_msg_id
-                # else:
-                msg_id = orig_msg_id + (not orig_msg_id % 2)  # + (not is_content_related)
-                # msg_id += 4 * (orig_msg_id % 4 == msg_id % 4)
-                # ic(msg_id)
-                assert msg_id % 2 != 0
-                seq_no = originating_request.seq_no + (not is_content_related)
+                is_content_related = self.is_content_related(objects)
+                if is_content_related:
+                    msg_id = self.msg_id()
+                else:
+                    msg_id = originating_request.msg_id + 1
+
+                seq_no = self.seq_no(objects)
         else:
             container = {
                 "_": "msg_container",
@@ -716,6 +709,7 @@ class Client:
                     # print(msg)
                     request = Request.from_msg(self, msg)
                     ic("RECEIVED:", request.obj)
+                    self.update_seq_no(request.obj, request.seq_no)
                     await self.propagate(request)
 
                 while True:
@@ -749,6 +743,38 @@ class Client:
             # Cleanup tasks: client disconnected, or an error occurred
             async with self.server.clients_lock:
                 self.server.clients.pop(self.uuid, None)
+
+    @staticmethod
+    def is_content_related(obj: TL) -> bool:
+        return obj._ in ["ping", "pong", "http_wait", "msgs_ack", "msg_container"]
+
+    def msg_id(self, in_reply: bool = True) -> int:
+        # credits to pyrogram
+        # about msg_id:
+        # https://core.telegram.org/mtproto/description#message-identifier-msg-id
+        # Client message identifiers are divisible by 4, server message
+        # identifiers modulo 4 yield 1 if the message is a response to
+        # a client message, and 3 otherwise.
+
+        now = int(time.time())
+        self._msg_id_offset = (self._msg_id_offset + 4) if now == self._msg_id_last_time else 0
+        msg_id = (now * 2 ** 32) + self._msg_id_offset + (1 if in_reply else 3)
+        self._msg_id_last_time = now
+
+        assert msg_id % 4 in [1, 3], f"Invalid server msg_id: {msg_id}"
+        return msg_id
+
+    def update_seq_no(self, obj: TL, seq_no: int):
+        if not self.is_content_related(obj):
+            assert self._last_seq_no < seq_no
+        self._last_seq_no = seq_no
+
+    def seq_no(self, obj: TL) -> int:
+        if obj._ == "rpc_result":
+            obj = obj.result
+
+        self._last_seq_no = self._last_seq_no + self.is_content_related(obj)
+        return self._last_seq_no
 
     async def propagate(self, request: "Request", just_return: bool = False):
         if request.obj._ == "msg_container":

@@ -1,6 +1,7 @@
 import logging
 
 from pyrogram import Client, idle
+from pyrogram.raw.functions.ping import Ping
 
 logging.basicConfig(level=logging.DEBUG)
 
@@ -16,4 +17,8 @@ app = Client(
 
 with app:
     print(app.get_me())
+
+    pong = app.invoke(Ping(ping_id=12345))
+    print("GOT PONG:", pong)
+
     idle()  # sleep forever
