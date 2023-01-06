@@ -221,7 +221,7 @@ class Client:
                 # Whether to use or not the new RSA_PAD algorithm
                 # TODO: handle different server public key
                 # with req_dh_params.public_key_fingerprint
-                old = True
+                old = False
 
                 async def handle(obj: TL) -> bool:
                     match obj._:
