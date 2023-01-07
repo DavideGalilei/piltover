@@ -140,7 +140,17 @@ async def main():
             "expires": int(time.time() + 60 * 10),
             "test_mode": False,
             "this_dc": 2,
-            "dc_options": [],
+            "dc_options": [
+                TL.from_dict(
+                    {
+                        "_": "dcOption",
+                        "this_port_only": True,
+                        "id": 2,
+                        "ip_address": "127.0.0.1",
+                        "port": 4430,
+                    },
+                )
+            ],
             "dc_txt_domain_name": "aa",
             "chat_size_max": 200,
             "megagroup_size_max": 200000,

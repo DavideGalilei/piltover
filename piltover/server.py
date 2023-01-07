@@ -190,6 +190,7 @@ class Client:
         self._msg_id_last_time = 0
         self._msg_id_offset = 0
         self._last_seq_no = 0
+        self._was_content_related = False
 
     async def read_auth_msg(self) -> tuple[Message, BytesIO]:
         data = BytesIO(await self.conn.recv())
@@ -779,7 +780,8 @@ class Client:
         if obj._ == "rpc_result":
             obj = obj.result
 
-        self._last_seq_no = self._last_seq_no + self.is_content_related(obj)
+        self._last_seq_no = self._last_seq_no + (not self._was_content_related)
+        self._was_content_related = self.is_content_related(obj)
         return self._last_seq_no
 
     async def propagate(self, request: "Request", just_return: bool = False):
