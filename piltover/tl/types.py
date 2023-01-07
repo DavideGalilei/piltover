@@ -24,9 +24,35 @@ class TLType:
     ...
 
 
+@dataclass(init=True, repr=True, frozen=True)
+class EncryptedMessage:
+    auth_key_id: int
+    msg_key: bytes
+    encrypted_data: bytes
+
+
+@dataclass(init=True, repr=True, frozen=True)
+class DecryptedMessage:
+    salt: bytes
+    session_id: int
+    message_id: int
+    seq_no: int
+    message_data: bytes
+    padding: bytes
+
+    def to_core_message(self, TL):
+        return CoreMessage(message_id=self.message_id, seq_no=self.seq_no, obj=TL.decode(BytesIO(self.message_data)))
+
+
+@dataclass(init=True, repr=True, frozen=True)
+class UnencryptedMessage:
+    message_id: int
+    message_data: bytes
+
+
 @dataclass(init=True, repr=True, frozen=True, kw_only=True)
 class CoreMessage:
-    msg_id: int
+    message_id: int
     seq_no: int
     obj: TLType
 
@@ -35,6 +61,7 @@ def read_string(data: BytesIO) -> str:
     return read_bytes(data).decode(errors="ignore")
 
 
+# TODO WTF, how can read_builtin need a session_id???
 def read_builtin(TL, typ: type, data: BytesIO):
     if issubclass(typ, bool):
         cid = read_int(data.read(4))
@@ -76,8 +103,9 @@ def read_builtin(TL, typ: type, data: BytesIO):
                     # ic(msg_id, seq_no, length)
 
                     result.append(
+                        # TODO total nonsense, wtf. Nuke it.
                         CoreMessage(
-                            msg_id=msg_id,
+                            message_id=msg_id,
                             seq_no=seq_no,
                             obj=TL.decode(data),
                         )
