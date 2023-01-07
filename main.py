@@ -57,6 +57,11 @@ async def main():
         )
     )
 
+    @pilt.on_message("msgs_ack")
+    async def msgs_ack(client: Client, request: Request):
+        print(request.obj, request.msg_id)
+        return False
+
     @pilt.on_message("ping")
     async def pong(client: Client, request: Request):
         print(request.obj, request.msg_id)

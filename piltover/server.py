@@ -154,6 +154,7 @@ class Server:
         return self.auth_keys.get(auth_key_id, None)
 
     def on_message(self, typ: str):
+        # TODO functools.wraps
         def decorator(func: Callable[[Client, Request], Awaitable[TL | dict | None]]):
             logger.debug("Added handler for function {typ!r}", typ=typ)
 
@@ -537,6 +538,7 @@ class Client:
     async def recv(self) -> "Request":
         data = BytesIO(await self.conn.recv())
         session_id = read_int(data.read(8))
+        ic(session_id)
         # TODO: errors... am I supposed to fix them?
         # assert session_id == self.session_id, "Wrong session id"
 
@@ -790,10 +792,6 @@ class Client:
             for msg in request.obj.messages:
                 msg: CoreMessage
                 handlers = self.server.handlers.get(msg.obj._, [])
-                if not handlers:
-                    logger.warning("No handler found for obj:")
-                    logger.debug("{obj}", obj=msg.obj)
-                    continue
 
                 result = None
                 for rpc in handlers:
@@ -810,10 +808,18 @@ class Client:
                     break
 
                 if result is None:
-                    # TODO: return rpc_error(500)
+                    logger.warning("No handler found for obj:\n{obj}", obj=msg.obj)
+                    result = TL.from_dict(
+                        {
+                            "_": "rpc_error",
+                            "error_code": 501,
+                            "error_message": "Not implemented",
+                        }
+                    )
+                if result is False:
                     continue
 
-                if result._ != "rpc_result" and result._ not in ["ping", "pong"]:
+                if result._ not in ("ping", "pong", "rpc_result"):
                     result = TL.from_dict(
                         {
                             "_": "rpc_result",
@@ -823,20 +829,17 @@ class Client:
                     )
                 results.append((result, msg))
 
-            if not len(results) > 0:
+            if not results:
                 # invokeWith_*
                 logger.warning("Empty msg_container, returning...")
                 return
 
-            assert len(results) > 0, "TODO: rpc_error"
+            assert results, "TODO: rpc_error"
             # if just_return:
             #     return results
             await self.send(results)
         else:
             handlers = self.server.handlers.get(request.obj._, [])
-            if not handlers:
-                logger.warning("No handler found for obj:")
-                logger.debug("{obj}", obj=request.obj)
 
             result = None
             for rpc in handlers:
@@ -854,10 +857,18 @@ class Client:
                 break
 
             if result is None:
-                # TODO: return rpc_error(500). or maybe not (invokeWith*)...?
+                logger.warning("No handler found for obj:\n{obj}", obj=request.obj)
+                result = TL.from_dict(
+                    {
+                        "_": "rpc_error",
+                        "error_code": 501,
+                        "error_message": "Not implemented",
+                    }
+                )
+            if result is False:
                 return
 
-            if result._ != "rpc_result" and result._ not in ["ping", "pong"]:
+            if result._ not in ("ping", "pong", "rpc_result"):
                 result = TL.from_dict(
                     {
                         "_": "rpc_result",
