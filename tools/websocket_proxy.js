@@ -1,8 +1,6 @@
 /*
-TODO: the proxy doesn't work properly, probably due to race conditions
-...but at least, it doesn't crash like with FastAPI/sanic/websockets.
-
-Looking for a python solution, but any other language is fine too.
+TODO: Looking for a python solution.
+Tried FastAPI/sanic/websockets so far, didn't work.
 */
 
 var express = require('express');

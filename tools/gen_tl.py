@@ -134,7 +134,6 @@ def typeinfo(typ: str, bytes_str: bool = False) -> dict:
             "typ": info["typ"],
         }
     else:
-        # # TODO: TLType maybe?
         # return {
         #     "optional": False,
         #     "typ": repr(typ),

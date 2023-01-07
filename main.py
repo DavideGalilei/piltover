@@ -363,7 +363,7 @@ async def main():
     async def get_nearest_dc(client: Client, request: CoreMessage, session_id: int):
         return {
             "_": "nearestDc",
-            "country": "Y-Land",
+            "country": "US",  # "Y-Land",
             "this_dc": 2,
             "nearest_dc": 2,
         }
@@ -412,19 +412,38 @@ async def main():
         return {
             "_": "help.countriesList",
             "countries": [
+                # TL.from_dict(
+                #     {
+                #         "_": "help.country",
+                #         "hidden": False,
+                #         "iso2": "yl",
+                #         "default_name": "Y-Land",
+                #         "name": "Y-Land",
+                #         "country_codes": [
+                #             TL.from_dict(
+                #                 {
+                #                     "_": "help.countryCode",
+                #                     "country_code": "42",
+                #                     "prefixes": ["42"],
+                #                     "patterns": ["XXXXX"],
+                #                 }
+                #             )
+                #         ],
+                #     }
+                # ),
                 TL.from_dict(
                     {
                         "_": "help.country",
                         "hidden": False,
-                        "iso2": "yl",
-                        "default_name": "Y-Land",
-                        "name": "Y-Land",
+                        "iso2": "ch",
+                        "default_name": "ch",
+                        "name": "Switzerland",
                         "country_codes": [
                             TL.from_dict(
                                 {
                                     "_": "help.countryCode",
-                                    "country_code": "42",
-                                    "prefixes": ["42"],
+                                    "country_code": "41",
+                                    "prefixes": ["41"],
                                     "patterns": ["XXXXX"],
                                 }
                             )
@@ -523,7 +542,7 @@ async def main():
                         "unread_count": 0,
                         "unread_mentions_count": 0,
                         "unread_reactions_count": 0,
-                        "notify_settings": await get_notify_settings(client, request),
+                        "notify_settings": await get_notify_settings(client, request, session_id),
                         # "draft": TL.from_dict(
                         #     {
                         #         "_": "draftMessage",
@@ -928,7 +947,7 @@ async def main():
                         "date_created": int(time.time() - 20),
                         "date_active": int(time.time()),
                         "ip": "127.0.0.1",
-                        "country": "Y-Land",
+                        "country": "US",  # "Y-Land",
                         "region": "Telegram HQ",
                     }
                 )
@@ -1080,6 +1099,31 @@ async def main():
         user["username"] = request.obj.username
         return user
 
+    @pilt.on_message("langpack.getLangPack")
+    async def get_lang_pack(client: Client, request: CoreMessage, session_id: int):
+        return {
+            "_": "langPackDifference",
+            "lang_code": "US",
+            "from_version": 1,
+            "version": 1,
+            "strings": [],
+        }
+
+    @pilt.on_message("langpack.getStrings")
+    async def get_strings(client: Client, request: CoreMessage, session_id: int):
+        return {
+            "_": "vector",
+            "data": [
+                TL.from_dict(
+                    {
+                        "_": "langPackString",
+                        "key": key,
+                        "value": key.upper(),
+                    }
+                )
+                for key in request.obj.keys
+            ]
+        }
 
     await pilt.serve()
 

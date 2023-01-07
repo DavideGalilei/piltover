@@ -4,6 +4,7 @@ import inspect
 from io import BytesIO
 from abc import ABC, abstractmethod
 from types import GenericAlias
+from typing import Any
 from dataclasses import dataclass
 
 from loguru import logger
@@ -21,7 +22,8 @@ RPC_ERROR_CID = 0x2144CA19
 
 
 class TLType:
-    ...
+    def __getattribute__(self, __name: str) -> Any:
+        return super().__getattribute__(__name)
 
 
 @dataclass(init=True, repr=True, frozen=True)
@@ -61,7 +63,6 @@ def read_string(data: BytesIO) -> str:
     return read_bytes(data).decode(errors="ignore")
 
 
-# TODO WTF, how can read_builtin need a session_id???
 def read_builtin(TL, typ: type, data: BytesIO):
     if issubclass(typ, bool):
         cid = read_int(data.read(4))
