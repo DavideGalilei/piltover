@@ -1,9 +1,10 @@
 # piltover 🐳
 An experimental Telegram server written from scratch in Python.
+Development chat: linked group to [@ChameleonGram](https://t.me/ChameleonGram).
 
 ## TODO
-- [ ] Fix ping issues: TDesktop and WebK deadlocks after several minutes
-- [x] Done in [b855f70](https://github.com/DavideGalilei/piltover/commit/b855f70037cff84b025087023ef152a0471486ca) ~~Give correct `msg_id`/`seq_no` according to the [Telegram specification](https://core.telegram.org/mtproto/description#message-identifier-msg-id)~~
+- [ ] WebK gets stuck on `sendCode()`
+- [x] Multiple sessions handling for: ~~Give correct `msg_id`/`seq_no` according to the [Telegram specification](https://core.telegram.org/mtproto/description#message-identifier-msg-id)~~
 - [x] ~~A Websocket proxy for Telegram Web (WebZ / WebK). A work in progress temporary implementation is in `tools/websocket_proxy.js`~~
 - [ ] Updates handling: `pts` / `qts` / etc...
 - [ ] Refactor the TL de/serialization module, the code is messy (e.g. make custom boxed types for List/int/str/bytes)
