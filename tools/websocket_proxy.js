@@ -12,6 +12,7 @@ var net = require('net');
 // with `ws://127.0.0.1/proxy`
 app.ws('/proxy', function (ws, req) {
     console.info("new connection detected");
+
     let conn = new net.Socket();
     conn.connect(4430, '127.0.0.1', () => {
         ws.on('message', function (msg) {
@@ -23,6 +24,11 @@ app.ws('/proxy', function (ws, req) {
         ws.send(data);
     }).on('close', () => {
         ws.close();
+    }).on("error", (err) => {
+        console.warn(
+            "The piltover server is probably offline.\nStart it, restart your application and try again\n"
+        );
+        console.error(err);
     });
 });
 
