@@ -124,7 +124,7 @@ An example output would look like this:
 - Ready to use, run the server and check if `test.py` works
 
 ### **Telethon**
-- `git clone --depth=1 https://github.com/pyrogram/pyrogram`
+- `git clone --depth=1 https://github.com/LonamiWebs/telethon`
 - Edit these variables: https://github.com/LonamiWebs/Telethon/blob/2007c83c9e1b1c85e60e4eca8e8651fcb120ee88/telethon/client/telegrambaseclient.py#L21-L24
   - ```python
     DEFAULT_DC_ID = 2
