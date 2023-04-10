@@ -63,13 +63,13 @@ class Server:
 
         self.fingerprint: int = get_public_key_fingerprint(self.server_keys.public_key)
 
-        self.clients: dict[str, Client] = {}
+        self.clients: dict[str, ClientConnection] = {}
         self.clients_lock = asyncio.Lock()
         self.auth_keys: dict[int, tuple[bytes, SimpleNamespace]] = {}
         self.handlers: defaultdict[
             # TODO incorporate the session_id, perhaps into a contextvar
             str,
-            list[Callable[[Client, CoreMessage, int], Awaitable[TL | dict | None]]],
+            list[Callable[[ClientConnection, CoreMessage, int], Awaitable[TL | dict | None]]],
         ] = defaultdict(list)
         self.salt: int = 0
 
@@ -135,7 +135,7 @@ class Server:
         stream: BufferedStream,
         transport: Transport,
     ):
-        client = Client(
+        client = ClientConnection(
             transport=transport,
             server=self,
             stream=stream,
@@ -161,7 +161,7 @@ class Server:
 
     def on_message(self, typ: str):
         def decorator(
-            func: Callable[[Client, CoreMessage, int], Awaitable[TL | dict | None]]
+            func: Callable[[ClientConnection, CoreMessage, int], Awaitable[TL | dict | None]]
         ):
             logger.debug("Added handler for function {typ!r}", typ=typ)
 
@@ -170,8 +170,12 @@ class Server:
 
         return decorator
 
+    def get_session(self, auth_key_id: int, session_id: int):
+        # TODO
+        raise NotImplementedError
 
-class Client:
+
+class ClientConnection:
     def __init__(
         self,
         server: Server,
@@ -188,12 +192,6 @@ class Client:
         )
 
         self.auth_data = None
-
-        self._msg_id_last_time = 0
-        self._msg_id_offset = 0
-        # TODO should be session-specific
-        self._incoming_content_related_msgs = 0
-        self._outgoing_content_related_msgs = 0
 
     async def read_message(self) -> EncryptedMessage | UnencryptedMessage:
         data = BytesIO(await self.conn.recv())
@@ -482,13 +480,14 @@ class Client:
                 )  # TODO right error
 
     async def handle_encrypted_message(
-        self, core_message: CoreMessage, session_id: int
+        self, message: EncryptedMessage, core_message: CoreMessage, session_id: int
     ):
-        self.update_incoming_content_related_msgs(
-            cast(TL, core_message.obj), session_id, core_message.seq_no
+        session, is_new_session = self.server.get_session(message.auth_key_id, session_id)
+        session.update_incoming_content_related_msgs(
+            cast(TL, core_message.obj), core_message.seq_no
         )
-        await self.propagate(
-            core_message, session_id
+        await session.propagate(
+            core_message
         )  # TODO this should always be just_return and we call self.send manually here
 
     async def recv(self):
@@ -500,13 +499,26 @@ class Client:
             decrypted = await self.decrypt(message)
             core_message = decrypted.to_core_message(TL)
             logger.debug(core_message)
-            await self.handle_encrypted_message(core_message, decrypted.session_id)
+            await self.handle_encrypted_message(message, core_message, decrypted.session_id)
         elif isinstance(message, UnencryptedMessage):
             # TODO validate message_id (useless since it's not encrypted but ¯\_(ツ)_/¯)
             # TODO handle invalid constructors
             decoded = TL.decode(BytesIO(message.message_data))
             logger.debug(decoded)
             await self.handle_unencrypted_message(decoded)
+
+class ClientSession:
+    def __init__(
+            self,
+            session_id: int,
+    ):
+        self.session_id = session_id
+
+        self._msg_id_last_time = 0
+        self._msg_id_offset = 0
+        self._incoming_content_related_msgs = 0
+        self._outgoing_content_related_msgs = 0
+
 
     # TODO fix indentation
     # TODO this method has a terrible signature

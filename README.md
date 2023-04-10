@@ -32,27 +32,31 @@ The server is meant to be used as a library, providing 100% control of every ans
 
 ### **Example**
 An example quick-start (incomplete) code would look like this:
+
 ```python
 import asyncio
-from piltover.server import Server, Client, Request
+from piltover.server import Server, ClientConnection, Request
 from piltover.utils import gen_keys
 
+
 async def main():
-    pilt = Server(server_keys=gen_keys())
-    # Running on localhost
-    # Port: 4430
+  pilt = Server(server_keys=gen_keys())
 
-    @pilt.on_message("ping")
-    async def pong(client: Client, request: Request):
-        print("Received ping:", request.obj)
+  # Running on localhost
+  # Port: 4430
 
-        return {
-            "_": "pong",
-            "msg_id": request.msg_id,
-            "ping_id": request.obj.ping_id,
-        }
+  @pilt.on_message("ping")
+  async def pong(client: ClientConnection, request: Request):
+    print("Received ping:", request.obj)
 
-    await pilt.serve()
+    return {
+      "_": "pong",
+      "msg_id": request.msg_id,
+      "ping_id": request.obj.ping_id,
+    }
+
+  await pilt.serve()
+
 
 asyncio.run(main())
 ```
