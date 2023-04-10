@@ -239,6 +239,14 @@ $ rm -rf tdata/ DebugLogs/ log.txt && c && ./Telegram
     $ cd tweb
     $ npm install --force
     ```
+- Create a SSL certificate
+  - ```shell
+      $ sudo npm install -g mkcert
+      $ mkdir certs && cd certs
+      $ mkcert create-ca
+      $ mkcert create-cert --key localhost-key.pem --cert localhost.pem
+      $ cd ..
+      ```
 - Edit the values in this file:
   https://github.com/morethanwords/tweb/blob/master/src/lib/mtproto/dcConfigurator.ts#L55
   - Change `` const chosenServer = `wss://...` `` to:
@@ -246,15 +254,18 @@ $ rm -rf tdata/ DebugLogs/ log.txt && c && ./Telegram
     const chosenServer = `ws://127.0.0.1:3000/proxy`;
     ```
   - Change every datacenter ip and port below, respectively to `127.0.0.1`
-    (localhost) and `3000` (port)
+    (localhost) and `4430` (port)
 - Run the websocket proxy from piltover
   - ```shell
     $ npm install express express-ws --force
     $ node tools/websocket_proxy.js
     ```
+- Edit the values in this file:
+  https://github.com/morethanwords/tweb/blob/master/src/lib/mtproto/rsaKeysManager.ts#L69-L78
+  - Change both the `modulus` to the **lowercase** string of `prime` obtained previously
 - Run with `npm start`
 - Wait some time for the app to compile
-- Open the app in your browser (usually `http://localhost:8080/`)
+- Open the app in your browser (usually `https://0.0.0.0:8080/`)
 
 ### **Telegram WebZ**
 
