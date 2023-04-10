@@ -1125,6 +1125,7 @@ async def main():
             ]
         }
 
+    logger.success("Running on {host}:{port}", host=pilt.HOST, port=pilt.PORT)
     await pilt.serve()
 
 
