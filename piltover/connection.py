@@ -83,8 +83,8 @@ class TCPAbridged(Connection):
             length = int.from_bytes(
                 await self.stream.read(3), byteorder="little", signed=False
             )
-        else:
-            length *= 4
+
+        length *= 4
 
         return await self.stream.read(length)
 
