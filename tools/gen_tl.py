@@ -29,12 +29,12 @@ out.mkdir(parents=True, exist_ok=True)
 FILES = [
     {
         "path": data / "api.tl",
-        "url": "https://raw.githubusercontent.com/telegramdesktop/tdesktop/dev/Telegram/Resources/tl/api.tl",
+        "url": "https://raw.githubusercontent.com/telegramdesktop/tdesktop/dev/Telegram/SourceFiles/mtproto/scheme/api.tl",
         "bytes_str": False,
     },
     {
         "path": data / "mtproto.tl",
-        "url": "https://raw.githubusercontent.com/telegramdesktop/tdesktop/dev/Telegram/Resources/tl/mtproto.tl",
+        "url": "https://raw.githubusercontent.com/telegramdesktop/tdesktop/dev/Telegram/SourceFiles/mtproto/scheme/mtproto.tl",
         "bytes_str": True,
     },
 ]
