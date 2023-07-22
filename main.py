@@ -47,7 +47,8 @@ async def main():
     fp = get_public_key_fingerprint(public_key, signed=True)
     logger.info(
         "Pubkey fingerprint: {fp:x} ({no_sign})",
-        fp=fp, no_sign=fp.to_bytes(8, "big", signed=True).hex()
+        fp=fp,
+        no_sign=fp.to_bytes(8, "big", signed=True).hex(),
     )
 
     pilt = Server(
@@ -74,15 +75,15 @@ async def main():
             "ping_id": request.obj.ping_id,
         }
 
-
     @pilt.on_message("ping_delay_disconnect")
-    async def ping_delay_disconnect(client: Client, request: CoreMessage, session_id: int):
+    async def ping_delay_disconnect(
+        client: Client, request: CoreMessage, session_id: int
+    ):
         return {
             "_": "pong",
             "msg_id": request.message_id,
             "ping_id": request.obj.ping_id,
         }
-
 
     @pilt.on_message("invokeWithLayer")
     async def invoke_with_layer(client: Client, request: CoreMessage, session_id: int):
@@ -109,7 +110,9 @@ async def main():
         )
 
     @pilt.on_message("invokeWithoutUpdates")
-    async def invoke_without_updates(client: Client, request: CoreMessage, session_id: int):
+    async def invoke_without_updates(
+        client: Client, request: CoreMessage, session_id: int
+    ):
         return await client.propagate(
             CoreMessage(
                 obj=request.obj.query,
@@ -388,7 +391,7 @@ async def main():
                         "lang_code": "grz",
                     }
                 )
-            ]
+            ],
         }
 
     @pilt.on_message("langpack.getLanguages")
@@ -404,7 +407,7 @@ async def main():
                         "lang_code": "grz",
                     }
                 )
-            ]
+            ],
         }
 
     @pilt.on_message("help.getCountriesList")
@@ -480,7 +483,9 @@ async def main():
         }
 
     @pilt.on_message("messages.getAvailableReactions")
-    async def get_available_reactions(client: Client, request: CoreMessage, session_id: int):
+    async def get_available_reactions(
+        client: Client, request: CoreMessage, session_id: int
+    ):
         return {
             "_": "messages.availableReactions",
             "hash": 0,
@@ -488,7 +493,9 @@ async def main():
         }
 
     @pilt.on_message("account.getDefaultEmojiStatuses")
-    async def get_default_emoji_statuses(client: Client, request: CoreMessage, session_id: int):
+    async def get_default_emoji_statuses(
+        client: Client, request: CoreMessage, session_id: int
+    ):
         return {
             "_": "account.emojiStatuses",
             "hash": 0,
@@ -496,7 +503,9 @@ async def main():
         }
 
     @pilt.on_message("set_client_DH_params")
-    async def set_client_dh_params(client: Client, request: CoreMessage, session_id: int):
+    async def set_client_dh_params(
+        client: Client, request: CoreMessage, session_id: int
+    ):
         print(request.obj)
         print(client.shared)
         raise
@@ -512,7 +521,9 @@ async def main():
         }
 
     @pilt.on_message("messages.getScheduledHistory")
-    async def get_scheduled_history(client: Client, request: CoreMessage, session_id: int):
+    async def get_scheduled_history(
+        client: Client, request: CoreMessage, session_id: int
+    ):
         return {
             "_": "messages.messages",
             "messages": [],
@@ -521,7 +532,9 @@ async def main():
         }
 
     @pilt.on_message("messages.getEmojiKeywordsLanguages")
-    async def get_emoji_keywords_languages(client: Client, request: CoreMessage, session_id: int):
+    async def get_emoji_keywords_languages(
+        client: Client, request: CoreMessage, session_id: int
+    ):
         return {
             "_": "vector",
             "data": [],
@@ -542,7 +555,9 @@ async def main():
                         "unread_count": 0,
                         "unread_mentions_count": 0,
                         "unread_reactions_count": 0,
-                        "notify_settings": await get_notify_settings(client, request, session_id),
+                        "notify_settings": await get_notify_settings(
+                            client, request, session_id
+                        ),
                         # "draft": TL.from_dict(
                         #     {
                         #         "_": "draftMessage",
@@ -745,7 +760,9 @@ async def main():
         }
 
     @pilt.on_message("messages.getRecentReactions")
-    async def get_recent_reactions(client: Client, request: CoreMessage, session_id: int):
+    async def get_recent_reactions(
+        client: Client, request: CoreMessage, session_id: int
+    ):
         return {
             "_": "messages.reactions",
             "hash": 0,
@@ -763,7 +780,9 @@ async def main():
         }
 
     @pilt.on_message("messages.getAttachMenuBots")
-    async def get_attach_menu_bots(client: Client, request: CoreMessage, session_id: int):
+    async def get_attach_menu_bots(
+        client: Client, request: CoreMessage, session_id: int
+    ):
         return {
             "_": "attachMenuBots",
             "hash": 0,
@@ -772,7 +791,9 @@ async def main():
         }
 
     @pilt.on_message("account.getNotifySettings")
-    async def get_notify_settings(client: Client, request: CoreMessage, session_id: int):
+    async def get_notify_settings(
+        client: Client, request: CoreMessage, session_id: int
+    ):
         return {
             "_": "peerNotifySettings",
             "show_previews": True,
@@ -789,7 +810,9 @@ async def main():
         }
 
     @pilt.on_message("help.getTermsOfServiceUpdate")
-    async def get_terms_of_service_update(client: Client, request: CoreMessage, session_id: int):
+    async def get_terms_of_service_update(
+        client: Client, request: CoreMessage, session_id: int
+    ):
         return {
             "_": "help.termsOfServiceUpdateEmpty",
             "expires": int(time.time() + 9000),
@@ -807,7 +830,9 @@ async def main():
         }
 
     @pilt.on_message("messages.reorderPinnedDialogs")
-    async def reorder_pinned_dialogs(client: Client, request: CoreMessage, session_id: int):
+    async def reorder_pinned_dialogs(
+        client: Client, request: CoreMessage, session_id: int
+    ):
         return {"_": "boolTrue"}
 
     @pilt.on_message("help.getPromoData")
@@ -849,7 +874,6 @@ async def main():
                         "currency": "EUR",
                         "amount": 169,
                         "bot_url": "t.me/spambot",
-
                     }
                 )
             ],
@@ -865,14 +889,18 @@ async def main():
         }
 
     @pilt.on_message("account.getGlobalPrivacySettings")
-    async def get_global_privacy_settings(client: Client, request: CoreMessage, session_id: int):
+    async def get_global_privacy_settings(
+        client: Client, request: CoreMessage, session_id: int
+    ):
         return {
             "_": "globalPrivacySettings",
             "archive_and_mute_new_noncontact_peers": False,
         }
 
     @pilt.on_message("account.getContentSettings")
-    async def get_content_settings(client: Client, request: CoreMessage, session_id: int):
+    async def get_content_settings(
+        client: Client, request: CoreMessage, session_id: int
+    ):
         return {
             "_": "account.contentSettings",
             "sensitive_enabled": True,
@@ -880,7 +908,9 @@ async def main():
         }
 
     @pilt.on_message("account.getContactSignUpNotification")
-    async def get_contact_sign_up_notification(client: Client, request: CoreMessage, session_id: int):
+    async def get_contact_sign_up_notification(
+        client: Client, request: CoreMessage, session_id: int
+    ):
         return {"_": "boolTrue"}
 
     @pilt.on_message("account.getPassword")
@@ -962,7 +992,9 @@ async def main():
         }
 
     @pilt.on_message("messages.getDefaultHistoryTTL")
-    async def get_default_history_ttl(client: Client, request: CoreMessage, session_id: int):
+    async def get_default_history_ttl(
+        client: Client, request: CoreMessage, session_id: int
+    ):
         return {
             "_": "defaultHistoryTTL",
             "period": 10,
@@ -983,7 +1015,9 @@ async def main():
         }
 
     @pilt.on_message("messages.getSearchResultsPositions")
-    async def get_search_results_positions(client: Client, request: CoreMessage, session_id: int):
+    async def get_search_results_positions(
+        client: Client, request: CoreMessage, session_id: int
+    ):
         return {
             "_": "messages.searchResultsPositions",
             "count": 0,
@@ -1000,7 +1034,9 @@ async def main():
         }
 
     @pilt.on_message("messages.getSearchCounters")
-    async def get_search_counters(client: Client, request: CoreMessage, session_id: int):
+    async def get_search_counters(
+        client: Client, request: CoreMessage, session_id: int
+    ):
         return {
             "_": "vector",
             "data": [
@@ -1011,9 +1047,8 @@ async def main():
                         "count": 0,
                     }
                 )
-                for flt
-                in request.obj.filters
-            ]
+                for flt in request.obj.filters
+            ],
         }
 
     @pilt.on_message("help.getInviteText")
@@ -1028,7 +1063,9 @@ async def main():
         return {"_": "boolTrue"}
 
     @pilt.on_message("messages.getSuggestedDialogFilters")
-    async def get_suggested_dialog_filters(client: Client, request: CoreMessage, session_id: int):
+    async def get_suggested_dialog_filters(
+        client: Client, request: CoreMessage, session_id: int
+    ):
         return {
             "_": "vector",
             "data": [],
@@ -1045,7 +1082,9 @@ async def main():
 
     @pilt.on_message("messages.getFeaturedStickers")
     @pilt.on_message("messages.getFeaturedEmojiStickers")
-    async def get_featured_stickers(client: Client, request: CoreMessage, session_id: int):
+    async def get_featured_stickers(
+        client: Client, request: CoreMessage, session_id: int
+    ):
         return {
             "_": "messages.featuredStickers",
             "hash": 0,
@@ -1122,7 +1161,7 @@ async def main():
                     }
                 )
                 for key in request.obj.keys
-            ]
+            ],
         }
 
     logger.success("Running on {host}:{port}", host=pilt.HOST, port=pilt.PORT)

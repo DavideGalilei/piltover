@@ -43,7 +43,11 @@ class DecryptedMessage:
     padding: bytes
 
     def to_core_message(self, TL):
-        return CoreMessage(message_id=self.message_id, seq_no=self.seq_no, obj=TL.decode(BytesIO(self.message_data)))
+        return CoreMessage(
+            message_id=self.message_id,
+            seq_no=self.seq_no,
+            obj=TL.decode(BytesIO(self.message_data)),
+        )
 
 
 @dataclass(init=True, repr=True, frozen=True)
@@ -81,7 +85,7 @@ def read_builtin(TL, typ: type, data: BytesIO):
             args = typ.__args__
             assert len(args) >= 1, "Wrong type specified"
             ret = args[0]
-            
+
             is_raw = len(args) > 1 and args[1] == "RAW"
             if not is_raw:
                 cid = data.read(4)
@@ -111,7 +115,9 @@ def read_builtin(TL, typ: type, data: BytesIO):
                             obj=TL.decode(data),
                         )
                     )
-            elif isinstance(ret, str) or (inspect.isclass(ret) and issubclass(ret, TLType)):
+            elif isinstance(ret, str) or (
+                inspect.isclass(ret) and issubclass(ret, TLType)
+            ):
                 for _ in range(length):
                     result.append(TL.decode(data))
             elif isinstance(ret, Basic):
@@ -245,14 +251,20 @@ class Int(Basic):
         self.__name__ = name
 
     def deserialize(self, data: BytesIO, signed: bool | None = None) -> int:
-        return read_int(data.read(self.size), signed=signed if signed is not None else self.signed)
+        return read_int(
+            data.read(self.size), signed=signed if signed is not None else self.signed
+        )
 
     def serialize(self, n: int, signed: bool | None = None) -> bytes:
-        return n.to_bytes(self.size, byteorder="little", signed=signed if signed is not None else self.signed)
+        return n.to_bytes(
+            self.size,
+            byteorder="little",
+            signed=signed if signed is not None else self.signed,
+        )
 
     def __str__(self) -> str:
         return f"{nameof(self)}(signed={self.signed})"
-    
+
     def __repr__(self) -> str:
         return nameof(self)
 
@@ -283,7 +295,9 @@ class FlagsOf(Basic):
             if isinstance(check_type, GenericAlias) or not inspect.isclass(check_type):
                 check_type = type(self.typ)
 
-            if issubclass(check_type, GenericAlias) or issubclass(check_type, (bool, int, float, str, bytes)):
+            if issubclass(check_type, GenericAlias) or issubclass(
+                check_type, (bool, int, float, str, bytes)
+            ):
                 decoded = read_builtin(TL, self.typ, data)
             elif issubclass(check_type, Basic):
                 decoded = self.typ.deserialize(data)
@@ -298,7 +312,7 @@ class FlagsOf(Basic):
     def serialize(self, TL, field: str, orig: dict, obj) -> bytes:
         if self.typ is Bit:
             if orig.get(field, False):
-                orig[self.param] |= (1 << self.pos)
+                orig[self.param] |= 1 << self.pos
             else:
                 orig[self.param] &= ~(1 << self.pos)
             return b""
@@ -310,7 +324,9 @@ class FlagsOf(Basic):
             if isinstance(check_type, GenericAlias) or not inspect.isclass(check_type):
                 check_type = type(self.typ)
 
-            if issubclass(check_type, (bool, int, float, str, bytes, list, GenericAlias)):
+            if issubclass(
+                check_type, (bool, int, float, str, bytes, list, GenericAlias)
+            ):
                 tmp = BytesIO()
                 write_builtin(TL, self.typ, obj, to=tmp)
                 return tmp.getvalue()

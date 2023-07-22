@@ -10,7 +10,7 @@ logging.basicConfig(level=logging.DEBUG)
 
 # Remember to use your own values from my.telegram.org!
 api_id = 12345
-api_hash = '0123456789abcdef0123456789abcdef'
+api_hash = "0123456789abcdef0123456789abcdef"
 client = TelegramClient(
     session=None,
     api_id=api_id,
