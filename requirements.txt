@@ -6,6 +6,5 @@ loguru
 httpx
 
 jinja2
-black
 
 icecream
