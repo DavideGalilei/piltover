@@ -83,14 +83,14 @@ MAP |= {
 # TODO: multiple layers support
 # special cased constructors
 MAP |= {
-    0x2619a90e: {
+    0x2619A90E: {
         "_": "messages.getStickerSet_71",
         "params": {
             "stickerset": TLType,
         },
         "ret": "messages.StickerSet",
     },
-    0xb60a24a6: {
+    0xB60A24A6: {
         "_": "messages.stickerSet_71",
         "params": {
             "set": TLType,  # StickerSet_71
@@ -99,7 +99,7 @@ MAP |= {
         },
         "is": "messages.StickerSet_71",
     },
-    0xcd303b41: {
+    0xCD303B41: {
         "_": "stickerSet_71",
         "params": {
             "flags": Int32,
@@ -116,11 +116,11 @@ MAP |= {
         },
         "is": "StickerSet_71",
     },
-    0x800fd57d: {
+    0x800FD57D: {
         "_": "langpack.getLanguages_72",
         "ret": list["LangPackLanguage_72"],
     },
-    0x117698f1: {
+    0x117698F1: {
         "_": "langPackLanguage_72",
         "params": {
             "name": str,

@@ -24,7 +24,9 @@ from piltover.utils import nameof
 try:
     from piltover.tl.generated import MAP, NAME_MAP
 except ImportError:
-    logger.error("Couldn't import TL map. Please run this command and try again `python3 tools/gen_tl.py update`")
+    logger.error(
+        "Couldn't import TL map. Please run this command and try again `python3 tools/gen_tl.py update`"
+    )
     exit(1)
 
 from icecream import ic
@@ -130,7 +132,9 @@ class TL(TLType):
             elif field not in obj:
                 raise ValueError(f"Missing parameter {field!r} of type {nameof(typ)}")
 
-            if issubclass(check_type, (bool, int, float, str, bytes, list, GenericAlias)):
+            if issubclass(
+                check_type, (bool, int, float, str, bytes, list, GenericAlias)
+            ):
                 write_builtin(TL, typ, value, to=result)
             elif issubclass(check_type, Basic):
                 if isinstance(typ, Int):

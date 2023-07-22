@@ -18,9 +18,9 @@ def get_public_key_fingerprint(public_key: str, signed: bool = False) -> int:
     #     signed=False,
     # )
     key = restore_public_key(public_key=public_key)
-    num = key.public_numbers() # type: ignore
-    n, e = num.n, num.e # type: ignore
-    
+    num = key.public_numbers()  # type: ignore
+    n, e = num.n, num.e  # type: ignore
+
     n_bytes = n.to_bytes((n.bit_length() + 7) // 8, "big", signed=False)
     e_bytes = e.to_bytes((e.bit_length() + 7) // 8, "big", signed=False)
 
@@ -47,20 +47,16 @@ def restore_public_key(public_key: str):
 def gen_keys():
     # https://dev.to/aaronktberry/generating-encrypted-key-pairs-in-python-69b
 
-    private_key = rsa.generate_private_key(
-        public_exponent=65537,
-        key_size=2048
-    )
+    private_key = rsa.generate_private_key(public_exponent=65537, key_size=2048)
 
     unencrypted_pem_private_key = private_key.private_bytes(
         encoding=serialization.Encoding.PEM,
         format=serialization.PrivateFormat.TraditionalOpenSSL,
-        encryption_algorithm=serialization.NoEncryption()
+        encryption_algorithm=serialization.NoEncryption(),
     )
 
     pem_public_key = private_key.public_key().public_bytes(
-        encoding=serialization.Encoding.PEM,
-        format=serialization.PublicFormat.PKCS1
+        encoding=serialization.Encoding.PEM, format=serialization.PublicFormat.PKCS1
     )
 
     private_key = unencrypted_pem_private_key.decode().strip()
