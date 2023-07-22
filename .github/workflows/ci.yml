@@ -4,9 +4,6 @@ on:
   push:
 
 jobs:
-  check-types:
-    runs-on: ubuntu-latest
-
   check-formatting:
     runs-on: ubuntu-latest
 
