@@ -1,0 +1,7 @@
+services:
+  piltover:
+    build: .
+    tty: true
+    stdin_open: true
+    ports: [4430:4430]
+    restart: unless-stopped

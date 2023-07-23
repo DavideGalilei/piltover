@@ -26,7 +26,7 @@ chat: linked group to [@ChameleonGram](https://t.me/ChameleonGram).
 - [ ] Use custom exceptions instead of Python assertions: `assert` statements
       are disabled with `python -O`, leading to missing important checks.
 - [ ] Add missing security checks, e.g., checking of `g_a`/`g_b`.
-- [ ] Refactor `main.py`, and use a database for auth
+- [ ] Refactor `piltover/__main__.py`, and use a database for auth
       keys/messages/users/updates (probably with SQLAlchemy and alambic due to
       reliable database migrations).
 - [ ] MTProxy support maybe? Obfuscation is already implemented, so why not?
@@ -84,7 +84,7 @@ asyncio.run(main())
 
 ```shell
 $ python3 -m pip install -U -r requirements.txt
-$ python3 main.py
+$ python3 -m piltover
 # Server running on 127.0.0.1:4430...
 ```
 
@@ -114,7 +114,7 @@ $ source venv/bin/activate
 ```shell
 $ python3 -m pip install -U -r requirements.txt
 $ python3 tools/gen_tl.py update
-$ python3 main.py
+$ python3 -m piltover
 ```
 
 Now wait until it loads correctly and fire a Ctrl-C to stop the process.
