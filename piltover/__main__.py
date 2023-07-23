@@ -1,6 +1,7 @@
 import asyncio
 import time
 import uvloop
+from os import getenv
 
 from pathlib import Path
 
@@ -22,7 +23,7 @@ privkey = secrets / "privkey.asc"
 pubkey = secrets / "pubkey.asc"
 
 
-if True:
+if not getenv("DISABLE_HR"):
     # Hot code reloading
     import jurigged
 
