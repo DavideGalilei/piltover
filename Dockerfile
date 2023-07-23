@@ -9,11 +9,10 @@ RUN venv/bin/pip install poetry
 
 COPY poetry.lock .
 COPY pyproject.toml .
+RUN venv/bin/poetry config virtualenvs.create false
 RUN venv/bin/poetry install --no-dev
 
 COPY piltover piltover
-
-RUN echo $(ls venv/lib/*/site-packages) | grep uvl && exit 1
 
 ENV DISABLE_HR=1
 CMD ["venv/bin/python", "-m", "piltover"]
