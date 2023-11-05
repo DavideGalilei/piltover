@@ -5,7 +5,7 @@ chat: linked group to [@ChameleonGram](https://t.me/ChameleonGram).
 
 ## TODO
 
-- [ ] WebK gets stuck on `sendCode()`.
+- [ ] WebK gets stuck on `sendCode()`. (note to self: inspect the MTProto workers in `chrome://inspect/#workers`)
 - [x] Multiple sessions handling for: ~~Give correct `msg_id`/`seq_no` according
       to the
       [Telegram specification](https://core.telegram.org/mtproto/description#message-identifier-msg-id)~~
@@ -83,8 +83,8 @@ asyncio.run(main())
 ```
 
 ```shell
-$ python3 -m pip install -U -r requirements.txt
-$ python3 -m piltover
+$ poetry install --no-root
+$ poetry run python -m piltover
 # Server running on 127.0.0.1:4430...
 ```
 
@@ -102,19 +102,16 @@ $ git clone https://github.com/DavideGalilei/piltover
 $ cd piltover
 ```
 
-#### **2. Setup a virtual environment (optional)**
+#### **2. Install poetry**
 
-```shell
-$ python3 -m virtualenv venv
-$ source venv/bin/activate
-```
+Follow instructions at: https://python-poetry.org/docs/#installation
 
 #### **3. Initial setup**
 
 ```shell
-$ python3 -m pip install -U -r requirements.txt
-$ python3 tools/gen_tl.py update
-$ python3 -m piltover
+$ poetry install --no-root
+$ poetry run python tools/gen_tl.py update
+$ poetry run python -m piltover
 ```
 
 Now wait until it loads correctly and fire a Ctrl-C to stop the process.
@@ -122,11 +119,11 @@ Now wait until it loads correctly and fire a Ctrl-C to stop the process.
 > **You should see a line looking like this at the beginning**
 >
 > ```yml
-> 2023-01-06 18:12:18.900 | INFO     | __main__:main:48 - Pubkey fingerprint: -5087c676da5acb3d (af78398925a534c3)
+> 2023-11-05 19:52:31.171 | INFO     | __main__:main:49 - Pubkey fingerprint: -6bff292cf4837025 (9400d6d30b7c8fdb)
 > ```
 
 **Get the fingerprint hex string and save it for later (some clients need it)**.
-In this case, the unsigned fingerprint is `af78398925a534c3`, but only for this
+In this case, the unsigned fingerprint is `9400d6d30b7c8fdb`, but only for this
 example. Do not reuse this key fingerprint, as it will be different in your
 setup.
 
@@ -237,32 +234,26 @@ $ rm -rf tdata/ DebugLogs/ log.txt && c && ./Telegram
   - ```shell
     $ git clone https://github.com/morethanwords/tweb
     $ cd tweb
-    $ npm install --force
+    $ npm i -g pnpm
+    $ pnpm install
     ```
-- Create a SSL certificate
-  - ```shell
-      $ sudo npm install -g mkcert
-      $ mkdir certs && cd certs
-      $ mkcert create-ca
-      $ mkcert create-cert --key localhost-key.pem --cert localhost.pem
-      $ cd ..
-      ```
 - Edit the values in this file:
-  https://github.com/morethanwords/tweb/blob/master/src/lib/mtproto/dcConfigurator.ts#L55
+  https://github.com/morethanwords/tweb/blob/f2827d9c19616a560346bd1662665ca30dc54668/src/lib/mtproto/dcConfigurator.ts#L50
   - Change `` const chosenServer = `wss://...` `` to:
   - ```typescript
     const chosenServer = `ws://127.0.0.1:3000/proxy`;
     ```
   - Change every datacenter ip and port below, respectively to `127.0.0.1`
     (localhost) and `4430` (port)
+    https://github.com/morethanwords/tweb/blob/f2827d9c19616a560346bd1662665ca30dc54668/src/lib/mtproto/dcConfigurator.ts#L58-L70
+- Edit the values in this file:
+  https://github.com/morethanwords/tweb/blob/f2827d9c19616a560346bd1662665ca30dc54668/src/lib/mtproto/rsaKeysManager.ts#L69-L78
+  - Change the `modulus` to the **lowercase** string of `prime` obtained previously
 - Run the websocket proxy from piltover
   - ```shell
     $ npm install express express-ws --force
     $ node tools/websocket_proxy.js
     ```
-- Edit the values in this file:
-  https://github.com/morethanwords/tweb/blob/master/src/lib/mtproto/rsaKeysManager.ts#L69-L78
-  - Change both the `modulus` to the **lowercase** string of `prime` obtained previously
 - Run with `npm start`
 - Wait some time for the app to compile
 - Open the app in your browser (usually `https://0.0.0.0:8080/`)

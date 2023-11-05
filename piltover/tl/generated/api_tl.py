@@ -23,7 +23,7 @@ from piltover.tl.types import (
 )
 
 
-LAYER: int = 151
+LAYER: int = -1
 
 
 MAP = {
@@ -300,17 +300,37 @@ MAP = {
         },
         "is": "InputMedia",
     },
+    0x89FDD778: {
+        "_": "inputMediaStory",
+        "params": {
+            "peer": TLType,
+            "id": Int32,
+        },
+        "is": "InputMedia",
+    },
+    0xC21B8849: {
+        "_": "inputMediaWebPage",
+        "params": {
+            "flags": Int32,
+            "force_large_media": FlagsOf("flags", 0, Bit),
+            "force_small_media": FlagsOf("flags", 1, Bit),
+            "optional": FlagsOf("flags", 2, Bit),
+            "url": str,
+        },
+        "is": "InputMedia",
+    },
     0x1CA48F57: {
         "_": "inputChatPhotoEmpty",
         "is": "InputChatPhoto",
     },
-    0xC642724E: {
+    0xBDCDAEC0: {
         "_": "inputChatUploadedPhoto",
         "params": {
             "flags": Int32,
             "file": FlagsOf("flags", 0, TLType),
             "video": FlagsOf("flags", 1, TLType),
             "video_start_ts": FlagsOf("flags", 2, float),
+            "video_emoji_markup": FlagsOf("flags", 3, TLType),
         },
         "is": "InputChatPhoto",
     },
@@ -508,7 +528,7 @@ MAP = {
         },
         "is": "User",
     },
-    0x8F97C628: {
+    0xEB602F25: {
         "_": "user",
         "params": {
             "flags": Int32,
@@ -531,6 +551,10 @@ MAP = {
             "premium": FlagsOf("flags", 28, Bit),
             "attach_menu_enabled": FlagsOf("flags", 29, Bit),
             "flags2": Int32,
+            "bot_can_edit": FlagsOf("flags2", 1, Bit),
+            "close_friend": FlagsOf("flags2", 2, Bit),
+            "stories_hidden": FlagsOf("flags2", 3, Bit),
+            "stories_unavailable": FlagsOf("flags2", 4, Bit),
             "id": Int64,
             "access_hash": FlagsOf("flags", 0, Int64),
             "first_name": FlagsOf("flags", 1, str),
@@ -545,6 +569,9 @@ MAP = {
             "lang_code": FlagsOf("flags", 22, str),
             "emoji_status": FlagsOf("flags", 30, TLType),
             "usernames": FlagsOf("flags2", 0, list["Username"]),
+            "stories_max_id": FlagsOf("flags2", 5, Int32),
+            "color": FlagsOf("flags2", 7, Int32),
+            "background_emoji_id": FlagsOf("flags2", 6, Int64),
         },
         "is": "User",
     },
@@ -631,7 +658,7 @@ MAP = {
         },
         "is": "Chat",
     },
-    0x83259464: {
+    0x1981EA7E: {
         "_": "channel",
         "params": {
             "flags": Int32,
@@ -656,6 +683,9 @@ MAP = {
             "join_request": FlagsOf("flags", 29, Bit),
             "forum": FlagsOf("flags", 30, Bit),
             "flags2": Int32,
+            "stories_hidden": FlagsOf("flags2", 1, Bit),
+            "stories_hidden_min": FlagsOf("flags2", 2, Bit),
+            "stories_unavailable": FlagsOf("flags2", 3, Bit),
             "id": Int64,
             "access_hash": FlagsOf("flags", 13, Int64),
             "title": str,
@@ -668,6 +698,9 @@ MAP = {
             "default_banned_rights": FlagsOf("flags", 18, TLType),
             "participants_count": FlagsOf("flags", 17, Int32),
             "usernames": FlagsOf("flags2", 0, list["Username"]),
+            "stories_max_id": FlagsOf("flags2", 4, Int32),
+            "color": FlagsOf("flags2", 6, Int32),
+            "background_emoji_id": FlagsOf("flags2", 5, Int64),
         },
         "is": "Chat",
     },
@@ -690,6 +723,7 @@ MAP = {
             "flags": Int32,
             "can_set_username": FlagsOf("flags", 7, Bit),
             "has_scheduled": FlagsOf("flags", 8, Bit),
+            "translations_disabled": FlagsOf("flags", 19, Bit),
             "id": Int64,
             "about": str,
             "participants": TLType,
@@ -709,7 +743,7 @@ MAP = {
         },
         "is": "ChatFull",
     },
-    0xF2355507: {
+    0x723027BD: {
         "_": "channelFull",
         "params": {
             "flags": Int32,
@@ -725,6 +759,8 @@ MAP = {
             "can_delete_channel": FlagsOf("flags2", 0, Bit),
             "antispam": FlagsOf("flags2", 1, Bit),
             "participants_hidden": FlagsOf("flags2", 2, Bit),
+            "translations_disabled": FlagsOf("flags2", 3, Bit),
+            "stories_pinned_available": FlagsOf("flags2", 5, Bit),
             "id": Int64,
             "about": str,
             "participants_count": FlagsOf("flags", 0, Int32),
@@ -760,6 +796,7 @@ MAP = {
             "recent_requesters": FlagsOf("flags", 28, list[Int64]),
             "default_send_as": FlagsOf("flags", 29, TLType),
             "available_reactions": FlagsOf("flags", 30, TLType),
+            "stories": FlagsOf("flags2", 4, TLType),
         },
         "is": "ChatFull",
     },
@@ -844,6 +881,7 @@ MAP = {
             "edit_hide": FlagsOf("flags", 21, Bit),
             "pinned": FlagsOf("flags", 24, Bit),
             "noforwards": FlagsOf("flags", 26, Bit),
+            "invert_media": FlagsOf("flags", 27, Bit),
             "id": Int32,
             "from_id": FlagsOf("flags", 8, TLType),
             "peer_id": TLType,
@@ -923,20 +961,26 @@ MAP = {
         "_": "messageMediaUnsupported",
         "is": "MessageMedia",
     },
-    0x9CB070D7: {
+    0x4CF4D72D: {
         "_": "messageMediaDocument",
         "params": {
             "flags": Int32,
             "nopremium": FlagsOf("flags", 3, Bit),
             "spoiler": FlagsOf("flags", 4, Bit),
             "document": FlagsOf("flags", 0, TLType),
+            "alt_document": FlagsOf("flags", 5, TLType),
             "ttl_seconds": FlagsOf("flags", 2, Int32),
         },
         "is": "MessageMedia",
     },
-    0xA32DD600: {
+    0xDDF10C3B: {
         "_": "messageMediaWebPage",
         "params": {
+            "flags": Int32,
+            "force_large_media": FlagsOf("flags", 0, Bit),
+            "force_small_media": FlagsOf("flags", 1, Bit),
+            "manual": FlagsOf("flags", 3, Bit),
+            "safe": FlagsOf("flags", 4, Bit),
             "webpage": TLType,
         },
         "is": "MessageMedia",
@@ -1001,6 +1045,30 @@ MAP = {
         "params": {
             "value": Int32,
             "emoticon": str,
+        },
+        "is": "MessageMedia",
+    },
+    0x68CB6283: {
+        "_": "messageMediaStory",
+        "params": {
+            "flags": Int32,
+            "via_mention": FlagsOf("flags", 1, Bit),
+            "peer": TLType,
+            "id": Int32,
+            "story": FlagsOf("flags", 0, TLType),
+        },
+        "is": "MessageMedia",
+    },
+    0x58260664: {
+        "_": "messageMediaGiveaway",
+        "params": {
+            "flags": Int32,
+            "only_new_subscribers": FlagsOf("flags", 0, Bit),
+            "channels": list[Int64],
+            "countries_iso2": FlagsOf("flags", 1, list[str]),
+            "quantity": Int32,
+            "months": Int32,
+            "until_date": Int32,
         },
         "is": "MessageMedia",
     },
@@ -1142,10 +1210,14 @@ MAP = {
         },
         "is": "MessageAction",
     },
-    0xABE9AFFE: {
+    0xC516D679: {
         "_": "messageActionBotAllowed",
         "params": {
-            "domain": str,
+            "flags": Int32,
+            "attach_menu": FlagsOf("flags", 1, Bit),
+            "from_request": FlagsOf("flags", 3, Bit),
+            "domain": FlagsOf("flags", 0, str),
+            "app": FlagsOf("flags", 2, TLType),
         },
         "is": "MessageAction",
     },
@@ -1237,12 +1309,15 @@ MAP = {
         },
         "is": "MessageAction",
     },
-    0xABA0F5C6: {
+    0xC83D6AEC: {
         "_": "messageActionGiftPremium",
         "params": {
+            "flags": Int32,
             "currency": str,
             "amount": Int64,
             "months": Int32,
+            "crypto_currency": FlagsOf("flags", 0, str),
+            "crypto_amount": FlagsOf("flags", 0, Int64),
         },
         "is": "MessageAction",
     },
@@ -1274,8 +1349,42 @@ MAP = {
         },
         "is": "MessageAction",
     },
-    0xE7E75F97: {
-        "_": "messageActionAttachMenuBotAllowed",
+    0xFE77345D: {
+        "_": "messageActionRequestedPeer",
+        "params": {
+            "button_id": Int32,
+            "peer": TLType,
+        },
+        "is": "MessageAction",
+    },
+    0xBC44A927: {
+        "_": "messageActionSetChatWallPaper",
+        "params": {
+            "wallpaper": TLType,
+        },
+        "is": "MessageAction",
+    },
+    0xC0787D6D: {
+        "_": "messageActionSetSameChatWallPaper",
+        "params": {
+            "wallpaper": TLType,
+        },
+        "is": "MessageAction",
+    },
+    0xD2CFDB0E: {
+        "_": "messageActionGiftCode",
+        "params": {
+            "flags": Int32,
+            "via_giveaway": FlagsOf("flags", 0, Bit),
+            "unclaimed": FlagsOf("flags", 2, Bit),
+            "boost_peer": FlagsOf("flags", 1, TLType),
+            "months": Int32,
+            "slug": str,
+        },
+        "is": "MessageAction",
+    },
+    0x332BA9ED: {
+        "_": "messageActionGiveawayLaunch",
         "is": "MessageAction",
     },
     0xD58A08C6: {
@@ -1415,13 +1524,21 @@ MAP = {
         },
         "is": "auth.SentCode",
     },
-    0x33FB7BB8: {
+    0x2390FE44: {
+        "_": "auth.sentCodeSuccess",
+        "params": {
+            "authorization": TLType,
+        },
+        "is": "auth.SentCode",
+    },
+    0x2EA2C0D4: {
         "_": "auth.authorization",
         "params": {
             "flags": Int32,
             "setup_password_required": FlagsOf("flags", 1, Bit),
             "otherwise_relogin_days": FlagsOf("flags", 1, Int32),
             "tmp_sessions": FlagsOf("flags", 0, Int32),
+            "future_auth_token": FlagsOf("flags", 2, bytes),
             "user": TLType,
         },
         "is": "auth.Authorization",
@@ -1469,7 +1586,7 @@ MAP = {
         },
         "is": "InputNotifyPeer",
     },
-    0xDF1F002B: {
+    0xCACB6AE2: {
         "_": "inputPeerNotifySettings",
         "params": {
             "flags": Int32,
@@ -1477,10 +1594,13 @@ MAP = {
             "silent": FlagsOf("flags", 1, bool),
             "mute_until": FlagsOf("flags", 2, Int32),
             "sound": FlagsOf("flags", 3, TLType),
+            "stories_muted": FlagsOf("flags", 6, bool),
+            "stories_hide_sender": FlagsOf("flags", 7, bool),
+            "stories_sound": FlagsOf("flags", 8, TLType),
         },
         "is": "InputPeerNotifySettings",
     },
-    0xA83B0426: {
+    0x99622C0C: {
         "_": "peerNotifySettings",
         "params": {
             "flags": Int32,
@@ -1490,6 +1610,11 @@ MAP = {
             "ios_sound": FlagsOf("flags", 3, TLType),
             "android_sound": FlagsOf("flags", 4, TLType),
             "other_sound": FlagsOf("flags", 5, TLType),
+            "stories_muted": FlagsOf("flags", 6, bool),
+            "stories_hide_sender": FlagsOf("flags", 7, bool),
+            "stories_ios_sound": FlagsOf("flags", 8, TLType),
+            "stories_android_sound": FlagsOf("flags", 9, TLType),
+            "stories_other_sound": FlagsOf("flags", 10, TLType),
         },
         "is": "PeerNotifySettings",
     },
@@ -1579,7 +1704,7 @@ MAP = {
         "_": "inputReportReasonPersonalDetails",
         "is": "ReportReason",
     },
-    0xF8D32AED: {
+    0xB9B12C6C: {
         "_": "userFull",
         "params": {
             "flags": Int32,
@@ -1590,6 +1715,9 @@ MAP = {
             "has_scheduled": FlagsOf("flags", 12, Bit),
             "video_calls_available": FlagsOf("flags", 13, Bit),
             "voice_messages_forbidden": FlagsOf("flags", 20, Bit),
+            "translations_disabled": FlagsOf("flags", 23, Bit),
+            "stories_pinned_available": FlagsOf("flags", 26, Bit),
+            "blocked_my_stories_from": FlagsOf("flags", 27, Bit),
             "id": Int64,
             "about": FlagsOf("flags", 1, str),
             "settings": TLType,
@@ -1607,6 +1735,8 @@ MAP = {
             "bot_group_admin_rights": FlagsOf("flags", 17, TLType),
             "bot_broadcast_admin_rights": FlagsOf("flags", 18, TLType),
             "premium_gifts": FlagsOf("flags", 19, list["PremiumGiftOption"]),
+            "wallpaper": FlagsOf("flags", 24, TLType),
+            "stories": FlagsOf("flags", 25, TLType),
         },
         "is": "UserFull",
     },
@@ -1922,6 +2052,18 @@ MAP = {
         },
         "is": "Update",
     },
+    0x8951ABEF: {
+        "_": "updateNewAuthorization",
+        "params": {
+            "flags": Int32,
+            "unconfirmed": FlagsOf("flags", 0, Bit),
+            "hash": Int64,
+            "date": FlagsOf("flags", 0, Int32),
+            "device": FlagsOf("flags", 0, str),
+            "location": FlagsOf("flags", 0, str),
+        },
+        "is": "Update",
+    },
     0x12BCBD9A: {
         "_": "updateNewEncryptedMessage",
         "params": {
@@ -1994,6 +2136,7 @@ MAP = {
         "params": {
             "flags": Int32,
             "popup": FlagsOf("flags", 0, Bit),
+            "invert_media": FlagsOf("flags", 2, Bit),
             "inbox_date": FlagsOf("flags", 1, Int32),
             "type": str,
             "message": str,
@@ -2050,12 +2193,14 @@ MAP = {
         },
         "is": "Update",
     },
-    0x68C13933: {
+    0xF8227181: {
         "_": "updateReadMessagesContents",
         "params": {
+            "flags": Int32,
             "messages": list[Int32],
             "pts": Int32,
             "pts_count": Int32,
+            "date": FlagsOf("flags", 0, Int32),
         },
         "is": "Update",
     },
@@ -2461,11 +2606,11 @@ MAP = {
         "_": "updateLoginToken",
         "is": "Update",
     },
-    0x106395C9: {
+    0x24F40E77: {
         "_": "updateMessagePollVote",
         "params": {
             "poll_id": Int64,
-            "user_id": Int64,
+            "peer": TLType,
             "options": list[bytes],
             "qts": Int32,
         },
@@ -2529,11 +2674,13 @@ MAP = {
         },
         "is": "Update",
     },
-    0x246A4B22: {
+    0xEBE07752: {
         "_": "updatePeerBlocked",
         "params": {
+            "flags": Int32,
+            "blocked": FlagsOf("flags", 0, Bit),
+            "blocked_my_stories_from": FlagsOf("flags", 1, Bit),
             "peer_id": TLType,
-            "blocked": bool,
         },
         "is": "Update",
     },
@@ -2624,6 +2771,7 @@ MAP = {
         "_": "updateChannelParticipant",
         "params": {
             "flags": Int32,
+            "via_chatlist": FlagsOf("flags", 3, Bit),
             "channel_id": Int64,
             "date": Int32,
             "actor_id": Int64,
@@ -2792,6 +2940,57 @@ MAP = {
         "_": "updateUser",
         "params": {
             "user_id": Int64,
+        },
+        "is": "Update",
+    },
+    0xEC05B097: {
+        "_": "updateAutoSaveSettings",
+        "is": "Update",
+    },
+    0xCCF08AD6: {
+        "_": "updateGroupInvitePrivacyForbidden",
+        "params": {
+            "user_id": Int64,
+        },
+        "is": "Update",
+    },
+    0x75B3B798: {
+        "_": "updateStory",
+        "params": {
+            "peer": TLType,
+            "story": TLType,
+        },
+        "is": "Update",
+    },
+    0xF74E932B: {
+        "_": "updateReadStories",
+        "params": {
+            "peer": TLType,
+            "max_id": Int32,
+        },
+        "is": "Update",
+    },
+    0x1BF335B9: {
+        "_": "updateStoryID",
+        "params": {
+            "id": Int32,
+            "random_id": Int64,
+        },
+        "is": "Update",
+    },
+    0x2C084DC1: {
+        "_": "updateStoriesStealthMode",
+        "params": {
+            "stealth_mode": TLType,
+        },
+        "is": "Update",
+    },
+    0x7D627683: {
+        "_": "updateSentStoryReaction",
+        "params": {
+            "peer": TLType,
+            "story_id": Int32,
+            "reaction": TLType,
         },
         "is": "Update",
     },
@@ -3002,17 +3201,14 @@ MAP = {
         },
         "is": "DcOption",
     },
-    0x232566AC: {
+    0xCC1A241E: {
         "_": "config",
         "params": {
             "flags": Int32,
-            "phonecalls_enabled": FlagsOf("flags", 1, Bit),
             "default_p2p_contacts": FlagsOf("flags", 3, Bit),
             "preload_featured_stickers": FlagsOf("flags", 4, Bit),
-            "ignore_phone_entities": FlagsOf("flags", 5, Bit),
             "revoke_pm_inbox": FlagsOf("flags", 6, Bit),
             "blocked_mode": FlagsOf("flags", 8, Bit),
-            "pfs_enabled": FlagsOf("flags", 13, Bit),
             "force_try_ipv6": FlagsOf("flags", 14, Bit),
             "date": Int32,
             "expires": Int32,
@@ -3031,17 +3227,13 @@ MAP = {
             "notify_default_delay_ms": Int32,
             "push_chat_period_ms": Int32,
             "push_chat_limit": Int32,
-            "saved_gifs_limit": Int32,
             "edit_time_limit": Int32,
             "revoke_time_limit": Int32,
             "revoke_pm_time_limit": Int32,
             "rating_e_decay": Int32,
             "stickers_recent_limit": Int32,
-            "stickers_faved_limit": Int32,
             "channels_read_media_period": Int32,
             "tmp_sessions": FlagsOf("flags", 0, Int32),
-            "pinned_dialogs_count_max": Int32,
-            "pinned_infolder_count_max": Int32,
             "call_receive_timeout_ms": Int32,
             "call_ring_timeout_ms": Int32,
             "call_connect_timeout_ms": Int32,
@@ -3059,6 +3251,7 @@ MAP = {
             "lang_pack_version": FlagsOf("flags", 2, Int32),
             "base_lang_pack_version": FlagsOf("flags", 2, Int32),
             "reactions_default": FlagsOf("flags", 15, TLType),
+            "autologin_token": FlagsOf("flags", 16, str),
         },
         "is": "Config",
     },
@@ -3474,6 +3667,10 @@ MAP = {
         "_": "inputPrivacyKeyVoiceMessages",
         "is": "InputPrivacyKey",
     },
+    0x3823CC40: {
+        "_": "inputPrivacyKeyAbout",
+        "is": "InputPrivacyKey",
+    },
     0xBC2EAB30: {
         "_": "privacyKeyStatusTimestamp",
         "is": "PrivacyKey",
@@ -3508,6 +3705,10 @@ MAP = {
     },
     0x697F414: {
         "_": "privacyKeyVoiceMessages",
+        "is": "PrivacyKey",
+    },
+    0xA486B761: {
+        "_": "privacyKeyAbout",
         "is": "PrivacyKey",
     },
     0xD09E07B: {
@@ -3554,6 +3755,10 @@ MAP = {
         },
         "is": "InputPrivacyRule",
     },
+    0x2F453E49: {
+        "_": "inputPrivacyValueAllowCloseFriends",
+        "is": "InputPrivacyRule",
+    },
     0xFFFE1BAC: {
         "_": "privacyValueAllowContacts",
         "is": "PrivacyRule",
@@ -3598,6 +3803,10 @@ MAP = {
         },
         "is": "PrivacyRule",
     },
+    0xF7E8D89B: {
+        "_": "privacyValueAllowCloseFriends",
+        "is": "PrivacyRule",
+    },
     0x50A04E45: {
         "_": "account.privacyRules",
         "params": {
@@ -3637,15 +3846,17 @@ MAP = {
         },
         "is": "DocumentAttribute",
     },
-    0xEF02CE6: {
+    0xD38FF1C2: {
         "_": "documentAttributeVideo",
         "params": {
             "flags": Int32,
             "round_message": FlagsOf("flags", 0, Bit),
             "supports_streaming": FlagsOf("flags", 1, Bit),
-            "duration": Int32,
+            "nosound": FlagsOf("flags", 3, Bit),
+            "duration": float,
             "w": Int32,
             "h": Int32,
+            "preload_prefix_size": FlagsOf("flags", 2, Int32),
         },
         "is": "DocumentAttribute",
     },
@@ -3723,17 +3934,21 @@ MAP = {
         },
         "is": "messages.AffectedMessages",
     },
-    0xEB1477E8: {
+    0x211A1788: {
         "_": "webPageEmpty",
         "params": {
+            "flags": Int32,
             "id": Int64,
+            "url": FlagsOf("flags", 0, str),
         },
         "is": "WebPage",
     },
-    0xC586DA1C: {
+    0xB0D13E47: {
         "_": "webPagePending",
         "params": {
+            "flags": Int32,
             "id": Int64,
+            "url": FlagsOf("flags", 0, str),
             "date": Int32,
         },
         "is": "WebPage",
@@ -3742,6 +3957,7 @@ MAP = {
         "_": "webPage",
         "params": {
             "flags": Int32,
+            "has_large_media": FlagsOf("flags", 13, Bit),
             "id": Int64,
             "url": str,
             "display_url": str,
@@ -3780,6 +3996,7 @@ MAP = {
             "password_pending": FlagsOf("flags", 2, Bit),
             "encrypted_requests_disabled": FlagsOf("flags", 3, Bit),
             "call_requests_disabled": FlagsOf("flags", 4, Bit),
+            "unconfirmed": FlagsOf("flags", 5, Bit),
             "hash": Int64,
             "device_model": str,
             "platform": str,
@@ -3889,7 +4106,7 @@ MAP = {
         },
         "is": "ChatInvite",
     },
-    0x300C44C1: {
+    0xCDE0EC40: {
         "_": "chatInvite",
         "params": {
             "flags": Int32,
@@ -3898,11 +4115,15 @@ MAP = {
             "public": FlagsOf("flags", 2, Bit),
             "megagroup": FlagsOf("flags", 3, Bit),
             "request_needed": FlagsOf("flags", 6, Bit),
+            "verified": FlagsOf("flags", 7, Bit),
+            "scam": FlagsOf("flags", 8, Bit),
+            "fake": FlagsOf("flags", 9, Bit),
             "title": str,
             "about": FlagsOf("flags", 5, str),
             "photo": TLType,
             "participants_count": Int32,
             "participants": FlagsOf("flags", 4, list["User"]),
+            "color": Int32,
         },
         "is": "ChatInvite",
     },
@@ -3974,6 +4195,7 @@ MAP = {
             "animated": FlagsOf("flags", 5, Bit),
             "videos": FlagsOf("flags", 6, Bit),
             "emojis": FlagsOf("flags", 7, Bit),
+            "text_color": FlagsOf("flags", 9, Bit),
             "installed_date": FlagsOf("flags", 0, Int32),
             "id": Int64,
             "access_hash": Int64,
@@ -4062,13 +4284,14 @@ MAP = {
         },
         "is": "KeyboardButton",
     },
-    0x568A748: {
+    0x93B9FBB5: {
         "_": "keyboardButtonSwitchInline",
         "params": {
             "flags": Int32,
             "same_peer": FlagsOf("flags", 0, Bit),
             "text": str,
             "query": str,
+            "peer_types": FlagsOf("flags", 1, list["InlineQueryPeerType"]),
         },
         "is": "KeyboardButton",
     },
@@ -4147,6 +4370,15 @@ MAP = {
         "params": {
             "text": str,
             "url": str,
+        },
+        "is": "KeyboardButton",
+    },
+    0xD0B468C: {
+        "_": "keyboardButtonRequestPeer",
+        "params": {
+            "text": str,
+            "button_id": Int32,
+            "peer_type": TLType,
         },
         "is": "KeyboardButton",
     },
@@ -4335,14 +4567,6 @@ MAP = {
         },
         "is": "MessageEntity",
     },
-    0x20DF5D0: {
-        "_": "messageEntityBlockquote",
-        "params": {
-            "offset": Int32,
-            "length": Int32,
-        },
-        "is": "MessageEntity",
-    },
     0x761E6AF4: {
         "_": "messageEntityBankCard",
         "params": {
@@ -4365,6 +4589,14 @@ MAP = {
             "offset": Int32,
             "length": Int32,
             "document_id": Int64,
+        },
+        "is": "MessageEntity",
+    },
+    0x20DF5D0: {
+        "_": "messageEntityBlockquote",
+        "params": {
+            "offset": Int32,
+            "length": Int32,
         },
         "is": "MessageEntity",
     },
@@ -4619,6 +4851,7 @@ MAP = {
         "_": "inputBotInlineMessageMediaAuto",
         "params": {
             "flags": Int32,
+            "invert_media": FlagsOf("flags", 3, Bit),
             "message": str,
             "entities": FlagsOf("flags", 1, list["MessageEntity"]),
             "reply_markup": FlagsOf("flags", 2, TLType),
@@ -4630,6 +4863,7 @@ MAP = {
         "params": {
             "flags": Int32,
             "no_webpage": FlagsOf("flags", 0, Bit),
+            "invert_media": FlagsOf("flags", 3, Bit),
             "message": str,
             "entities": FlagsOf("flags", 1, list["MessageEntity"]),
             "reply_markup": FlagsOf("flags", 2, TLType),
@@ -4697,6 +4931,21 @@ MAP = {
         },
         "is": "InputBotInlineMessage",
     },
+    0xBDDCC510: {
+        "_": "inputBotInlineMessageMediaWebPage",
+        "params": {
+            "flags": Int32,
+            "invert_media": FlagsOf("flags", 3, Bit),
+            "force_large_media": FlagsOf("flags", 4, Bit),
+            "force_small_media": FlagsOf("flags", 5, Bit),
+            "optional": FlagsOf("flags", 6, Bit),
+            "message": str,
+            "entities": FlagsOf("flags", 1, list["MessageEntity"]),
+            "url": str,
+            "reply_markup": FlagsOf("flags", 2, TLType),
+        },
+        "is": "InputBotInlineMessage",
+    },
     0x88BF9319: {
         "_": "inputBotInlineResult",
         "params": {
@@ -4748,6 +4997,7 @@ MAP = {
         "_": "botInlineMessageMediaAuto",
         "params": {
             "flags": Int32,
+            "invert_media": FlagsOf("flags", 3, Bit),
             "message": str,
             "entities": FlagsOf("flags", 1, list["MessageEntity"]),
             "reply_markup": FlagsOf("flags", 2, TLType),
@@ -4759,6 +5009,7 @@ MAP = {
         "params": {
             "flags": Int32,
             "no_webpage": FlagsOf("flags", 0, Bit),
+            "invert_media": FlagsOf("flags", 3, Bit),
             "message": str,
             "entities": FlagsOf("flags", 1, list["MessageEntity"]),
             "reply_markup": FlagsOf("flags", 2, TLType),
@@ -4818,6 +5069,22 @@ MAP = {
         },
         "is": "BotInlineMessage",
     },
+    0x809AD9A6: {
+        "_": "botInlineMessageMediaWebPage",
+        "params": {
+            "flags": Int32,
+            "invert_media": FlagsOf("flags", 3, Bit),
+            "force_large_media": FlagsOf("flags", 4, Bit),
+            "force_small_media": FlagsOf("flags", 5, Bit),
+            "manual": FlagsOf("flags", 7, Bit),
+            "safe": FlagsOf("flags", 8, Bit),
+            "message": str,
+            "entities": FlagsOf("flags", 1, list["MessageEntity"]),
+            "url": str,
+            "reply_markup": FlagsOf("flags", 2, TLType),
+        },
+        "is": "BotInlineMessage",
+    },
     0x11965F3A: {
         "_": "botInlineResult",
         "params": {
@@ -4847,7 +5114,7 @@ MAP = {
         },
         "is": "BotInlineResult",
     },
-    0x947CA848: {
+    0xE021F2F6: {
         "_": "messages.botResults",
         "params": {
             "flags": Int32,
@@ -4855,6 +5122,7 @@ MAP = {
             "query_id": Int64,
             "next_offset": FlagsOf("flags", 1, str),
             "switch_pm": FlagsOf("flags", 2, TLType),
+            "switch_webview": FlagsOf("flags", 3, TLType),
             "results": list["BotInlineResult"],
             "cache_time": Int32,
             "users": list["User"],
@@ -4941,7 +5209,7 @@ MAP = {
         },
         "is": "auth.SentCodeType",
     },
-    0x5A159841: {
+    0xF450F59B: {
         "_": "auth.sentCodeTypeEmailCode",
         "params": {
             "flags": Int32,
@@ -4949,7 +5217,8 @@ MAP = {
             "google_signin_allowed": FlagsOf("flags", 1, Bit),
             "email_pattern": str,
             "length": Int32,
-            "next_phone_login_date": FlagsOf("flags", 2, Int32),
+            "reset_available_period": FlagsOf("flags", 3, Int32),
+            "reset_pending_date": FlagsOf("flags", 4, Int32),
         },
         "is": "auth.SentCodeType",
     },
@@ -4966,6 +5235,17 @@ MAP = {
         "_": "auth.sentCodeTypeFragmentSms",
         "params": {
             "url": str,
+            "length": Int32,
+        },
+        "is": "auth.SentCodeType",
+    },
+    0xE57B1432: {
+        "_": "auth.sentCodeTypeFirebaseSms",
+        "params": {
+            "flags": Int32,
+            "nonce": FlagsOf("flags", 0, bytes),
+            "receipt": FlagsOf("flags", 1, str),
+            "push_timeout": FlagsOf("flags", 1, Int32),
             "length": Int32,
         },
         "is": "auth.SentCodeType",
@@ -5103,14 +5383,16 @@ MAP = {
         },
         "is": "DraftMessage",
     },
-    0xFD8E711F: {
+    0x3FCCF7EF: {
         "_": "draftMessage",
         "params": {
             "flags": Int32,
             "no_webpage": FlagsOf("flags", 1, Bit),
-            "reply_to_msg_id": FlagsOf("flags", 0, Int32),
+            "invert_media": FlagsOf("flags", 6, Bit),
+            "reply_to": FlagsOf("flags", 4, TLType),
             "message": str,
             "entities": FlagsOf("flags", 3, list["MessageEntity"]),
+            "media": FlagsOf("flags", 5, TLType),
             "date": Int32,
         },
         "is": "DraftMessage",
@@ -5656,7 +5938,7 @@ MAP = {
         },
         "is": "LabeledPrice",
     },
-    0x3E85A91B: {
+    0x5DB95A15: {
         "_": "invoice",
         "params": {
             "flags": Int32,
@@ -5673,7 +5955,7 @@ MAP = {
             "prices": list["LabeledPrice"],
             "max_tip_amount": FlagsOf("flags", 8, Int64),
             "suggested_tip_amounts": FlagsOf("flags", 8, list[Int64]),
-            "recurring_terms_url": FlagsOf("flags", 9, str),
+            "terms_url": FlagsOf("flags", 10, str),
         },
         "is": "Invoice",
     },
@@ -5913,13 +6195,14 @@ MAP = {
         },
         "is": "ShippingOption",
     },
-    0xFFA0A496: {
+    0x32DA9E9C: {
         "_": "inputStickerSetItem",
         "params": {
             "flags": Int32,
             "document": TLType,
             "emoji": str,
             "mask_coords": FlagsOf("flags", 0, TLType),
+            "keywords": FlagsOf("flags", 1, str),
         },
         "is": "InputStickerSetItem",
     },
@@ -6337,9 +6620,11 @@ MAP = {
         },
         "is": "ChannelAdminLogEventAction",
     },
-    0x5CDADA77: {
+    0xFE9FC158: {
         "_": "channelAdminLogEventActionParticipantJoinByInvite",
         "params": {
+            "flags": Int32,
+            "via_chatlist": FlagsOf("flags", 0, Bit),
             "invite": TLType,
         },
         "is": "ChannelAdminLogEventAction",
@@ -6461,6 +6746,22 @@ MAP = {
         "_": "channelAdminLogEventActionToggleAntiSpam",
         "params": {
             "new_value": bool,
+        },
+        "is": "ChannelAdminLogEventAction",
+    },
+    0x3C2B247B: {
+        "_": "channelAdminLogEventActionChangeColor",
+        "params": {
+            "prev_value": Int32,
+            "new_value": Int32,
+        },
+        "is": "ChannelAdminLogEventAction",
+    },
+    0x445FC434: {
+        "_": "channelAdminLogEventActionChangeBackgroundEmoji",
+        "params": {
+            "prev_value": Int64,
+            "new_value": Int64,
         },
         "is": "ChannelAdminLogEventAction",
     },
@@ -7287,14 +7588,14 @@ MAP = {
         },
         "is": "PollAnswerVoters",
     },
-    0xDCB82EA3: {
+    0x7ADF2420: {
         "_": "pollResults",
         "params": {
             "flags": Int32,
             "min": FlagsOf("flags", 0, Bit),
             "results": FlagsOf("flags", 1, list["PollAnswerVoters"]),
             "total_voters": FlagsOf("flags", 2, Int32),
-            "recent_voters": FlagsOf("flags", 3, list[Int64]),
+            "recent_voters": FlagsOf("flags", 3, list["Peer"]),
             "solution": FlagsOf("flags", 4, str),
             "solution_entities": FlagsOf("flags", 4, list["MessageEntity"]),
         },
@@ -7330,6 +7631,9 @@ MAP = {
             "manage_call": FlagsOf("flags", 11, Bit),
             "other": FlagsOf("flags", 12, Bit),
             "manage_topics": FlagsOf("flags", 13, Bit),
+            "post_stories": FlagsOf("flags", 14, Bit),
+            "edit_stories": FlagsOf("flags", 15, Bit),
+            "delete_stories": FlagsOf("flags", 16, Bit),
         },
         "is": "ChatAdminRights",
     },
@@ -7350,6 +7654,13 @@ MAP = {
             "invite_users": FlagsOf("flags", 15, Bit),
             "pin_messages": FlagsOf("flags", 17, Bit),
             "manage_topics": FlagsOf("flags", 18, Bit),
+            "send_photos": FlagsOf("flags", 19, Bit),
+            "send_videos": FlagsOf("flags", 20, Bit),
+            "send_roundvideos": FlagsOf("flags", 21, Bit),
+            "send_audios": FlagsOf("flags", 22, Bit),
+            "send_voices": FlagsOf("flags", 23, Bit),
+            "send_docs": FlagsOf("flags", 24, Bit),
+            "send_plain": FlagsOf("flags", 25, Bit),
             "until_date": Int32,
         },
         "is": "ChatBannedRights",
@@ -7388,7 +7699,7 @@ MAP = {
         },
         "is": "account.WallPapers",
     },
-    0x8A6469C2: {
+    0xAD253D78: {
         "_": "codeSettings",
         "params": {
             "flags": Int32,
@@ -7396,7 +7707,10 @@ MAP = {
             "current_number": FlagsOf("flags", 1, Bit),
             "allow_app_hash": FlagsOf("flags", 4, Bit),
             "allow_missed_call": FlagsOf("flags", 5, Bit),
+            "allow_firebase": FlagsOf("flags", 7, Bit),
             "logout_tokens": FlagsOf("flags", 6, list[bytes]),
+            "token": FlagsOf("flags", 8, str),
+            "app_sandbox": FlagsOf("flags", 8, bool),
         },
         "is": "CodeSettings",
     },
@@ -7415,7 +7729,7 @@ MAP = {
         },
         "is": "WallPaperSettings",
     },
-    0x8EFAB953: {
+    0xBAA57628: {
         "_": "autoDownloadSettings",
         "params": {
             "flags": Int32,
@@ -7423,10 +7737,13 @@ MAP = {
             "video_preload_large": FlagsOf("flags", 1, Bit),
             "audio_preload_next": FlagsOf("flags", 2, Bit),
             "phonecalls_less_data": FlagsOf("flags", 3, Bit),
+            "stories_preload": FlagsOf("flags", 4, Bit),
             "photo_size_max": Int32,
             "video_size_max": Int64,
             "file_size_max": Int64,
             "video_upload_maxbitrate": Int32,
+            "small_queue_active_operations_max": Int32,
+            "large_queue_active_operations_max": Int32,
         },
         "is": "AutoDownloadSettings",
     },
@@ -7718,38 +8035,23 @@ MAP = {
         },
         "is": "WebPageAttribute",
     },
-    0x34D247B4: {
-        "_": "messageUserVote",
+    0x2E94C3E7: {
+        "_": "webPageAttributeStory",
         "params": {
-            "user_id": Int64,
-            "option": bytes,
-            "date": Int32,
+            "flags": Int32,
+            "peer": TLType,
+            "id": Int32,
+            "story": FlagsOf("flags", 0, TLType),
         },
-        "is": "MessageUserVote",
+        "is": "WebPageAttribute",
     },
-    0x3CA5B0EC: {
-        "_": "messageUserVoteInputOption",
-        "params": {
-            "user_id": Int64,
-            "date": Int32,
-        },
-        "is": "MessageUserVote",
-    },
-    0x8A65E557: {
-        "_": "messageUserVoteMultiple",
-        "params": {
-            "user_id": Int64,
-            "options": list[bytes],
-            "date": Int32,
-        },
-        "is": "MessageUserVote",
-    },
-    0x823F649: {
+    0x4899484E: {
         "_": "messages.votesList",
         "params": {
             "flags": Int32,
             "count": Int32,
-            "votes": list["MessageUserVote"],
+            "votes": list["MessagePeerVote"],
+            "chats": list["Chat"],
             "users": list["User"],
             "next_offset": FlagsOf("flags", 0, str),
         },
@@ -7794,6 +8096,19 @@ MAP = {
     },
     0x363293AE: {
         "_": "dialogFilterDefault",
+        "is": "DialogFilter",
+    },
+    0xD64A04A8: {
+        "_": "dialogFilterChatlist",
+        "params": {
+            "flags": Int32,
+            "has_my_invites": FlagsOf("flags", 26, Bit),
+            "id": Int32,
+            "title": str,
+            "emoticon": FlagsOf("flags", 25, str),
+            "pinned_peers": list["InputPeer"],
+            "include_peers": list["InputPeer"],
+        },
         "is": "DialogFilter",
     },
     0x77744D4A: {
@@ -7914,6 +8229,23 @@ MAP = {
         },
         "is": "VideoSize",
     },
+    0xF85C413C: {
+        "_": "videoSizeEmojiMarkup",
+        "params": {
+            "emoji_id": Int64,
+            "background_colors": list[Int32],
+        },
+        "is": "VideoSize",
+    },
+    0xDA082FE: {
+        "_": "videoSizeStickerMarkup",
+        "params": {
+            "stickerset": TLType,
+            "sticker_id": Int64,
+            "background_colors": list[Int32],
+        },
+        "is": "VideoSize",
+    },
     0x9D04AF9B: {
         "_": "statsGroupTopPoster",
         "params": {
@@ -7964,11 +8296,13 @@ MAP = {
         },
         "is": "stats.MegagroupStats",
     },
-    0xBEA2F424: {
+    0x734C4CCB: {
         "_": "globalPrivacySettings",
         "params": {
             "flags": Int32,
-            "archive_and_mute_new_noncontact_peers": FlagsOf("flags", 0, bool),
+            "archive_and_mute_new_noncontact_peers": FlagsOf("flags", 0, Bit),
+            "keep_archived_unmuted": FlagsOf("flags", 1, Bit),
+            "keep_archived_folders": FlagsOf("flags", 2, Bit),
         },
         "is": "GlobalPrivacySettings",
     },
@@ -8039,15 +8373,28 @@ MAP = {
         },
         "is": "messages.DiscussionMessage",
     },
-    0xA6D57763: {
+    0x6EEBCABD: {
         "_": "messageReplyHeader",
         "params": {
             "flags": Int32,
             "reply_to_scheduled": FlagsOf("flags", 2, Bit),
             "forum_topic": FlagsOf("flags", 3, Bit),
-            "reply_to_msg_id": Int32,
+            "quote": FlagsOf("flags", 9, Bit),
+            "reply_to_msg_id": FlagsOf("flags", 4, Int32),
             "reply_to_peer_id": FlagsOf("flags", 0, TLType),
+            "reply_from": FlagsOf("flags", 5, TLType),
+            "reply_media": FlagsOf("flags", 8, TLType),
             "reply_to_top_id": FlagsOf("flags", 1, Int32),
+            "quote_text": FlagsOf("flags", 6, str),
+            "quote_entities": FlagsOf("flags", 7, list["MessageEntity"]),
+        },
+        "is": "MessageReplyHeader",
+    },
+    0x9C98BFC1: {
+        "_": "messageReplyStoryHeader",
+        "params": {
+            "user_id": Int64,
+            "story_id": Int32,
         },
         "is": "MessageReplyHeader",
     },
@@ -8191,6 +8538,10 @@ MAP = {
         "_": "inlineQueryPeerTypeBroadcast",
         "is": "InlineQueryPeerType",
     },
+    0xE3B2D0C: {
+        "_": "inlineQueryPeerTypeBotPM",
+        "is": "InlineQueryPeerType",
+    },
     0x1662AF0B: {
         "_": "messages.historyImport",
         "params": {
@@ -8223,6 +8574,7 @@ MAP = {
         "params": {
             "flags": Int32,
             "requested": FlagsOf("flags", 0, Bit),
+            "via_chatlist": FlagsOf("flags", 3, Bit),
             "user_id": Int64,
             "date": Int32,
             "about": FlagsOf("flags", 2, str),
@@ -8387,7 +8739,7 @@ MAP = {
         "_": "account.resetPasswordOk",
         "is": "account.ResetPasswordResult",
     },
-    0x3A836DF8: {
+    0xDAAFFF6B: {
         "_": "sponsoredMessage",
         "params": {
             "flags": Int32,
@@ -8399,8 +8751,11 @@ MAP = {
             "chat_invite_hash": FlagsOf("flags", 4, str),
             "channel_post": FlagsOf("flags", 2, Int32),
             "start_param": FlagsOf("flags", 0, str),
+            "webpage": FlagsOf("flags", 9, TLType),
             "message": str,
             "entities": FlagsOf("flags", 1, list["MessageEntity"]),
+            "sponsor_info": FlagsOf("flags", 7, str),
+            "additional_info": FlagsOf("flags", 8, str),
         },
         "is": "SponsoredMessage",
     },
@@ -8560,24 +8915,15 @@ MAP = {
         },
         "is": "messages.AvailableReactions",
     },
-    0x67CA4737: {
-        "_": "messages.translateNoResult",
-        "is": "messages.TranslatedText",
-    },
-    0xA214F7D0: {
-        "_": "messages.translateResultText",
-        "params": {
-            "text": str,
-        },
-        "is": "messages.TranslatedText",
-    },
-    0xB156FE9C: {
+    0x8C79B63C: {
         "_": "messagePeerReaction",
         "params": {
             "flags": Int32,
             "big": FlagsOf("flags", 0, Bit),
             "unread": FlagsOf("flags", 1, Bit),
+            "my": FlagsOf("flags", 2, Bit),
             "peer_id": TLType,
+            "date": Int32,
             "reaction": TLType,
         },
         "is": "MessagePeerReaction",
@@ -8624,16 +8970,19 @@ MAP = {
         },
         "is": "AttachMenuBotIcon",
     },
-    0xC8AA2CD2: {
+    0xD90D8DFE: {
         "_": "attachMenuBot",
         "params": {
             "flags": Int32,
             "inactive": FlagsOf("flags", 0, Bit),
             "has_settings": FlagsOf("flags", 1, Bit),
             "request_write_access": FlagsOf("flags", 2, Bit),
+            "show_in_attach_menu": FlagsOf("flags", 3, Bit),
+            "show_in_side_menu": FlagsOf("flags", 4, Bit),
+            "side_menu_disclaimer_needed": FlagsOf("flags", 5, Bit),
             "bot_id": Int64,
             "short_name": str,
-            "peer_types": list["AttachMenuPeerType"],
+            "peer_types": FlagsOf("flags", 3, list["AttachMenuPeerType"]),
             "icons": list["AttachMenuBotIcon"],
         },
         "is": "AttachMenuBot",
@@ -8779,6 +9128,14 @@ MAP = {
         },
         "is": "InputInvoice",
     },
+    0x98986C0D: {
+        "_": "inputInvoicePremiumGiftCode",
+        "params": {
+            "purpose": TLType,
+            "option": TLType,
+        },
+        "is": "InputInvoice",
+    },
     0xAED0CBD9: {
         "_": "payments.exportedInvoice",
         "params": {
@@ -8813,6 +9170,7 @@ MAP = {
         "params": {
             "flags": Int32,
             "restore": FlagsOf("flags", 0, Bit),
+            "upgrade": FlagsOf("flags", 1, Bit),
         },
         "is": "InputStorePaymentPurpose",
     },
@@ -8820,6 +9178,32 @@ MAP = {
         "_": "inputStorePaymentGiftPremium",
         "params": {
             "user_id": TLType,
+            "currency": str,
+            "amount": Int64,
+        },
+        "is": "InputStorePaymentPurpose",
+    },
+    0xA3805F3F: {
+        "_": "inputStorePaymentPremiumGiftCode",
+        "params": {
+            "flags": Int32,
+            "users": list["InputUser"],
+            "boost_peer": FlagsOf("flags", 0, TLType),
+            "currency": str,
+            "amount": Int64,
+        },
+        "is": "InputStorePaymentPurpose",
+    },
+    0x7C9375E6: {
+        "_": "inputStorePaymentPremiumGiveaway",
+        "params": {
+            "flags": Int32,
+            "only_new_subscribers": FlagsOf("flags", 0, Bit),
+            "boost_peer": TLType,
+            "additional_peers": FlagsOf("flags", 1, list["InputPeer"]),
+            "countries_iso2": FlagsOf("flags", 2, list[str]),
+            "random_id": Int64,
+            "until_date": Int32,
             "currency": str,
             "amount": Int64,
         },
@@ -8977,12 +9361,13 @@ MAP = {
         },
         "is": "account.EmailVerified",
     },
-    0xB6F11EBE: {
+    0x5F2D1DF2: {
         "_": "premiumSubscriptionOption",
         "params": {
             "flags": Int32,
             "current": FlagsOf("flags", 1, Bit),
             "can_purchase_upgrade": FlagsOf("flags", 2, Bit),
+            "transaction": FlagsOf("flags", 3, str),
             "months": Int32,
             "currency": str,
             "amount": Int64,
@@ -9097,6 +9482,679 @@ MAP = {
             "expires": Int32,
         },
         "is": "ExportedContactToken",
+    },
+    0x5F3B8A00: {
+        "_": "requestPeerTypeUser",
+        "params": {
+            "flags": Int32,
+            "bot": FlagsOf("flags", 0, bool),
+            "premium": FlagsOf("flags", 1, bool),
+        },
+        "is": "RequestPeerType",
+    },
+    0xC9F06E1B: {
+        "_": "requestPeerTypeChat",
+        "params": {
+            "flags": Int32,
+            "creator": FlagsOf("flags", 0, Bit),
+            "bot_participant": FlagsOf("flags", 5, Bit),
+            "has_username": FlagsOf("flags", 3, bool),
+            "forum": FlagsOf("flags", 4, bool),
+            "user_admin_rights": FlagsOf("flags", 1, TLType),
+            "bot_admin_rights": FlagsOf("flags", 2, TLType),
+        },
+        "is": "RequestPeerType",
+    },
+    0x339BEF6C: {
+        "_": "requestPeerTypeBroadcast",
+        "params": {
+            "flags": Int32,
+            "creator": FlagsOf("flags", 0, Bit),
+            "has_username": FlagsOf("flags", 3, bool),
+            "user_admin_rights": FlagsOf("flags", 1, TLType),
+            "bot_admin_rights": FlagsOf("flags", 2, TLType),
+        },
+        "is": "RequestPeerType",
+    },
+    0x481EADFA: {
+        "_": "emojiListNotModified",
+        "is": "EmojiList",
+    },
+    0x7A1E11D1: {
+        "_": "emojiList",
+        "params": {
+            "hash": Int64,
+            "document_id": list[Int64],
+        },
+        "is": "EmojiList",
+    },
+    0x7A9ABDA9: {
+        "_": "emojiGroup",
+        "params": {
+            "title": str,
+            "icon_emoji_id": Int64,
+            "emoticons": list[str],
+        },
+        "is": "EmojiGroup",
+    },
+    0x6FB4AD87: {
+        "_": "messages.emojiGroupsNotModified",
+        "is": "messages.EmojiGroups",
+    },
+    0x881FB94B: {
+        "_": "messages.emojiGroups",
+        "params": {
+            "hash": Int32,
+            "groups": list["EmojiGroup"],
+        },
+        "is": "messages.EmojiGroups",
+    },
+    0x751F3146: {
+        "_": "textWithEntities",
+        "params": {
+            "text": str,
+            "entities": list["MessageEntity"],
+        },
+        "is": "TextWithEntities",
+    },
+    0x33DB32F8: {
+        "_": "messages.translateResult",
+        "params": {
+            "result": list["TextWithEntities"],
+        },
+        "is": "messages.TranslatedText",
+    },
+    0xC84834CE: {
+        "_": "autoSaveSettings",
+        "params": {
+            "flags": Int32,
+            "photos": FlagsOf("flags", 0, Bit),
+            "videos": FlagsOf("flags", 1, Bit),
+            "video_max_size": FlagsOf("flags", 2, Int64),
+        },
+        "is": "AutoSaveSettings",
+    },
+    0x81602D47: {
+        "_": "autoSaveException",
+        "params": {
+            "peer": TLType,
+            "settings": TLType,
+        },
+        "is": "AutoSaveException",
+    },
+    0x4C3E069D: {
+        "_": "account.autoSaveSettings",
+        "params": {
+            "users_settings": TLType,
+            "chats_settings": TLType,
+            "broadcasts_settings": TLType,
+            "exceptions": list["AutoSaveException"],
+            "chats": list["Chat"],
+            "users": list["User"],
+        },
+        "is": "account.AutoSaveSettings",
+    },
+    0x7CDE641D: {
+        "_": "help.appConfigNotModified",
+        "is": "help.AppConfig",
+    },
+    0xDD18782E: {
+        "_": "help.appConfig",
+        "params": {
+            "hash": Int32,
+            "config": TLType,
+        },
+        "is": "help.AppConfig",
+    },
+    0xA920BD7A: {
+        "_": "inputBotAppID",
+        "params": {
+            "id": Int64,
+            "access_hash": Int64,
+        },
+        "is": "InputBotApp",
+    },
+    0x908C0407: {
+        "_": "inputBotAppShortName",
+        "params": {
+            "bot_id": TLType,
+            "short_name": str,
+        },
+        "is": "InputBotApp",
+    },
+    0x5DA674B7: {
+        "_": "botAppNotModified",
+        "is": "BotApp",
+    },
+    0x95FCD1D6: {
+        "_": "botApp",
+        "params": {
+            "flags": Int32,
+            "id": Int64,
+            "access_hash": Int64,
+            "short_name": str,
+            "title": str,
+            "description": str,
+            "photo": TLType,
+            "document": FlagsOf("flags", 0, TLType),
+            "hash": Int64,
+        },
+        "is": "BotApp",
+    },
+    0xEB50ADF5: {
+        "_": "messages.botApp",
+        "params": {
+            "flags": Int32,
+            "inactive": FlagsOf("flags", 0, Bit),
+            "request_write_access": FlagsOf("flags", 1, Bit),
+            "has_settings": FlagsOf("flags", 2, Bit),
+            "app": TLType,
+        },
+        "is": "messages.BotApp",
+    },
+    0x3C1B4F0D: {
+        "_": "appWebViewResultUrl",
+        "params": {
+            "url": str,
+        },
+        "is": "AppWebViewResult",
+    },
+    0xB57295D5: {
+        "_": "inlineBotWebView",
+        "params": {
+            "text": str,
+            "url": str,
+        },
+        "is": "InlineBotWebView",
+    },
+    0x4A4FF172: {
+        "_": "readParticipantDate",
+        "params": {
+            "user_id": Int64,
+            "date": Int32,
+        },
+        "is": "ReadParticipantDate",
+    },
+    0xF3E0DA33: {
+        "_": "inputChatlistDialogFilter",
+        "params": {
+            "filter_id": Int32,
+        },
+        "is": "InputChatlist",
+    },
+    0xC5181AC: {
+        "_": "exportedChatlistInvite",
+        "params": {
+            "flags": Int32,
+            "title": str,
+            "url": str,
+            "peers": list["Peer"],
+        },
+        "is": "ExportedChatlistInvite",
+    },
+    0x10E6E3A6: {
+        "_": "chatlists.exportedChatlistInvite",
+        "params": {
+            "filter": TLType,
+            "invite": TLType,
+        },
+        "is": "chatlists.ExportedChatlistInvite",
+    },
+    0x10AB6DC7: {
+        "_": "chatlists.exportedInvites",
+        "params": {
+            "invites": list["ExportedChatlistInvite"],
+            "chats": list["Chat"],
+            "users": list["User"],
+        },
+        "is": "chatlists.ExportedInvites",
+    },
+    0xFA87F659: {
+        "_": "chatlists.chatlistInviteAlready",
+        "params": {
+            "filter_id": Int32,
+            "missing_peers": list["Peer"],
+            "already_peers": list["Peer"],
+            "chats": list["Chat"],
+            "users": list["User"],
+        },
+        "is": "chatlists.ChatlistInvite",
+    },
+    0x1DCD839D: {
+        "_": "chatlists.chatlistInvite",
+        "params": {
+            "flags": Int32,
+            "title": str,
+            "emoticon": FlagsOf("flags", 0, str),
+            "peers": list["Peer"],
+            "chats": list["Chat"],
+            "users": list["User"],
+        },
+        "is": "chatlists.ChatlistInvite",
+    },
+    0x93BD878D: {
+        "_": "chatlists.chatlistUpdates",
+        "params": {
+            "missing_peers": list["Peer"],
+            "chats": list["Chat"],
+            "users": list["User"],
+        },
+        "is": "chatlists.ChatlistUpdates",
+    },
+    0xE8A775B0: {
+        "_": "bots.botInfo",
+        "params": {
+            "name": str,
+            "about": str,
+            "description": str,
+        },
+        "is": "bots.BotInfo",
+    },
+    0xB6CC2D5C: {
+        "_": "messagePeerVote",
+        "params": {
+            "peer": TLType,
+            "option": bytes,
+            "date": Int32,
+        },
+        "is": "MessagePeerVote",
+    },
+    0x74CDA504: {
+        "_": "messagePeerVoteInputOption",
+        "params": {
+            "peer": TLType,
+            "date": Int32,
+        },
+        "is": "MessagePeerVote",
+    },
+    0x4628F6E6: {
+        "_": "messagePeerVoteMultiple",
+        "params": {
+            "peer": TLType,
+            "options": list[bytes],
+            "date": Int32,
+        },
+        "is": "MessagePeerVote",
+    },
+    0x3DB8EC63: {
+        "_": "sponsoredWebPage",
+        "params": {
+            "flags": Int32,
+            "url": str,
+            "site_name": str,
+            "photo": FlagsOf("flags", 0, TLType),
+        },
+        "is": "SponsoredWebPage",
+    },
+    0x8D595CD6: {
+        "_": "storyViews",
+        "params": {
+            "flags": Int32,
+            "has_viewers": FlagsOf("flags", 1, Bit),
+            "views_count": Int32,
+            "forwards_count": FlagsOf("flags", 2, Int32),
+            "reactions": FlagsOf("flags", 3, list["ReactionCount"]),
+            "reactions_count": FlagsOf("flags", 4, Int32),
+            "recent_viewers": FlagsOf("flags", 0, list[Int64]),
+        },
+        "is": "StoryViews",
+    },
+    0x51E6EE4F: {
+        "_": "storyItemDeleted",
+        "params": {
+            "id": Int32,
+        },
+        "is": "StoryItem",
+    },
+    0xFFADC913: {
+        "_": "storyItemSkipped",
+        "params": {
+            "flags": Int32,
+            "close_friends": FlagsOf("flags", 8, Bit),
+            "id": Int32,
+            "date": Int32,
+            "expire_date": Int32,
+        },
+        "is": "StoryItem",
+    },
+    0x44C457CE: {
+        "_": "storyItem",
+        "params": {
+            "flags": Int32,
+            "pinned": FlagsOf("flags", 5, Bit),
+            "public": FlagsOf("flags", 7, Bit),
+            "close_friends": FlagsOf("flags", 8, Bit),
+            "min": FlagsOf("flags", 9, Bit),
+            "noforwards": FlagsOf("flags", 10, Bit),
+            "edited": FlagsOf("flags", 11, Bit),
+            "contacts": FlagsOf("flags", 12, Bit),
+            "selected_contacts": FlagsOf("flags", 13, Bit),
+            "out": FlagsOf("flags", 16, Bit),
+            "id": Int32,
+            "date": Int32,
+            "expire_date": Int32,
+            "caption": FlagsOf("flags", 0, str),
+            "entities": FlagsOf("flags", 1, list["MessageEntity"]),
+            "media": TLType,
+            "media_areas": FlagsOf("flags", 14, list["MediaArea"]),
+            "privacy": FlagsOf("flags", 2, list["PrivacyRule"]),
+            "views": FlagsOf("flags", 3, TLType),
+            "sent_reaction": FlagsOf("flags", 15, TLType),
+        },
+        "is": "StoryItem",
+    },
+    0x1158FE3E: {
+        "_": "stories.allStoriesNotModified",
+        "params": {
+            "flags": Int32,
+            "state": str,
+            "stealth_mode": TLType,
+        },
+        "is": "stories.AllStories",
+    },
+    0x6EFC5E81: {
+        "_": "stories.allStories",
+        "params": {
+            "flags": Int32,
+            "has_more": FlagsOf("flags", 0, Bit),
+            "count": Int32,
+            "state": str,
+            "peer_stories": list["PeerStories"],
+            "chats": list["Chat"],
+            "users": list["User"],
+            "stealth_mode": TLType,
+        },
+        "is": "stories.AllStories",
+    },
+    0x5DD8C3C8: {
+        "_": "stories.stories",
+        "params": {
+            "count": Int32,
+            "stories": list["StoryItem"],
+            "chats": list["Chat"],
+            "users": list["User"],
+        },
+        "is": "stories.Stories",
+    },
+    0xB0BDEAC5: {
+        "_": "storyView",
+        "params": {
+            "flags": Int32,
+            "blocked": FlagsOf("flags", 0, Bit),
+            "blocked_my_stories_from": FlagsOf("flags", 1, Bit),
+            "user_id": Int64,
+            "date": Int32,
+            "reaction": FlagsOf("flags", 2, TLType),
+        },
+        "is": "StoryView",
+    },
+    0x46E9B9EC: {
+        "_": "stories.storyViewsList",
+        "params": {
+            "flags": Int32,
+            "count": Int32,
+            "reactions_count": Int32,
+            "views": list["StoryView"],
+            "users": list["User"],
+            "next_offset": FlagsOf("flags", 0, str),
+        },
+        "is": "stories.StoryViewsList",
+    },
+    0xDE9EED1D: {
+        "_": "stories.storyViews",
+        "params": {
+            "views": list["StoryViews"],
+            "users": list["User"],
+        },
+        "is": "stories.StoryViews",
+    },
+    0x73EC805: {
+        "_": "inputReplyToMessage",
+        "params": {
+            "flags": Int32,
+            "reply_to_msg_id": Int32,
+            "top_msg_id": FlagsOf("flags", 0, Int32),
+            "reply_to_peer_id": FlagsOf("flags", 1, TLType),
+            "quote_text": FlagsOf("flags", 2, str),
+            "quote_entities": FlagsOf("flags", 3, list["MessageEntity"]),
+        },
+        "is": "InputReplyTo",
+    },
+    0x15B0F283: {
+        "_": "inputReplyToStory",
+        "params": {
+            "user_id": TLType,
+            "story_id": Int32,
+        },
+        "is": "InputReplyTo",
+    },
+    0x3FC9053B: {
+        "_": "exportedStoryLink",
+        "params": {
+            "link": str,
+        },
+        "is": "ExportedStoryLink",
+    },
+    0x712E27FD: {
+        "_": "storiesStealthMode",
+        "params": {
+            "flags": Int32,
+            "active_until_date": FlagsOf("flags", 0, Int32),
+            "cooldown_until_date": FlagsOf("flags", 1, Int32),
+        },
+        "is": "StoriesStealthMode",
+    },
+    0x3D1EA4E: {
+        "_": "mediaAreaCoordinates",
+        "params": {
+            "x": float,
+            "y": float,
+            "w": float,
+            "h": float,
+            "rotation": float,
+        },
+        "is": "MediaAreaCoordinates",
+    },
+    0xBE82DB9C: {
+        "_": "mediaAreaVenue",
+        "params": {
+            "coordinates": TLType,
+            "geo": TLType,
+            "title": str,
+            "address": str,
+            "provider": str,
+            "venue_id": str,
+            "venue_type": str,
+        },
+        "is": "MediaArea",
+    },
+    0xB282217F: {
+        "_": "inputMediaAreaVenue",
+        "params": {
+            "coordinates": TLType,
+            "query_id": Int64,
+            "result_id": str,
+        },
+        "is": "MediaArea",
+    },
+    0xDF8B3B22: {
+        "_": "mediaAreaGeoPoint",
+        "params": {
+            "coordinates": TLType,
+            "geo": TLType,
+        },
+        "is": "MediaArea",
+    },
+    0x14455871: {
+        "_": "mediaAreaSuggestedReaction",
+        "params": {
+            "flags": Int32,
+            "dark": FlagsOf("flags", 0, Bit),
+            "flipped": FlagsOf("flags", 1, Bit),
+            "coordinates": TLType,
+            "reaction": TLType,
+        },
+        "is": "MediaArea",
+    },
+    0x9A35E999: {
+        "_": "peerStories",
+        "params": {
+            "flags": Int32,
+            "peer": TLType,
+            "max_read_id": FlagsOf("flags", 0, Int32),
+            "stories": list["StoryItem"],
+        },
+        "is": "PeerStories",
+    },
+    0xCAE68768: {
+        "_": "stories.peerStories",
+        "params": {
+            "stories": TLType,
+            "chats": list["Chat"],
+            "users": list["User"],
+        },
+        "is": "stories.PeerStories",
+    },
+    0xFD5E12BD: {
+        "_": "messages.webPage",
+        "params": {
+            "webpage": TLType,
+            "chats": list["Chat"],
+            "users": list["User"],
+        },
+        "is": "messages.WebPage",
+    },
+    0x257E962B: {
+        "_": "premiumGiftCodeOption",
+        "params": {
+            "flags": Int32,
+            "users": Int32,
+            "months": Int32,
+            "store_product": FlagsOf("flags", 0, str),
+            "store_quantity": FlagsOf("flags", 1, Int32),
+            "currency": str,
+            "amount": Int64,
+        },
+        "is": "PremiumGiftCodeOption",
+    },
+    0xB722F158: {
+        "_": "payments.checkedGiftCode",
+        "params": {
+            "flags": Int32,
+            "via_giveaway": FlagsOf("flags", 2, Bit),
+            "from_id": TLType,
+            "giveaway_msg_id": FlagsOf("flags", 3, Int32),
+            "to_id": FlagsOf("flags", 0, Int64),
+            "date": Int32,
+            "months": Int32,
+            "used_date": FlagsOf("flags", 1, Int32),
+            "chats": list["Chat"],
+            "users": list["User"],
+        },
+        "is": "payments.CheckedGiftCode",
+    },
+    0x4367DAA0: {
+        "_": "payments.giveawayInfo",
+        "params": {
+            "flags": Int32,
+            "participating": FlagsOf("flags", 0, Bit),
+            "preparing_results": FlagsOf("flags", 3, Bit),
+            "start_date": Int32,
+            "joined_too_early_date": FlagsOf("flags", 1, Int32),
+            "admin_disallowed_chat_id": FlagsOf("flags", 2, Int64),
+            "disallowed_country": FlagsOf("flags", 4, str),
+        },
+        "is": "payments.GiveawayInfo",
+    },
+    0xCD5570: {
+        "_": "payments.giveawayInfoResults",
+        "params": {
+            "flags": Int32,
+            "winner": FlagsOf("flags", 0, Bit),
+            "refunded": FlagsOf("flags", 1, Bit),
+            "start_date": Int32,
+            "gift_code_slug": FlagsOf("flags", 0, str),
+            "finish_date": Int32,
+            "winners_count": Int32,
+            "activated_count": Int32,
+        },
+        "is": "payments.GiveawayInfo",
+    },
+    0xB2539D54: {
+        "_": "prepaidGiveaway",
+        "params": {
+            "id": Int64,
+            "months": Int32,
+            "quantity": Int32,
+            "date": Int32,
+        },
+        "is": "PrepaidGiveaway",
+    },
+    0x2A1C8C71: {
+        "_": "boost",
+        "params": {
+            "flags": Int32,
+            "gift": FlagsOf("flags", 1, Bit),
+            "giveaway": FlagsOf("flags", 2, Bit),
+            "unclaimed": FlagsOf("flags", 3, Bit),
+            "id": str,
+            "user_id": FlagsOf("flags", 0, Int64),
+            "giveaway_msg_id": FlagsOf("flags", 2, Int32),
+            "date": Int32,
+            "expires": Int32,
+            "used_gift_slug": FlagsOf("flags", 4, str),
+            "multiplier": FlagsOf("flags", 5, Int32),
+        },
+        "is": "Boost",
+    },
+    0x86F8613C: {
+        "_": "premium.boostsList",
+        "params": {
+            "flags": Int32,
+            "count": Int32,
+            "boosts": list["Boost"],
+            "next_offset": FlagsOf("flags", 0, str),
+            "users": list["User"],
+        },
+        "is": "premium.BoostsList",
+    },
+    0xC448415C: {
+        "_": "myBoost",
+        "params": {
+            "flags": Int32,
+            "slot": Int32,
+            "peer": FlagsOf("flags", 0, TLType),
+            "date": Int32,
+            "expires": Int32,
+            "cooldown_until_date": FlagsOf("flags", 1, Int32),
+        },
+        "is": "MyBoost",
+    },
+    0x9AE228E2: {
+        "_": "premium.myBoosts",
+        "params": {
+            "my_boosts": list["MyBoost"],
+            "chats": list["Chat"],
+            "users": list["User"],
+        },
+        "is": "premium.MyBoosts",
+    },
+    0x4959427A: {
+        "_": "premium.boostsStatus",
+        "params": {
+            "flags": Int32,
+            "my_boost": FlagsOf("flags", 2, Bit),
+            "level": Int32,
+            "current_level_boosts": Int32,
+            "boosts": Int32,
+            "gift_boosts": FlagsOf("flags", 4, Int32),
+            "next_level_boosts": FlagsOf("flags", 0, Int32),
+            "premium_audience": FlagsOf("flags", 1, TLType),
+            "boost_url": str,
+            "prepaid_giveaways": FlagsOf("flags", 3, list["PrepaidGiveaway"]),
+            "my_boost_slots": FlagsOf("flags", 2, list[Int32]),
+        },
+        "is": "premium.BoostsStatus",
     },
     0xCB9F372D: {
         "_": "invokeAfterMsg",
@@ -9317,6 +10375,25 @@ MAP = {
             "web_auth_token": str,
         },
         "ret": "auth.Authorization",
+    },
+    0x89464B50: {
+        "_": "auth.requestFirebaseSms",
+        "params": {
+            "flags": Int32,
+            "phone_number": str,
+            "phone_code_hash": str,
+            "safety_net_token": FlagsOf("flags", 0, str),
+            "ios_push_secret": FlagsOf("flags", 1, str),
+        },
+        "ret": bool,
+    },
+    0x7E960193: {
+        "_": "auth.resetLoginEmail",
+        "params": {
+            "phone_number": str,
+            "phone_code_hash": str,
+        },
+        "ret": "auth.SentCode",
     },
     0xEC86017A: {
         "_": "account.registerDevice",
@@ -9666,6 +10743,7 @@ MAP = {
         "params": {
             "flags": Int32,
             "compare_sound": FlagsOf("flags", 1, Bit),
+            "compare_stories": FlagsOf("flags", 2, Bit),
             "peer": FlagsOf("flags", 0, TLType),
         },
         "ret": "Updates",
@@ -9677,9 +10755,11 @@ MAP = {
         },
         "ret": "WallPaper",
     },
-    0xDD853661: {
+    0xE39A8F03: {
         "_": "account.uploadWallPaper",
         "params": {
+            "flags": Int32,
+            "for_chat": FlagsOf("flags", 0, Bit),
             "file": TLType,
             "mime_type": str,
             "settings": TLType,
@@ -9857,6 +10937,7 @@ MAP = {
         "_": "account.changeAuthorizationSettings",
         "params": {
             "flags": Int32,
+            "confirmed": FlagsOf("flags", 3, Bit),
             "hash": Int64,
             "encrypted_requests_disabled": FlagsOf("flags", 0, bool),
             "call_requests_disabled": FlagsOf("flags", 1, bool),
@@ -9927,6 +11008,63 @@ MAP = {
         },
         "ret": bool,
     },
+    0xE2750328: {
+        "_": "account.getDefaultProfilePhotoEmojis",
+        "params": {
+            "hash": Int64,
+        },
+        "ret": "EmojiList",
+    },
+    0x915860AE: {
+        "_": "account.getDefaultGroupPhotoEmojis",
+        "params": {
+            "hash": Int64,
+        },
+        "ret": "EmojiList",
+    },
+    0xADCBBCDA: {
+        "_": "account.getAutoSaveSettings",
+        "ret": "account.AutoSaveSettings",
+    },
+    0xD69B8361: {
+        "_": "account.saveAutoSaveSettings",
+        "params": {
+            "flags": Int32,
+            "users": FlagsOf("flags", 0, Bit),
+            "chats": FlagsOf("flags", 1, Bit),
+            "broadcasts": FlagsOf("flags", 2, Bit),
+            "peer": FlagsOf("flags", 3, TLType),
+            "settings": TLType,
+        },
+        "ret": bool,
+    },
+    0x53BC0020: {
+        "_": "account.deleteAutoSaveExceptions",
+        "ret": bool,
+    },
+    0xCA8AE8BA: {
+        "_": "account.invalidateSignInCodes",
+        "params": {
+            "codes": list[str],
+        },
+        "ret": bool,
+    },
+    0xA001CC43: {
+        "_": "account.updateColor",
+        "params": {
+            "flags": Int32,
+            "color": Int32,
+            "background_emoji_id": FlagsOf("flags", 0, Int64),
+        },
+        "ret": bool,
+    },
+    0xA60AB9CE: {
+        "_": "account.getDefaultBackgroundEmojis",
+        "params": {
+            "hash": Int64,
+        },
+        "ret": "EmojiList",
+    },
     0xD91A548: {
         "_": "users.getUsers",
         "params": {
@@ -9988,23 +11126,29 @@ MAP = {
         },
         "ret": bool,
     },
-    0x68CC1411: {
+    0x2E2E8734: {
         "_": "contacts.block",
         "params": {
+            "flags": Int32,
+            "my_stories_from": FlagsOf("flags", 0, Bit),
             "id": TLType,
         },
         "ret": bool,
     },
-    0xBEA65D50: {
+    0xB550D328: {
         "_": "contacts.unblock",
         "params": {
+            "flags": Int32,
+            "my_stories_from": FlagsOf("flags", 0, Bit),
             "id": TLType,
         },
         "ret": bool,
     },
-    0xF57C350F: {
+    0x9A868F80: {
         "_": "contacts.getBlocked",
         "params": {
+            "flags": Int32,
+            "my_stories_from": FlagsOf("flags", 0, Bit),
             "offset": Int32,
             "limit": Int32,
         },
@@ -10124,6 +11268,23 @@ MAP = {
         },
         "ret": "User",
     },
+    0xBA6705F0: {
+        "_": "contacts.editCloseFriends",
+        "params": {
+            "id": list[Int64],
+        },
+        "ret": bool,
+    },
+    0x94C65C76: {
+        "_": "contacts.setBlocked",
+        "params": {
+            "flags": Int32,
+            "my_stories_from": FlagsOf("flags", 0, Bit),
+            "id": list["InputPeer"],
+            "limit": Int32,
+        },
+        "ret": bool,
+    },
     0x63C66506: {
         "_": "messages.getMessages",
         "params": {
@@ -10226,7 +11387,7 @@ MAP = {
         },
         "ret": bool,
     },
-    0x1CC20387: {
+    0x280D096F: {
         "_": "messages.sendMessage",
         "params": {
             "flags": Int32,
@@ -10236,9 +11397,9 @@ MAP = {
             "clear_draft": FlagsOf("flags", 7, Bit),
             "noforwards": FlagsOf("flags", 14, Bit),
             "update_stickersets_order": FlagsOf("flags", 15, Bit),
+            "invert_media": FlagsOf("flags", 16, Bit),
             "peer": TLType,
-            "reply_to_msg_id": FlagsOf("flags", 0, Int32),
-            "top_msg_id": FlagsOf("flags", 9, Int32),
+            "reply_to": FlagsOf("flags", 0, TLType),
             "message": str,
             "random_id": Int64,
             "reply_markup": FlagsOf("flags", 2, TLType),
@@ -10248,7 +11409,7 @@ MAP = {
         },
         "ret": "Updates",
     },
-    0x7547C966: {
+    0x72CCC23D: {
         "_": "messages.sendMedia",
         "params": {
             "flags": Int32,
@@ -10257,9 +11418,9 @@ MAP = {
             "clear_draft": FlagsOf("flags", 7, Bit),
             "noforwards": FlagsOf("flags", 14, Bit),
             "update_stickersets_order": FlagsOf("flags", 15, Bit),
+            "invert_media": FlagsOf("flags", 16, Bit),
             "peer": TLType,
-            "reply_to_msg_id": FlagsOf("flags", 0, Int32),
-            "top_msg_id": FlagsOf("flags", 9, Int32),
+            "reply_to": FlagsOf("flags", 0, TLType),
             "media": TLType,
             "message": str,
             "random_id": Int64,
@@ -10648,7 +11809,7 @@ MAP = {
         },
         "ret": "messages.BotResults",
     },
-    0xEB5EA206: {
+    0xBB12A419: {
         "_": "messages.setInlineBotResults",
         "params": {
             "flags": Int32,
@@ -10659,10 +11820,11 @@ MAP = {
             "cache_time": Int32,
             "next_offset": FlagsOf("flags", 2, str),
             "switch_pm": FlagsOf("flags", 3, TLType),
+            "switch_webview": FlagsOf("flags", 4, TLType),
         },
         "ret": bool,
     },
-    0xD3FBDCCB: {
+    0xF7BC68BA: {
         "_": "messages.sendInlineBotResult",
         "params": {
             "flags": Int32,
@@ -10671,8 +11833,7 @@ MAP = {
             "clear_draft": FlagsOf("flags", 7, Bit),
             "hide_via": FlagsOf("flags", 11, Bit),
             "peer": TLType,
-            "reply_to_msg_id": FlagsOf("flags", 0, Int32),
-            "top_msg_id": FlagsOf("flags", 9, Int32),
+            "reply_to": FlagsOf("flags", 0, TLType),
             "random_id": Int64,
             "query_id": Int64,
             "id": str,
@@ -10694,6 +11855,7 @@ MAP = {
         "params": {
             "flags": Int32,
             "no_webpage": FlagsOf("flags", 1, Bit),
+            "invert_media": FlagsOf("flags", 16, Bit),
             "peer": TLType,
             "id": Int32,
             "message": FlagsOf("flags", 11, str),
@@ -10709,6 +11871,7 @@ MAP = {
         "params": {
             "flags": Int32,
             "no_webpage": FlagsOf("flags", 1, Bit),
+            "invert_media": FlagsOf("flags", 16, Bit),
             "id": TLType,
             "message": FlagsOf("flags", 11, str),
             "media": FlagsOf("flags", 14, TLType),
@@ -10748,16 +11911,17 @@ MAP = {
         },
         "ret": "messages.PeerDialogs",
     },
-    0xB4331E3F: {
+    0x7FF3B806: {
         "_": "messages.saveDraft",
         "params": {
             "flags": Int32,
             "no_webpage": FlagsOf("flags", 1, Bit),
-            "reply_to_msg_id": FlagsOf("flags", 0, Int32),
-            "top_msg_id": FlagsOf("flags", 2, Int32),
+            "invert_media": FlagsOf("flags", 6, Bit),
+            "reply_to": FlagsOf("flags", 4, TLType),
             "peer": TLType,
             "message": str,
             "entities": FlagsOf("flags", 3, list["MessageEntity"]),
+            "media": FlagsOf("flags", 5, TLType),
         },
         "ret": bool,
     },
@@ -10882,20 +12046,13 @@ MAP = {
         },
         "ret": "messages.Chats",
     },
-    0x875F74BE: {
-        "_": "messages.getAllChats",
-        "params": {
-            "except_ids": list[Int64],
-        },
-        "ret": "messages.Chats",
-    },
-    0x32CA8F91: {
+    0x8D9692A3: {
         "_": "messages.getWebPage",
         "params": {
             "url": str,
             "hash": Int32,
         },
-        "ret": "WebPage",
+        "ret": "messages.WebPage",
     },
     0xA731E257: {
         "_": "messages.toggleDialogPin",
@@ -10951,11 +12108,11 @@ MAP = {
         },
         "ret": "MessageMedia",
     },
-    0xC97DF020: {
+    0xA1405817: {
         "_": "messages.sendScreenshotNotification",
         "params": {
             "peer": TLType,
-            "reply_to_msg_id": Int32,
+            "reply_to": TLType,
             "random_id": Int64,
         },
         "ret": "Updates",
@@ -11007,7 +12164,7 @@ MAP = {
         },
         "ret": "messages.Messages",
     },
-    0xB6F11A1C: {
+    0x456E8987: {
         "_": "messages.sendMultiMedia",
         "params": {
             "flags": Int32,
@@ -11016,9 +12173,9 @@ MAP = {
             "clear_draft": FlagsOf("flags", 7, Bit),
             "noforwards": FlagsOf("flags", 14, Bit),
             "update_stickersets_order": FlagsOf("flags", 15, Bit),
+            "invert_media": FlagsOf("flags", 16, Bit),
             "peer": TLType,
-            "reply_to_msg_id": FlagsOf("flags", 0, Int32),
-            "top_msg_id": FlagsOf("flags", 9, Int32),
+            "reply_to": FlagsOf("flags", 0, TLType),
             "multi_media": list["InputSingleMedia"],
             "schedule_date": FlagsOf("flags", 10, Int32),
             "send_as": FlagsOf("flags", 13, TLType),
@@ -11458,13 +12615,13 @@ MAP = {
         },
         "ret": "Updates",
     },
-    0x2C6F97B7: {
+    0x31C1C44F: {
         "_": "messages.getMessageReadParticipants",
         "params": {
             "peer": TLType,
             "msg_id": Int32,
         },
-        "ret": list[Int64],
+        "ret": list["ReadParticipantDate"],
     },
     0x49F0BDE9: {
         "_": "messages.getSearchResultsCalendar",
@@ -11576,14 +12733,13 @@ MAP = {
         },
         "ret": bool,
     },
-    0x24CE6DEE: {
+    0x63183030: {
         "_": "messages.translateText",
         "params": {
             "flags": Int32,
             "peer": FlagsOf("flags", 0, TLType),
-            "msg_id": FlagsOf("flags", 0, Int32),
-            "text": FlagsOf("flags", 1, str),
-            "from_lang": FlagsOf("flags", 2, str),
+            "id": FlagsOf("flags", 0, list[Int32]),
+            "text": FlagsOf("flags", 1, list["TextWithEntities"]),
             "to_lang": str,
         },
         "ret": "messages.TranslatedText",
@@ -11644,7 +12800,7 @@ MAP = {
         },
         "ret": bool,
     },
-    0x178B480B: {
+    0x269DC2C1: {
         "_": "messages.requestWebView",
         "params": {
             "flags": Int32,
@@ -11656,13 +12812,12 @@ MAP = {
             "start_param": FlagsOf("flags", 3, str),
             "theme_params": FlagsOf("flags", 2, TLType),
             "platform": str,
-            "reply_to_msg_id": FlagsOf("flags", 0, Int32),
-            "top_msg_id": FlagsOf("flags", 9, Int32),
+            "reply_to": FlagsOf("flags", 0, TLType),
             "send_as": FlagsOf("flags", 13, TLType),
         },
         "ret": "WebViewResult",
     },
-    0x7FF34309: {
+    0xB0D81A83: {
         "_": "messages.prolongWebView",
         "params": {
             "flags": Int32,
@@ -11670,18 +12825,20 @@ MAP = {
             "peer": TLType,
             "bot": TLType,
             "query_id": Int64,
-            "reply_to_msg_id": FlagsOf("flags", 0, Int32),
-            "top_msg_id": FlagsOf("flags", 9, Int32),
+            "reply_to": FlagsOf("flags", 0, TLType),
             "send_as": FlagsOf("flags", 13, TLType),
         },
         "ret": bool,
     },
-    0x299BEC8E: {
+    0x1A46500A: {
         "_": "messages.requestSimpleWebView",
         "params": {
             "flags": Int32,
+            "from_switch_webview": FlagsOf("flags", 1, Bit),
+            "from_side_menu": FlagsOf("flags", 2, Bit),
             "bot": TLType,
-            "url": str,
+            "url": FlagsOf("flags", 3, str),
+            "start_param": FlagsOf("flags", 4, str),
             "theme_params": FlagsOf("flags", 0, TLType),
             "platform": str,
         },
@@ -11792,18 +12949,100 @@ MAP = {
         "_": "messages.getDefaultHistoryTTL",
         "ret": "DefaultHistoryTTL",
     },
+    0xFE38D01B: {
+        "_": "messages.sendBotRequestedPeer",
+        "params": {
+            "peer": TLType,
+            "msg_id": Int32,
+            "button_id": Int32,
+            "requested_peer": TLType,
+        },
+        "ret": "Updates",
+    },
+    0x7488CE5B: {
+        "_": "messages.getEmojiGroups",
+        "params": {
+            "hash": Int32,
+        },
+        "ret": "messages.EmojiGroups",
+    },
+    0x2ECD56CD: {
+        "_": "messages.getEmojiStatusGroups",
+        "params": {
+            "hash": Int32,
+        },
+        "ret": "messages.EmojiGroups",
+    },
+    0x21A548F3: {
+        "_": "messages.getEmojiProfilePhotoGroups",
+        "params": {
+            "hash": Int32,
+        },
+        "ret": "messages.EmojiGroups",
+    },
+    0x2C11C0D7: {
+        "_": "messages.searchCustomEmoji",
+        "params": {
+            "emoticon": str,
+            "hash": Int64,
+        },
+        "ret": "EmojiList",
+    },
+    0xE47CB579: {
+        "_": "messages.togglePeerTranslations",
+        "params": {
+            "flags": Int32,
+            "disabled": FlagsOf("flags", 0, Bit),
+            "peer": TLType,
+        },
+        "ret": bool,
+    },
+    0x34FDC5C3: {
+        "_": "messages.getBotApp",
+        "params": {
+            "app": TLType,
+            "hash": Int64,
+        },
+        "ret": "messages.BotApp",
+    },
+    0x8C5A3B3C: {
+        "_": "messages.requestAppWebView",
+        "params": {
+            "flags": Int32,
+            "write_allowed": FlagsOf("flags", 0, Bit),
+            "peer": TLType,
+            "app": TLType,
+            "start_param": FlagsOf("flags", 1, str),
+            "theme_params": FlagsOf("flags", 2, TLType),
+            "platform": str,
+        },
+        "ret": "AppWebViewResult",
+    },
+    0x8FFACAE1: {
+        "_": "messages.setChatWallPaper",
+        "params": {
+            "flags": Int32,
+            "peer": TLType,
+            "wallpaper": FlagsOf("flags", 0, TLType),
+            "settings": FlagsOf("flags", 2, TLType),
+            "id": FlagsOf("flags", 1, Int32),
+        },
+        "ret": "Updates",
+    },
     0xEDD4882A: {
         "_": "updates.getState",
         "ret": "updates.State",
     },
-    0x25939651: {
+    0x19C2F763: {
         "_": "updates.getDifference",
         "params": {
             "flags": Int32,
             "pts": Int32,
+            "pts_limit": FlagsOf("flags", 1, Int32),
             "pts_total_limit": FlagsOf("flags", 0, Int32),
             "date": Int32,
             "qts": Int32,
+            "qts_limit": FlagsOf("flags", 2, Int32),
         },
         "ret": "updates.Difference",
     },
@@ -11819,23 +13058,26 @@ MAP = {
         },
         "ret": "updates.ChannelDifference",
     },
-    0x1C3D5956: {
+    0x9E82039: {
         "_": "photos.updateProfilePhoto",
         "params": {
             "flags": Int32,
             "fallback": FlagsOf("flags", 0, Bit),
+            "bot": FlagsOf("flags", 1, TLType),
             "id": TLType,
         },
         "ret": "photos.Photo",
     },
-    0x89F30F69: {
+    0x388A3B5: {
         "_": "photos.uploadProfilePhoto",
         "params": {
             "flags": Int32,
             "fallback": FlagsOf("flags", 3, Bit),
+            "bot": FlagsOf("flags", 5, TLType),
             "file": FlagsOf("flags", 0, TLType),
             "video": FlagsOf("flags", 1, TLType),
             "video_start_ts": FlagsOf("flags", 2, float),
+            "video_emoji_markup": FlagsOf("flags", 4, TLType),
         },
         "ret": "photos.Photo",
     },
@@ -11856,7 +13098,7 @@ MAP = {
         },
         "ret": "photos.Photos",
     },
-    0xB91A83BF: {
+    0xE14C4A71: {
         "_": "photos.uploadContactProfilePhoto",
         "params": {
             "flags": Int32,
@@ -11866,6 +13108,7 @@ MAP = {
             "file": FlagsOf("flags", 0, TLType),
             "video": FlagsOf("flags", 1, TLType),
             "video_start_ts": FlagsOf("flags", 2, float),
+            "video_emoji_markup": FlagsOf("flags", 5, TLType),
         },
         "ret": "photos.Photo",
     },
@@ -12009,9 +13252,12 @@ MAP = {
         },
         "ret": "help.DeepLinkInfo",
     },
-    0x98914110: {
+    0x61E3F854: {
         "_": "help.getAppConfig",
-        "ret": "JSONValue",
+        "params": {
+            "hash": Int32,
+        },
+        "ret": "help.AppConfig",
     },
     0x6F02F748: {
         "_": "help.saveAppLog",
@@ -12151,6 +13397,7 @@ MAP = {
             "broadcast": FlagsOf("flags", 0, Bit),
             "megagroup": FlagsOf("flags", 1, Bit),
             "for_import": FlagsOf("flags", 3, Bit),
+            "forum": FlagsOf("flags", 5, Bit),
             "title": str,
             "about": str,
             "geo_point": FlagsOf("flags", 2, TLType),
@@ -12547,6 +13794,24 @@ MAP = {
         },
         "ret": "Updates",
     },
+    0x18AFBC93: {
+        "_": "channels.clickSponsoredMessage",
+        "params": {
+            "channel": TLType,
+            "random_id": bytes,
+        },
+        "ret": bool,
+    },
+    0x621A201F: {
+        "_": "channels.updateColor",
+        "params": {
+            "flags": Int32,
+            "channel": TLType,
+            "color": Int32,
+            "background_emoji_id": FlagsOf("flags", 0, Int64),
+        },
+        "ret": "Updates",
+    },
     0xAA2769ED: {
         "_": "bots.sendCustomRequest",
         "params": {
@@ -12616,6 +13881,67 @@ MAP = {
             "admin_rights": TLType,
         },
         "ret": bool,
+    },
+    0x10CF3123: {
+        "_": "bots.setBotInfo",
+        "params": {
+            "flags": Int32,
+            "bot": FlagsOf("flags", 2, TLType),
+            "lang_code": str,
+            "name": FlagsOf("flags", 3, str),
+            "about": FlagsOf("flags", 0, str),
+            "description": FlagsOf("flags", 1, str),
+        },
+        "ret": bool,
+    },
+    0xDCD914FD: {
+        "_": "bots.getBotInfo",
+        "params": {
+            "flags": Int32,
+            "bot": FlagsOf("flags", 0, TLType),
+            "lang_code": str,
+        },
+        "ret": "bots.BotInfo",
+    },
+    0x9709B1C2: {
+        "_": "bots.reorderUsernames",
+        "params": {
+            "bot": TLType,
+            "order": list[str],
+        },
+        "ret": bool,
+    },
+    0x53CA973: {
+        "_": "bots.toggleUsername",
+        "params": {
+            "bot": TLType,
+            "username": str,
+            "active": bool,
+        },
+        "ret": bool,
+    },
+    0x1359F4E6: {
+        "_": "bots.canSendMessage",
+        "params": {
+            "bot": TLType,
+        },
+        "ret": bool,
+    },
+    0xF132E3EF: {
+        "_": "bots.allowSendMessage",
+        "params": {
+            "bot": TLType,
+        },
+        "ret": "Updates",
+    },
+    0x87FC5E7: {
+        "_": "bots.invokeWebViewCustomMethod",
+        "params": {
+            "bot": TLType,
+            "custom_method": str,
+            "params": TLType,
+        },
+        "ret": "DataJSON",
     },
     0x37148DBB: {
         "_": "payments.getPaymentForm",
@@ -12707,6 +14033,45 @@ MAP = {
         },
         "ret": bool,
     },
+    0x2757BA54: {
+        "_": "payments.getPremiumGiftCodeOptions",
+        "params": {
+            "flags": Int32,
+            "boost_peer": FlagsOf("flags", 0, TLType),
+        },
+        "ret": list["PremiumGiftCodeOption"],
+    },
+    0x8E51B4C1: {
+        "_": "payments.checkGiftCode",
+        "params": {
+            "slug": str,
+        },
+        "ret": "payments.CheckedGiftCode",
+    },
+    0xF6E26854: {
+        "_": "payments.applyGiftCode",
+        "params": {
+            "slug": str,
+        },
+        "ret": "Updates",
+    },
+    0xF4239425: {
+        "_": "payments.getGiveawayInfo",
+        "params": {
+            "peer": TLType,
+            "msg_id": Int32,
+        },
+        "ret": "payments.GiveawayInfo",
+    },
+    0x5FF58F20: {
+        "_": "payments.launchPrepaidGiveaway",
+        "params": {
+            "peer": TLType,
+            "giveaway_id": Int64,
+            "purpose": TLType,
+        },
+        "ret": "Updates",
+    },
     0x9021AB67: {
         "_": "stickers.createStickerSet",
         "params": {
@@ -12714,6 +14079,8 @@ MAP = {
             "masks": FlagsOf("flags", 0, Bit),
             "animated": FlagsOf("flags", 1, Bit),
             "videos": FlagsOf("flags", 4, Bit),
+            "emojis": FlagsOf("flags", 5, Bit),
+            "text_color": FlagsOf("flags", 6, Bit),
             "user_id": TLType,
             "title": str,
             "short_name": str,
@@ -12746,11 +14113,13 @@ MAP = {
         },
         "ret": "messages.StickerSet",
     },
-    0x9A364E30: {
+    0xA76A5392: {
         "_": "stickers.setStickerSetThumb",
         "params": {
+            "flags": Int32,
             "stickerset": TLType,
-            "thumb": TLType,
+            "thumb": FlagsOf("flags", 0, TLType),
+            "thumb_document_id": FlagsOf("flags", 1, Int64),
         },
         "ret": "messages.StickerSet",
     },
@@ -12767,6 +14136,32 @@ MAP = {
             "title": str,
         },
         "ret": "stickers.SuggestedShortName",
+    },
+    0xF5537EBC: {
+        "_": "stickers.changeSticker",
+        "params": {
+            "flags": Int32,
+            "sticker": TLType,
+            "emoji": FlagsOf("flags", 0, str),
+            "mask_coords": FlagsOf("flags", 1, TLType),
+            "keywords": FlagsOf("flags", 2, str),
+        },
+        "ret": "messages.StickerSet",
+    },
+    0x124B1C00: {
+        "_": "stickers.renameStickerSet",
+        "params": {
+            "stickerset": TLType,
+            "title": str,
+        },
+        "ret": "messages.StickerSet",
+    },
+    0x87704394: {
+        "_": "stickers.deleteStickerSet",
+        "params": {
+            "stickerset": TLType,
+        },
+        "ret": bool,
     },
     0x55451FA9: {
         "_": "phone.getCallConfig",
@@ -13094,13 +14489,6 @@ MAP = {
         },
         "ret": "Updates",
     },
-    0x1C295881: {
-        "_": "folders.deleteFolder",
-        "params": {
-            "folder_id": Int32,
-        },
-        "ret": "Updates",
-    },
     0xAB42441A: {
         "_": "stats.getBroadcastStats",
         "params": {
@@ -13149,5 +14537,327 @@ MAP = {
             "msg_id": Int32,
         },
         "ret": "stats.MessageStats",
+    },
+    0x8472478E: {
+        "_": "chatlists.exportChatlistInvite",
+        "params": {
+            "chatlist": TLType,
+            "title": str,
+            "peers": list["InputPeer"],
+        },
+        "ret": "chatlists.ExportedChatlistInvite",
+    },
+    0x719C5C5E: {
+        "_": "chatlists.deleteExportedInvite",
+        "params": {
+            "chatlist": TLType,
+            "slug": str,
+        },
+        "ret": bool,
+    },
+    0x653DB63D: {
+        "_": "chatlists.editExportedInvite",
+        "params": {
+            "flags": Int32,
+            "chatlist": TLType,
+            "slug": str,
+            "title": FlagsOf("flags", 1, str),
+            "peers": FlagsOf("flags", 2, list["InputPeer"]),
+        },
+        "ret": "ExportedChatlistInvite",
+    },
+    0xCE03DA83: {
+        "_": "chatlists.getExportedInvites",
+        "params": {
+            "chatlist": TLType,
+        },
+        "ret": "chatlists.ExportedInvites",
+    },
+    0x41C10FFF: {
+        "_": "chatlists.checkChatlistInvite",
+        "params": {
+            "slug": str,
+        },
+        "ret": "chatlists.ChatlistInvite",
+    },
+    0xA6B1E39A: {
+        "_": "chatlists.joinChatlistInvite",
+        "params": {
+            "slug": str,
+            "peers": list["InputPeer"],
+        },
+        "ret": "Updates",
+    },
+    0x89419521: {
+        "_": "chatlists.getChatlistUpdates",
+        "params": {
+            "chatlist": TLType,
+        },
+        "ret": "chatlists.ChatlistUpdates",
+    },
+    0xE089F8F5: {
+        "_": "chatlists.joinChatlistUpdates",
+        "params": {
+            "chatlist": TLType,
+            "peers": list["InputPeer"],
+        },
+        "ret": "Updates",
+    },
+    0x66E486FB: {
+        "_": "chatlists.hideChatlistUpdates",
+        "params": {
+            "chatlist": TLType,
+        },
+        "ret": bool,
+    },
+    0xFDBCD714: {
+        "_": "chatlists.getLeaveChatlistSuggestions",
+        "params": {
+            "chatlist": TLType,
+        },
+        "ret": list["Peer"],
+    },
+    0x74FAE13A: {
+        "_": "chatlists.leaveChatlist",
+        "params": {
+            "chatlist": TLType,
+            "peers": list["InputPeer"],
+        },
+        "ret": "Updates",
+    },
+    0xC7DFDFDD: {
+        "_": "stories.canSendStory",
+        "params": {
+            "peer": TLType,
+        },
+        "ret": bool,
+    },
+    0xBCB73644: {
+        "_": "stories.sendStory",
+        "params": {
+            "flags": Int32,
+            "pinned": FlagsOf("flags", 2, Bit),
+            "noforwards": FlagsOf("flags", 4, Bit),
+            "peer": TLType,
+            "media": TLType,
+            "media_areas": FlagsOf("flags", 5, list["MediaArea"]),
+            "caption": FlagsOf("flags", 0, str),
+            "entities": FlagsOf("flags", 1, list["MessageEntity"]),
+            "privacy_rules": list["InputPrivacyRule"],
+            "random_id": Int64,
+            "period": FlagsOf("flags", 3, Int32),
+        },
+        "ret": "Updates",
+    },
+    0xB583BA46: {
+        "_": "stories.editStory",
+        "params": {
+            "flags": Int32,
+            "peer": TLType,
+            "id": Int32,
+            "media": FlagsOf("flags", 0, TLType),
+            "media_areas": FlagsOf("flags", 3, list["MediaArea"]),
+            "caption": FlagsOf("flags", 1, str),
+            "entities": FlagsOf("flags", 1, list["MessageEntity"]),
+            "privacy_rules": FlagsOf("flags", 2, list["InputPrivacyRule"]),
+        },
+        "ret": "Updates",
+    },
+    0xAE59DB5F: {
+        "_": "stories.deleteStories",
+        "params": {
+            "peer": TLType,
+            "id": list[Int32],
+        },
+        "ret": list[Int32],
+    },
+    0x9A75A1EF: {
+        "_": "stories.togglePinned",
+        "params": {
+            "peer": TLType,
+            "id": list[Int32],
+            "pinned": bool,
+        },
+        "ret": list[Int32],
+    },
+    0xEEB0D625: {
+        "_": "stories.getAllStories",
+        "params": {
+            "flags": Int32,
+            "next": FlagsOf("flags", 1, Bit),
+            "hidden": FlagsOf("flags", 2, Bit),
+            "state": FlagsOf("flags", 0, str),
+        },
+        "ret": "stories.AllStories",
+    },
+    0x5821A5DC: {
+        "_": "stories.getPinnedStories",
+        "params": {
+            "peer": TLType,
+            "offset_id": Int32,
+            "limit": Int32,
+        },
+        "ret": "stories.Stories",
+    },
+    0xB4352016: {
+        "_": "stories.getStoriesArchive",
+        "params": {
+            "peer": TLType,
+            "offset_id": Int32,
+            "limit": Int32,
+        },
+        "ret": "stories.Stories",
+    },
+    0x5774CA74: {
+        "_": "stories.getStoriesByID",
+        "params": {
+            "peer": TLType,
+            "id": list[Int32],
+        },
+        "ret": "stories.Stories",
+    },
+    0x7C2557C4: {
+        "_": "stories.toggleAllStoriesHidden",
+        "params": {
+            "hidden": bool,
+        },
+        "ret": bool,
+    },
+    0xA556DAC8: {
+        "_": "stories.readStories",
+        "params": {
+            "peer": TLType,
+            "max_id": Int32,
+        },
+        "ret": list[Int32],
+    },
+    0xB2028AFB: {
+        "_": "stories.incrementStoryViews",
+        "params": {
+            "peer": TLType,
+            "id": list[Int32],
+        },
+        "ret": bool,
+    },
+    0x7ED23C57: {
+        "_": "stories.getStoryViewsList",
+        "params": {
+            "flags": Int32,
+            "just_contacts": FlagsOf("flags", 0, Bit),
+            "reactions_first": FlagsOf("flags", 2, Bit),
+            "peer": TLType,
+            "q": FlagsOf("flags", 1, str),
+            "id": Int32,
+            "offset": str,
+            "limit": Int32,
+        },
+        "ret": "stories.StoryViewsList",
+    },
+    0x28E16CC8: {
+        "_": "stories.getStoriesViews",
+        "params": {
+            "peer": TLType,
+            "id": list[Int32],
+        },
+        "ret": "stories.StoryViews",
+    },
+    0x7B8DEF20: {
+        "_": "stories.exportStoryLink",
+        "params": {
+            "peer": TLType,
+            "id": Int32,
+        },
+        "ret": "ExportedStoryLink",
+    },
+    0x1923FA8C: {
+        "_": "stories.report",
+        "params": {
+            "peer": TLType,
+            "id": list[Int32],
+            "reason": TLType,
+            "message": str,
+        },
+        "ret": bool,
+    },
+    0x57BBD166: {
+        "_": "stories.activateStealthMode",
+        "params": {
+            "flags": Int32,
+            "past": FlagsOf("flags", 0, Bit),
+            "future": FlagsOf("flags", 1, Bit),
+        },
+        "ret": "Updates",
+    },
+    0x7FD736B2: {
+        "_": "stories.sendReaction",
+        "params": {
+            "flags": Int32,
+            "add_to_recent": FlagsOf("flags", 0, Bit),
+            "peer": TLType,
+            "story_id": Int32,
+            "reaction": TLType,
+        },
+        "ret": "Updates",
+    },
+    0x2C4ADA50: {
+        "_": "stories.getPeerStories",
+        "params": {
+            "peer": TLType,
+        },
+        "ret": "stories.PeerStories",
+    },
+    0x9B5AE7F9: {
+        "_": "stories.getAllReadPeerStories",
+        "ret": "Updates",
+    },
+    0x535983C3: {
+        "_": "stories.getPeerMaxIDs",
+        "params": {
+            "id": list["InputPeer"],
+        },
+        "ret": list[Int32],
+    },
+    0xA56A8B60: {
+        "_": "stories.getChatsToSend",
+        "ret": "messages.Chats",
+    },
+    0xBD0415C4: {
+        "_": "stories.togglePeerStoriesHidden",
+        "params": {
+            "peer": TLType,
+            "hidden": bool,
+        },
+        "ret": bool,
+    },
+    0x60F67660: {
+        "_": "premium.getBoostsList",
+        "params": {
+            "flags": Int32,
+            "gifts": FlagsOf("flags", 0, Bit),
+            "peer": TLType,
+            "offset": str,
+            "limit": Int32,
+        },
+        "ret": "premium.BoostsList",
+    },
+    0xBE77B4A: {
+        "_": "premium.getMyBoosts",
+        "ret": "premium.MyBoosts",
+    },
+    0x6B7DA746: {
+        "_": "premium.applyBoost",
+        "params": {
+            "flags": Int32,
+            "slots": FlagsOf("flags", 0, list[Int32]),
+            "peer": TLType,
+        },
+        "ret": "premium.MyBoosts",
+    },
+    0x42F1F61: {
+        "_": "premium.getBoostsStatus",
+        "params": {
+            "peer": TLType,
+        },
+        "ret": "premium.BoostsStatus",
     },
 }

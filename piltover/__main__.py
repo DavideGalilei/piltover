@@ -1,18 +1,18 @@
 import asyncio
+import sys
 import time
-import uvloop
 from os import getenv
-
 from pathlib import Path
 
+import uvloop
 from loguru import logger
-from piltover.server import Server, Client, CoreMessage
-from piltover.utils import gen_keys, get_public_key_fingerprint
-from piltover.types import Keys
+
+from piltover.server import Client, CoreMessage, Server
 from piltover.tl import TL
+from piltover.types import Keys
+from piltover.utils import gen_keys, get_public_key_fingerprint
 
-
-root = Path(__file__).parent.resolve(strict=True)
+root = Path(__file__).parent.parent.resolve(strict=True)
 data = root / "data"
 data.mkdir(parents=True, exist_ok=True)
 
@@ -281,8 +281,6 @@ async def main():
 
     @pilt.on_message("auth.signIn")
     async def sign_in(client: Client, request: CoreMessage, session_id: int):
-        from binascii import crc32
-
         code = 69696
         code = str(code).encode()
 
@@ -1169,8 +1167,9 @@ async def main():
     await pilt.serve()
 
 
-try:
-    uvloop.install()
-    asyncio.run(main())
-except KeyboardInterrupt:
-    pass
+if __name__ == "__main__":
+    try:
+        uvloop.install()
+        asyncio.run(main())
+    except KeyboardInterrupt:
+        pass

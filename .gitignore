@@ -2,7 +2,7 @@ venv
 **/__pycache__
 .**/
 !.github/
-data/secrets
+data/secrets/
 
 !.gitignore
 

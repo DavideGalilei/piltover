@@ -2,10 +2,7 @@ import tgcrypto
 
 from hashlib import sha256
 
-from cryptography.hazmat.primitives.asymmetric.types import (
-    PRIVATE_KEY_TYPES,
-    PUBLIC_KEY_TYPES,
-)
+from cryptography.hazmat.primitives.asymmetric.types import PrivateKeyTypes, PublicKeyTypes
 
 
 """
@@ -29,7 +26,7 @@ RSA_PAD(data, server_public_key) mentioned above is implemented as follows:
 
 
 def rsa_decrypt(
-    data: bytes, public_key: PUBLIC_KEY_TYPES, private_key: PRIVATE_KEY_TYPES
+    data: bytes, public_key: PublicKeyTypes, private_key: PrivateKeyTypes
 ) -> bytes:
     private = private_key.private_numbers()  # type: ignore
     public = public_key.public_numbers()  # type: ignore
@@ -47,8 +44,8 @@ def xor(x: bytes, y: bytes) -> bytes:
 
 def rsa_pad_inverse(
     encrypted_data: bytes,
-    public_key: PUBLIC_KEY_TYPES,
-    private_key: PRIVATE_KEY_TYPES,
+    public_key: PublicKeyTypes,
+    private_key: PrivateKeyTypes,
 ) -> bytes:
     key_aes_encrypted = rsa_decrypt(
         encrypted_data,
