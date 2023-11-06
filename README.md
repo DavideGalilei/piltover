@@ -244,7 +244,7 @@ $ rm -rf tdata/ DebugLogs/ log.txt && c && ./Telegram
     const chosenServer = `ws://127.0.0.1:3000/proxy`;
     ```
   - Change every datacenter ip and port below, respectively to `127.0.0.1`
-    (localhost) and `4430` (port)
+    (localhost) and `3000` (websocket proxy port)
     https://github.com/morethanwords/tweb/blob/f2827d9c19616a560346bd1662665ca30dc54668/src/lib/mtproto/dcConfigurator.ts#L58-L70
 - Edit the values in this file:
   https://github.com/morethanwords/tweb/blob/f2827d9c19616a560346bd1662665ca30dc54668/src/lib/mtproto/rsaKeysManager.ts#L69-L78
