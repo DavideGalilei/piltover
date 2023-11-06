@@ -4,5 +4,5 @@ from .rsa_pairs import (
     restore_private_key,
     restore_public_key,
 )
-from .utils import read_int, nameof, kdf, read_bytes, write_bytes
+from .utils import read_int, nameof, kdf, read_bytes, write_bytes, background
 from .gen_primes import generate_large_prime, gen_safe_prime

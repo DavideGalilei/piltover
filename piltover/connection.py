@@ -204,9 +204,17 @@ class TCPObfuscated(Connection):
                 decrypt=self.decrypt,
             )
         elif header == b"\xee\xee\xee\xee":
-            assert False, "TODO, Intermediate"
+            return TCPIntermediateObfuscated(
+                stream=self.stream,
+                encrypt=self.encrypt,
+                decrypt=self.decrypt,
+            )
         elif header == b"\xdd\xdd\xdd\xdd":
-            assert False, "TODO, PaddedIntermediate"
+            return TCPPaddedIntermediateObfuscated(
+                stream=self.stream,
+                encrypt=self.encrypt,
+                decrypt=self.decrypt,
+            )
         else:
             assert False, "idk, tcpfull maybe? or corrupted connection"
 
@@ -236,6 +244,7 @@ class TCPAbridgedObfuscated(Connection):
         data = (
             bytes([length]) if length <= 126 else b"\x7f" + length.to_bytes(3, "little")
         ) + data
+
         payload = tgcrypto.ctr256_encrypt(data, *self.decrypt)
 
         self.stream.write(payload)
@@ -251,6 +260,74 @@ class TCPAbridgedObfuscated(Connection):
 
         data = await self.stream.read(int.from_bytes(length, "little") * 4)
         return tgcrypto.ctr256_decrypt(data, *self.encrypt)
+
+    async def close(self):
+        await self.stream.close()
+
+
+class TCPIntermediateObfuscated(Connection):
+    # TODO: Garbage, probably doesn't work
+    def __init__(
+        self,
+        stream: BufferedStream,
+        encrypt: tuple[bytes, bytes, bytearray],
+        decrypt: tuple[bytes, bytes, bytearray],
+    ):
+        self.stream = stream
+        self.encrypt = encrypt
+        self.decrypt = decrypt
+
+    async def send(self, data: bytes):
+        length = len(data)
+        self.stream.write(length.to_bytes(4, "little", signed=False))
+        self.stream.write(tgcrypto.ctr256_encrypt(data, *self.decrypt))
+        await self.stream.drain()
+
+    async def recv(self) -> bytes:
+        length = int.from_bytes(
+            await self.stream.read(4), byteorder="little", signed=False
+        )
+
+        assert length != 0, "Received null length"
+
+        data = await self.stream.read(length)
+        return tgcrypto.ctr256_decrypt(data, *self.encrypt)
+
+    async def close(self):
+        await self.stream.close()
+
+
+class TCPPaddedIntermediateObfuscated(Connection):
+    # TODO: Garbage, probably doesn't work
+    def __init__(
+        self,
+        stream: BufferedStream,
+        encrypt: tuple[bytes, bytes, bytearray],
+        decrypt: tuple[bytes, bytes, bytearray],
+    ):
+        self.stream = stream
+        self.encrypt = encrypt
+        self.decrypt = decrypt
+
+    async def send(self, data: bytes):
+        length = len(data)
+        data += os.urandom(-length % 16)
+        length = len(data)
+
+        length = length.to_bytes(4, "little", signed=False)
+        data = tgcrypto.ctr256_encrypt(length + data, *self.decrypt)
+
+        self.stream.write(data)
+        await self.stream.drain()
+
+    async def recv(self) -> bytes:
+        length = await self.stream.read(4)
+        length = tgcrypto.ctr256_decrypt(length, *self.encrypt)
+
+        data = await self.stream.read(int.from_bytes(length, "little"))
+        data = tgcrypto.ctr256_decrypt(data, *self.encrypt)
+
+        return data
 
     async def close(self):
         await self.stream.close()

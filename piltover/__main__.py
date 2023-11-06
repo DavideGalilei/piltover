@@ -355,6 +355,23 @@ async def main():
             "data": result,
         }
 
+    @pilt.on_message("stories.getAllStories")
+    async def get_all_stories(client: Client, request: CoreMessage, session_id: int):
+        return {
+            "_": "stories.allStories",
+            "has_more": False,
+            "count": 0,
+            "state": "",
+            "peer_stories": [],
+            "chats": [],
+            "users": [],
+            "stealth_mode": {
+                "_": "storiesStealthMode",
+                "active_until_date": 0,
+                "cooldown_until_date": 0,
+            },
+        }
+
     @pilt.on_message("auth.bindTempAuthKey")
     async def bind_temp_auth_key(client: Client, request: CoreMessage, session_id: int):
         return {
@@ -463,10 +480,6 @@ async def main():
             "expires": 1000,
             "token": b"levlam",
         }
-
-    @pilt.on_message("msgs_ack")
-    async def msgs_ack(client: Client, request: CoreMessage, session_id: int):
-        ...
 
     """
     @pilt.on_message("msgs_state_req")

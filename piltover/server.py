@@ -35,6 +35,7 @@ from piltover.utils import (
     restore_private_key,
     restore_public_key,
     kdf,
+    background,
 )
 from piltover.utils.rsa_utils import rsa_decrypt, rsa_pad_inverse
 from piltover.utils.buffered_stream import BufferedStream
@@ -141,7 +142,7 @@ class Server:
             stream=stream,
             peerinfo=stream.get_extra_info("peerinfo"),
         )
-        task = asyncio.create_task(client.worker())
+        task = background(client.worker())
         # task.add_done_callback(lambda: self.clean(task))
 
     async def serve(self):
@@ -588,11 +589,13 @@ class Client:
         # ic(self.auth_key[96:96 + 32])
         aes_key, aes_iv = kdf(self.auth_data.auth_key, msg_key, False)
 
-        return (
+        result = (
             Int64.serialize(self.auth_data.auth_key_id)
             + msg_key
             + tgcrypto.ige256_encrypt(data + padding, aes_key, aes_iv)
         )
+        ic(len(result))
+        return result
 
     async def decrypt(self, message: EncryptedMessage) -> DecryptedMessage:
         if self.auth_data is None:

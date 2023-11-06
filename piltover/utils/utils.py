@@ -1,8 +1,10 @@
 import inspect
+import asyncio
 
 from io import BytesIO
 from hashlib import sha256
 from types import GenericAlias
+from typing import TypeVar, Coroutine
 
 
 def read_int(data: bytes, signed: bool = False) -> int:
@@ -58,3 +60,16 @@ def kdf(auth_key: bytes, msg_key: bytes, outgoing: bool) -> tuple:
     aes_iv = sha256_b[:8] + sha256_a[8:24] + sha256_b[24:32]
 
     return aes_key, aes_iv
+
+
+_tasks = set()
+T = TypeVar("T")
+
+
+def background(coro: Coroutine[None, None, T]) -> asyncio.Task[T]:
+    loop = asyncio.get_event_loop()
+    loop = asyncio.get_event_loop()
+    task = loop.create_task(coro)
+    _tasks.add(task)
+    task.add_done_callback(_tasks.remove)
+    return task

@@ -2,7 +2,10 @@ import tgcrypto
 
 from hashlib import sha256
 
-from cryptography.hazmat.primitives.asymmetric.types import PrivateKeyTypes, PublicKeyTypes
+from cryptography.hazmat.primitives.asymmetric.types import (
+    PrivateKeyTypes,
+    PublicKeyTypes,
+)
 
 
 """
