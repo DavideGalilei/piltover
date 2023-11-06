@@ -251,8 +251,7 @@ $ rm -rf tdata/ DebugLogs/ log.txt && c && ./Telegram
   - Change the `modulus` to the **lowercase** string of `prime` obtained previously
 - Run the websocket proxy from piltover
   - ```shell
-    $ npm install express express-ws --force
-    $ node tools/websocket_proxy.js
+    $ poetry run python tools/websocket_proxy.py
     ```
 - Run with `npm start`
 - Wait some time for the app to compile
