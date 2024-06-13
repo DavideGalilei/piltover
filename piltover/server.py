@@ -477,7 +477,10 @@ class Client:
 
                 # Maybe we should keep it
                 # self.auth_data = None
+            case "msgs_ack":
+                logger.debug("Received ack for messages {msg_ids}", msg_ids=obj.msg_ids)
             case _:
+                logger.error("Received unexpected unencrypted message {obj}", obj=obj)
                 raise RuntimeError(
                     "Received unexpected unencrypted message"
                 )  # TODO right error
@@ -499,7 +502,11 @@ class Client:
             # Steps: run tdesktop, restart the server, receive a message:
             # AttributeError: 'types.SimpleNamespace' object has no attribute 'auth_key'
             decrypted = await self.decrypt(message)
-            core_message = decrypted.to_core_message(TL)
+            try:
+                core_message = decrypted.to_core_message(TL)
+            except InvalidConstructor as e:
+                await self.reply_invalid_constructor(e, decrypted)
+                return
             logger.debug(core_message)
             await self.handle_encrypted_message(core_message, decrypted.session_id)
         elif isinstance(message, UnencryptedMessage):

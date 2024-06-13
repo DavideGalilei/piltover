@@ -138,6 +138,7 @@ def typeinfo(typ: str, bytes_str: bool = False) -> dict:
         #     "optional": False,
         #     "typ": repr(typ),
         # }
+
         return {
             "optional": False,
             "typ": "TLType",

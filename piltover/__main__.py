@@ -734,6 +734,13 @@ async def main():
     async def get_sticker_set(client: Client, request: CoreMessage, session_id: int):
         import random
 
+        if request.obj.stickerset._ == "inputStickerSetShortName" and request.obj.stickerset.short_name == "tg_placeholders_android":
+            return {
+                "_": "rpc_error",
+                "error_code": 400,
+                "error_message": "STICKERSET_INVALID",
+            }
+
         return {
             "_": "messages.stickerSet",
             "set": TL.from_dict(
@@ -1174,6 +1181,87 @@ async def main():
                 )
                 for key in request.obj.keys
             ],
+        }
+
+    @pilt.on_message("account.getAutoDownloadSettings")
+    async def get_auto_download_settings(
+        client: Client, request: CoreMessage, session_id: int
+    ):
+        return {
+            "_": "account.autoDownloadSettings",
+            "low": TL.from_dict(
+                {
+                    "_": "autoDownloadSettings",
+                    "disabled": True,
+                    "photo_size_max": 1,
+                    "video_size_max": 1,
+                    "file_size_max": 1,
+                    "video_upload_maxbitrate": 1,
+                    "small_queue_active_operations_max": 1,
+                    "large_queue_active_operations_max": 1,
+                }
+            ),
+            "medium": TL.from_dict(
+                {
+                    "_": "autoDownloadSettings",
+                    "disabled": True,
+                    "photo_size_max": 1,
+                    "video_size_max": 1,
+                    "file_size_max": 1,
+                    "video_upload_maxbitrate": 1,
+                    "small_queue_active_operations_max": 1,
+                    "large_queue_active_operations_max": 1,
+                }
+            ),
+            "high": TL.from_dict(
+                {
+                    "_": "autoDownloadSettings",
+                    "disabled": True,
+                    "photo_size_max": 1,
+                    "video_size_max": 1,
+                    "file_size_max": 1,
+                    "video_upload_maxbitrate": 1,
+                    "small_queue_active_operations_max": 1,
+                    "large_queue_active_operations_max": 1,
+                }
+            ),
+        }
+
+    @pilt.on_message("account.getDefaultProfilePhotoEmojis")
+    async def get_default_profile_photo_emojis(
+        client: Client, request: CoreMessage, session_id: int
+    ):
+        return {
+            "_": "emojiList",
+            "hash": 0,
+            "document_id": [],
+        }
+    
+    @pilt.on_message("account.getSavedRingtones")
+    async def get_saved_ringtones(client: Client, request: CoreMessage, session_id: int):
+        return {
+            "_": "account.savedRingtones",
+            "hash": 0,
+            "ringtones": [],
+        }
+
+    @pilt.on_message("stories.getAllReadPeerStories")
+    async def get_all_read_peer_stories(
+        client: Client, request: CoreMessage, session_id: int
+    ):
+        return {
+            "_": "updateReadStories",
+            "max_id": 0,
+            "peer": TL.from_dict({"_": "peerUser", "user_id": user["id"]}),
+        }
+
+    @pilt.on_message("channels.getAdminedPublicChannels")
+    async def get_admined_public_channels(
+        client: Client, request: CoreMessage, session_id: int
+    ):
+        return {
+            "_": "messages.chats",
+            "chats": [],
         }
 
     logger.success("Running on {host}:{port}", host=pilt.HOST, port=pilt.PORT)

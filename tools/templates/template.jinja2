@@ -37,7 +37,7 @@ MAP = {
                 {% if field["info"]["optional"] %}
                     FlagsOf("{{ field["info"]["field"] }}", {{ field["info"]["bit"] }}, {{ field["info"]["typ"] }})
                 {% else %}
-                    {{ field["info"]["typ"] }}
+                    {{ field["info"]["typ"] }} {% if field["info"]["original"] %}# {{ field["info"]["original"] }}{% endif %}
                 {% endif %},
             {% endfor %}
         },

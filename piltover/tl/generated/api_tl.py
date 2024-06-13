@@ -79,7 +79,7 @@ MAP = {
         "params": {
             "flags": Int32,
             "big": FlagsOf("flags", 0, Bit),
-            "peer": TLType,
+            "peer": TLType,  # InputPeer
             "volume_id": Int64,
             "local_id": Int32,
         },
@@ -88,7 +88,7 @@ MAP = {
     0xDBAEAE9: {
         "_": "inputStickerSetThumbLegacy",
         "params": {
-            "stickerset": TLType,
+            "stickerset": TLType,  # InputStickerSet
             "volume_id": Int64,
             "local_id": Int32,
         },
@@ -128,7 +128,7 @@ MAP = {
     0xA87B0A1C: {
         "_": "inputPeerUserFromMessage",
         "params": {
-            "peer": TLType,
+            "peer": TLType,  # InputPeer
             "msg_id": Int32,
             "user_id": Int64,
         },
@@ -137,7 +137,7 @@ MAP = {
     0xBD2A0840: {
         "_": "inputPeerChannelFromMessage",
         "params": {
-            "peer": TLType,
+            "peer": TLType,  # InputPeer
             "msg_id": Int32,
             "channel_id": Int64,
         },
@@ -162,7 +162,7 @@ MAP = {
     0x1DA448E2: {
         "_": "inputUserFromMessage",
         "params": {
-            "peer": TLType,
+            "peer": TLType,  # InputPeer
             "msg_id": Int32,
             "user_id": Int64,
         },
@@ -206,7 +206,7 @@ MAP = {
         "params": {
             "flags": Int32,
             "spoiler": FlagsOf("flags", 2, Bit),
-            "file": TLType,
+            "file": TLType,  # InputFile
             "stickers": FlagsOf("flags", 0, list["InputDocument"]),
             "ttl_seconds": FlagsOf("flags", 1, Int32),
         },
@@ -217,7 +217,7 @@ MAP = {
         "params": {
             "flags": Int32,
             "spoiler": FlagsOf("flags", 1, Bit),
-            "id": TLType,
+            "id": TLType,  # InputPhoto
             "ttl_seconds": FlagsOf("flags", 0, Int32),
         },
         "is": "InputMedia",
@@ -225,7 +225,7 @@ MAP = {
     0xF9C44144: {
         "_": "inputMediaGeoPoint",
         "params": {
-            "geo_point": TLType,
+            "geo_point": TLType,  # InputGeoPoint
         },
         "is": "InputMedia",
     },
@@ -246,7 +246,7 @@ MAP = {
             "nosound_video": FlagsOf("flags", 3, Bit),
             "force_file": FlagsOf("flags", 4, Bit),
             "spoiler": FlagsOf("flags", 5, Bit),
-            "file": TLType,
+            "file": TLType,  # InputFile
             "thumb": FlagsOf("flags", 2, TLType),
             "mime_type": str,
             "attributes": list["DocumentAttribute"],
@@ -260,7 +260,7 @@ MAP = {
         "params": {
             "flags": Int32,
             "spoiler": FlagsOf("flags", 2, Bit),
-            "id": TLType,
+            "id": TLType,  # InputDocument
             "ttl_seconds": FlagsOf("flags", 0, Int32),
             "query": FlagsOf("flags", 1, str),
         },
@@ -269,7 +269,7 @@ MAP = {
     0xC13D1C11: {
         "_": "inputMediaVenue",
         "params": {
-            "geo_point": TLType,
+            "geo_point": TLType,  # InputGeoPoint
             "title": str,
             "address": str,
             "provider": str,
@@ -301,7 +301,7 @@ MAP = {
     0xD33F43F3: {
         "_": "inputMediaGame",
         "params": {
-            "id": TLType,
+            "id": TLType,  # InputGame
         },
         "is": "InputMedia",
     },
@@ -312,10 +312,10 @@ MAP = {
             "title": str,
             "description": str,
             "photo": FlagsOf("flags", 0, TLType),
-            "invoice": TLType,
+            "invoice": TLType,  # Invoice
             "payload": bytes,
             "provider": str,
-            "provider_data": TLType,
+            "provider_data": TLType,  # DataJSON
             "start_param": FlagsOf("flags", 1, str),
             "extended_media": FlagsOf("flags", 2, TLType),
         },
@@ -326,7 +326,7 @@ MAP = {
         "params": {
             "flags": Int32,
             "stopped": FlagsOf("flags", 0, Bit),
-            "geo_point": TLType,
+            "geo_point": TLType,  # InputGeoPoint
             "heading": FlagsOf("flags", 2, Int32),
             "period": FlagsOf("flags", 1, Int32),
             "proximity_notification_radius": FlagsOf("flags", 3, Int32),
@@ -337,7 +337,7 @@ MAP = {
         "_": "inputMediaPoll",
         "params": {
             "flags": Int32,
-            "poll": TLType,
+            "poll": TLType,  # Poll
             "correct_answers": FlagsOf("flags", 0, list[bytes]),
             "solution": FlagsOf("flags", 1, str),
             "solution_entities": FlagsOf("flags", 1, list["MessageEntity"]),
@@ -354,7 +354,7 @@ MAP = {
     0x89FDD778: {
         "_": "inputMediaStory",
         "params": {
-            "peer": TLType,
+            "peer": TLType,  # InputPeer
             "id": Int32,
         },
         "is": "InputMedia",
@@ -377,7 +377,7 @@ MAP = {
     0x8953AD37: {
         "_": "inputChatPhoto",
         "params": {
-            "id": TLType,
+            "id": TLType,  # InputPhoto
         },
         "is": "InputChatPhoto",
     },
@@ -475,7 +475,7 @@ MAP = {
         "params": {
             "flags": Int32,
             "big": FlagsOf("flags", 0, Bit),
-            "peer": TLType,
+            "peer": TLType,  # InputPeer
             "photo_id": Int64,
         },
         "is": "InputFileLocation",
@@ -483,7 +483,7 @@ MAP = {
     0x9D84F3DB: {
         "_": "inputStickerSetThumb",
         "params": {
-            "stickerset": TLType,
+            "stickerset": TLType,  # InputStickerSet
             "thumb_version": Int32,
         },
         "is": "InputFileLocation",
@@ -492,7 +492,7 @@ MAP = {
         "_": "inputGroupCallStream",
         "params": {
             "flags": Int32,
-            "call": TLType,
+            "call": TLType,  # InputGroupCall
             "time_ms": Int64,
             "scale": Int32,
             "video_channel": FlagsOf("flags", 0, Int32),
@@ -678,7 +678,7 @@ MAP = {
             "noforwards": FlagsOf("flags", 25, Bit),
             "id": Int64,
             "title": str,
-            "photo": TLType,
+            "photo": TLType,  # ChatPhoto
             "participants_count": Int32,
             "date": Int32,
             "version": Int32,
@@ -728,7 +728,7 @@ MAP = {
             "access_hash": FlagsOf("flags", 13, Int64),
             "title": str,
             "username": FlagsOf("flags", 6, str),
-            "photo": TLType,
+            "photo": TLType,  # ChatPhoto
             "date": Int32,
             "restriction_reason": FlagsOf("flags", 9, list["RestrictionReason"]),
             "admin_rights": FlagsOf("flags", 14, TLType),
@@ -762,9 +762,9 @@ MAP = {
             "translations_disabled": FlagsOf("flags", 19, Bit),
             "id": Int64,
             "about": str,
-            "participants": TLType,
+            "participants": TLType,  # ChatParticipants
             "chat_photo": FlagsOf("flags", 2, TLType),
-            "notify_settings": TLType,
+            "notify_settings": TLType,  # PeerNotifySettings
             "exported_invite": FlagsOf("flags", 13, TLType),
             "bot_info": FlagsOf("flags", 3, list["BotInfo"]),
             "pinned_msg_id": FlagsOf("flags", 6, Int32),
@@ -807,8 +807,8 @@ MAP = {
             "read_inbox_max_id": Int32,
             "read_outbox_max_id": Int32,
             "unread_count": Int32,
-            "chat_photo": TLType,
-            "notify_settings": TLType,
+            "chat_photo": TLType,  # Photo
+            "notify_settings": TLType,  # PeerNotifySettings
             "exported_invite": FlagsOf("flags", 23, TLType),
             "bot_info": list["BotInfo"],
             "migrated_from_chat_id": FlagsOf("flags", 4, Int64),
@@ -919,7 +919,7 @@ MAP = {
             "noforwards": FlagsOf("flags", 26, Bit),
             "id": Int32,
             "from_id": FlagsOf("flags", 8, TLType),
-            "peer_id": TLType,
+            "peer_id": TLType,  # Peer
             "fwd_from": FlagsOf("flags", 2, TLType),
             "via_bot_id": FlagsOf("flags", 11, Int64),
             "reply_to": FlagsOf("flags", 3, TLType),
@@ -952,10 +952,10 @@ MAP = {
             "legacy": FlagsOf("flags", 19, Bit),
             "id": Int32,
             "from_id": FlagsOf("flags", 8, TLType),
-            "peer_id": TLType,
+            "peer_id": TLType,  # Peer
             "reply_to": FlagsOf("flags", 3, TLType),
             "date": Int32,
-            "action": TLType,
+            "action": TLType,  # MessageAction
             "ttl_period": FlagsOf("flags", 25, Int32),
         },
         "is": "Message",
@@ -977,7 +977,7 @@ MAP = {
     0x56E0D474: {
         "_": "messageMediaGeo",
         "params": {
-            "geo": TLType,
+            "geo": TLType,  # GeoPoint
         },
         "is": "MessageMedia",
     },
@@ -1011,14 +1011,14 @@ MAP = {
     0xA32DD600: {
         "_": "messageMediaWebPage",
         "params": {
-            "webpage": TLType,
+            "webpage": TLType,  # WebPage
         },
         "is": "MessageMedia",
     },
     0x2EC0533F: {
         "_": "messageMediaVenue",
         "params": {
-            "geo": TLType,
+            "geo": TLType,  # GeoPoint
             "title": str,
             "address": str,
             "provider": str,
@@ -1030,7 +1030,7 @@ MAP = {
     0xFDB19008: {
         "_": "messageMediaGame",
         "params": {
-            "game": TLType,
+            "game": TLType,  # Game
         },
         "is": "MessageMedia",
     },
@@ -1055,7 +1055,7 @@ MAP = {
         "_": "messageMediaGeoLive",
         "params": {
             "flags": Int32,
-            "geo": TLType,
+            "geo": TLType,  # GeoPoint
             "heading": FlagsOf("flags", 0, Int32),
             "period": Int32,
             "proximity_notification_radius": FlagsOf("flags", 1, Int32),
@@ -1065,8 +1065,8 @@ MAP = {
     0x4BD6E798: {
         "_": "messageMediaPoll",
         "params": {
-            "poll": TLType,
-            "results": TLType,
+            "poll": TLType,  # Poll
+            "results": TLType,  # PollResults
         },
         "is": "MessageMedia",
     },
@@ -1083,7 +1083,7 @@ MAP = {
         "params": {
             "flags": Int32,
             "via_mention": FlagsOf("flags", 1, Bit),
-            "peer": TLType,
+            "peer": TLType,  # Peer
             "id": Int32,
             "story": FlagsOf("flags", 0, TLType),
         },
@@ -1111,7 +1111,7 @@ MAP = {
     0x7FCB13A8: {
         "_": "messageActionChatEditPhoto",
         "params": {
-            "photo": TLType,
+            "photo": TLType,  # Photo
         },
         "is": "MessageAction",
     },
@@ -1189,7 +1189,7 @@ MAP = {
             "payload": bytes,
             "info": FlagsOf("flags", 0, TLType),
             "shipping_option_id": FlagsOf("flags", 1, str),
-            "charge": TLType,
+            "charge": TLType,  # PaymentCharge
         },
         "is": "MessageAction",
     },
@@ -1242,7 +1242,7 @@ MAP = {
         "_": "messageActionSecureValuesSentMe",
         "params": {
             "values": list["SecureValue"],
-            "credentials": TLType,
+            "credentials": TLType,  # SecureCredentialsEncrypted
         },
         "is": "MessageAction",
     },
@@ -1260,8 +1260,8 @@ MAP = {
     0x98E0D697: {
         "_": "messageActionGeoProximityReached",
         "params": {
-            "from_id": TLType,
-            "to_id": TLType,
+            "from_id": TLType,  # Peer
+            "to_id": TLType,  # Peer
             "distance": Int32,
         },
         "is": "MessageAction",
@@ -1270,7 +1270,7 @@ MAP = {
         "_": "messageActionGroupCall",
         "params": {
             "flags": Int32,
-            "call": TLType,
+            "call": TLType,  # InputGroupCall
             "duration": FlagsOf("flags", 0, Int32),
         },
         "is": "MessageAction",
@@ -1278,7 +1278,7 @@ MAP = {
     0x502F92F7: {
         "_": "messageActionInviteToGroupCall",
         "params": {
-            "call": TLType,
+            "call": TLType,  # InputGroupCall
             "users": list[Int64],
         },
         "is": "MessageAction",
@@ -1295,7 +1295,7 @@ MAP = {
     0xB3A07661: {
         "_": "messageActionGroupCallScheduled",
         "params": {
-            "call": TLType,
+            "call": TLType,  # InputGroupCall
             "schedule_date": Int32,
         },
         "is": "MessageAction",
@@ -1362,7 +1362,7 @@ MAP = {
     0x57DE635E: {
         "_": "messageActionSuggestProfilePhoto",
         "params": {
-            "photo": TLType,
+            "photo": TLType,  # Photo
         },
         "is": "MessageAction",
     },
@@ -1370,21 +1370,21 @@ MAP = {
         "_": "messageActionRequestedPeer",
         "params": {
             "button_id": Int32,
-            "peer": TLType,
+            "peer": TLType,  # Peer
         },
         "is": "MessageAction",
     },
     0xBC44A927: {
         "_": "messageActionSetChatWallPaper",
         "params": {
-            "wallpaper": TLType,
+            "wallpaper": TLType,  # WallPaper
         },
         "is": "MessageAction",
     },
     0xC0787D6D: {
         "_": "messageActionSetSameChatWallPaper",
         "params": {
-            "wallpaper": TLType,
+            "wallpaper": TLType,  # WallPaper
         },
         "is": "MessageAction",
     },
@@ -1394,14 +1394,14 @@ MAP = {
             "flags": Int32,
             "pinned": FlagsOf("flags", 2, Bit),
             "unread_mark": FlagsOf("flags", 3, Bit),
-            "peer": TLType,
+            "peer": TLType,  # Peer
             "top_message": Int32,
             "read_inbox_max_id": Int32,
             "read_outbox_max_id": Int32,
             "unread_count": Int32,
             "unread_mentions_count": Int32,
             "unread_reactions_count": Int32,
-            "notify_settings": TLType,
+            "notify_settings": TLType,  # PeerNotifySettings
             "pts": FlagsOf("flags", 0, Int32),
             "draft": FlagsOf("flags", 1, TLType),
             "folder_id": FlagsOf("flags", 4, Int32),
@@ -1414,8 +1414,8 @@ MAP = {
         "params": {
             "flags": Int32,
             "pinned": FlagsOf("flags", 2, Bit),
-            "folder": TLType,
-            "peer": TLType,
+            "folder": TLType,  # Folder
+            "peer": TLType,  # Peer
             "top_message": Int32,
             "unread_muted_peers_count": Int32,
             "unread_unmuted_peers_count": Int32,
@@ -1518,7 +1518,7 @@ MAP = {
         "_": "auth.sentCode",
         "params": {
             "flags": Int32,
-            "type": TLType,
+            "type": TLType,  # auth.SentCodeType
             "phone_code_hash": str,
             "next_type": FlagsOf("flags", 1, TLType),
             "timeout": FlagsOf("flags", 2, Int32),
@@ -1528,7 +1528,7 @@ MAP = {
     0x2390FE44: {
         "_": "auth.sentCodeSuccess",
         "params": {
-            "authorization": TLType,
+            "authorization": TLType,  # auth.Authorization
         },
         "is": "auth.SentCode",
     },
@@ -1540,7 +1540,7 @@ MAP = {
             "otherwise_relogin_days": FlagsOf("flags", 1, Int32),
             "tmp_sessions": FlagsOf("flags", 0, Int32),
             "future_auth_token": FlagsOf("flags", 2, bytes),
-            "user": TLType,
+            "user": TLType,  # User
         },
         "is": "auth.Authorization",
     },
@@ -1563,7 +1563,7 @@ MAP = {
     0xB8BC5B0C: {
         "_": "inputNotifyPeer",
         "params": {
-            "peer": TLType,
+            "peer": TLType,  # InputPeer
         },
         "is": "InputNotifyPeer",
     },
@@ -1582,7 +1582,7 @@ MAP = {
     0x5C467992: {
         "_": "inputNotifyForumTopic",
         "params": {
-            "peer": TLType,
+            "peer": TLType,  # InputPeer
             "top_msg_id": Int32,
         },
         "is": "InputNotifyPeer",
@@ -1649,7 +1649,7 @@ MAP = {
             "dark": FlagsOf("flags", 4, Bit),
             "access_hash": Int64,
             "slug": str,
-            "document": TLType,
+            "document": TLType,  # Document
             "settings": FlagsOf("flags", 2, TLType),
         },
         "is": "WallPaper",
@@ -1721,11 +1721,11 @@ MAP = {
             "blocked_my_stories_from": FlagsOf("flags", 27, Bit),
             "id": Int64,
             "about": FlagsOf("flags", 1, str),
-            "settings": TLType,
+            "settings": TLType,  # PeerSettings
             "personal_photo": FlagsOf("flags", 21, TLType),
             "profile_photo": FlagsOf("flags", 2, TLType),
             "fallback_photo": FlagsOf("flags", 22, TLType),
-            "notify_settings": TLType,
+            "notify_settings": TLType,  # PeerNotifySettings
             "bot_info": FlagsOf("flags", 3, TLType),
             "pinned_msg_id": FlagsOf("flags", 6, Int32),
             "common_chats_count": Int32,
@@ -1761,7 +1761,7 @@ MAP = {
         "_": "contactStatus",
         "params": {
             "user_id": Int64,
-            "status": TLType,
+            "status": TLType,  # UserStatus
         },
         "is": "ContactStatus",
     },
@@ -1898,7 +1898,7 @@ MAP = {
     0xE5D7D19C: {
         "_": "messages.chatFull",
         "params": {
-            "full_chat": TLType,
+            "full_chat": TLType,  # ChatFull
             "chats": list["Chat"],
             "users": list["User"],
         },
@@ -1988,7 +1988,7 @@ MAP = {
     0x1F2B0AFD: {
         "_": "updateNewMessage",
         "params": {
-            "message": TLType,
+            "message": TLType,  # Message
             "pts": Int32,
             "pts_count": Int32,
         },
@@ -2015,7 +2015,7 @@ MAP = {
         "_": "updateUserTyping",
         "params": {
             "user_id": Int64,
-            "action": TLType,
+            "action": TLType,  # SendMessageAction
         },
         "is": "Update",
     },
@@ -2023,15 +2023,15 @@ MAP = {
         "_": "updateChatUserTyping",
         "params": {
             "chat_id": Int64,
-            "from_id": TLType,
-            "action": TLType,
+            "from_id": TLType,  # Peer
+            "action": TLType,  # SendMessageAction
         },
         "is": "Update",
     },
     0x7761198: {
         "_": "updateChatParticipants",
         "params": {
-            "participants": TLType,
+            "participants": TLType,  # ChatParticipants
         },
         "is": "Update",
     },
@@ -2039,7 +2039,7 @@ MAP = {
         "_": "updateUserStatus",
         "params": {
             "user_id": Int64,
-            "status": TLType,
+            "status": TLType,  # UserStatus
         },
         "is": "Update",
     },
@@ -2068,7 +2068,7 @@ MAP = {
     0x12BCBD9A: {
         "_": "updateNewEncryptedMessage",
         "params": {
-            "message": TLType,
+            "message": TLType,  # EncryptedMessage
             "qts": Int32,
         },
         "is": "Update",
@@ -2083,7 +2083,7 @@ MAP = {
     0xB4A2E88D: {
         "_": "updateEncryption",
         "params": {
-            "chat": TLType,
+            "chat": TLType,  # EncryptedChat
             "date": Int32,
         },
         "is": "Update",
@@ -2127,8 +2127,8 @@ MAP = {
     0xBEC268EF: {
         "_": "updateNotifySettings",
         "params": {
-            "peer": TLType,
-            "notify_settings": TLType,
+            "peer": TLType,  # NotifyPeer
+            "notify_settings": TLType,  # PeerNotifySettings
         },
         "is": "Update",
     },
@@ -2140,7 +2140,7 @@ MAP = {
             "inbox_date": FlagsOf("flags", 1, Int32),
             "type": str,
             "message": str,
-            "media": TLType,
+            "media": TLType,  # MessageMedia
             "entities": list["MessageEntity"],
         },
         "is": "Update",
@@ -2148,7 +2148,7 @@ MAP = {
     0xEE3B272A: {
         "_": "updatePrivacy",
         "params": {
-            "key": TLType,
+            "key": TLType,  # PrivacyKey
             "rules": list["PrivacyRule"],
         },
         "is": "Update",
@@ -2166,7 +2166,7 @@ MAP = {
         "params": {
             "flags": Int32,
             "folder_id": FlagsOf("flags", 0, Int32),
-            "peer": TLType,
+            "peer": TLType,  # Peer
             "max_id": Int32,
             "still_unread_count": Int32,
             "pts": Int32,
@@ -2177,7 +2177,7 @@ MAP = {
     0x2F2F21BF: {
         "_": "updateReadHistoryOutbox",
         "params": {
-            "peer": TLType,
+            "peer": TLType,  # Peer
             "max_id": Int32,
             "pts": Int32,
             "pts_count": Int32,
@@ -2187,7 +2187,7 @@ MAP = {
     0x7F891213: {
         "_": "updateWebPage",
         "params": {
-            "webpage": TLType,
+            "webpage": TLType,  # WebPage
             "pts": Int32,
             "pts_count": Int32,
         },
@@ -2223,7 +2223,7 @@ MAP = {
     0x62BA04D9: {
         "_": "updateNewChannelMessage",
         "params": {
-            "message": TLType,
+            "message": TLType,  # Message
             "pts": Int32,
             "pts_count": Int32,
         },
@@ -2273,7 +2273,7 @@ MAP = {
     0x688A30AA: {
         "_": "updateNewStickerSet",
         "params": {
-            "stickerset": TLType,
+            "stickerset": TLType,  # messages.StickerSet
         },
         "is": "Update",
     },
@@ -2328,7 +2328,7 @@ MAP = {
     0x1B3F4DF7: {
         "_": "updateEditChannelMessage",
         "params": {
-            "message": TLType,
+            "message": TLType,  # Message
             "pts": Int32,
             "pts_count": Int32,
         },
@@ -2340,7 +2340,7 @@ MAP = {
             "flags": Int32,
             "query_id": Int64,
             "user_id": Int64,
-            "peer": TLType,
+            "peer": TLType,  # Peer
             "msg_id": Int32,
             "chat_instance": Int64,
             "data": FlagsOf("flags", 0, bytes),
@@ -2351,7 +2351,7 @@ MAP = {
     0xE40370A3: {
         "_": "updateEditMessage",
         "params": {
-            "message": TLType,
+            "message": TLType,  # Message
             "pts": Int32,
             "pts_count": Int32,
         },
@@ -2363,7 +2363,7 @@ MAP = {
             "flags": Int32,
             "query_id": Int64,
             "user_id": Int64,
-            "msg_id": TLType,
+            "msg_id": TLType,  # InputBotInlineMessageID
             "chat_instance": Int64,
             "data": FlagsOf("flags", 0, bytes),
             "game_short_name": FlagsOf("flags", 1, str),
@@ -2382,9 +2382,9 @@ MAP = {
         "_": "updateDraftMessage",
         "params": {
             "flags": Int32,
-            "peer": TLType,
+            "peer": TLType,  # Peer
             "top_msg_id": FlagsOf("flags", 0, Int32),
-            "draft": TLType,
+            "draft": TLType,  # DraftMessage
         },
         "is": "Update",
     },
@@ -2408,7 +2408,7 @@ MAP = {
         "_": "updateChannelWebPage",
         "params": {
             "channel_id": Int64,
-            "webpage": TLType,
+            "webpage": TLType,  # WebPage
             "pts": Int32,
             "pts_count": Int32,
         },
@@ -2420,7 +2420,7 @@ MAP = {
             "flags": Int32,
             "pinned": FlagsOf("flags", 0, Bit),
             "folder_id": FlagsOf("flags", 1, Int32),
-            "peer": TLType,
+            "peer": TLType,  # DialogPeer
         },
         "is": "Update",
     },
@@ -2436,7 +2436,7 @@ MAP = {
     0x8317C0C3: {
         "_": "updateBotWebhookJSON",
         "params": {
-            "data": TLType,
+            "data": TLType,  # DataJSON
         },
         "is": "Update",
     },
@@ -2444,7 +2444,7 @@ MAP = {
         "_": "updateBotWebhookJSONQuery",
         "params": {
             "query_id": Int64,
-            "data": TLType,
+            "data": TLType,  # DataJSON
             "timeout": Int32,
         },
         "is": "Update",
@@ -2455,7 +2455,7 @@ MAP = {
             "query_id": Int64,
             "user_id": Int64,
             "payload": bytes,
-            "shipping_address": TLType,
+            "shipping_address": TLType,  # PostAddress
         },
         "is": "Update",
     },
@@ -2476,7 +2476,7 @@ MAP = {
     0xAB0F6B1E: {
         "_": "updatePhoneCall",
         "params": {
-            "phone_call": TLType,
+            "phone_call": TLType,  # PhoneCall
         },
         "is": "Update",
     },
@@ -2490,7 +2490,7 @@ MAP = {
     0x56022F4D: {
         "_": "updateLangPack",
         "params": {
-            "difference": TLType,
+            "difference": TLType,  # LangPackDifference
         },
         "is": "Update",
     },
@@ -2525,7 +2525,7 @@ MAP = {
         "params": {
             "flags": Int32,
             "unread": FlagsOf("flags", 0, Bit),
-            "peer": TLType,
+            "peer": TLType,  # DialogPeer
         },
         "is": "Update",
     },
@@ -2535,15 +2535,15 @@ MAP = {
             "flags": Int32,
             "poll_id": Int64,
             "poll": FlagsOf("flags", 0, TLType),
-            "results": TLType,
+            "results": TLType,  # PollResults
         },
         "is": "Update",
     },
     0x54C01850: {
         "_": "updateChatDefaultBannedRights",
         "params": {
-            "peer": TLType,
-            "default_banned_rights": TLType,
+            "peer": TLType,  # Peer
+            "default_banned_rights": TLType,  # ChatBannedRights
             "version": Int32,
         },
         "is": "Update",
@@ -2560,8 +2560,8 @@ MAP = {
     0x6A7E7366: {
         "_": "updatePeerSettings",
         "params": {
-            "peer": TLType,
-            "settings": TLType,
+            "peer": TLType,  # Peer
+            "settings": TLType,  # PeerSettings
         },
         "is": "Update",
     },
@@ -2575,14 +2575,14 @@ MAP = {
     0x39A51DFB: {
         "_": "updateNewScheduledMessage",
         "params": {
-            "message": TLType,
+            "message": TLType,  # Message
         },
         "is": "Update",
     },
     0x90866CEE: {
         "_": "updateDeleteScheduledMessages",
         "params": {
-            "peer": TLType,
+            "peer": TLType,  # Peer
             "messages": list[Int32],
         },
         "is": "Update",
@@ -2590,14 +2590,14 @@ MAP = {
     0x8216FBA3: {
         "_": "updateTheme",
         "params": {
-            "theme": TLType,
+            "theme": TLType,  # Theme
         },
         "is": "Update",
     },
     0x871FB939: {
         "_": "updateGeoLiveViewed",
         "params": {
-            "peer": TLType,
+            "peer": TLType,  # Peer
             "msg_id": Int32,
         },
         "is": "Update",
@@ -2610,7 +2610,7 @@ MAP = {
         "_": "updateMessagePollVote",
         "params": {
             "poll_id": Int64,
-            "peer": TLType,
+            "peer": TLType,  # Peer
             "options": list[bytes],
             "qts": Int32,
         },
@@ -2680,7 +2680,7 @@ MAP = {
             "flags": Int32,
             "blocked": FlagsOf("flags", 0, Bit),
             "blocked_my_stories_from": FlagsOf("flags", 1, Bit),
-            "peer_id": TLType,
+            "peer_id": TLType,  # Peer
         },
         "is": "Update",
     },
@@ -2690,8 +2690,8 @@ MAP = {
             "flags": Int32,
             "channel_id": Int64,
             "top_msg_id": FlagsOf("flags", 0, Int32),
-            "from_id": TLType,
-            "action": TLType,
+            "from_id": TLType,  # Peer
+            "action": TLType,  # SendMessageAction
         },
         "is": "Update",
     },
@@ -2700,7 +2700,7 @@ MAP = {
         "params": {
             "flags": Int32,
             "pinned": FlagsOf("flags", 0, Bit),
-            "peer": TLType,
+            "peer": TLType,  # Peer
             "messages": list[Int32],
             "pts": Int32,
             "pts_count": Int32,
@@ -2729,7 +2729,7 @@ MAP = {
     0xF2EBDB4E: {
         "_": "updateGroupCallParticipants",
         "params": {
-            "call": TLType,
+            "call": TLType,  # InputGroupCall
             "participants": list["GroupCallParticipant"],
             "version": Int32,
         },
@@ -2739,7 +2739,7 @@ MAP = {
         "_": "updateGroupCall",
         "params": {
             "chat_id": Int64,
-            "call": TLType,
+            "call": TLType,  # GroupCall
         },
         "is": "Update",
     },
@@ -2747,7 +2747,7 @@ MAP = {
         "_": "updatePeerHistoryTTL",
         "params": {
             "flags": Int32,
-            "peer": TLType,
+            "peer": TLType,  # Peer
             "ttl_period": FlagsOf("flags", 0, Int32),
         },
         "is": "Update",
@@ -2798,14 +2798,14 @@ MAP = {
         "params": {
             "flags": Int32,
             "presentation": FlagsOf("flags", 0, Bit),
-            "params": TLType,
+            "params": TLType,  # DataJSON
         },
         "is": "Update",
     },
     0x4D712F2E: {
         "_": "updateBotCommands",
         "params": {
-            "peer": TLType,
+            "peer": TLType,  # Peer
             "bot_id": Int64,
             "commands": list["BotCommand"],
         },
@@ -2814,7 +2814,7 @@ MAP = {
     0x7063C3DB: {
         "_": "updatePendingJoinRequests",
         "params": {
-            "peer": TLType,
+            "peer": TLType,  # Peer
             "requests_pending": Int32,
             "recent_requesters": list[Int64],
         },
@@ -2823,11 +2823,11 @@ MAP = {
     0x11DFA986: {
         "_": "updateBotChatInviteRequester",
         "params": {
-            "peer": TLType,
+            "peer": TLType,  # Peer
             "date": Int32,
             "user_id": Int64,
             "about": str,
-            "invite": TLType,
+            "invite": TLType,  # ExportedChatInvite
             "qts": Int32,
         },
         "is": "Update",
@@ -2836,10 +2836,10 @@ MAP = {
         "_": "updateMessageReactions",
         "params": {
             "flags": Int32,
-            "peer": TLType,
+            "peer": TLType,  # Peer
             "msg_id": Int32,
             "top_msg_id": FlagsOf("flags", 0, Int32),
-            "reactions": TLType,
+            "reactions": TLType,  # MessageReactions
         },
         "is": "Update",
     },
@@ -2858,7 +2858,7 @@ MAP = {
         "_": "updateBotMenuButton",
         "params": {
             "bot_id": Int64,
-            "button": TLType,
+            "button": TLType,  # BotMenuButton
         },
         "is": "Update",
     },
@@ -2871,7 +2871,7 @@ MAP = {
         "params": {
             "flags": Int32,
             "pending": FlagsOf("flags", 0, Bit),
-            "peer": TLType,
+            "peer": TLType,  # Peer
             "msg_id": Int32,
             "transcription_id": Int64,
             "text": str,
@@ -2886,7 +2886,7 @@ MAP = {
         "_": "updateUserEmojiStatus",
         "params": {
             "user_id": Int64,
-            "emoji_status": TLType,
+            "emoji_status": TLType,  # EmojiStatus
         },
         "is": "Update",
     },
@@ -2911,9 +2911,9 @@ MAP = {
     0x5A73A98C: {
         "_": "updateMessageExtendedMedia",
         "params": {
-            "peer": TLType,
+            "peer": TLType,  # Peer
             "msg_id": Int32,
-            "extended_media": TLType,
+            "extended_media": TLType,  # MessageExtendedMedia
         },
         "is": "Update",
     },
@@ -2957,15 +2957,15 @@ MAP = {
     0x75B3B798: {
         "_": "updateStory",
         "params": {
-            "peer": TLType,
-            "story": TLType,
+            "peer": TLType,  # Peer
+            "story": TLType,  # StoryItem
         },
         "is": "Update",
     },
     0xF74E932B: {
         "_": "updateReadStories",
         "params": {
-            "peer": TLType,
+            "peer": TLType,  # Peer
             "max_id": Int32,
         },
         "is": "Update",
@@ -2981,16 +2981,16 @@ MAP = {
     0x2C084DC1: {
         "_": "updateStoriesStealthMode",
         "params": {
-            "stealth_mode": TLType,
+            "stealth_mode": TLType,  # StoriesStealthMode
         },
         "is": "Update",
     },
     0x7D627683: {
         "_": "updateSentStoryReaction",
         "params": {
-            "peer": TLType,
+            "peer": TLType,  # Peer
             "story_id": Int32,
-            "reaction": TLType,
+            "reaction": TLType,  # Reaction
         },
         "is": "Update",
     },
@@ -3021,7 +3021,7 @@ MAP = {
             "other_updates": list["Update"],
             "chats": list["Chat"],
             "users": list["User"],
-            "state": TLType,
+            "state": TLType,  # updates.State
         },
         "is": "updates.Difference",
     },
@@ -3033,7 +3033,7 @@ MAP = {
             "other_updates": list["Update"],
             "chats": list["Chat"],
             "users": list["User"],
-            "intermediate_state": TLType,
+            "intermediate_state": TLType,  # updates.State
         },
         "is": "updates.Difference",
     },
@@ -3096,7 +3096,7 @@ MAP = {
     0x78D4DEC1: {
         "_": "updateShort",
         "params": {
-            "update": TLType,
+            "update": TLType,  # Update
             "date": Int32,
         },
         "is": "Updates",
@@ -3159,7 +3159,7 @@ MAP = {
     0x20212CA8: {
         "_": "photos.photo",
         "params": {
-            "photo": TLType,
+            "photo": TLType,  # Photo
             "users": list["User"],
         },
         "is": "photos.Photo",
@@ -3167,7 +3167,7 @@ MAP = {
     0x96A18D5: {
         "_": "upload.file",
         "params": {
-            "type": TLType,
+            "type": TLType,  # storage.FileType
             "mtime": Int32,
             "bytes": bytes,
         },
@@ -3405,7 +3405,7 @@ MAP = {
             "chat_id": Int32,
             "date": Int32,
             "bytes": bytes,
-            "file": TLType,
+            "file": TLType,  # EncryptedFile
         },
         "is": "EncryptedMessage",
     },
@@ -3447,7 +3447,7 @@ MAP = {
         "_": "messages.sentEncryptedFile",
         "params": {
             "date": Int32,
-            "file": TLType,
+            "file": TLType,  # EncryptedFile
         },
         "is": "messages.SentEncryptedMessage",
     },
@@ -3492,14 +3492,14 @@ MAP = {
         "_": "help.support",
         "params": {
             "phone_number": str,
-            "user": TLType,
+            "user": TLType,  # User
         },
         "is": "help.Support",
     },
     0x9FD40BD8: {
         "_": "notifyPeer",
         "params": {
-            "peer": TLType,
+            "peer": TLType,  # Peer
         },
         "is": "NotifyPeer",
     },
@@ -3518,7 +3518,7 @@ MAP = {
     0x226E6308: {
         "_": "notifyForumTopic",
         "params": {
-            "peer": TLType,
+            "peer": TLType,  # Peer
             "top_msg_id": Int32,
         },
         "is": "NotifyPeer",
@@ -3610,7 +3610,7 @@ MAP = {
         "params": {
             "emoticon": str,
             "msg_id": Int32,
-            "interaction": TLType,
+            "interaction": TLType,  # DataJSON
         },
         "is": "SendMessageAction",
     },
@@ -3841,7 +3841,7 @@ MAP = {
             "flags": Int32,
             "mask": FlagsOf("flags", 1, Bit),
             "alt": str,
-            "stickerset": TLType,
+            "stickerset": TLType,  # InputStickerSet
             "mask_coords": FlagsOf("flags", 0, TLType),
         },
         "is": "DocumentAttribute",
@@ -3890,7 +3890,7 @@ MAP = {
             "free": FlagsOf("flags", 0, Bit),
             "text_color": FlagsOf("flags", 1, Bit),
             "alt": str,
-            "stickerset": TLType,
+            "stickerset": TLType,  # InputStickerSet
         },
         "is": "DocumentAttribute",
     },
@@ -4027,8 +4027,8 @@ MAP = {
             "srp_id": FlagsOf("flags", 2, Int64),
             "hint": FlagsOf("flags", 3, str),
             "email_unconfirmed_pattern": FlagsOf("flags", 4, str),
-            "new_algo": TLType,
-            "new_secure_algo": TLType,
+            "new_algo": TLType,  # PasswordKdfAlgo
+            "new_secure_algo": TLType,  # SecurePasswordKdfAlgo
             "secure_random": bytes,
             "pending_reset_date": FlagsOf("flags", 5, Int32),
             "login_email_pattern": FlagsOf("flags", 6, str),
@@ -4097,7 +4097,7 @@ MAP = {
     0x5A686D7C: {
         "_": "chatInviteAlready",
         "params": {
-            "chat": TLType,
+            "chat": TLType,  # Chat
         },
         "is": "ChatInvite",
     },
@@ -4115,7 +4115,7 @@ MAP = {
             "fake": FlagsOf("flags", 9, Bit),
             "title": str,
             "about": FlagsOf("flags", 5, str),
-            "photo": TLType,
+            "photo": TLType,  # Photo
             "participants_count": Int32,
             "participants": FlagsOf("flags", 4, list["User"]),
         },
@@ -4124,7 +4124,7 @@ MAP = {
     0x61695CB0: {
         "_": "chatInvitePeek",
         "params": {
-            "chat": TLType,
+            "chat": TLType,  # Chat
             "expires": Int32,
         },
         "is": "ChatInvite",
@@ -4206,7 +4206,7 @@ MAP = {
     0x6E153F16: {
         "_": "messages.stickerSet",
         "params": {
-            "set": TLType,
+            "set": TLType,  # StickerSet
             "packs": list["StickerPack"],
             "keywords": list["StickerKeyword"],
             "documents": list["Document"],
@@ -4321,7 +4321,7 @@ MAP = {
             "text": str,
             "fwd_text": FlagsOf("flags", 1, str),
             "url": str,
-            "bot": TLType,
+            "bot": TLType,  # InputUser
         },
         "is": "KeyboardButton",
     },
@@ -4338,7 +4338,7 @@ MAP = {
         "_": "inputKeyboardButtonUserProfile",
         "params": {
             "text": str,
-            "user_id": TLType,
+            "user_id": TLType,  # InputUser
         },
         "is": "KeyboardButton",
     },
@@ -4371,7 +4371,7 @@ MAP = {
         "params": {
             "text": str,
             "button_id": Int32,
-            "peer_type": TLType,
+            "peer_type": TLType,  # RequestPeerType
         },
         "is": "KeyboardButton",
     },
@@ -4524,7 +4524,7 @@ MAP = {
         "params": {
             "offset": Int32,
             "length": Int32,
-            "user_id": TLType,
+            "user_id": TLType,  # InputUser
         },
         "is": "MessageEntity",
     },
@@ -4608,7 +4608,7 @@ MAP = {
     0x5B934F9D: {
         "_": "inputChannelFromMessage",
         "params": {
-            "peer": TLType,
+            "peer": TLType,  # InputPeer
             "msg_id": Int32,
             "channel_id": Int64,
         },
@@ -4617,7 +4617,7 @@ MAP = {
     0x7F077AD9: {
         "_": "contacts.resolvedPeer",
         "params": {
-            "peer": TLType,
+            "peer": TLType,  # Peer
             "chats": list["Chat"],
             "users": list["User"],
         },
@@ -4647,7 +4647,7 @@ MAP = {
             "flags": Int32,
             "final": FlagsOf("flags", 0, Bit),
             "timeout": FlagsOf("flags", 1, Int32),
-            "dialog": TLType,
+            "dialog": TLType,  # Dialog
             "messages": list["Message"],
             "chats": list["Chat"],
             "users": list["User"],
@@ -4705,7 +4705,7 @@ MAP = {
         "params": {
             "flags": Int32,
             "user_id": Int64,
-            "admin_rights": TLType,
+            "admin_rights": TLType,  # ChatAdminRights
             "rank": FlagsOf("flags", 0, str),
         },
         "is": "ChannelParticipant",
@@ -4720,7 +4720,7 @@ MAP = {
             "inviter_id": FlagsOf("flags", 1, Int64),
             "promoted_by": Int64,
             "date": Int32,
-            "admin_rights": TLType,
+            "admin_rights": TLType,  # ChatAdminRights
             "rank": FlagsOf("flags", 2, str),
         },
         "is": "ChannelParticipant",
@@ -4730,17 +4730,17 @@ MAP = {
         "params": {
             "flags": Int32,
             "left": FlagsOf("flags", 0, Bit),
-            "peer": TLType,
+            "peer": TLType,  # Peer
             "kicked_by": Int64,
             "date": Int32,
-            "banned_rights": TLType,
+            "banned_rights": TLType,  # ChatBannedRights
         },
         "is": "ChannelParticipant",
     },
     0x1B03F006: {
         "_": "channelParticipantLeft",
         "params": {
-            "peer": TLType,
+            "peer": TLType,  # Peer
         },
         "is": "ChannelParticipant",
     },
@@ -4810,7 +4810,7 @@ MAP = {
     0xDFB80317: {
         "_": "channels.channelParticipant",
         "params": {
-            "participant": TLType,
+            "participant": TLType,  # ChannelParticipant
             "chats": list["Chat"],
             "users": list["User"],
         },
@@ -4821,7 +4821,7 @@ MAP = {
         "params": {
             "flags": Int32,
             "popup": FlagsOf("flags", 0, Bit),
-            "id": TLType,
+            "id": TLType,  # DataJSON
             "text": str,
             "entities": list["MessageEntity"],
             "min_age_confirm": FlagsOf("flags", 1, Int32),
@@ -4865,7 +4865,7 @@ MAP = {
         "_": "inputBotInlineMessageMediaGeo",
         "params": {
             "flags": Int32,
-            "geo_point": TLType,
+            "geo_point": TLType,  # InputGeoPoint
             "heading": FlagsOf("flags", 0, Int32),
             "period": FlagsOf("flags", 1, Int32),
             "proximity_notification_radius": FlagsOf("flags", 3, Int32),
@@ -4877,7 +4877,7 @@ MAP = {
         "_": "inputBotInlineMessageMediaVenue",
         "params": {
             "flags": Int32,
-            "geo_point": TLType,
+            "geo_point": TLType,  # InputGeoPoint
             "title": str,
             "address": str,
             "provider": str,
@@ -4914,10 +4914,10 @@ MAP = {
             "title": str,
             "description": str,
             "photo": FlagsOf("flags", 0, TLType),
-            "invoice": TLType,
+            "invoice": TLType,  # Invoice
             "payload": bytes,
             "provider": str,
-            "provider_data": TLType,
+            "provider_data": TLType,  # DataJSON
             "reply_markup": FlagsOf("flags", 2, TLType),
         },
         "is": "InputBotInlineMessage",
@@ -4933,7 +4933,7 @@ MAP = {
             "url": FlagsOf("flags", 3, str),
             "thumb": FlagsOf("flags", 4, TLType),
             "content": FlagsOf("flags", 5, TLType),
-            "send_message": TLType,
+            "send_message": TLType,  # InputBotInlineMessage
         },
         "is": "InputBotInlineResult",
     },
@@ -4942,8 +4942,8 @@ MAP = {
         "params": {
             "id": str,
             "type": str,
-            "photo": TLType,
-            "send_message": TLType,
+            "photo": TLType,  # InputPhoto
+            "send_message": TLType,  # InputBotInlineMessage
         },
         "is": "InputBotInlineResult",
     },
@@ -4955,8 +4955,8 @@ MAP = {
             "type": str,
             "title": FlagsOf("flags", 1, str),
             "description": FlagsOf("flags", 2, str),
-            "document": TLType,
-            "send_message": TLType,
+            "document": TLType,  # InputDocument
+            "send_message": TLType,  # InputBotInlineMessage
         },
         "is": "InputBotInlineResult",
     },
@@ -4965,7 +4965,7 @@ MAP = {
         "params": {
             "id": str,
             "short_name": str,
-            "send_message": TLType,
+            "send_message": TLType,  # InputBotInlineMessage
         },
         "is": "InputBotInlineResult",
     },
@@ -4994,7 +4994,7 @@ MAP = {
         "_": "botInlineMessageMediaGeo",
         "params": {
             "flags": Int32,
-            "geo": TLType,
+            "geo": TLType,  # GeoPoint
             "heading": FlagsOf("flags", 0, Int32),
             "period": FlagsOf("flags", 1, Int32),
             "proximity_notification_radius": FlagsOf("flags", 3, Int32),
@@ -5006,7 +5006,7 @@ MAP = {
         "_": "botInlineMessageMediaVenue",
         "params": {
             "flags": Int32,
-            "geo": TLType,
+            "geo": TLType,  # GeoPoint
             "title": str,
             "address": str,
             "provider": str,
@@ -5054,7 +5054,7 @@ MAP = {
             "url": FlagsOf("flags", 3, str),
             "thumb": FlagsOf("flags", 4, TLType),
             "content": FlagsOf("flags", 5, TLType),
-            "send_message": TLType,
+            "send_message": TLType,  # BotInlineMessage
         },
         "is": "BotInlineResult",
     },
@@ -5068,7 +5068,7 @@ MAP = {
             "document": FlagsOf("flags", 1, TLType),
             "title": FlagsOf("flags", 2, str),
             "description": FlagsOf("flags", 3, str),
-            "send_message": TLType,
+            "send_message": TLType,  # BotInlineMessage
         },
         "is": "BotInlineResult",
     },
@@ -5263,14 +5263,14 @@ MAP = {
             "messages": list["Message"],
             "chats": list["Chat"],
             "users": list["User"],
-            "state": TLType,
+            "state": TLType,  # updates.State
         },
         "is": "messages.PeerDialogs",
     },
     0xEDCDC05B: {
         "_": "topPeer",
         "params": {
-            "peer": TLType,
+            "peer": TLType,  # Peer
             "rating": float,
         },
         "is": "TopPeer",
@@ -5310,7 +5310,7 @@ MAP = {
     0xFB834291: {
         "_": "topPeerCategoryPeers",
         "params": {
-            "category": TLType,
+            "category": TLType,  # TopPeerCategory
             "count": Int32,
             "peers": list["TopPeer"],
         },
@@ -5408,15 +5408,15 @@ MAP = {
     0x6410A5D2: {
         "_": "stickerSetCovered",
         "params": {
-            "set": TLType,
-            "cover": TLType,
+            "set": TLType,  # StickerSet
+            "cover": TLType,  # Document
         },
         "is": "StickerSetCovered",
     },
     0x3407E51B: {
         "_": "stickerSetMultiCovered",
         "params": {
-            "set": TLType,
+            "set": TLType,  # StickerSet
             "covers": list["Document"],
         },
         "is": "StickerSetCovered",
@@ -5424,7 +5424,7 @@ MAP = {
     0x40D13C0E: {
         "_": "stickerSetFullCovered",
         "params": {
-            "set": TLType,
+            "set": TLType,  # StickerSet
             "packs": list["StickerPack"],
             "keywords": list["StickerKeyword"],
             "documents": list["Document"],
@@ -5434,7 +5434,7 @@ MAP = {
     0x77B15D1C: {
         "_": "stickerSetNoCovered",
         "params": {
-            "set": TLType,
+            "set": TLType,  # StickerSet
         },
         "is": "StickerSetCovered",
     },
@@ -5451,14 +5451,14 @@ MAP = {
     0x4A992157: {
         "_": "inputStickeredMediaPhoto",
         "params": {
-            "id": TLType,
+            "id": TLType,  # InputPhoto
         },
         "is": "InputStickeredMedia",
     },
     0x438865B: {
         "_": "inputStickeredMediaDocument",
         "params": {
-            "id": TLType,
+            "id": TLType,  # InputDocument
         },
         "is": "InputStickeredMedia",
     },
@@ -5471,7 +5471,7 @@ MAP = {
             "short_name": str,
             "title": str,
             "description": str,
-            "photo": TLType,
+            "photo": TLType,  # Photo
             "document": FlagsOf("flags", 0, TLType),
         },
         "is": "Game",
@@ -5487,7 +5487,7 @@ MAP = {
     0xC331E80A: {
         "_": "inputGameShortName",
         "params": {
-            "bot_id": TLType,
+            "bot_id": TLType,  # InputUser
             "short_name": str,
         },
         "is": "InputGame",
@@ -5523,42 +5523,42 @@ MAP = {
     0x6724ABC4: {
         "_": "textBold",
         "params": {
-            "text": TLType,
+            "text": TLType,  # RichText
         },
         "is": "RichText",
     },
     0xD912A59C: {
         "_": "textItalic",
         "params": {
-            "text": TLType,
+            "text": TLType,  # RichText
         },
         "is": "RichText",
     },
     0xC12622C4: {
         "_": "textUnderline",
         "params": {
-            "text": TLType,
+            "text": TLType,  # RichText
         },
         "is": "RichText",
     },
     0x9BF8BB95: {
         "_": "textStrike",
         "params": {
-            "text": TLType,
+            "text": TLType,  # RichText
         },
         "is": "RichText",
     },
     0x6C3F19B9: {
         "_": "textFixed",
         "params": {
-            "text": TLType,
+            "text": TLType,  # RichText
         },
         "is": "RichText",
     },
     0x3C2884C1: {
         "_": "textUrl",
         "params": {
-            "text": TLType,
+            "text": TLType,  # RichText
             "url": str,
             "webpage_id": Int64,
         },
@@ -5567,7 +5567,7 @@ MAP = {
     0xDE5A0DD6: {
         "_": "textEmail",
         "params": {
-            "text": TLType,
+            "text": TLType,  # RichText
             "email": str,
         },
         "is": "RichText",
@@ -5582,28 +5582,28 @@ MAP = {
     0xED6A8504: {
         "_": "textSubscript",
         "params": {
-            "text": TLType,
+            "text": TLType,  # RichText
         },
         "is": "RichText",
     },
     0xC7FB5E01: {
         "_": "textSuperscript",
         "params": {
-            "text": TLType,
+            "text": TLType,  # RichText
         },
         "is": "RichText",
     },
     0x34B8621: {
         "_": "textMarked",
         "params": {
-            "text": TLType,
+            "text": TLType,  # RichText
         },
         "is": "RichText",
     },
     0x1CCB966A: {
         "_": "textPhone",
         "params": {
-            "text": TLType,
+            "text": TLType,  # RichText
             "phone": str,
         },
         "is": "RichText",
@@ -5620,7 +5620,7 @@ MAP = {
     0x35553762: {
         "_": "textAnchor",
         "params": {
-            "text": TLType,
+            "text": TLType,  # RichText
             "name": str,
         },
         "is": "RichText",
@@ -5632,21 +5632,21 @@ MAP = {
     0x70ABC3FD: {
         "_": "pageBlockTitle",
         "params": {
-            "text": TLType,
+            "text": TLType,  # RichText
         },
         "is": "PageBlock",
     },
     0x8FFA9A1F: {
         "_": "pageBlockSubtitle",
         "params": {
-            "text": TLType,
+            "text": TLType,  # RichText
         },
         "is": "PageBlock",
     },
     0xBAAFE5E0: {
         "_": "pageBlockAuthorDate",
         "params": {
-            "author": TLType,
+            "author": TLType,  # RichText
             "published_date": Int32,
         },
         "is": "PageBlock",
@@ -5654,28 +5654,28 @@ MAP = {
     0xBFD064EC: {
         "_": "pageBlockHeader",
         "params": {
-            "text": TLType,
+            "text": TLType,  # RichText
         },
         "is": "PageBlock",
     },
     0xF12BB6E1: {
         "_": "pageBlockSubheader",
         "params": {
-            "text": TLType,
+            "text": TLType,  # RichText
         },
         "is": "PageBlock",
     },
     0x467A0766: {
         "_": "pageBlockParagraph",
         "params": {
-            "text": TLType,
+            "text": TLType,  # RichText
         },
         "is": "PageBlock",
     },
     0xC070D93E: {
         "_": "pageBlockPreformatted",
         "params": {
-            "text": TLType,
+            "text": TLType,  # RichText
             "language": str,
         },
         "is": "PageBlock",
@@ -5683,7 +5683,7 @@ MAP = {
     0x48870999: {
         "_": "pageBlockFooter",
         "params": {
-            "text": TLType,
+            "text": TLType,  # RichText
         },
         "is": "PageBlock",
     },
@@ -5708,16 +5708,16 @@ MAP = {
     0x263D7C26: {
         "_": "pageBlockBlockquote",
         "params": {
-            "text": TLType,
-            "caption": TLType,
+            "text": TLType,  # RichText
+            "caption": TLType,  # RichText
         },
         "is": "PageBlock",
     },
     0x4F4456D3: {
         "_": "pageBlockPullquote",
         "params": {
-            "text": TLType,
-            "caption": TLType,
+            "text": TLType,  # RichText
+            "caption": TLType,  # RichText
         },
         "is": "PageBlock",
     },
@@ -5726,7 +5726,7 @@ MAP = {
         "params": {
             "flags": Int32,
             "photo_id": Int64,
-            "caption": TLType,
+            "caption": TLType,  # PageCaption
             "url": FlagsOf("flags", 0, str),
             "webpage_id": FlagsOf("flags", 0, Int64),
         },
@@ -5739,14 +5739,14 @@ MAP = {
             "autoplay": FlagsOf("flags", 0, Bit),
             "loop": FlagsOf("flags", 1, Bit),
             "video_id": Int64,
-            "caption": TLType,
+            "caption": TLType,  # PageCaption
         },
         "is": "PageBlock",
     },
     0x39F23300: {
         "_": "pageBlockCover",
         "params": {
-            "cover": TLType,
+            "cover": TLType,  # PageBlock
         },
         "is": "PageBlock",
     },
@@ -5761,7 +5761,7 @@ MAP = {
             "poster_photo_id": FlagsOf("flags", 4, Int64),
             "w": FlagsOf("flags", 5, Int32),
             "h": FlagsOf("flags", 5, Int32),
-            "caption": TLType,
+            "caption": TLType,  # PageCaption
         },
         "is": "PageBlock",
     },
@@ -5774,7 +5774,7 @@ MAP = {
             "author": str,
             "date": Int32,
             "blocks": list["PageBlock"],
-            "caption": TLType,
+            "caption": TLType,  # PageCaption
         },
         "is": "PageBlock",
     },
@@ -5782,7 +5782,7 @@ MAP = {
         "_": "pageBlockCollage",
         "params": {
             "items": list["PageBlock"],
-            "caption": TLType,
+            "caption": TLType,  # PageCaption
         },
         "is": "PageBlock",
     },
@@ -5790,14 +5790,14 @@ MAP = {
         "_": "pageBlockSlideshow",
         "params": {
             "items": list["PageBlock"],
-            "caption": TLType,
+            "caption": TLType,  # PageCaption
         },
         "is": "PageBlock",
     },
     0xEF1751B5: {
         "_": "pageBlockChannel",
         "params": {
-            "channel": TLType,
+            "channel": TLType,  # Chat
         },
         "is": "PageBlock",
     },
@@ -5805,14 +5805,14 @@ MAP = {
         "_": "pageBlockAudio",
         "params": {
             "audio_id": Int64,
-            "caption": TLType,
+            "caption": TLType,  # PageCaption
         },
         "is": "PageBlock",
     },
     0x1E148390: {
         "_": "pageBlockKicker",
         "params": {
-            "text": TLType,
+            "text": TLType,  # RichText
         },
         "is": "PageBlock",
     },
@@ -5822,7 +5822,7 @@ MAP = {
             "flags": Int32,
             "bordered": FlagsOf("flags", 0, Bit),
             "striped": FlagsOf("flags", 1, Bit),
-            "title": TLType,
+            "title": TLType,  # RichText
             "rows": list["PageTableRow"],
         },
         "is": "PageBlock",
@@ -5840,14 +5840,14 @@ MAP = {
             "flags": Int32,
             "open": FlagsOf("flags", 0, Bit),
             "blocks": list["PageBlock"],
-            "title": TLType,
+            "title": TLType,  # RichText
         },
         "is": "PageBlock",
     },
     0x16115A96: {
         "_": "pageBlockRelatedArticles",
         "params": {
-            "title": TLType,
+            "title": TLType,  # RichText
             "articles": list["PageRelatedArticle"],
         },
         "is": "PageBlock",
@@ -5855,11 +5855,11 @@ MAP = {
     0xA44F3EF6: {
         "_": "pageBlockMap",
         "params": {
-            "geo": TLType,
+            "geo": TLType,  # GeoPoint
             "zoom": Int32,
             "w": Int32,
             "h": Int32,
-            "caption": TLType,
+            "caption": TLType,  # PageCaption
         },
         "is": "PageBlock",
     },
@@ -5996,7 +5996,7 @@ MAP = {
     0x9F2221C9: {
         "_": "inputWebFileGeoPointLocation",
         "params": {
-            "geo_point": TLType,
+            "geo_point": TLType,  # InputGeoPoint
             "access_hash": Int64,
             "w": Int32,
             "h": Int32,
@@ -6021,7 +6021,7 @@ MAP = {
         "params": {
             "size": Int32,
             "mime_type": str,
-            "file_type": TLType,
+            "file_type": TLType,  # storage.FileType
             "mtime": Int32,
             "bytes": bytes,
         },
@@ -6038,7 +6038,7 @@ MAP = {
             "title": str,
             "description": str,
             "photo": FlagsOf("flags", 5, TLType),
-            "invoice": TLType,
+            "invoice": TLType,  # Invoice
             "provider_id": Int64,
             "url": str,
             "native_provider": FlagsOf("flags", 4, str),
@@ -6062,7 +6062,7 @@ MAP = {
     0x4E5F810D: {
         "_": "payments.paymentResult",
         "params": {
-            "updates": TLType,
+            "updates": TLType,  # Updates
         },
         "is": "payments.PaymentResult",
     },
@@ -6083,7 +6083,7 @@ MAP = {
             "title": str,
             "description": str,
             "photo": FlagsOf("flags", 2, TLType),
-            "invoice": TLType,
+            "invoice": TLType,  # Invoice
             "info": FlagsOf("flags", 0, TLType),
             "shipping": FlagsOf("flags", 1, TLType),
             "tip_amount": FlagsOf("flags", 3, Int64),
@@ -6116,21 +6116,21 @@ MAP = {
         "params": {
             "flags": Int32,
             "save": FlagsOf("flags", 0, Bit),
-            "data": TLType,
+            "data": TLType,  # DataJSON
         },
         "is": "InputPaymentCredentials",
     },
     0xAA1C39F: {
         "_": "inputPaymentCredentialsApplePay",
         "params": {
-            "payment_data": TLType,
+            "payment_data": TLType,  # DataJSON
         },
         "is": "InputPaymentCredentials",
     },
     0x8AC32801: {
         "_": "inputPaymentCredentialsGooglePay",
         "params": {
-            "payment_token": TLType,
+            "payment_token": TLType,  # DataJSON
         },
         "is": "InputPaymentCredentials",
     },
@@ -6155,7 +6155,7 @@ MAP = {
         "_": "inputStickerSetItem",
         "params": {
             "flags": Int32,
-            "document": TLType,
+            "document": TLType,  # InputDocument
             "emoji": str,
             "mask_coords": FlagsOf("flags", 0, TLType),
             "keywords": FlagsOf("flags", 1, str),
@@ -6187,7 +6187,7 @@ MAP = {
             "date": Int32,
             "admin_id": Int64,
             "participant_id": Int64,
-            "protocol": TLType,
+            "protocol": TLType,  # PhoneCallProtocol
             "receive_date": FlagsOf("flags", 0, Int32),
         },
         "is": "PhoneCall",
@@ -6203,7 +6203,7 @@ MAP = {
             "admin_id": Int64,
             "participant_id": Int64,
             "g_a_hash": bytes,
-            "protocol": TLType,
+            "protocol": TLType,  # PhoneCallProtocol
         },
         "is": "PhoneCall",
     },
@@ -6218,7 +6218,7 @@ MAP = {
             "admin_id": Int64,
             "participant_id": Int64,
             "g_b": bytes,
-            "protocol": TLType,
+            "protocol": TLType,  # PhoneCallProtocol
         },
         "is": "PhoneCall",
     },
@@ -6235,7 +6235,7 @@ MAP = {
             "participant_id": Int64,
             "g_a_or_b": bytes,
             "key_fingerprint": Int64,
-            "protocol": TLType,
+            "protocol": TLType,  # PhoneCallProtocol
             "connections": list["PhoneConnection"],
             "start_date": Int32,
         },
@@ -6297,7 +6297,7 @@ MAP = {
     0xEC82E140: {
         "_": "phone.phoneCall",
         "params": {
-            "phone_call": TLType,
+            "phone_call": TLType,  # PhoneCall
             "users": list["User"],
         },
         "is": "phone.PhoneCall",
@@ -6415,8 +6415,8 @@ MAP = {
     0x434BD2AF: {
         "_": "channelAdminLogEventActionChangePhoto",
         "params": {
-            "prev_photo": TLType,
-            "new_photo": TLType,
+            "prev_photo": TLType,  # Photo
+            "new_photo": TLType,  # Photo
         },
         "is": "ChannelAdminLogEventAction",
     },
@@ -6437,22 +6437,22 @@ MAP = {
     0xE9E82C18: {
         "_": "channelAdminLogEventActionUpdatePinned",
         "params": {
-            "message": TLType,
+            "message": TLType,  # Message
         },
         "is": "ChannelAdminLogEventAction",
     },
     0x709B2405: {
         "_": "channelAdminLogEventActionEditMessage",
         "params": {
-            "prev_message": TLType,
-            "new_message": TLType,
+            "prev_message": TLType,  # Message
+            "new_message": TLType,  # Message
         },
         "is": "ChannelAdminLogEventAction",
     },
     0x42E047BB: {
         "_": "channelAdminLogEventActionDeleteMessage",
         "params": {
-            "message": TLType,
+            "message": TLType,  # Message
         },
         "is": "ChannelAdminLogEventAction",
     },
@@ -6467,31 +6467,31 @@ MAP = {
     0xE31C34D8: {
         "_": "channelAdminLogEventActionParticipantInvite",
         "params": {
-            "participant": TLType,
+            "participant": TLType,  # ChannelParticipant
         },
         "is": "ChannelAdminLogEventAction",
     },
     0xE6D83D7E: {
         "_": "channelAdminLogEventActionParticipantToggleBan",
         "params": {
-            "prev_participant": TLType,
-            "new_participant": TLType,
+            "prev_participant": TLType,  # ChannelParticipant
+            "new_participant": TLType,  # ChannelParticipant
         },
         "is": "ChannelAdminLogEventAction",
     },
     0xD5676710: {
         "_": "channelAdminLogEventActionParticipantToggleAdmin",
         "params": {
-            "prev_participant": TLType,
-            "new_participant": TLType,
+            "prev_participant": TLType,  # ChannelParticipant
+            "new_participant": TLType,  # ChannelParticipant
         },
         "is": "ChannelAdminLogEventAction",
     },
     0xB1C3CAA7: {
         "_": "channelAdminLogEventActionChangeStickerSet",
         "params": {
-            "prev_stickerset": TLType,
-            "new_stickerset": TLType,
+            "prev_stickerset": TLType,  # InputStickerSet
+            "new_stickerset": TLType,  # InputStickerSet
         },
         "is": "ChannelAdminLogEventAction",
     },
@@ -6505,15 +6505,15 @@ MAP = {
     0x2DF5FC0A: {
         "_": "channelAdminLogEventActionDefaultBannedRights",
         "params": {
-            "prev_banned_rights": TLType,
-            "new_banned_rights": TLType,
+            "prev_banned_rights": TLType,  # ChatBannedRights
+            "new_banned_rights": TLType,  # ChatBannedRights
         },
         "is": "ChannelAdminLogEventAction",
     },
     0x8F079643: {
         "_": "channelAdminLogEventActionStopPoll",
         "params": {
-            "message": TLType,
+            "message": TLType,  # Message
         },
         "is": "ChannelAdminLogEventAction",
     },
@@ -6528,8 +6528,8 @@ MAP = {
     0xE6B76AE: {
         "_": "channelAdminLogEventActionChangeLocation",
         "params": {
-            "prev_value": TLType,
-            "new_value": TLType,
+            "prev_value": TLType,  # ChannelLocation
+            "new_value": TLType,  # ChannelLocation
         },
         "is": "ChannelAdminLogEventAction",
     },
@@ -6544,28 +6544,28 @@ MAP = {
     0x23209745: {
         "_": "channelAdminLogEventActionStartGroupCall",
         "params": {
-            "call": TLType,
+            "call": TLType,  # InputGroupCall
         },
         "is": "ChannelAdminLogEventAction",
     },
     0xDB9F9140: {
         "_": "channelAdminLogEventActionDiscardGroupCall",
         "params": {
-            "call": TLType,
+            "call": TLType,  # InputGroupCall
         },
         "is": "ChannelAdminLogEventAction",
     },
     0xF92424D2: {
         "_": "channelAdminLogEventActionParticipantMute",
         "params": {
-            "participant": TLType,
+            "participant": TLType,  # GroupCallParticipant
         },
         "is": "ChannelAdminLogEventAction",
     },
     0xE64429C0: {
         "_": "channelAdminLogEventActionParticipantUnmute",
         "params": {
-            "participant": TLType,
+            "participant": TLType,  # GroupCallParticipant
         },
         "is": "ChannelAdminLogEventAction",
     },
@@ -6581,36 +6581,36 @@ MAP = {
         "params": {
             "flags": Int32,
             "via_chatlist": FlagsOf("flags", 0, Bit),
-            "invite": TLType,
+            "invite": TLType,  # ExportedChatInvite
         },
         "is": "ChannelAdminLogEventAction",
     },
     0x5A50FCA4: {
         "_": "channelAdminLogEventActionExportedInviteDelete",
         "params": {
-            "invite": TLType,
+            "invite": TLType,  # ExportedChatInvite
         },
         "is": "ChannelAdminLogEventAction",
     },
     0x410A134E: {
         "_": "channelAdminLogEventActionExportedInviteRevoke",
         "params": {
-            "invite": TLType,
+            "invite": TLType,  # ExportedChatInvite
         },
         "is": "ChannelAdminLogEventAction",
     },
     0xE90EBB59: {
         "_": "channelAdminLogEventActionExportedInviteEdit",
         "params": {
-            "prev_invite": TLType,
-            "new_invite": TLType,
+            "prev_invite": TLType,  # ExportedChatInvite
+            "new_invite": TLType,  # ExportedChatInvite
         },
         "is": "ChannelAdminLogEventAction",
     },
     0x3E7F6847: {
         "_": "channelAdminLogEventActionParticipantVolume",
         "params": {
-            "participant": TLType,
+            "participant": TLType,  # GroupCallParticipant
         },
         "is": "ChannelAdminLogEventAction",
     },
@@ -6625,7 +6625,7 @@ MAP = {
     0xAFB6144A: {
         "_": "channelAdminLogEventActionParticipantJoinByRequest",
         "params": {
-            "invite": TLType,
+            "invite": TLType,  # ExportedChatInvite
             "approved_by": Int64,
         },
         "is": "ChannelAdminLogEventAction",
@@ -6640,15 +6640,15 @@ MAP = {
     0x278F2868: {
         "_": "channelAdminLogEventActionSendMessage",
         "params": {
-            "message": TLType,
+            "message": TLType,  # Message
         },
         "is": "ChannelAdminLogEventAction",
     },
     0xBE4E0EF8: {
         "_": "channelAdminLogEventActionChangeAvailableReactions",
         "params": {
-            "prev_value": TLType,
-            "new_value": TLType,
+            "prev_value": TLType,  # ChatReactions
+            "new_value": TLType,  # ChatReactions
         },
         "is": "ChannelAdminLogEventAction",
     },
@@ -6670,22 +6670,22 @@ MAP = {
     0x58707D28: {
         "_": "channelAdminLogEventActionCreateTopic",
         "params": {
-            "topic": TLType,
+            "topic": TLType,  # ForumTopic
         },
         "is": "ChannelAdminLogEventAction",
     },
     0xF06FE208: {
         "_": "channelAdminLogEventActionEditTopic",
         "params": {
-            "prev_topic": TLType,
-            "new_topic": TLType,
+            "prev_topic": TLType,  # ForumTopic
+            "new_topic": TLType,  # ForumTopic
         },
         "is": "ChannelAdminLogEventAction",
     },
     0xAE168909: {
         "_": "channelAdminLogEventActionDeleteTopic",
         "params": {
-            "topic": TLType,
+            "topic": TLType,  # ForumTopic
         },
         "is": "ChannelAdminLogEventAction",
     },
@@ -6711,7 +6711,7 @@ MAP = {
             "id": Int64,
             "date": Int32,
             "user_id": Int64,
-            "action": TLType,
+            "action": TLType,  # ChannelAdminLogEventAction
         },
         "is": "ChannelAdminLogEvent",
     },
@@ -6797,7 +6797,7 @@ MAP = {
         "_": "recentMeUrlChatInvite",
         "params": {
             "url": str,
-            "chat_invite": TLType,
+            "chat_invite": TLType,  # ChatInvite
         },
         "is": "RecentMeUrl",
     },
@@ -6805,7 +6805,7 @@ MAP = {
         "_": "recentMeUrlStickerSet",
         "params": {
             "url": str,
-            "set": TLType,
+            "set": TLType,  # StickerSetCovered
         },
         "is": "RecentMeUrl",
     },
@@ -6822,7 +6822,7 @@ MAP = {
         "_": "inputSingleMedia",
         "params": {
             "flags": Int32,
-            "media": TLType,
+            "media": TLType,  # InputMedia
             "random_id": Int64,
             "message": str,
             "entities": FlagsOf("flags", 0, list["MessageEntity"]),
@@ -6881,7 +6881,7 @@ MAP = {
     0xFCAAFEB7: {
         "_": "inputDialogPeer",
         "params": {
-            "peer": TLType,
+            "peer": TLType,  # InputPeer
         },
         "is": "InputDialogPeer",
     },
@@ -6895,7 +6895,7 @@ MAP = {
     0xE56DBF05: {
         "_": "dialogPeer",
         "params": {
-            "peer": TLType,
+            "peer": TLType,  # Peer
         },
         "is": "DialogPeer",
     },
@@ -6946,7 +6946,7 @@ MAP = {
         "_": "help.termsOfServiceUpdate",
         "params": {
             "expires": Int32,
-            "terms_of_service": TLType,
+            "terms_of_service": TLType,  # help.TermsOfService
         },
         "is": "help.TermsOfServiceUpdate",
     },
@@ -7065,7 +7065,7 @@ MAP = {
         "_": "secureValue",
         "params": {
             "flags": Int32,
-            "type": TLType,
+            "type": TLType,  # SecureValueType
             "data": FlagsOf("flags", 0, TLType),
             "front_side": FlagsOf("flags", 1, TLType),
             "reverse_side": FlagsOf("flags", 2, TLType),
@@ -7081,7 +7081,7 @@ MAP = {
         "_": "inputSecureValue",
         "params": {
             "flags": Int32,
-            "type": TLType,
+            "type": TLType,  # SecureValueType
             "data": FlagsOf("flags", 0, TLType),
             "front_side": FlagsOf("flags", 1, TLType),
             "reverse_side": FlagsOf("flags", 2, TLType),
@@ -7095,7 +7095,7 @@ MAP = {
     0xED1ECDB0: {
         "_": "secureValueHash",
         "params": {
-            "type": TLType,
+            "type": TLType,  # SecureValueType
             "hash": bytes,
         },
         "is": "SecureValueHash",
@@ -7103,7 +7103,7 @@ MAP = {
     0xE8A40BD9: {
         "_": "secureValueErrorData",
         "params": {
-            "type": TLType,
+            "type": TLType,  # SecureValueType
             "data_hash": bytes,
             "field": str,
             "text": str,
@@ -7113,7 +7113,7 @@ MAP = {
     0xBE3DFA: {
         "_": "secureValueErrorFrontSide",
         "params": {
-            "type": TLType,
+            "type": TLType,  # SecureValueType
             "file_hash": bytes,
             "text": str,
         },
@@ -7122,7 +7122,7 @@ MAP = {
     0x868A2AA5: {
         "_": "secureValueErrorReverseSide",
         "params": {
-            "type": TLType,
+            "type": TLType,  # SecureValueType
             "file_hash": bytes,
             "text": str,
         },
@@ -7131,7 +7131,7 @@ MAP = {
     0xE537CED6: {
         "_": "secureValueErrorSelfie",
         "params": {
-            "type": TLType,
+            "type": TLType,  # SecureValueType
             "file_hash": bytes,
             "text": str,
         },
@@ -7140,7 +7140,7 @@ MAP = {
     0x7A700873: {
         "_": "secureValueErrorFile",
         "params": {
-            "type": TLType,
+            "type": TLType,  # SecureValueType
             "file_hash": bytes,
             "text": str,
         },
@@ -7149,7 +7149,7 @@ MAP = {
     0x666220E9: {
         "_": "secureValueErrorFiles",
         "params": {
-            "type": TLType,
+            "type": TLType,  # SecureValueType
             "file_hash": list[bytes],
             "text": str,
         },
@@ -7158,7 +7158,7 @@ MAP = {
     0x869D758F: {
         "_": "secureValueError",
         "params": {
-            "type": TLType,
+            "type": TLType,  # SecureValueType
             "hash": bytes,
             "text": str,
         },
@@ -7167,7 +7167,7 @@ MAP = {
     0xA1144770: {
         "_": "secureValueErrorTranslationFile",
         "params": {
-            "type": TLType,
+            "type": TLType,  # SecureValueType
             "file_hash": bytes,
             "text": str,
         },
@@ -7176,7 +7176,7 @@ MAP = {
     0x34636DD8: {
         "_": "secureValueErrorTranslationFiles",
         "params": {
-            "type": TLType,
+            "type": TLType,  # SecureValueType
             "file_hash": list[bytes],
             "text": str,
         },
@@ -7277,7 +7277,7 @@ MAP = {
     0x1527BCAC: {
         "_": "secureSecretSettings",
         "params": {
-            "secure_algo": TLType,
+            "secure_algo": TLType,  # SecurePasswordKdfAlgo
             "secure_secret": bytes,
             "secure_secret_id": Int64,
         },
@@ -7303,7 +7303,7 @@ MAP = {
             "native_names": FlagsOf("flags", 0, Bit),
             "selfie_required": FlagsOf("flags", 1, Bit),
             "translation_required": FlagsOf("flags", 2, Bit),
-            "type": TLType,
+            "type": TLType,  # SecureValueType
         },
         "is": "SecureRequiredType",
     },
@@ -7322,7 +7322,7 @@ MAP = {
         "_": "help.passportConfig",
         "params": {
             "hash": Int32,
-            "countries_langs": TLType,
+            "countries_langs": TLType,  # DataJSON
         },
         "is": "help.PassportConfig",
     },
@@ -7332,7 +7332,7 @@ MAP = {
             "time": float,
             "type": str,
             "peer": Int64,
-            "data": TLType,
+            "data": TLType,  # JSONValue
         },
         "is": "InputAppEvent",
     },
@@ -7340,7 +7340,7 @@ MAP = {
         "_": "jsonObjectValue",
         "params": {
             "key": str,
-            "value": TLType,
+            "value": TLType,  # JSONValue
         },
         "is": "JSONObjectValue",
     },
@@ -7408,15 +7408,15 @@ MAP = {
     0x6F747657: {
         "_": "pageCaption",
         "params": {
-            "text": TLType,
-            "credit": TLType,
+            "text": TLType,  # RichText
+            "credit": TLType,  # RichText
         },
         "is": "PageCaption",
     },
     0xB92FB6CD: {
         "_": "pageListItemText",
         "params": {
-            "text": TLType,
+            "text": TLType,  # RichText
         },
         "is": "PageListItem",
     },
@@ -7431,7 +7431,7 @@ MAP = {
         "_": "pageListOrderedItemText",
         "params": {
             "num": str,
-            "text": TLType,
+            "text": TLType,  # RichText
         },
         "is": "PageListOrderedItem",
     },
@@ -7690,9 +7690,9 @@ MAP = {
     0x63CACF26: {
         "_": "account.autoDownloadSettings",
         "params": {
-            "low": TLType,
-            "medium": TLType,
-            "high": TLType,
+            "low": TLType,  # AutoDownloadSettings
+            "medium": TLType,  # AutoDownloadSettings
+            "high": TLType,  # AutoDownloadSettings
         },
         "is": "account.AutoDownloadSettings",
     },
@@ -7752,7 +7752,7 @@ MAP = {
     0xFBD2C296: {
         "_": "inputFolderPeer",
         "params": {
-            "peer": TLType,
+            "peer": TLType,  # InputPeer
             "folder_id": Int32,
         },
         "is": "InputFolderPeer",
@@ -7760,7 +7760,7 @@ MAP = {
     0xE9BAA668: {
         "_": "folderPeer",
         "params": {
-            "peer": TLType,
+            "peer": TLType,  # Peer
             "folder_id": Int32,
         },
         "is": "FolderPeer",
@@ -7770,7 +7770,7 @@ MAP = {
         "params": {
             "flags": Int32,
             "inexact": FlagsOf("flags", 1, Bit),
-            "filter": TLType,
+            "filter": TLType,  # MessagesFilter
             "count": Int32,
         },
         "is": "messages.SearchCounter",
@@ -7780,7 +7780,7 @@ MAP = {
         "params": {
             "flags": Int32,
             "request_write_access": FlagsOf("flags", 0, Bit),
-            "bot": TLType,
+            "bot": TLType,  # User
             "domain": str,
         },
         "is": "UrlAuthResult",
@@ -7803,7 +7803,7 @@ MAP = {
     0x209B82DB: {
         "_": "channelLocation",
         "params": {
-            "geo_point": TLType,
+            "geo_point": TLType,  # GeoPoint
             "address": str,
         },
         "is": "ChannelLocation",
@@ -7811,7 +7811,7 @@ MAP = {
     0xCA461B5D: {
         "_": "peerLocated",
         "params": {
-            "peer": TLType,
+            "peer": TLType,  # Peer
             "expires": Int32,
             "distance": Int32,
         },
@@ -7897,7 +7897,7 @@ MAP = {
     0x390D5C5E: {
         "_": "auth.loginTokenSuccess",
         "params": {
-            "authorization": TLType,
+            "authorization": TLType,  # auth.Authorization
         },
         "is": "auth.LoginToken",
     },
@@ -7944,7 +7944,7 @@ MAP = {
         "params": {
             "flags": Int32,
             "message_colors_animated": FlagsOf("flags", 2, Bit),
-            "base_theme": TLType,
+            "base_theme": TLType,  # BaseTheme
             "accent_color": Int32,
             "outbox_accent_color": FlagsOf("flags", 3, Int32),
             "message_colors": FlagsOf("flags", 0, list[Int32]),
@@ -7958,7 +7958,7 @@ MAP = {
         "params": {
             "flags": Int32,
             "message_colors_animated": FlagsOf("flags", 2, Bit),
-            "base_theme": TLType,
+            "base_theme": TLType,  # BaseTheme
             "accent_color": Int32,
             "outbox_accent_color": FlagsOf("flags", 3, Int32),
             "message_colors": FlagsOf("flags", 0, list[Int32]),
@@ -7979,7 +7979,7 @@ MAP = {
         "_": "webPageAttributeStory",
         "params": {
             "flags": Int32,
-            "peer": TLType,
+            "peer": TLType,  # Peer
             "id": Int32,
             "story": FlagsOf("flags", 0, TLType),
         },
@@ -8054,7 +8054,7 @@ MAP = {
     0x77744D4A: {
         "_": "dialogFilterSuggested",
         "params": {
-            "filter": TLType,
+            "filter": TLType,  # DialogFilter
             "description": str,
         },
         "is": "DialogFilterSuggested",
@@ -8101,7 +8101,7 @@ MAP = {
         "_": "statsGraph",
         "params": {
             "flags": Int32,
-            "json": TLType,
+            "json": TLType,  # DataJSON
             "zoom_token": FlagsOf("flags", 0, str),
         },
         "is": "StatsGraph",
@@ -8118,20 +8118,20 @@ MAP = {
     0xBDF78394: {
         "_": "stats.broadcastStats",
         "params": {
-            "period": TLType,
-            "followers": TLType,
-            "views_per_post": TLType,
-            "shares_per_post": TLType,
-            "enabled_notifications": TLType,
-            "growth_graph": TLType,
-            "followers_graph": TLType,
-            "mute_graph": TLType,
-            "top_hours_graph": TLType,
-            "interactions_graph": TLType,
-            "iv_interactions_graph": TLType,
-            "views_by_source_graph": TLType,
-            "new_followers_by_source_graph": TLType,
-            "languages_graph": TLType,
+            "period": TLType,  # StatsDateRangeDays
+            "followers": TLType,  # StatsAbsValueAndPrev
+            "views_per_post": TLType,  # StatsAbsValueAndPrev
+            "shares_per_post": TLType,  # StatsAbsValueAndPrev
+            "enabled_notifications": TLType,  # StatsPercentValue
+            "growth_graph": TLType,  # StatsGraph
+            "followers_graph": TLType,  # StatsGraph
+            "mute_graph": TLType,  # StatsGraph
+            "top_hours_graph": TLType,  # StatsGraph
+            "interactions_graph": TLType,  # StatsGraph
+            "iv_interactions_graph": TLType,  # StatsGraph
+            "views_by_source_graph": TLType,  # StatsGraph
+            "new_followers_by_source_graph": TLType,  # StatsGraph
+            "languages_graph": TLType,  # StatsGraph
             "recent_message_interactions": list["MessageInteractionCounters"],
         },
         "is": "stats.BroadcastStats",
@@ -8149,7 +8149,7 @@ MAP = {
             "flags": Int32,
             "proxy": FlagsOf("flags", 0, Bit),
             "expires": Int32,
-            "peer": TLType,
+            "peer": TLType,  # Peer
             "chats": list["Chat"],
             "users": list["User"],
             "psa_type": FlagsOf("flags", 1, str),
@@ -8180,7 +8180,7 @@ MAP = {
     0xDA082FE: {
         "_": "videoSizeStickerMarkup",
         "params": {
-            "stickerset": TLType,
+            "stickerset": TLType,  # InputStickerSet
             "sticker_id": Int64,
             "background_colors": list[Int32],
         },
@@ -8216,19 +8216,19 @@ MAP = {
     0xEF7FF916: {
         "_": "stats.megagroupStats",
         "params": {
-            "period": TLType,
-            "members": TLType,
-            "messages": TLType,
-            "viewers": TLType,
-            "posters": TLType,
-            "growth_graph": TLType,
-            "members_graph": TLType,
-            "new_members_by_source_graph": TLType,
-            "languages_graph": TLType,
-            "messages_graph": TLType,
-            "actions_graph": TLType,
-            "top_hours_graph": TLType,
-            "weekdays_graph": TLType,
+            "period": TLType,  # StatsDateRangeDays
+            "members": TLType,  # StatsAbsValueAndPrev
+            "messages": TLType,  # StatsAbsValueAndPrev
+            "viewers": TLType,  # StatsAbsValueAndPrev
+            "posters": TLType,  # StatsAbsValueAndPrev
+            "growth_graph": TLType,  # StatsGraph
+            "members_graph": TLType,  # StatsGraph
+            "new_members_by_source_graph": TLType,  # StatsGraph
+            "languages_graph": TLType,  # StatsGraph
+            "messages_graph": TLType,  # StatsGraph
+            "actions_graph": TLType,  # StatsGraph
+            "top_hours_graph": TLType,  # StatsGraph
+            "weekdays_graph": TLType,  # StatsGraph
             "top_posters": list["StatsGroupTopPoster"],
             "top_admins": list["StatsGroupTopAdmin"],
             "top_inviters": list["StatsGroupTopInviter"],
@@ -8350,7 +8350,7 @@ MAP = {
     0xE8FD8014: {
         "_": "peerBlocked",
         "params": {
-            "peer_id": TLType,
+            "peer_id": TLType,  # Peer
             "date": Int32,
         },
         "is": "PeerBlocked",
@@ -8358,7 +8358,7 @@ MAP = {
     0x8999F295: {
         "_": "stats.messageStats",
         "params": {
-            "views_graph": TLType,
+            "views_graph": TLType,  # StatsGraph
         },
         "is": "stats.MessageStats",
     },
@@ -8418,7 +8418,7 @@ MAP = {
             "volume_by_admin": FlagsOf("flags", 10, Bit),
             "self": FlagsOf("flags", 12, Bit),
             "video_joined": FlagsOf("flags", 15, Bit),
-            "peer": TLType,
+            "peer": TLType,  # Peer
             "date": Int32,
             "active_date": FlagsOf("flags", 3, Int32),
             "source": Int32,
@@ -8433,7 +8433,7 @@ MAP = {
     0x9E727AAD: {
         "_": "phone.groupCall",
         "params": {
-            "call": TLType,
+            "call": TLType,  # GroupCall
             "participants": list["GroupCallParticipant"],
             "participants_next_offset": str,
             "chats": list["Chat"],
@@ -8529,7 +8529,7 @@ MAP = {
     0x1871BE50: {
         "_": "messages.exportedChatInvite",
         "params": {
-            "invite": TLType,
+            "invite": TLType,  # ExportedChatInvite
             "users": list["User"],
         },
         "is": "messages.ExportedChatInvite",
@@ -8537,8 +8537,8 @@ MAP = {
     0x222600EF: {
         "_": "messages.exportedChatInviteReplaced",
         "params": {
-            "invite": TLType,
-            "new_invite": TLType,
+            "invite": TLType,  # ExportedChatInvite
+            "new_invite": TLType,  # ExportedChatInvite
             "users": list["User"],
         },
         "is": "messages.ExportedChatInvite",
@@ -8637,22 +8637,22 @@ MAP = {
     0xDB9D897D: {
         "_": "botCommandScopePeer",
         "params": {
-            "peer": TLType,
+            "peer": TLType,  # InputPeer
         },
         "is": "BotCommandScope",
     },
     0x3FD863D1: {
         "_": "botCommandScopePeerAdmins",
         "params": {
-            "peer": TLType,
+            "peer": TLType,  # InputPeer
         },
         "is": "BotCommandScope",
     },
     0xA1321F3: {
         "_": "botCommandScopePeerUser",
         "params": {
-            "peer": TLType,
-            "user_id": TLType,
+            "peer": TLType,  # InputPeer
+            "user_id": TLType,  # InputUser
         },
         "is": "BotCommandScope",
     },
@@ -8764,7 +8764,7 @@ MAP = {
     0x3B6D152E: {
         "_": "users.userFull",
         "params": {
-            "full_user": TLType,
+            "full_user": TLType,  # UserFull
             "chats": list["Chat"],
             "users": list["User"],
         },
@@ -8773,7 +8773,7 @@ MAP = {
     0x6880B94D: {
         "_": "messages.peerSettings",
         "params": {
-            "settings": TLType,
+            "settings": TLType,  # PeerSettings
             "chats": list["Chat"],
             "users": list["User"],
         },
@@ -8792,7 +8792,7 @@ MAP = {
         "params": {
             "flags": Int32,
             "chosen_order": FlagsOf("flags", 0, Int32),
-            "reaction": TLType,
+            "reaction": TLType,  # Reaction
             "count": Int32,
         },
         "is": "ReactionCount",
@@ -8828,11 +8828,11 @@ MAP = {
             "premium": FlagsOf("flags", 2, Bit),
             "reaction": str,
             "title": str,
-            "static_icon": TLType,
-            "appear_animation": TLType,
-            "select_animation": TLType,
-            "activate_animation": TLType,
-            "effect_animation": TLType,
+            "static_icon": TLType,  # Document
+            "appear_animation": TLType,  # Document
+            "select_animation": TLType,  # Document
+            "activate_animation": TLType,  # Document
+            "effect_animation": TLType,  # Document
             "around_animation": FlagsOf("flags", 1, TLType),
             "center_icon": FlagsOf("flags", 1, TLType),
         },
@@ -8857,9 +8857,9 @@ MAP = {
             "big": FlagsOf("flags", 0, Bit),
             "unread": FlagsOf("flags", 1, Bit),
             "my": FlagsOf("flags", 2, Bit),
-            "peer_id": TLType,
+            "peer_id": TLType,  # Peer
             "date": Int32,
-            "reaction": TLType,
+            "reaction": TLType,  # Reaction
         },
         "is": "MessagePeerReaction",
     },
@@ -8900,7 +8900,7 @@ MAP = {
         "params": {
             "flags": Int32,
             "name": str,
-            "icon": TLType,
+            "icon": TLType,  # Document
             "colors": FlagsOf("flags", 0, list["AttachMenuBotIconColor"]),
         },
         "is": "AttachMenuBotIcon",
@@ -8938,7 +8938,7 @@ MAP = {
     0x93BF667F: {
         "_": "attachMenuBotsBot",
         "params": {
-            "bot": TLType,
+            "bot": TLType,  # AttachMenuBot
             "users": list["User"],
         },
         "is": "AttachMenuBotsBot",
@@ -9024,7 +9024,7 @@ MAP = {
     0x1F307EB7: {
         "_": "account.savedRingtoneConverted",
         "params": {
-            "document": TLType,
+            "document": TLType,  # Document
         },
         "is": "account.SavedRingtone",
     },
@@ -9051,7 +9051,7 @@ MAP = {
     0xC5B56859: {
         "_": "inputInvoiceMessage",
         "params": {
-            "peer": TLType,
+            "peer": TLType,  # InputPeer
             "msg_id": Int32,
         },
         "is": "InputInvoice",
@@ -9104,7 +9104,7 @@ MAP = {
     0x616F7FE8: {
         "_": "inputStorePaymentGiftPremium",
         "params": {
-            "user_id": TLType,
+            "user_id": TLType,  # InputUser
             "currency": str,
             "amount": Int64,
         },
@@ -9258,7 +9258,7 @@ MAP = {
         "_": "account.emailVerifiedLogin",
         "params": {
             "email": str,
-            "sent_code": TLType,
+            "sent_code": TLType,  # auth.SentCode
         },
         "is": "account.EmailVerified",
     },
@@ -9282,7 +9282,7 @@ MAP = {
         "params": {
             "flags": Int32,
             "premium_required": FlagsOf("flags", 0, Bit),
-            "peer": TLType,
+            "peer": TLType,  # Peer
         },
         "is": "SendAsPeer",
     },
@@ -9300,7 +9300,7 @@ MAP = {
     0xEE479C64: {
         "_": "messageExtendedMedia",
         "params": {
-            "media": TLType,
+            "media": TLType,  # MessageMedia
         },
         "is": "MessageExtendedMedia",
     },
@@ -9349,8 +9349,8 @@ MAP = {
             "unread_count": Int32,
             "unread_mentions_count": Int32,
             "unread_reactions_count": Int32,
-            "from_id": TLType,
-            "notify_settings": TLType,
+            "from_id": TLType,  # Peer
+            "notify_settings": TLType,  # PeerNotifySettings
             "draft": FlagsOf("flags", 4, TLType),
         },
         "is": "ForumTopic",
@@ -9478,17 +9478,17 @@ MAP = {
     0x81602D47: {
         "_": "autoSaveException",
         "params": {
-            "peer": TLType,
-            "settings": TLType,
+            "peer": TLType,  # Peer
+            "settings": TLType,  # AutoSaveSettings
         },
         "is": "AutoSaveException",
     },
     0x4C3E069D: {
         "_": "account.autoSaveSettings",
         "params": {
-            "users_settings": TLType,
-            "chats_settings": TLType,
-            "broadcasts_settings": TLType,
+            "users_settings": TLType,  # AutoSaveSettings
+            "chats_settings": TLType,  # AutoSaveSettings
+            "broadcasts_settings": TLType,  # AutoSaveSettings
             "exceptions": list["AutoSaveException"],
             "chats": list["Chat"],
             "users": list["User"],
@@ -9503,7 +9503,7 @@ MAP = {
         "_": "help.appConfig",
         "params": {
             "hash": Int32,
-            "config": TLType,
+            "config": TLType,  # JSONValue
         },
         "is": "help.AppConfig",
     },
@@ -9518,7 +9518,7 @@ MAP = {
     0x908C0407: {
         "_": "inputBotAppShortName",
         "params": {
-            "bot_id": TLType,
+            "bot_id": TLType,  # InputUser
             "short_name": str,
         },
         "is": "InputBotApp",
@@ -9536,7 +9536,7 @@ MAP = {
             "short_name": str,
             "title": str,
             "description": str,
-            "photo": TLType,
+            "photo": TLType,  # Photo
             "document": FlagsOf("flags", 0, TLType),
             "hash": Int64,
         },
@@ -9549,7 +9549,7 @@ MAP = {
             "inactive": FlagsOf("flags", 0, Bit),
             "request_write_access": FlagsOf("flags", 1, Bit),
             "has_settings": FlagsOf("flags", 2, Bit),
-            "app": TLType,
+            "app": TLType,  # BotApp
         },
         "is": "messages.BotApp",
     },
@@ -9596,8 +9596,8 @@ MAP = {
     0x10E6E3A6: {
         "_": "chatlists.exportedChatlistInvite",
         "params": {
-            "filter": TLType,
-            "invite": TLType,
+            "filter": TLType,  # DialogFilter
+            "invite": TLType,  # ExportedChatlistInvite
         },
         "is": "chatlists.ExportedChatlistInvite",
     },
@@ -9654,7 +9654,7 @@ MAP = {
     0xB6CC2D5C: {
         "_": "messagePeerVote",
         "params": {
-            "peer": TLType,
+            "peer": TLType,  # Peer
             "option": bytes,
             "date": Int32,
         },
@@ -9663,7 +9663,7 @@ MAP = {
     0x74CDA504: {
         "_": "messagePeerVoteInputOption",
         "params": {
-            "peer": TLType,
+            "peer": TLType,  # Peer
             "date": Int32,
         },
         "is": "MessagePeerVote",
@@ -9671,7 +9671,7 @@ MAP = {
     0x4628F6E6: {
         "_": "messagePeerVoteMultiple",
         "params": {
-            "peer": TLType,
+            "peer": TLType,  # Peer
             "options": list[bytes],
             "date": Int32,
         },
@@ -9736,7 +9736,7 @@ MAP = {
             "expire_date": Int32,
             "caption": FlagsOf("flags", 0, str),
             "entities": FlagsOf("flags", 1, list["MessageEntity"]),
-            "media": TLType,
+            "media": TLType,  # MessageMedia
             "media_areas": FlagsOf("flags", 14, list["MediaArea"]),
             "privacy": FlagsOf("flags", 2, list["PrivacyRule"]),
             "views": FlagsOf("flags", 3, TLType),
@@ -9749,7 +9749,7 @@ MAP = {
         "params": {
             "flags": Int32,
             "state": str,
-            "stealth_mode": TLType,
+            "stealth_mode": TLType,  # StoriesStealthMode
         },
         "is": "stories.AllStories",
     },
@@ -9763,7 +9763,7 @@ MAP = {
             "peer_stories": list["PeerStories"],
             "chats": list["Chat"],
             "users": list["User"],
-            "stealth_mode": TLType,
+            "stealth_mode": TLType,  # StoriesStealthMode
         },
         "is": "stories.AllStories",
     },
@@ -9821,7 +9821,7 @@ MAP = {
     0x15B0F283: {
         "_": "inputReplyToStory",
         "params": {
-            "user_id": TLType,
+            "user_id": TLType,  # InputUser
             "story_id": Int32,
         },
         "is": "InputReplyTo",
@@ -9856,8 +9856,8 @@ MAP = {
     0xBE82DB9C: {
         "_": "mediaAreaVenue",
         "params": {
-            "coordinates": TLType,
-            "geo": TLType,
+            "coordinates": TLType,  # MediaAreaCoordinates
+            "geo": TLType,  # GeoPoint
             "title": str,
             "address": str,
             "provider": str,
@@ -9869,7 +9869,7 @@ MAP = {
     0xB282217F: {
         "_": "inputMediaAreaVenue",
         "params": {
-            "coordinates": TLType,
+            "coordinates": TLType,  # MediaAreaCoordinates
             "query_id": Int64,
             "result_id": str,
         },
@@ -9878,8 +9878,8 @@ MAP = {
     0xDF8B3B22: {
         "_": "mediaAreaGeoPoint",
         "params": {
-            "coordinates": TLType,
-            "geo": TLType,
+            "coordinates": TLType,  # MediaAreaCoordinates
+            "geo": TLType,  # GeoPoint
         },
         "is": "MediaArea",
     },
@@ -9889,8 +9889,8 @@ MAP = {
             "flags": Int32,
             "dark": FlagsOf("flags", 0, Bit),
             "flipped": FlagsOf("flags", 1, Bit),
-            "coordinates": TLType,
-            "reaction": TLType,
+            "coordinates": TLType,  # MediaAreaCoordinates
+            "reaction": TLType,  # Reaction
         },
         "is": "MediaArea",
     },
@@ -9898,7 +9898,7 @@ MAP = {
         "_": "peerStories",
         "params": {
             "flags": Int32,
-            "peer": TLType,
+            "peer": TLType,  # Peer
             "max_read_id": FlagsOf("flags", 0, Int32),
             "stories": list["StoryItem"],
         },
@@ -9907,7 +9907,7 @@ MAP = {
     0xCAE68768: {
         "_": "stories.peerStories",
         "params": {
-            "stories": TLType,
+            "stories": TLType,  # PeerStories
             "chats": list["Chat"],
             "users": list["User"],
         },
@@ -9934,7 +9934,7 @@ MAP = {
     0x712C4655: {
         "_": "stories.canApplyBoostReplace",
         "params": {
-            "current_boost": TLType,
+            "current_boost": TLType,  # Peer
             "chats": list["Chat"],
         },
         "is": "stories.CanApplyBoostResult",
@@ -9961,7 +9961,7 @@ MAP = {
     0xFD5E12BD: {
         "_": "messages.webPage",
         "params": {
-            "webpage": TLType,
+            "webpage": TLType,  # WebPage
             "chats": list["Chat"],
             "users": list["User"],
         },
@@ -10018,7 +10018,7 @@ MAP = {
     0x365275F2: {
         "_": "invokeWithMessagesRange",
         "params": {
-            "range": TLType,
+            "range": TLType,  # MessageRange
             "query": TLType,
         },
         "ret": TLType,
@@ -10037,7 +10037,7 @@ MAP = {
             "phone_number": str,
             "api_id": Int32,
             "api_hash": str,
-            "settings": TLType,
+            "settings": TLType,  # CodeSettings
         },
         "ret": "auth.SentCode",
     },
@@ -10108,7 +10108,7 @@ MAP = {
     0xD18B4D16: {
         "_": "auth.checkPassword",
         "params": {
-            "password": TLType,
+            "password": TLType,  # InputCheckPasswordSRP
         },
         "ret": "auth.Authorization",
     },
@@ -10231,15 +10231,15 @@ MAP = {
     0x84BE5B93: {
         "_": "account.updateNotifySettings",
         "params": {
-            "peer": TLType,
-            "settings": TLType,
+            "peer": TLType,  # InputNotifyPeer
+            "settings": TLType,  # InputPeerNotifySettings
         },
         "ret": bool,
     },
     0x12B3AD31: {
         "_": "account.getNotifySettings",
         "params": {
-            "peer": TLType,
+            "peer": TLType,  # InputNotifyPeer
         },
         "ret": "PeerNotifySettings",
     },
@@ -10274,8 +10274,8 @@ MAP = {
     0xC5BA3D86: {
         "_": "account.reportPeer",
         "params": {
-            "peer": TLType,
-            "reason": TLType,
+            "peer": TLType,  # InputPeer
+            "reason": TLType,  # ReportReason
             "message": str,
         },
         "ret": bool,
@@ -10297,14 +10297,14 @@ MAP = {
     0xDADBC950: {
         "_": "account.getPrivacy",
         "params": {
-            "key": TLType,
+            "key": TLType,  # InputPrivacyKey
         },
         "ret": "account.PrivacyRules",
     },
     0xC9F81CE8: {
         "_": "account.setPrivacy",
         "params": {
-            "key": TLType,
+            "key": TLType,  # InputPrivacyKey
             "rules": list["InputPrivacyRule"],
         },
         "ret": "account.PrivacyRules",
@@ -10325,7 +10325,7 @@ MAP = {
     0x2442485E: {
         "_": "account.setAccountTTL",
         "params": {
-            "ttl": TLType,
+            "ttl": TLType,  # AccountDaysTTL
         },
         "ret": bool,
     },
@@ -10333,7 +10333,7 @@ MAP = {
         "_": "account.sendChangePhoneCode",
         "params": {
             "phone_number": str,
-            "settings": TLType,
+            "settings": TLType,  # CodeSettings
         },
         "ret": "auth.SentCode",
     },
@@ -10371,15 +10371,15 @@ MAP = {
     0x9CD4EAF9: {
         "_": "account.getPasswordSettings",
         "params": {
-            "password": TLType,
+            "password": TLType,  # InputCheckPasswordSRP
         },
         "ret": "account.PasswordSettings",
     },
     0xA59B102F: {
         "_": "account.updatePasswordSettings",
         "params": {
-            "password": TLType,
-            "new_settings": TLType,
+            "password": TLType,  # InputCheckPasswordSRP
+            "new_settings": TLType,  # account.PasswordInputSettings
         },
         "ret": bool,
     },
@@ -10387,7 +10387,7 @@ MAP = {
         "_": "account.sendConfirmPhoneCode",
         "params": {
             "hash": str,
-            "settings": TLType,
+            "settings": TLType,  # CodeSettings
         },
         "ret": "auth.SentCode",
     },
@@ -10402,7 +10402,7 @@ MAP = {
     0x449E0B51: {
         "_": "account.getTmpPassword",
         "params": {
-            "password": TLType,
+            "password": TLType,  # InputCheckPasswordSRP
             "period": Int32,
         },
         "ret": "account.TmpPassword",
@@ -10436,7 +10436,7 @@ MAP = {
     0x899FE31D: {
         "_": "account.saveSecureValue",
         "params": {
-            "value": TLType,
+            "value": TLType,  # InputSecureValue
             "secure_secret_id": Int64,
         },
         "ret": "SecureValue",
@@ -10464,7 +10464,7 @@ MAP = {
             "scope": str,
             "public_key": str,
             "value_hashes": list["SecureValueHash"],
-            "credentials": TLType,
+            "credentials": TLType,  # SecureCredentialsEncrypted
         },
         "ret": bool,
     },
@@ -10472,7 +10472,7 @@ MAP = {
         "_": "account.sendVerifyPhoneCode",
         "params": {
             "phone_number": str,
-            "settings": TLType,
+            "settings": TLType,  # CodeSettings
         },
         "ret": "auth.SentCode",
     },
@@ -10488,7 +10488,7 @@ MAP = {
     0x98E037BB: {
         "_": "account.sendVerifyEmailCode",
         "params": {
-            "purpose": TLType,
+            "purpose": TLType,  # EmailVerifyPurpose
             "email": str,
         },
         "ret": "account.SentEmailCode",
@@ -10496,8 +10496,8 @@ MAP = {
     0x32DA4CF: {
         "_": "account.verifyEmail",
         "params": {
-            "purpose": TLType,
-            "verification": TLType,
+            "purpose": TLType,  # EmailVerifyPurpose
+            "verification": TLType,  # EmailVerification
         },
         "ret": "account.EmailVerified",
     },
@@ -10562,7 +10562,7 @@ MAP = {
     0xFC8DDBEA: {
         "_": "account.getWallPaper",
         "params": {
-            "wallpaper": TLType,
+            "wallpaper": TLType,  # InputWallPaper
         },
         "ret": "WallPaper",
     },
@@ -10571,26 +10571,26 @@ MAP = {
         "params": {
             "flags": Int32,
             "for_chat": FlagsOf("flags", 0, Bit),
-            "file": TLType,
+            "file": TLType,  # InputFile
             "mime_type": str,
-            "settings": TLType,
+            "settings": TLType,  # WallPaperSettings
         },
         "ret": "WallPaper",
     },
     0x6C5A5B37: {
         "_": "account.saveWallPaper",
         "params": {
-            "wallpaper": TLType,
+            "wallpaper": TLType,  # InputWallPaper
             "unsave": bool,
-            "settings": TLType,
+            "settings": TLType,  # WallPaperSettings
         },
         "ret": bool,
     },
     0xFEED5769: {
         "_": "account.installWallPaper",
         "params": {
-            "wallpaper": TLType,
-            "settings": TLType,
+            "wallpaper": TLType,  # InputWallPaper
+            "settings": TLType,  # WallPaperSettings
         },
         "ret": bool,
     },
@@ -10608,7 +10608,7 @@ MAP = {
             "flags": Int32,
             "low": FlagsOf("flags", 0, Bit),
             "high": FlagsOf("flags", 1, Bit),
-            "settings": TLType,
+            "settings": TLType,  # AutoDownloadSettings
         },
         "ret": bool,
     },
@@ -10616,7 +10616,7 @@ MAP = {
         "_": "account.uploadTheme",
         "params": {
             "flags": Int32,
-            "file": TLType,
+            "file": TLType,  # InputFile
             "thumb": FlagsOf("flags", 0, TLType),
             "file_name": str,
             "mime_type": str,
@@ -10639,7 +10639,7 @@ MAP = {
         "params": {
             "flags": Int32,
             "format": str,
-            "theme": TLType,
+            "theme": TLType,  # InputTheme
             "slug": FlagsOf("flags", 0, str),
             "title": FlagsOf("flags", 1, str),
             "document": FlagsOf("flags", 2, TLType),
@@ -10650,7 +10650,7 @@ MAP = {
     0xF257106C: {
         "_": "account.saveTheme",
         "params": {
-            "theme": TLType,
+            "theme": TLType,  # InputTheme
             "unsave": bool,
         },
         "ret": bool,
@@ -10670,7 +10670,7 @@ MAP = {
         "_": "account.getTheme",
         "params": {
             "format": str,
-            "theme": TLType,
+            "theme": TLType,  # InputTheme
         },
         "ret": "Theme",
     },
@@ -10708,16 +10708,16 @@ MAP = {
     0x1EDAAAC2: {
         "_": "account.setGlobalPrivacySettings",
         "params": {
-            "settings": TLType,
+            "settings": TLType,  # GlobalPrivacySettings
         },
         "ret": "GlobalPrivacySettings",
     },
     0xFA8CC6F5: {
         "_": "account.reportProfilePhoto",
         "params": {
-            "peer": TLType,
-            "photo_id": TLType,
-            "reason": TLType,
+            "peer": TLType,  # InputPeer
+            "photo_id": TLType,  # InputPhoto
+            "reason": TLType,  # ReportReason
             "message": str,
         },
         "ret": bool,
@@ -10765,7 +10765,7 @@ MAP = {
     0x3DEA5B03: {
         "_": "account.saveRingtone",
         "params": {
-            "id": TLType,
+            "id": TLType,  # InputDocument
             "unsave": bool,
         },
         "ret": "account.SavedRingtone",
@@ -10773,7 +10773,7 @@ MAP = {
     0x831A83A2: {
         "_": "account.uploadRingtone",
         "params": {
-            "file": TLType,
+            "file": TLType,  # InputFile
             "file_name": str,
             "mime_type": str,
         },
@@ -10782,7 +10782,7 @@ MAP = {
     0xFBD3DE6B: {
         "_": "account.updateEmojiStatus",
         "params": {
-            "emoji_status": TLType,
+            "emoji_status": TLType,  # EmojiStatus
         },
         "ret": bool,
     },
@@ -10845,7 +10845,7 @@ MAP = {
             "chats": FlagsOf("flags", 1, Bit),
             "broadcasts": FlagsOf("flags", 2, Bit),
             "peer": FlagsOf("flags", 3, TLType),
-            "settings": TLType,
+            "settings": TLType,  # AutoSaveSettings
         },
         "ret": bool,
     },
@@ -10870,14 +10870,14 @@ MAP = {
     0xB60F5918: {
         "_": "users.getFullUser",
         "params": {
-            "id": TLType,
+            "id": TLType,  # InputUser
         },
         "ret": "users.UserFull",
     },
     0x90C894B5: {
         "_": "users.setSecureValueErrors",
         "params": {
-            "id": TLType,
+            "id": TLType,  # InputUser
             "errors": list["SecureValueError"],
         },
         "ret": bool,
@@ -10926,7 +10926,7 @@ MAP = {
         "params": {
             "flags": Int32,
             "my_stories_from": FlagsOf("flags", 0, Bit),
-            "id": TLType,
+            "id": TLType,  # InputPeer
         },
         "ret": bool,
     },
@@ -10935,7 +10935,7 @@ MAP = {
         "params": {
             "flags": Int32,
             "my_stories_from": FlagsOf("flags", 0, Bit),
-            "id": TLType,
+            "id": TLType,  # InputPeer
         },
         "ret": bool,
     },
@@ -10985,8 +10985,8 @@ MAP = {
     0x1AE373AC: {
         "_": "contacts.resetTopPeerRating",
         "params": {
-            "category": TLType,
-            "peer": TLType,
+            "category": TLType,  # TopPeerCategory
+            "peer": TLType,  # InputPeer
         },
         "ret": bool,
     },
@@ -11010,7 +11010,7 @@ MAP = {
         "params": {
             "flags": Int32,
             "add_phone_privacy_exception": FlagsOf("flags", 0, Bit),
-            "id": TLType,
+            "id": TLType,  # InputUser
             "first_name": str,
             "last_name": str,
             "phone": str,
@@ -11020,7 +11020,7 @@ MAP = {
     0xF831A20F: {
         "_": "contacts.acceptContact",
         "params": {
-            "id": TLType,
+            "id": TLType,  # InputUser
         },
         "ret": "Updates",
     },
@@ -11029,7 +11029,7 @@ MAP = {
         "params": {
             "flags": Int32,
             "background": FlagsOf("flags", 1, Bit),
-            "geo_point": TLType,
+            "geo_point": TLType,  # InputGeoPoint
             "self_expires": FlagsOf("flags", 0, Int32),
         },
         "ret": "Updates",
@@ -11095,7 +11095,7 @@ MAP = {
             "folder_id": FlagsOf("flags", 1, Int32),
             "offset_date": Int32,
             "offset_id": Int32,
-            "offset_peer": TLType,
+            "offset_peer": TLType,  # InputPeer
             "limit": Int32,
             "hash": Int64,
         },
@@ -11104,7 +11104,7 @@ MAP = {
     0x4423E6C5: {
         "_": "messages.getHistory",
         "params": {
-            "peer": TLType,
+            "peer": TLType,  # InputPeer
             "offset_id": Int32,
             "offset_date": Int32,
             "add_offset": Int32,
@@ -11119,11 +11119,11 @@ MAP = {
         "_": "messages.search",
         "params": {
             "flags": Int32,
-            "peer": TLType,
+            "peer": TLType,  # InputPeer
             "q": str,
             "from_id": FlagsOf("flags", 0, TLType),
             "top_msg_id": FlagsOf("flags", 1, Int32),
-            "filter": TLType,
+            "filter": TLType,  # MessagesFilter
             "min_date": Int32,
             "max_date": Int32,
             "offset_id": Int32,
@@ -11138,7 +11138,7 @@ MAP = {
     0xE306D3A: {
         "_": "messages.readHistory",
         "params": {
-            "peer": TLType,
+            "peer": TLType,  # InputPeer
             "max_id": Int32,
         },
         "ret": "messages.AffectedMessages",
@@ -11149,7 +11149,7 @@ MAP = {
             "flags": Int32,
             "just_clear": FlagsOf("flags", 0, Bit),
             "revoke": FlagsOf("flags", 1, Bit),
-            "peer": TLType,
+            "peer": TLType,  # InputPeer
             "max_id": Int32,
             "min_date": FlagsOf("flags", 2, Int32),
             "max_date": FlagsOf("flags", 3, Int32),
@@ -11176,9 +11176,9 @@ MAP = {
         "_": "messages.setTyping",
         "params": {
             "flags": Int32,
-            "peer": TLType,
+            "peer": TLType,  # InputPeer
             "top_msg_id": FlagsOf("flags", 0, Int32),
-            "action": TLType,
+            "action": TLType,  # SendMessageAction
         },
         "ret": bool,
     },
@@ -11192,7 +11192,7 @@ MAP = {
             "clear_draft": FlagsOf("flags", 7, Bit),
             "noforwards": FlagsOf("flags", 14, Bit),
             "update_stickersets_order": FlagsOf("flags", 15, Bit),
-            "peer": TLType,
+            "peer": TLType,  # InputPeer
             "reply_to": FlagsOf("flags", 0, TLType),
             "message": str,
             "random_id": Int64,
@@ -11212,9 +11212,9 @@ MAP = {
             "clear_draft": FlagsOf("flags", 7, Bit),
             "noforwards": FlagsOf("flags", 14, Bit),
             "update_stickersets_order": FlagsOf("flags", 15, Bit),
-            "peer": TLType,
+            "peer": TLType,  # InputPeer
             "reply_to": FlagsOf("flags", 0, TLType),
-            "media": TLType,
+            "media": TLType,  # InputMedia
             "message": str,
             "random_id": Int64,
             "reply_markup": FlagsOf("flags", 2, TLType),
@@ -11234,10 +11234,10 @@ MAP = {
             "drop_author": FlagsOf("flags", 11, Bit),
             "drop_media_captions": FlagsOf("flags", 12, Bit),
             "noforwards": FlagsOf("flags", 14, Bit),
-            "from_peer": TLType,
+            "from_peer": TLType,  # InputPeer
             "id": list[Int32],
             "random_id": list[Int64],
-            "to_peer": TLType,
+            "to_peer": TLType,  # InputPeer
             "top_msg_id": FlagsOf("flags", 9, Int32),
             "schedule_date": FlagsOf("flags", 10, Int32),
             "send_as": FlagsOf("flags", 13, TLType),
@@ -11247,23 +11247,23 @@ MAP = {
     0xCF1592DB: {
         "_": "messages.reportSpam",
         "params": {
-            "peer": TLType,
+            "peer": TLType,  # InputPeer
         },
         "ret": bool,
     },
     0xEFD9A6A2: {
         "_": "messages.getPeerSettings",
         "params": {
-            "peer": TLType,
+            "peer": TLType,  # InputPeer
         },
         "ret": "messages.PeerSettings",
     },
     0x8953AB4E: {
         "_": "messages.report",
         "params": {
-            "peer": TLType,
+            "peer": TLType,  # InputPeer
             "id": list[Int32],
-            "reason": TLType,
+            "reason": TLType,  # ReportReason
             "message": str,
         },
         "ret": bool,
@@ -11294,7 +11294,7 @@ MAP = {
         "_": "messages.editChatPhoto",
         "params": {
             "chat_id": Int64,
-            "photo": TLType,
+            "photo": TLType,  # InputChatPhoto
         },
         "ret": "Updates",
     },
@@ -11302,7 +11302,7 @@ MAP = {
         "_": "messages.addChatUser",
         "params": {
             "chat_id": Int64,
-            "user_id": TLType,
+            "user_id": TLType,  # InputUser
             "fwd_limit": Int32,
         },
         "ret": "Updates",
@@ -11313,7 +11313,7 @@ MAP = {
             "flags": Int32,
             "revoke_history": FlagsOf("flags", 0, Bit),
             "chat_id": Int64,
-            "user_id": TLType,
+            "user_id": TLType,  # InputUser
         },
         "ret": "Updates",
     },
@@ -11338,7 +11338,7 @@ MAP = {
     0xF64DAF43: {
         "_": "messages.requestEncryption",
         "params": {
-            "user_id": TLType,
+            "user_id": TLType,  # InputUser
             "random_id": Int32,
             "g_a": bytes,
         },
@@ -11347,7 +11347,7 @@ MAP = {
     0x3DBC0415: {
         "_": "messages.acceptEncryption",
         "params": {
-            "peer": TLType,
+            "peer": TLType,  # InputEncryptedChat
             "g_b": bytes,
             "key_fingerprint": Int64,
         },
@@ -11365,7 +11365,7 @@ MAP = {
     0x791451ED: {
         "_": "messages.setEncryptedTyping",
         "params": {
-            "peer": TLType,
+            "peer": TLType,  # InputEncryptedChat
             "typing": bool,
         },
         "ret": bool,
@@ -11373,7 +11373,7 @@ MAP = {
     0x7F4B690A: {
         "_": "messages.readEncryptedHistory",
         "params": {
-            "peer": TLType,
+            "peer": TLType,  # InputEncryptedChat
             "max_date": Int32,
         },
         "ret": bool,
@@ -11383,7 +11383,7 @@ MAP = {
         "params": {
             "flags": Int32,
             "silent": FlagsOf("flags", 0, Bit),
-            "peer": TLType,
+            "peer": TLType,  # InputEncryptedChat
             "random_id": Int64,
             "data": bytes,
         },
@@ -11394,17 +11394,17 @@ MAP = {
         "params": {
             "flags": Int32,
             "silent": FlagsOf("flags", 0, Bit),
-            "peer": TLType,
+            "peer": TLType,  # InputEncryptedChat
             "random_id": Int64,
             "data": bytes,
-            "file": TLType,
+            "file": TLType,  # InputEncryptedFile
         },
         "ret": "messages.SentEncryptedMessage",
     },
     0x32D439A4: {
         "_": "messages.sendEncryptedService",
         "params": {
-            "peer": TLType,
+            "peer": TLType,  # InputEncryptedChat
             "random_id": Int64,
             "data": bytes,
         },
@@ -11420,7 +11420,7 @@ MAP = {
     0x4B0C8C0F: {
         "_": "messages.reportEncryptedSpam",
         "params": {
-            "peer": TLType,
+            "peer": TLType,  # InputEncryptedChat
         },
         "ret": bool,
     },
@@ -11461,7 +11461,7 @@ MAP = {
             "flags": Int32,
             "legacy_revoke_permanent": FlagsOf("flags", 2, Bit),
             "request_needed": FlagsOf("flags", 3, Bit),
-            "peer": TLType,
+            "peer": TLType,  # InputPeer
             "expire_date": FlagsOf("flags", 0, Int32),
             "usage_limit": FlagsOf("flags", 1, Int32),
             "title": FlagsOf("flags", 4, str),
@@ -11485,7 +11485,7 @@ MAP = {
     0xC8A0EC74: {
         "_": "messages.getStickerSet",
         "params": {
-            "stickerset": TLType,
+            "stickerset": TLType,  # InputStickerSet
             "hash": Int32,
         },
         "ret": "messages.StickerSet",
@@ -11493,7 +11493,7 @@ MAP = {
     0xC78FE460: {
         "_": "messages.installStickerSet",
         "params": {
-            "stickerset": TLType,
+            "stickerset": TLType,  # InputStickerSet
             "archived": bool,
         },
         "ret": "messages.StickerSetInstallResult",
@@ -11501,15 +11501,15 @@ MAP = {
     0xF96E55DE: {
         "_": "messages.uninstallStickerSet",
         "params": {
-            "stickerset": TLType,
+            "stickerset": TLType,  # InputStickerSet
         },
         "ret": bool,
     },
     0xE6DF7378: {
         "_": "messages.startBot",
         "params": {
-            "bot": TLType,
-            "peer": TLType,
+            "bot": TLType,  # InputUser
+            "peer": TLType,  # InputPeer
             "random_id": Int64,
             "start_param": str,
         },
@@ -11518,7 +11518,7 @@ MAP = {
     0x5784D3E1: {
         "_": "messages.getMessagesViews",
         "params": {
-            "peer": TLType,
+            "peer": TLType,  # InputPeer
             "id": list[Int32],
             "increment": bool,
         },
@@ -11528,7 +11528,7 @@ MAP = {
         "_": "messages.editChatAdmin",
         "params": {
             "chat_id": Int64,
-            "user_id": TLType,
+            "user_id": TLType,  # InputUser
             "is_admin": bool,
         },
         "ret": bool,
@@ -11546,11 +11546,11 @@ MAP = {
             "flags": Int32,
             "folder_id": FlagsOf("flags", 0, Int32),
             "q": str,
-            "filter": TLType,
+            "filter": TLType,  # MessagesFilter
             "min_date": Int32,
             "max_date": Int32,
             "offset_rate": Int32,
-            "offset_peer": TLType,
+            "offset_peer": TLType,  # InputPeer
             "offset_id": Int32,
             "limit": Int32,
         },
@@ -11585,7 +11585,7 @@ MAP = {
     0x327A30CB: {
         "_": "messages.saveGif",
         "params": {
-            "id": TLType,
+            "id": TLType,  # InputDocument
             "unsave": bool,
         },
         "ret": bool,
@@ -11594,8 +11594,8 @@ MAP = {
         "_": "messages.getInlineBotResults",
         "params": {
             "flags": Int32,
-            "bot": TLType,
-            "peer": TLType,
+            "bot": TLType,  # InputUser
+            "peer": TLType,  # InputPeer
             "geo_point": FlagsOf("flags", 0, TLType),
             "query": str,
             "offset": str,
@@ -11625,7 +11625,7 @@ MAP = {
             "background": FlagsOf("flags", 6, Bit),
             "clear_draft": FlagsOf("flags", 7, Bit),
             "hide_via": FlagsOf("flags", 11, Bit),
-            "peer": TLType,
+            "peer": TLType,  # InputPeer
             "reply_to": FlagsOf("flags", 0, TLType),
             "random_id": Int64,
             "query_id": Int64,
@@ -11638,7 +11638,7 @@ MAP = {
     0xFDA68D36: {
         "_": "messages.getMessageEditData",
         "params": {
-            "peer": TLType,
+            "peer": TLType,  # InputPeer
             "id": Int32,
         },
         "ret": "messages.MessageEditData",
@@ -11648,7 +11648,7 @@ MAP = {
         "params": {
             "flags": Int32,
             "no_webpage": FlagsOf("flags", 1, Bit),
-            "peer": TLType,
+            "peer": TLType,  # InputPeer
             "id": Int32,
             "message": FlagsOf("flags", 11, str),
             "media": FlagsOf("flags", 14, TLType),
@@ -11663,7 +11663,7 @@ MAP = {
         "params": {
             "flags": Int32,
             "no_webpage": FlagsOf("flags", 1, Bit),
-            "id": TLType,
+            "id": TLType,  # InputBotInlineMessageID
             "message": FlagsOf("flags", 11, str),
             "media": FlagsOf("flags", 14, TLType),
             "reply_markup": FlagsOf("flags", 2, TLType),
@@ -11676,7 +11676,7 @@ MAP = {
         "params": {
             "flags": Int32,
             "game": FlagsOf("flags", 1, Bit),
-            "peer": TLType,
+            "peer": TLType,  # InputPeer
             "msg_id": Int32,
             "data": FlagsOf("flags", 0, bytes),
             "password": FlagsOf("flags", 2, TLType),
@@ -11709,7 +11709,7 @@ MAP = {
             "no_webpage": FlagsOf("flags", 1, Bit),
             "reply_to_msg_id": FlagsOf("flags", 0, Int32),
             "top_msg_id": FlagsOf("flags", 2, Int32),
-            "peer": TLType,
+            "peer": TLType,  # InputPeer
             "message": str,
             "entities": FlagsOf("flags", 3, list["MessageEntity"]),
         },
@@ -11747,7 +11747,7 @@ MAP = {
         "params": {
             "flags": Int32,
             "attached": FlagsOf("flags", 0, Bit),
-            "id": TLType,
+            "id": TLType,  # InputDocument
             "unsave": bool,
         },
         "ret": bool,
@@ -11781,7 +11781,7 @@ MAP = {
     0xCC5B67CC: {
         "_": "messages.getAttachedStickers",
         "params": {
-            "media": TLType,
+            "media": TLType,  # InputStickeredMedia
         },
         "ret": list["StickerSetCovered"],
     },
@@ -11791,9 +11791,9 @@ MAP = {
             "flags": Int32,
             "edit_message": FlagsOf("flags", 0, Bit),
             "force": FlagsOf("flags", 1, Bit),
-            "peer": TLType,
+            "peer": TLType,  # InputPeer
             "id": Int32,
-            "user_id": TLType,
+            "user_id": TLType,  # InputUser
             "score": Int32,
         },
         "ret": "Updates",
@@ -11804,8 +11804,8 @@ MAP = {
             "flags": Int32,
             "edit_message": FlagsOf("flags", 0, Bit),
             "force": FlagsOf("flags", 1, Bit),
-            "id": TLType,
-            "user_id": TLType,
+            "id": TLType,  # InputBotInlineMessageID
+            "user_id": TLType,  # InputUser
             "score": Int32,
         },
         "ret": bool,
@@ -11813,24 +11813,24 @@ MAP = {
     0xE822649D: {
         "_": "messages.getGameHighScores",
         "params": {
-            "peer": TLType,
+            "peer": TLType,  # InputPeer
             "id": Int32,
-            "user_id": TLType,
+            "user_id": TLType,  # InputUser
         },
         "ret": "messages.HighScores",
     },
     0xF635E1B: {
         "_": "messages.getInlineGameHighScores",
         "params": {
-            "id": TLType,
-            "user_id": TLType,
+            "id": TLType,  # InputBotInlineMessageID
+            "user_id": TLType,  # InputUser
         },
         "ret": "messages.HighScores",
     },
     0xE40CA104: {
         "_": "messages.getCommonChats",
         "params": {
-            "user_id": TLType,
+            "user_id": TLType,  # InputUser
             "max_id": Int64,
             "limit": Int32,
         },
@@ -11849,7 +11849,7 @@ MAP = {
         "params": {
             "flags": Int32,
             "pinned": FlagsOf("flags", 0, Bit),
-            "peer": TLType,
+            "peer": TLType,  # InputDialogPeer
         },
         "ret": bool,
     },
@@ -11893,16 +11893,16 @@ MAP = {
     0x519BC2B1: {
         "_": "messages.uploadMedia",
         "params": {
-            "peer": TLType,
-            "media": TLType,
+            "peer": TLType,  # InputPeer
+            "media": TLType,  # InputMedia
         },
         "ret": "MessageMedia",
     },
     0xA1405817: {
         "_": "messages.sendScreenshotNotification",
         "params": {
-            "peer": TLType,
-            "reply_to": TLType,
+            "peer": TLType,  # InputPeer
+            "reply_to": TLType,  # InputReplyTo
             "random_id": Int64,
         },
         "ret": "Updates",
@@ -11917,7 +11917,7 @@ MAP = {
     0xB9FFC55B: {
         "_": "messages.faveSticker",
         "params": {
-            "id": TLType,
+            "id": TLType,  # InputDocument
             "unfave": bool,
         },
         "ret": bool,
@@ -11926,7 +11926,7 @@ MAP = {
         "_": "messages.getUnreadMentions",
         "params": {
             "flags": Int32,
-            "peer": TLType,
+            "peer": TLType,  # InputPeer
             "top_msg_id": FlagsOf("flags", 0, Int32),
             "offset_id": Int32,
             "add_offset": Int32,
@@ -11940,7 +11940,7 @@ MAP = {
         "_": "messages.readMentions",
         "params": {
             "flags": Int32,
-            "peer": TLType,
+            "peer": TLType,  # InputPeer
             "top_msg_id": FlagsOf("flags", 0, Int32),
         },
         "ret": "messages.AffectedHistory",
@@ -11948,7 +11948,7 @@ MAP = {
     0x702A40E0: {
         "_": "messages.getRecentLocations",
         "params": {
-            "peer": TLType,
+            "peer": TLType,  # InputPeer
             "limit": Int32,
             "hash": Int64,
         },
@@ -11963,7 +11963,7 @@ MAP = {
             "clear_draft": FlagsOf("flags", 7, Bit),
             "noforwards": FlagsOf("flags", 14, Bit),
             "update_stickersets_order": FlagsOf("flags", 15, Bit),
-            "peer": TLType,
+            "peer": TLType,  # InputPeer
             "reply_to": FlagsOf("flags", 0, TLType),
             "multi_media": list["InputSingleMedia"],
             "schedule_date": FlagsOf("flags", 10, Int32),
@@ -11974,8 +11974,8 @@ MAP = {
     0x5057C497: {
         "_": "messages.uploadEncryptedFile",
         "params": {
-            "peer": TLType,
-            "file": TLType,
+            "peer": TLType,  # InputEncryptedChat
+            "file": TLType,  # InputEncryptedFile
         },
         "ret": "EncryptedFile",
     },
@@ -11998,7 +11998,7 @@ MAP = {
         "params": {
             "flags": Int32,
             "unread": FlagsOf("flags", 0, Bit),
-            "peer": TLType,
+            "peer": TLType,  # InputDialogPeer
         },
         "ret": bool,
     },
@@ -12017,7 +12017,7 @@ MAP = {
             "silent": FlagsOf("flags", 0, Bit),
             "unpin": FlagsOf("flags", 1, Bit),
             "pm_oneside": FlagsOf("flags", 2, Bit),
-            "peer": TLType,
+            "peer": TLType,  # InputPeer
             "id": Int32,
         },
         "ret": "Updates",
@@ -12025,7 +12025,7 @@ MAP = {
     0x10EA6184: {
         "_": "messages.sendVote",
         "params": {
-            "peer": TLType,
+            "peer": TLType,  # InputPeer
             "msg_id": Int32,
             "options": list[bytes],
         },
@@ -12034,7 +12034,7 @@ MAP = {
     0x73BB643B: {
         "_": "messages.getPollResults",
         "params": {
-            "peer": TLType,
+            "peer": TLType,  # InputPeer
             "msg_id": Int32,
         },
         "ret": "Updates",
@@ -12042,14 +12042,14 @@ MAP = {
     0x6E2BE050: {
         "_": "messages.getOnlines",
         "params": {
-            "peer": TLType,
+            "peer": TLType,  # InputPeer
         },
         "ret": "ChatOnlines",
     },
     0xDEF60797: {
         "_": "messages.editChatAbout",
         "params": {
-            "peer": TLType,
+            "peer": TLType,  # InputPeer
             "about": str,
         },
         "ret": bool,
@@ -12057,8 +12057,8 @@ MAP = {
     0xA5866B41: {
         "_": "messages.editChatDefaultBannedRights",
         "params": {
-            "peer": TLType,
-            "banned_rights": TLType,
+            "peer": TLType,  # InputPeer
+            "banned_rights": TLType,  # ChatBannedRights
         },
         "ret": "Updates",
     },
@@ -12095,7 +12095,7 @@ MAP = {
         "_": "messages.getSearchCounters",
         "params": {
             "flags": Int32,
-            "peer": TLType,
+            "peer": TLType,  # InputPeer
             "top_msg_id": FlagsOf("flags", 0, Int32),
             "filters": list["MessagesFilter"],
         },
@@ -12127,14 +12127,14 @@ MAP = {
     0x4FACB138: {
         "_": "messages.hidePeerSettingsBar",
         "params": {
-            "peer": TLType,
+            "peer": TLType,  # InputPeer
         },
         "ret": bool,
     },
     0xF516760B: {
         "_": "messages.getScheduledHistory",
         "params": {
-            "peer": TLType,
+            "peer": TLType,  # InputPeer
             "hash": Int64,
         },
         "ret": "messages.Messages",
@@ -12142,7 +12142,7 @@ MAP = {
     0xBDBB0464: {
         "_": "messages.getScheduledMessages",
         "params": {
-            "peer": TLType,
+            "peer": TLType,  # InputPeer
             "id": list[Int32],
         },
         "ret": "messages.Messages",
@@ -12150,7 +12150,7 @@ MAP = {
     0xBD38850A: {
         "_": "messages.sendScheduledMessages",
         "params": {
-            "peer": TLType,
+            "peer": TLType,  # InputPeer
             "id": list[Int32],
         },
         "ret": "Updates",
@@ -12158,7 +12158,7 @@ MAP = {
     0x59AE2B16: {
         "_": "messages.deleteScheduledMessages",
         "params": {
-            "peer": TLType,
+            "peer": TLType,  # InputPeer
             "id": list[Int32],
         },
         "ret": "Updates",
@@ -12167,7 +12167,7 @@ MAP = {
         "_": "messages.getPollVotes",
         "params": {
             "flags": Int32,
-            "peer": TLType,
+            "peer": TLType,  # InputPeer
             "id": Int32,
             "option": FlagsOf("flags", 0, bytes),
             "offset": FlagsOf("flags", 1, str),
@@ -12222,7 +12222,7 @@ MAP = {
     0x22DDD30C: {
         "_": "messages.getReplies",
         "params": {
-            "peer": TLType,
+            "peer": TLType,  # InputPeer
             "msg_id": Int32,
             "offset_id": Int32,
             "offset_date": Int32,
@@ -12237,7 +12237,7 @@ MAP = {
     0x446972FD: {
         "_": "messages.getDiscussionMessage",
         "params": {
-            "peer": TLType,
+            "peer": TLType,  # InputPeer
             "msg_id": Int32,
         },
         "ret": "messages.DiscussionMessage",
@@ -12245,7 +12245,7 @@ MAP = {
     0xF731A9F4: {
         "_": "messages.readDiscussion",
         "params": {
-            "peer": TLType,
+            "peer": TLType,  # InputPeer
             "msg_id": Int32,
             "read_max_id": Int32,
         },
@@ -12255,7 +12255,7 @@ MAP = {
         "_": "messages.unpinAllMessages",
         "params": {
             "flags": Int32,
-            "peer": TLType,
+            "peer": TLType,  # InputPeer
             "top_msg_id": FlagsOf("flags", 0, Int32),
         },
         "ret": "messages.AffectedHistory",
@@ -12285,8 +12285,8 @@ MAP = {
     0x34090C3B: {
         "_": "messages.initHistoryImport",
         "params": {
-            "peer": TLType,
-            "file": TLType,
+            "peer": TLType,  # InputPeer
+            "file": TLType,  # InputFile
             "media_count": Int32,
         },
         "ret": "messages.HistoryImport",
@@ -12294,17 +12294,17 @@ MAP = {
     0x2A862092: {
         "_": "messages.uploadImportedMedia",
         "params": {
-            "peer": TLType,
+            "peer": TLType,  # InputPeer
             "import_id": Int64,
             "file_name": str,
-            "media": TLType,
+            "media": TLType,  # InputMedia
         },
         "ret": "MessageMedia",
     },
     0xB43DF344: {
         "_": "messages.startHistoryImport",
         "params": {
-            "peer": TLType,
+            "peer": TLType,  # InputPeer
             "import_id": Int64,
         },
         "ret": bool,
@@ -12314,8 +12314,8 @@ MAP = {
         "params": {
             "flags": Int32,
             "revoked": FlagsOf("flags", 3, Bit),
-            "peer": TLType,
-            "admin_id": TLType,
+            "peer": TLType,  # InputPeer
+            "admin_id": TLType,  # InputUser
             "offset_date": FlagsOf("flags", 2, Int32),
             "offset_link": FlagsOf("flags", 2, str),
             "limit": Int32,
@@ -12325,7 +12325,7 @@ MAP = {
     0x73746F5C: {
         "_": "messages.getExportedChatInvite",
         "params": {
-            "peer": TLType,
+            "peer": TLType,  # InputPeer
             "link": str,
         },
         "ret": "messages.ExportedChatInvite",
@@ -12335,7 +12335,7 @@ MAP = {
         "params": {
             "flags": Int32,
             "revoked": FlagsOf("flags", 2, Bit),
-            "peer": TLType,
+            "peer": TLType,  # InputPeer
             "link": str,
             "expire_date": FlagsOf("flags", 0, Int32),
             "usage_limit": FlagsOf("flags", 1, Int32),
@@ -12347,15 +12347,15 @@ MAP = {
     0x56987BD5: {
         "_": "messages.deleteRevokedExportedChatInvites",
         "params": {
-            "peer": TLType,
-            "admin_id": TLType,
+            "peer": TLType,  # InputPeer
+            "admin_id": TLType,  # InputUser
         },
         "ret": bool,
     },
     0xD464A42B: {
         "_": "messages.deleteExportedChatInvite",
         "params": {
-            "peer": TLType,
+            "peer": TLType,  # InputPeer
             "link": str,
         },
         "ret": bool,
@@ -12363,7 +12363,7 @@ MAP = {
     0x3920E6EF: {
         "_": "messages.getAdminsWithInvites",
         "params": {
-            "peer": TLType,
+            "peer": TLType,  # InputPeer
         },
         "ret": "messages.ChatAdminsWithInvites",
     },
@@ -12372,11 +12372,11 @@ MAP = {
         "params": {
             "flags": Int32,
             "requested": FlagsOf("flags", 0, Bit),
-            "peer": TLType,
+            "peer": TLType,  # InputPeer
             "link": FlagsOf("flags", 1, str),
             "q": FlagsOf("flags", 2, str),
             "offset_date": Int32,
-            "offset_user": TLType,
+            "offset_user": TLType,  # InputUser
             "limit": Int32,
         },
         "ret": "messages.ChatInviteImporters",
@@ -12384,7 +12384,7 @@ MAP = {
     0xB80E5FE4: {
         "_": "messages.setHistoryTTL",
         "params": {
-            "peer": TLType,
+            "peer": TLType,  # InputPeer
             "period": Int32,
         },
         "ret": "Updates",
@@ -12392,14 +12392,14 @@ MAP = {
     0x5DC60F03: {
         "_": "messages.checkHistoryImportPeer",
         "params": {
-            "peer": TLType,
+            "peer": TLType,  # InputPeer
         },
         "ret": "messages.CheckedHistoryImportPeer",
     },
     0xE63BE13F: {
         "_": "messages.setChatTheme",
         "params": {
-            "peer": TLType,
+            "peer": TLType,  # InputPeer
             "emoticon": str,
         },
         "ret": "Updates",
@@ -12407,7 +12407,7 @@ MAP = {
     0x31C1C44F: {
         "_": "messages.getMessageReadParticipants",
         "params": {
-            "peer": TLType,
+            "peer": TLType,  # InputPeer
             "msg_id": Int32,
         },
         "ret": list["ReadParticipantDate"],
@@ -12415,8 +12415,8 @@ MAP = {
     0x49F0BDE9: {
         "_": "messages.getSearchResultsCalendar",
         "params": {
-            "peer": TLType,
-            "filter": TLType,
+            "peer": TLType,  # InputPeer
+            "filter": TLType,  # MessagesFilter
             "offset_id": Int32,
             "offset_date": Int32,
         },
@@ -12425,8 +12425,8 @@ MAP = {
     0x6E9583A3: {
         "_": "messages.getSearchResultsPositions",
         "params": {
-            "peer": TLType,
-            "filter": TLType,
+            "peer": TLType,  # InputPeer
+            "filter": TLType,  # MessagesFilter
             "offset_id": Int32,
             "limit": Int32,
         },
@@ -12437,8 +12437,8 @@ MAP = {
         "params": {
             "flags": Int32,
             "approved": FlagsOf("flags", 0, Bit),
-            "peer": TLType,
-            "user_id": TLType,
+            "peer": TLType,  # InputPeer
+            "user_id": TLType,  # InputUser
         },
         "ret": "Updates",
     },
@@ -12447,7 +12447,7 @@ MAP = {
         "params": {
             "flags": Int32,
             "approved": FlagsOf("flags", 0, Bit),
-            "peer": TLType,
+            "peer": TLType,  # InputPeer
             "link": FlagsOf("flags", 1, str),
         },
         "ret": "Updates",
@@ -12455,7 +12455,7 @@ MAP = {
     0xB11EAFA2: {
         "_": "messages.toggleNoForwards",
         "params": {
-            "peer": TLType,
+            "peer": TLType,  # InputPeer
             "enabled": bool,
         },
         "ret": "Updates",
@@ -12463,8 +12463,8 @@ MAP = {
     0xCCFDDF96: {
         "_": "messages.saveDefaultSendAs",
         "params": {
-            "peer": TLType,
-            "send_as": TLType,
+            "peer": TLType,  # InputPeer
+            "send_as": TLType,  # InputPeer
         },
         "ret": bool,
     },
@@ -12474,7 +12474,7 @@ MAP = {
             "flags": Int32,
             "big": FlagsOf("flags", 1, Bit),
             "add_to_recent": FlagsOf("flags", 2, Bit),
-            "peer": TLType,
+            "peer": TLType,  # InputPeer
             "msg_id": Int32,
             "reaction": FlagsOf("flags", 0, list["Reaction"]),
         },
@@ -12483,7 +12483,7 @@ MAP = {
     0x8BBA90E6: {
         "_": "messages.getMessagesReactions",
         "params": {
-            "peer": TLType,
+            "peer": TLType,  # InputPeer
             "id": list[Int32],
         },
         "ret": "Updates",
@@ -12492,7 +12492,7 @@ MAP = {
         "_": "messages.getMessageReactionsList",
         "params": {
             "flags": Int32,
-            "peer": TLType,
+            "peer": TLType,  # InputPeer
             "id": Int32,
             "reaction": FlagsOf("flags", 0, TLType),
             "offset": FlagsOf("flags", 1, str),
@@ -12503,8 +12503,8 @@ MAP = {
     0xFEB16771: {
         "_": "messages.setChatAvailableReactions",
         "params": {
-            "peer": TLType,
-            "available_reactions": TLType,
+            "peer": TLType,  # InputPeer
+            "available_reactions": TLType,  # ChatReactions
         },
         "ret": "Updates",
     },
@@ -12518,7 +12518,7 @@ MAP = {
     0x4F47A016: {
         "_": "messages.setDefaultReaction",
         "params": {
-            "reaction": TLType,
+            "reaction": TLType,  # Reaction
         },
         "ret": bool,
     },
@@ -12537,7 +12537,7 @@ MAP = {
         "_": "messages.getUnreadReactions",
         "params": {
             "flags": Int32,
-            "peer": TLType,
+            "peer": TLType,  # InputPeer
             "top_msg_id": FlagsOf("flags", 0, Int32),
             "offset_id": Int32,
             "add_offset": Int32,
@@ -12551,7 +12551,7 @@ MAP = {
         "_": "messages.readReactions",
         "params": {
             "flags": Int32,
-            "peer": TLType,
+            "peer": TLType,  # InputPeer
             "top_msg_id": FlagsOf("flags", 0, Int32),
         },
         "ret": "messages.AffectedHistory",
@@ -12560,7 +12560,7 @@ MAP = {
         "_": "messages.searchSentMedia",
         "params": {
             "q": str,
-            "filter": TLType,
+            "filter": TLType,  # MessagesFilter
             "limit": Int32,
         },
         "ret": "messages.Messages",
@@ -12575,7 +12575,7 @@ MAP = {
     0x77216192: {
         "_": "messages.getAttachMenuBot",
         "params": {
-            "bot": TLType,
+            "bot": TLType,  # InputUser
         },
         "ret": "AttachMenuBotsBot",
     },
@@ -12584,7 +12584,7 @@ MAP = {
         "params": {
             "flags": Int32,
             "write_allowed": FlagsOf("flags", 0, Bit),
-            "bot": TLType,
+            "bot": TLType,  # InputUser
             "enabled": bool,
         },
         "ret": bool,
@@ -12595,8 +12595,8 @@ MAP = {
             "flags": Int32,
             "from_bot_menu": FlagsOf("flags", 4, Bit),
             "silent": FlagsOf("flags", 5, Bit),
-            "peer": TLType,
-            "bot": TLType,
+            "peer": TLType,  # InputPeer
+            "bot": TLType,  # InputUser
             "url": FlagsOf("flags", 1, str),
             "start_param": FlagsOf("flags", 3, str),
             "theme_params": FlagsOf("flags", 2, TLType),
@@ -12611,8 +12611,8 @@ MAP = {
         "params": {
             "flags": Int32,
             "silent": FlagsOf("flags", 5, Bit),
-            "peer": TLType,
-            "bot": TLType,
+            "peer": TLType,  # InputPeer
+            "bot": TLType,  # InputUser
             "query_id": Int64,
             "reply_to": FlagsOf("flags", 0, TLType),
             "send_as": FlagsOf("flags", 13, TLType),
@@ -12625,7 +12625,7 @@ MAP = {
             "flags": Int32,
             "from_switch_webview": FlagsOf("flags", 1, Bit),
             "from_side_menu": FlagsOf("flags", 2, Bit),
-            "bot": TLType,
+            "bot": TLType,  # InputUser
             "url": FlagsOf("flags", 3, str),
             "start_param": FlagsOf("flags", 4, str),
             "theme_params": FlagsOf("flags", 0, TLType),
@@ -12637,14 +12637,14 @@ MAP = {
         "_": "messages.sendWebViewResultMessage",
         "params": {
             "bot_query_id": str,
-            "result": TLType,
+            "result": TLType,  # InputBotInlineResult
         },
         "ret": "WebViewMessageSent",
     },
     0xDC0242C8: {
         "_": "messages.sendWebViewData",
         "params": {
-            "bot": TLType,
+            "bot": TLType,  # InputUser
             "random_id": Int64,
             "button_text": str,
             "data": str,
@@ -12654,7 +12654,7 @@ MAP = {
     0x269E9A49: {
         "_": "messages.transcribeAudio",
         "params": {
-            "peer": TLType,
+            "peer": TLType,  # InputPeer
             "msg_id": Int32,
         },
         "ret": "messages.TranscribedAudio",
@@ -12662,7 +12662,7 @@ MAP = {
     0x7F1D072F: {
         "_": "messages.rateTranscribedAudio",
         "params": {
-            "peer": TLType,
+            "peer": TLType,  # InputPeer
             "msg_id": Int32,
             "transcription_id": Int64,
             "good": bool,
@@ -12693,9 +12693,9 @@ MAP = {
     0x3F64C076: {
         "_": "messages.reportReaction",
         "params": {
-            "peer": TLType,
+            "peer": TLType,  # InputPeer
             "id": Int32,
-            "reaction_peer": TLType,
+            "reaction_peer": TLType,  # InputPeer
         },
         "ret": bool,
     },
@@ -12722,7 +12722,7 @@ MAP = {
     0x84F80814: {
         "_": "messages.getExtendedMedia",
         "params": {
-            "peer": TLType,
+            "peer": TLType,  # InputPeer
             "id": list[Int32],
         },
         "ret": "Updates",
@@ -12741,10 +12741,10 @@ MAP = {
     0xFE38D01B: {
         "_": "messages.sendBotRequestedPeer",
         "params": {
-            "peer": TLType,
+            "peer": TLType,  # InputPeer
             "msg_id": Int32,
             "button_id": Int32,
-            "requested_peer": TLType,
+            "requested_peer": TLType,  # InputPeer
         },
         "ret": "Updates",
     },
@@ -12782,14 +12782,14 @@ MAP = {
         "params": {
             "flags": Int32,
             "disabled": FlagsOf("flags", 0, Bit),
-            "peer": TLType,
+            "peer": TLType,  # InputPeer
         },
         "ret": bool,
     },
     0x34FDC5C3: {
         "_": "messages.getBotApp",
         "params": {
-            "app": TLType,
+            "app": TLType,  # InputBotApp
             "hash": Int64,
         },
         "ret": "messages.BotApp",
@@ -12799,8 +12799,8 @@ MAP = {
         "params": {
             "flags": Int32,
             "write_allowed": FlagsOf("flags", 0, Bit),
-            "peer": TLType,
-            "app": TLType,
+            "peer": TLType,  # InputPeer
+            "app": TLType,  # InputBotApp
             "start_param": FlagsOf("flags", 1, str),
             "theme_params": FlagsOf("flags", 2, TLType),
             "platform": str,
@@ -12811,7 +12811,7 @@ MAP = {
         "_": "messages.setChatWallPaper",
         "params": {
             "flags": Int32,
-            "peer": TLType,
+            "peer": TLType,  # InputPeer
             "wallpaper": FlagsOf("flags", 0, TLType),
             "settings": FlagsOf("flags", 2, TLType),
             "id": FlagsOf("flags", 1, Int32),
@@ -12840,8 +12840,8 @@ MAP = {
         "params": {
             "flags": Int32,
             "force": FlagsOf("flags", 0, Bit),
-            "channel": TLType,
-            "filter": TLType,
+            "channel": TLType,  # InputChannel
+            "filter": TLType,  # ChannelMessagesFilter
             "pts": Int32,
             "limit": Int32,
         },
@@ -12853,7 +12853,7 @@ MAP = {
             "flags": Int32,
             "fallback": FlagsOf("flags", 0, Bit),
             "bot": FlagsOf("flags", 1, TLType),
-            "id": TLType,
+            "id": TLType,  # InputPhoto
         },
         "ret": "photos.Photo",
     },
@@ -12880,7 +12880,7 @@ MAP = {
     0x91CD32A8: {
         "_": "photos.getUserPhotos",
         "params": {
-            "user_id": TLType,
+            "user_id": TLType,  # InputUser
             "offset": Int32,
             "max_id": Int64,
             "limit": Int32,
@@ -12893,7 +12893,7 @@ MAP = {
             "flags": Int32,
             "suggest": FlagsOf("flags", 3, Bit),
             "save": FlagsOf("flags", 4, Bit),
-            "user_id": TLType,
+            "user_id": TLType,  # InputUser
             "file": FlagsOf("flags", 0, TLType),
             "video": FlagsOf("flags", 1, TLType),
             "video_start_ts": FlagsOf("flags", 2, float),
@@ -12916,7 +12916,7 @@ MAP = {
             "flags": Int32,
             "precise": FlagsOf("flags", 0, Bit),
             "cdn_supported": FlagsOf("flags", 1, Bit),
-            "location": TLType,
+            "location": TLType,  # InputFileLocation
             "offset": Int64,
             "limit": Int32,
         },
@@ -12935,7 +12935,7 @@ MAP = {
     0x24E6818D: {
         "_": "upload.getWebFile",
         "params": {
-            "location": TLType,
+            "location": TLType,  # InputWebFileLocation
             "offset": Int32,
             "limit": Int32,
         },
@@ -12969,7 +12969,7 @@ MAP = {
     0x9156982A: {
         "_": "upload.getFileHashes",
         "params": {
-            "location": TLType,
+            "location": TLType,  # InputFileLocation
             "offset": Int64,
         },
         "ret": list["FileHash"],
@@ -13030,7 +13030,7 @@ MAP = {
     0xEE72F79A: {
         "_": "help.acceptTermsOfService",
         "params": {
-            "id": TLType,
+            "id": TLType,  # DataJSON
         },
         "ret": bool,
     },
@@ -13069,14 +13069,14 @@ MAP = {
     0x38A08D3: {
         "_": "help.getUserInfo",
         "params": {
-            "user_id": TLType,
+            "user_id": TLType,  # InputUser
         },
         "ret": "help.UserInfo",
     },
     0x66B91B70: {
         "_": "help.editUserInfo",
         "params": {
-            "user_id": TLType,
+            "user_id": TLType,  # InputUser
             "message": str,
             "entities": list["MessageEntity"],
         },
@@ -13089,14 +13089,14 @@ MAP = {
     0x1E251C95: {
         "_": "help.hidePromoData",
         "params": {
-            "peer": TLType,
+            "peer": TLType,  # InputPeer
         },
         "ret": bool,
     },
     0xF50DBAA1: {
         "_": "help.dismissSuggestion",
         "params": {
-            "peer": TLType,
+            "peer": TLType,  # InputPeer
             "suggestion": str,
         },
         "ret": bool,
@@ -13116,7 +13116,7 @@ MAP = {
     0xCC104937: {
         "_": "channels.readHistory",
         "params": {
-            "channel": TLType,
+            "channel": TLType,  # InputChannel
             "max_id": Int32,
         },
         "ret": bool,
@@ -13124,7 +13124,7 @@ MAP = {
     0x84C1FD4E: {
         "_": "channels.deleteMessages",
         "params": {
-            "channel": TLType,
+            "channel": TLType,  # InputChannel
             "id": list[Int32],
         },
         "ret": "messages.AffectedMessages",
@@ -13132,8 +13132,8 @@ MAP = {
     0xF44A8315: {
         "_": "channels.reportSpam",
         "params": {
-            "channel": TLType,
-            "participant": TLType,
+            "channel": TLType,  # InputChannel
+            "participant": TLType,  # InputPeer
             "id": list[Int32],
         },
         "ret": bool,
@@ -13141,7 +13141,7 @@ MAP = {
     0xAD8C9A23: {
         "_": "channels.getMessages",
         "params": {
-            "channel": TLType,
+            "channel": TLType,  # InputChannel
             "id": list["InputMessage"],
         },
         "ret": "messages.Messages",
@@ -13149,8 +13149,8 @@ MAP = {
     0x77CED9D0: {
         "_": "channels.getParticipants",
         "params": {
-            "channel": TLType,
-            "filter": TLType,
+            "channel": TLType,  # InputChannel
+            "filter": TLType,  # ChannelParticipantsFilter
             "offset": Int32,
             "limit": Int32,
             "hash": Int64,
@@ -13160,8 +13160,8 @@ MAP = {
     0xA0AB6CC6: {
         "_": "channels.getParticipant",
         "params": {
-            "channel": TLType,
-            "participant": TLType,
+            "channel": TLType,  # InputChannel
+            "participant": TLType,  # InputPeer
         },
         "ret": "channels.ChannelParticipant",
     },
@@ -13175,7 +13175,7 @@ MAP = {
     0x8736A09: {
         "_": "channels.getFullChannel",
         "params": {
-            "channel": TLType,
+            "channel": TLType,  # InputChannel
         },
         "ret": "messages.ChatFull",
     },
@@ -13198,9 +13198,9 @@ MAP = {
     0xD33C8902: {
         "_": "channels.editAdmin",
         "params": {
-            "channel": TLType,
-            "user_id": TLType,
-            "admin_rights": TLType,
+            "channel": TLType,  # InputChannel
+            "user_id": TLType,  # InputUser
+            "admin_rights": TLType,  # ChatAdminRights
             "rank": str,
         },
         "ret": "Updates",
@@ -13208,7 +13208,7 @@ MAP = {
     0x566DECD0: {
         "_": "channels.editTitle",
         "params": {
-            "channel": TLType,
+            "channel": TLType,  # InputChannel
             "title": str,
         },
         "ret": "Updates",
@@ -13216,15 +13216,15 @@ MAP = {
     0xF12E57C9: {
         "_": "channels.editPhoto",
         "params": {
-            "channel": TLType,
-            "photo": TLType,
+            "channel": TLType,  # InputChannel
+            "photo": TLType,  # InputChatPhoto
         },
         "ret": "Updates",
     },
     0x10E6BD2C: {
         "_": "channels.checkUsername",
         "params": {
-            "channel": TLType,
+            "channel": TLType,  # InputChannel
             "username": str,
         },
         "ret": bool,
@@ -13232,7 +13232,7 @@ MAP = {
     0x3514B3DE: {
         "_": "channels.updateUsername",
         "params": {
-            "channel": TLType,
+            "channel": TLType,  # InputChannel
             "username": str,
         },
         "ret": bool,
@@ -13240,21 +13240,21 @@ MAP = {
     0x24B524C5: {
         "_": "channels.joinChannel",
         "params": {
-            "channel": TLType,
+            "channel": TLType,  # InputChannel
         },
         "ret": "Updates",
     },
     0xF836AA95: {
         "_": "channels.leaveChannel",
         "params": {
-            "channel": TLType,
+            "channel": TLType,  # InputChannel
         },
         "ret": "Updates",
     },
     0x199F3A6C: {
         "_": "channels.inviteToChannel",
         "params": {
-            "channel": TLType,
+            "channel": TLType,  # InputChannel
             "users": list["InputUser"],
         },
         "ret": "Updates",
@@ -13262,7 +13262,7 @@ MAP = {
     0xC0111FE3: {
         "_": "channels.deleteChannel",
         "params": {
-            "channel": TLType,
+            "channel": TLType,  # InputChannel
         },
         "ret": "Updates",
     },
@@ -13272,7 +13272,7 @@ MAP = {
             "flags": Int32,
             "grouped": FlagsOf("flags", 0, Bit),
             "thread": FlagsOf("flags", 1, Bit),
-            "channel": TLType,
+            "channel": TLType,  # InputChannel
             "id": Int32,
         },
         "ret": "ExportedMessageLink",
@@ -13280,7 +13280,7 @@ MAP = {
     0x1F69B606: {
         "_": "channels.toggleSignatures",
         "params": {
-            "channel": TLType,
+            "channel": TLType,  # InputChannel
             "enabled": bool,
         },
         "ret": "Updates",
@@ -13297,9 +13297,9 @@ MAP = {
     0x96E6CD81: {
         "_": "channels.editBanned",
         "params": {
-            "channel": TLType,
-            "participant": TLType,
-            "banned_rights": TLType,
+            "channel": TLType,  # InputChannel
+            "participant": TLType,  # InputPeer
+            "banned_rights": TLType,  # ChatBannedRights
         },
         "ret": "Updates",
     },
@@ -13307,7 +13307,7 @@ MAP = {
         "_": "channels.getAdminLog",
         "params": {
             "flags": Int32,
-            "channel": TLType,
+            "channel": TLType,  # InputChannel
             "q": str,
             "events_filter": FlagsOf("flags", 0, TLType),
             "admins": FlagsOf("flags", 1, list["InputUser"]),
@@ -13320,15 +13320,15 @@ MAP = {
     0xEA8CA4F9: {
         "_": "channels.setStickers",
         "params": {
-            "channel": TLType,
-            "stickerset": TLType,
+            "channel": TLType,  # InputChannel
+            "stickerset": TLType,  # InputStickerSet
         },
         "ret": bool,
     },
     0xEAB5DC38: {
         "_": "channels.readMessageContents",
         "params": {
-            "channel": TLType,
+            "channel": TLType,  # InputChannel
             "id": list[Int32],
         },
         "ret": bool,
@@ -13338,7 +13338,7 @@ MAP = {
         "params": {
             "flags": Int32,
             "for_everyone": FlagsOf("flags", 0, Bit),
-            "channel": TLType,
+            "channel": TLType,  # InputChannel
             "max_id": Int32,
         },
         "ret": "Updates",
@@ -13346,7 +13346,7 @@ MAP = {
     0xEABBB94C: {
         "_": "channels.togglePreHistoryHidden",
         "params": {
-            "channel": TLType,
+            "channel": TLType,  # InputChannel
             "enabled": bool,
         },
         "ret": "Updates",
@@ -13365,25 +13365,25 @@ MAP = {
     0x40582BB2: {
         "_": "channels.setDiscussionGroup",
         "params": {
-            "broadcast": TLType,
-            "group": TLType,
+            "broadcast": TLType,  # InputChannel
+            "group": TLType,  # InputChannel
         },
         "ret": bool,
     },
     0x8F38CD1F: {
         "_": "channels.editCreator",
         "params": {
-            "channel": TLType,
-            "user_id": TLType,
-            "password": TLType,
+            "channel": TLType,  # InputChannel
+            "user_id": TLType,  # InputUser
+            "password": TLType,  # InputCheckPasswordSRP
         },
         "ret": "Updates",
     },
     0x58E63F6D: {
         "_": "channels.editLocation",
         "params": {
-            "channel": TLType,
-            "geo_point": TLType,
+            "channel": TLType,  # InputChannel
+            "geo_point": TLType,  # InputGeoPoint
             "address": str,
         },
         "ret": bool,
@@ -13391,7 +13391,7 @@ MAP = {
     0xEDD49EF0: {
         "_": "channels.toggleSlowMode",
         "params": {
-            "channel": TLType,
+            "channel": TLType,  # InputChannel
             "seconds": Int32,
         },
         "ret": "Updates",
@@ -13403,14 +13403,14 @@ MAP = {
     0xB290C69: {
         "_": "channels.convertToGigagroup",
         "params": {
-            "channel": TLType,
+            "channel": TLType,  # InputChannel
         },
         "ret": "Updates",
     },
     0xBEAEDB94: {
         "_": "channels.viewSponsoredMessage",
         "params": {
-            "channel": TLType,
+            "channel": TLType,  # InputChannel
             "random_id": bytes,
         },
         "ret": bool,
@@ -13418,29 +13418,29 @@ MAP = {
     0xEC210FBF: {
         "_": "channels.getSponsoredMessages",
         "params": {
-            "channel": TLType,
+            "channel": TLType,  # InputChannel
         },
         "ret": "messages.SponsoredMessages",
     },
     0xDC770EE: {
         "_": "channels.getSendAs",
         "params": {
-            "peer": TLType,
+            "peer": TLType,  # InputPeer
         },
         "ret": "channels.SendAsPeers",
     },
     0x367544DB: {
         "_": "channels.deleteParticipantHistory",
         "params": {
-            "channel": TLType,
-            "participant": TLType,
+            "channel": TLType,  # InputChannel
+            "participant": TLType,  # InputPeer
         },
         "ret": "messages.AffectedHistory",
     },
     0xE4CB9580: {
         "_": "channels.toggleJoinToSend",
         "params": {
-            "channel": TLType,
+            "channel": TLType,  # InputChannel
             "enabled": bool,
         },
         "ret": "Updates",
@@ -13448,7 +13448,7 @@ MAP = {
     0x4C2985B6: {
         "_": "channels.toggleJoinRequest",
         "params": {
-            "channel": TLType,
+            "channel": TLType,  # InputChannel
             "enabled": bool,
         },
         "ret": "Updates",
@@ -13456,7 +13456,7 @@ MAP = {
     0xB45CED1D: {
         "_": "channels.reorderUsernames",
         "params": {
-            "channel": TLType,
+            "channel": TLType,  # InputChannel
             "order": list[str],
         },
         "ret": bool,
@@ -13464,7 +13464,7 @@ MAP = {
     0x50F24105: {
         "_": "channels.toggleUsername",
         "params": {
-            "channel": TLType,
+            "channel": TLType,  # InputChannel
             "username": str,
             "active": bool,
         },
@@ -13473,14 +13473,14 @@ MAP = {
     0xA245DD3: {
         "_": "channels.deactivateAllUsernames",
         "params": {
-            "channel": TLType,
+            "channel": TLType,  # InputChannel
         },
         "ret": bool,
     },
     0xA4298B29: {
         "_": "channels.toggleForum",
         "params": {
-            "channel": TLType,
+            "channel": TLType,  # InputChannel
             "enabled": bool,
         },
         "ret": "Updates",
@@ -13489,7 +13489,7 @@ MAP = {
         "_": "channels.createForumTopic",
         "params": {
             "flags": Int32,
-            "channel": TLType,
+            "channel": TLType,  # InputChannel
             "title": str,
             "icon_color": FlagsOf("flags", 0, Int32),
             "icon_emoji_id": FlagsOf("flags", 3, Int64),
@@ -13502,7 +13502,7 @@ MAP = {
         "_": "channels.getForumTopics",
         "params": {
             "flags": Int32,
-            "channel": TLType,
+            "channel": TLType,  # InputChannel
             "q": FlagsOf("flags", 0, str),
             "offset_date": Int32,
             "offset_id": Int32,
@@ -13514,7 +13514,7 @@ MAP = {
     0xB0831EB9: {
         "_": "channels.getForumTopicsByID",
         "params": {
-            "channel": TLType,
+            "channel": TLType,  # InputChannel
             "topics": list[Int32],
         },
         "ret": "messages.ForumTopics",
@@ -13523,7 +13523,7 @@ MAP = {
         "_": "channels.editForumTopic",
         "params": {
             "flags": Int32,
-            "channel": TLType,
+            "channel": TLType,  # InputChannel
             "topic_id": Int32,
             "title": FlagsOf("flags", 0, str),
             "icon_emoji_id": FlagsOf("flags", 1, Int64),
@@ -13535,7 +13535,7 @@ MAP = {
     0x6C2D9026: {
         "_": "channels.updatePinnedForumTopic",
         "params": {
-            "channel": TLType,
+            "channel": TLType,  # InputChannel
             "topic_id": Int32,
             "pinned": bool,
         },
@@ -13544,7 +13544,7 @@ MAP = {
     0x34435F2D: {
         "_": "channels.deleteTopicHistory",
         "params": {
-            "channel": TLType,
+            "channel": TLType,  # InputChannel
             "top_msg_id": Int32,
         },
         "ret": "messages.AffectedHistory",
@@ -13554,7 +13554,7 @@ MAP = {
         "params": {
             "flags": Int32,
             "force": FlagsOf("flags", 0, Bit),
-            "channel": TLType,
+            "channel": TLType,  # InputChannel
             "order": list[Int32],
         },
         "ret": "Updates",
@@ -13562,7 +13562,7 @@ MAP = {
     0x68F3E4EB: {
         "_": "channels.toggleAntiSpam",
         "params": {
-            "channel": TLType,
+            "channel": TLType,  # InputChannel
             "enabled": bool,
         },
         "ret": "Updates",
@@ -13570,7 +13570,7 @@ MAP = {
     0xA850A693: {
         "_": "channels.reportAntiSpamFalsePositive",
         "params": {
-            "channel": TLType,
+            "channel": TLType,  # InputChannel
             "msg_id": Int32,
         },
         "ret": bool,
@@ -13578,7 +13578,7 @@ MAP = {
     0x6A6E7854: {
         "_": "channels.toggleParticipantsHidden",
         "params": {
-            "channel": TLType,
+            "channel": TLType,  # InputChannel
             "enabled": bool,
         },
         "ret": "Updates",
@@ -13586,7 +13586,7 @@ MAP = {
     0x18AFBC93: {
         "_": "channels.clickSponsoredMessage",
         "params": {
-            "channel": TLType,
+            "channel": TLType,  # InputChannel
             "random_id": bytes,
         },
         "ret": bool,
@@ -13595,7 +13595,7 @@ MAP = {
         "_": "bots.sendCustomRequest",
         "params": {
             "custom_method": str,
-            "params": TLType,
+            "params": TLType,  # DataJSON
         },
         "ret": "DataJSON",
     },
@@ -13603,14 +13603,14 @@ MAP = {
         "_": "bots.answerWebhookJSONQuery",
         "params": {
             "query_id": Int64,
-            "data": TLType,
+            "data": TLType,  # DataJSON
         },
         "ret": bool,
     },
     0x517165A: {
         "_": "bots.setBotCommands",
         "params": {
-            "scope": TLType,
+            "scope": TLType,  # BotCommandScope
             "lang_code": str,
             "commands": list["BotCommand"],
         },
@@ -13619,7 +13619,7 @@ MAP = {
     0x3D8DE0F9: {
         "_": "bots.resetBotCommands",
         "params": {
-            "scope": TLType,
+            "scope": TLType,  # BotCommandScope
             "lang_code": str,
         },
         "ret": bool,
@@ -13627,7 +13627,7 @@ MAP = {
     0xE34C0DD6: {
         "_": "bots.getBotCommands",
         "params": {
-            "scope": TLType,
+            "scope": TLType,  # BotCommandScope
             "lang_code": str,
         },
         "ret": list["BotCommand"],
@@ -13635,29 +13635,29 @@ MAP = {
     0x4504D54F: {
         "_": "bots.setBotMenuButton",
         "params": {
-            "user_id": TLType,
-            "button": TLType,
+            "user_id": TLType,  # InputUser
+            "button": TLType,  # BotMenuButton
         },
         "ret": bool,
     },
     0x9C60EB28: {
         "_": "bots.getBotMenuButton",
         "params": {
-            "user_id": TLType,
+            "user_id": TLType,  # InputUser
         },
         "ret": "BotMenuButton",
     },
     0x788464E1: {
         "_": "bots.setBotBroadcastDefaultAdminRights",
         "params": {
-            "admin_rights": TLType,
+            "admin_rights": TLType,  # ChatAdminRights
         },
         "ret": bool,
     },
     0x925EC9EA: {
         "_": "bots.setBotGroupDefaultAdminRights",
         "params": {
-            "admin_rights": TLType,
+            "admin_rights": TLType,  # ChatAdminRights
         },
         "ret": bool,
     },
@@ -13685,7 +13685,7 @@ MAP = {
     0x9709B1C2: {
         "_": "bots.reorderUsernames",
         "params": {
-            "bot": TLType,
+            "bot": TLType,  # InputUser
             "order": list[str],
         },
         "ret": bool,
@@ -13693,7 +13693,7 @@ MAP = {
     0x53CA973: {
         "_": "bots.toggleUsername",
         "params": {
-            "bot": TLType,
+            "bot": TLType,  # InputUser
             "username": str,
             "active": bool,
         },
@@ -13702,23 +13702,23 @@ MAP = {
     0x1359F4E6: {
         "_": "bots.canSendMessage",
         "params": {
-            "bot": TLType,
+            "bot": TLType,  # InputUser
         },
         "ret": bool,
     },
     0xF132E3EF: {
         "_": "bots.allowSendMessage",
         "params": {
-            "bot": TLType,
+            "bot": TLType,  # InputUser
         },
         "ret": "Updates",
     },
     0x87FC5E7: {
         "_": "bots.invokeWebViewCustomMethod",
         "params": {
-            "bot": TLType,
+            "bot": TLType,  # InputUser
             "custom_method": str,
-            "params": TLType,
+            "params": TLType,  # DataJSON
         },
         "ret": "DataJSON",
     },
@@ -13726,7 +13726,7 @@ MAP = {
         "_": "payments.getPaymentForm",
         "params": {
             "flags": Int32,
-            "invoice": TLType,
+            "invoice": TLType,  # InputInvoice
             "theme_params": FlagsOf("flags", 0, TLType),
         },
         "ret": "payments.PaymentForm",
@@ -13734,7 +13734,7 @@ MAP = {
     0x2478D1CC: {
         "_": "payments.getPaymentReceipt",
         "params": {
-            "peer": TLType,
+            "peer": TLType,  # InputPeer
             "msg_id": Int32,
         },
         "ret": "payments.PaymentReceipt",
@@ -13744,8 +13744,8 @@ MAP = {
         "params": {
             "flags": Int32,
             "save": FlagsOf("flags", 0, Bit),
-            "invoice": TLType,
-            "info": TLType,
+            "invoice": TLType,  # InputInvoice
+            "info": TLType,  # PaymentRequestedInfo
         },
         "ret": "payments.ValidatedRequestedInfo",
     },
@@ -13754,10 +13754,10 @@ MAP = {
         "params": {
             "flags": Int32,
             "form_id": Int64,
-            "invoice": TLType,
+            "invoice": TLType,  # InputInvoice
             "requested_info_id": FlagsOf("flags", 0, str),
             "shipping_option_id": FlagsOf("flags", 1, str),
-            "credentials": TLType,
+            "credentials": TLType,  # InputPaymentCredentials
             "tip_amount": FlagsOf("flags", 2, Int64),
         },
         "ret": "payments.PaymentResult",
@@ -13785,7 +13785,7 @@ MAP = {
     0xF91B065: {
         "_": "payments.exportInvoice",
         "params": {
-            "invoice_media": TLType,
+            "invoice_media": TLType,  # InputMedia
         },
         "ret": "payments.ExportedInvoice",
     },
@@ -13793,22 +13793,22 @@ MAP = {
         "_": "payments.assignAppStoreTransaction",
         "params": {
             "receipt": bytes,
-            "purpose": TLType,
+            "purpose": TLType,  # InputStorePaymentPurpose
         },
         "ret": "Updates",
     },
     0xDFFD50D3: {
         "_": "payments.assignPlayMarketTransaction",
         "params": {
-            "receipt": TLType,
-            "purpose": TLType,
+            "receipt": TLType,  # DataJSON
+            "purpose": TLType,  # InputStorePaymentPurpose
         },
         "ret": "Updates",
     },
     0x9FC19EB6: {
         "_": "payments.canPurchasePremium",
         "params": {
-            "purpose": TLType,
+            "purpose": TLType,  # InputStorePaymentPurpose
         },
         "ret": bool,
     },
@@ -13821,7 +13821,7 @@ MAP = {
             "videos": FlagsOf("flags", 4, Bit),
             "emojis": FlagsOf("flags", 5, Bit),
             "text_color": FlagsOf("flags", 6, Bit),
-            "user_id": TLType,
+            "user_id": TLType,  # InputUser
             "title": str,
             "short_name": str,
             "thumb": FlagsOf("flags", 2, TLType),
@@ -13833,14 +13833,14 @@ MAP = {
     0xF7760F51: {
         "_": "stickers.removeStickerFromSet",
         "params": {
-            "sticker": TLType,
+            "sticker": TLType,  # InputDocument
         },
         "ret": "messages.StickerSet",
     },
     0xFFB6D4CA: {
         "_": "stickers.changeStickerPosition",
         "params": {
-            "sticker": TLType,
+            "sticker": TLType,  # InputDocument
             "position": Int32,
         },
         "ret": "messages.StickerSet",
@@ -13848,8 +13848,8 @@ MAP = {
     0x8653FEBE: {
         "_": "stickers.addStickerToSet",
         "params": {
-            "stickerset": TLType,
-            "sticker": TLType,
+            "stickerset": TLType,  # InputStickerSet
+            "sticker": TLType,  # InputStickerSetItem
         },
         "ret": "messages.StickerSet",
     },
@@ -13857,7 +13857,7 @@ MAP = {
         "_": "stickers.setStickerSetThumb",
         "params": {
             "flags": Int32,
-            "stickerset": TLType,
+            "stickerset": TLType,  # InputStickerSet
             "thumb": FlagsOf("flags", 0, TLType),
             "thumb_document_id": FlagsOf("flags", 1, Int64),
         },
@@ -13881,7 +13881,7 @@ MAP = {
         "_": "stickers.changeSticker",
         "params": {
             "flags": Int32,
-            "sticker": TLType,
+            "sticker": TLType,  # InputDocument
             "emoji": FlagsOf("flags", 0, str),
             "mask_coords": FlagsOf("flags", 1, TLType),
             "keywords": FlagsOf("flags", 2, str),
@@ -13891,7 +13891,7 @@ MAP = {
     0x124B1C00: {
         "_": "stickers.renameStickerSet",
         "params": {
-            "stickerset": TLType,
+            "stickerset": TLType,  # InputStickerSet
             "title": str,
         },
         "ret": "messages.StickerSet",
@@ -13899,7 +13899,7 @@ MAP = {
     0x87704394: {
         "_": "stickers.deleteStickerSet",
         "params": {
-            "stickerset": TLType,
+            "stickerset": TLType,  # InputStickerSet
         },
         "ret": bool,
     },
@@ -13912,36 +13912,36 @@ MAP = {
         "params": {
             "flags": Int32,
             "video": FlagsOf("flags", 0, Bit),
-            "user_id": TLType,
+            "user_id": TLType,  # InputUser
             "random_id": Int32,
             "g_a_hash": bytes,
-            "protocol": TLType,
+            "protocol": TLType,  # PhoneCallProtocol
         },
         "ret": "phone.PhoneCall",
     },
     0x3BD2B4A0: {
         "_": "phone.acceptCall",
         "params": {
-            "peer": TLType,
+            "peer": TLType,  # InputPhoneCall
             "g_b": bytes,
-            "protocol": TLType,
+            "protocol": TLType,  # PhoneCallProtocol
         },
         "ret": "phone.PhoneCall",
     },
     0x2EFE1722: {
         "_": "phone.confirmCall",
         "params": {
-            "peer": TLType,
+            "peer": TLType,  # InputPhoneCall
             "g_a": bytes,
             "key_fingerprint": Int64,
-            "protocol": TLType,
+            "protocol": TLType,  # PhoneCallProtocol
         },
         "ret": "phone.PhoneCall",
     },
     0x17D54F61: {
         "_": "phone.receivedCall",
         "params": {
-            "peer": TLType,
+            "peer": TLType,  # InputPhoneCall
         },
         "ret": bool,
     },
@@ -13950,9 +13950,9 @@ MAP = {
         "params": {
             "flags": Int32,
             "video": FlagsOf("flags", 0, Bit),
-            "peer": TLType,
+            "peer": TLType,  # InputPhoneCall
             "duration": Int32,
-            "reason": TLType,
+            "reason": TLType,  # PhoneCallDiscardReason
             "connection_id": Int64,
         },
         "ret": "Updates",
@@ -13962,7 +13962,7 @@ MAP = {
         "params": {
             "flags": Int32,
             "user_initiative": FlagsOf("flags", 0, Bit),
-            "peer": TLType,
+            "peer": TLType,  # InputPhoneCall
             "rating": Int32,
             "comment": str,
         },
@@ -13971,15 +13971,15 @@ MAP = {
     0x277ADD7E: {
         "_": "phone.saveCallDebug",
         "params": {
-            "peer": TLType,
-            "debug": TLType,
+            "peer": TLType,  # InputPhoneCall
+            "debug": TLType,  # DataJSON
         },
         "ret": bool,
     },
     0xFF7A9383: {
         "_": "phone.sendSignalingData",
         "params": {
-            "peer": TLType,
+            "peer": TLType,  # InputPhoneCall
             "data": bytes,
         },
         "ret": bool,
@@ -13989,7 +13989,7 @@ MAP = {
         "params": {
             "flags": Int32,
             "rtmp_stream": FlagsOf("flags", 2, Bit),
-            "peer": TLType,
+            "peer": TLType,  # InputPeer
             "random_id": Int32,
             "title": FlagsOf("flags", 0, str),
             "schedule_date": FlagsOf("flags", 1, Int32),
@@ -14002,17 +14002,17 @@ MAP = {
             "flags": Int32,
             "muted": FlagsOf("flags", 0, Bit),
             "video_stopped": FlagsOf("flags", 2, Bit),
-            "call": TLType,
-            "join_as": TLType,
+            "call": TLType,  # InputGroupCall
+            "join_as": TLType,  # InputPeer
             "invite_hash": FlagsOf("flags", 1, str),
-            "params": TLType,
+            "params": TLType,  # DataJSON
         },
         "ret": "Updates",
     },
     0x500377F9: {
         "_": "phone.leaveGroupCall",
         "params": {
-            "call": TLType,
+            "call": TLType,  # InputGroupCall
             "source": Int32,
         },
         "ret": "Updates",
@@ -14020,7 +14020,7 @@ MAP = {
     0x7B393160: {
         "_": "phone.inviteToGroupCall",
         "params": {
-            "call": TLType,
+            "call": TLType,  # InputGroupCall
             "users": list["InputUser"],
         },
         "ret": "Updates",
@@ -14028,7 +14028,7 @@ MAP = {
     0x7A777135: {
         "_": "phone.discardGroupCall",
         "params": {
-            "call": TLType,
+            "call": TLType,  # InputGroupCall
         },
         "ret": "Updates",
     },
@@ -14037,7 +14037,7 @@ MAP = {
         "params": {
             "flags": Int32,
             "reset_invite_hash": FlagsOf("flags", 1, Bit),
-            "call": TLType,
+            "call": TLType,  # InputGroupCall
             "join_muted": FlagsOf("flags", 0, bool),
         },
         "ret": "Updates",
@@ -14045,7 +14045,7 @@ MAP = {
     0x41845DB: {
         "_": "phone.getGroupCall",
         "params": {
-            "call": TLType,
+            "call": TLType,  # InputGroupCall
             "limit": Int32,
         },
         "ret": "phone.GroupCall",
@@ -14053,7 +14053,7 @@ MAP = {
     0xC558D8AB: {
         "_": "phone.getGroupParticipants",
         "params": {
-            "call": TLType,
+            "call": TLType,  # InputGroupCall
             "ids": list["InputPeer"],
             "sources": list[Int32],
             "offset": str,
@@ -14064,7 +14064,7 @@ MAP = {
     0xB59CF977: {
         "_": "phone.checkGroupCall",
         "params": {
-            "call": TLType,
+            "call": TLType,  # InputGroupCall
             "sources": list[Int32],
         },
         "ret": list[Int32],
@@ -14075,7 +14075,7 @@ MAP = {
             "flags": Int32,
             "start": FlagsOf("flags", 0, Bit),
             "video": FlagsOf("flags", 2, Bit),
-            "call": TLType,
+            "call": TLType,  # InputGroupCall
             "title": FlagsOf("flags", 1, str),
             "video_portrait": FlagsOf("flags", 2, bool),
         },
@@ -14085,8 +14085,8 @@ MAP = {
         "_": "phone.editGroupCallParticipant",
         "params": {
             "flags": Int32,
-            "call": TLType,
-            "participant": TLType,
+            "call": TLType,  # InputGroupCall
+            "participant": TLType,  # InputPeer
             "muted": FlagsOf("flags", 0, bool),
             "volume": FlagsOf("flags", 1, Int32),
             "raise_hand": FlagsOf("flags", 2, bool),
@@ -14099,7 +14099,7 @@ MAP = {
     0x1CA6AC0A: {
         "_": "phone.editGroupCallTitle",
         "params": {
-            "call": TLType,
+            "call": TLType,  # InputGroupCall
             "title": str,
         },
         "ret": "Updates",
@@ -14107,7 +14107,7 @@ MAP = {
     0xEF7C213A: {
         "_": "phone.getGroupCallJoinAs",
         "params": {
-            "peer": TLType,
+            "peer": TLType,  # InputPeer
         },
         "ret": "phone.JoinAsPeers",
     },
@@ -14116,14 +14116,14 @@ MAP = {
         "params": {
             "flags": Int32,
             "can_self_unmute": FlagsOf("flags", 0, Bit),
-            "call": TLType,
+            "call": TLType,  # InputGroupCall
         },
         "ret": "phone.ExportedGroupCallInvite",
     },
     0x219C34E6: {
         "_": "phone.toggleGroupCallStartSubscription",
         "params": {
-            "call": TLType,
+            "call": TLType,  # InputGroupCall
             "subscribed": bool,
         },
         "ret": "Updates",
@@ -14131,44 +14131,44 @@ MAP = {
     0x5680E342: {
         "_": "phone.startScheduledGroupCall",
         "params": {
-            "call": TLType,
+            "call": TLType,  # InputGroupCall
         },
         "ret": "Updates",
     },
     0x575E1F8C: {
         "_": "phone.saveDefaultGroupCallJoinAs",
         "params": {
-            "peer": TLType,
-            "join_as": TLType,
+            "peer": TLType,  # InputPeer
+            "join_as": TLType,  # InputPeer
         },
         "ret": bool,
     },
     0xCBEA6BC4: {
         "_": "phone.joinGroupCallPresentation",
         "params": {
-            "call": TLType,
-            "params": TLType,
+            "call": TLType,  # InputGroupCall
+            "params": TLType,  # DataJSON
         },
         "ret": "Updates",
     },
     0x1C50D144: {
         "_": "phone.leaveGroupCallPresentation",
         "params": {
-            "call": TLType,
+            "call": TLType,  # InputGroupCall
         },
         "ret": "Updates",
     },
     0x1AB21940: {
         "_": "phone.getGroupCallStreamChannels",
         "params": {
-            "call": TLType,
+            "call": TLType,  # InputGroupCall
         },
         "ret": "phone.GroupCallStreamChannels",
     },
     0xDEB3ABBF: {
         "_": "phone.getGroupCallStreamRtmpUrl",
         "params": {
-            "peer": TLType,
+            "peer": TLType,  # InputPeer
             "revoke": bool,
         },
         "ret": "phone.GroupCallStreamRtmpUrl",
@@ -14176,8 +14176,8 @@ MAP = {
     0x41248786: {
         "_": "phone.saveCallLog",
         "params": {
-            "peer": TLType,
-            "file": TLType,
+            "peer": TLType,  # InputPhoneCall
+            "file": TLType,  # InputFile
         },
         "ret": bool,
     },
@@ -14234,7 +14234,7 @@ MAP = {
         "params": {
             "flags": Int32,
             "dark": FlagsOf("flags", 0, Bit),
-            "channel": TLType,
+            "channel": TLType,  # InputChannel
         },
         "ret": "stats.BroadcastStats",
     },
@@ -14252,17 +14252,17 @@ MAP = {
         "params": {
             "flags": Int32,
             "dark": FlagsOf("flags", 0, Bit),
-            "channel": TLType,
+            "channel": TLType,  # InputChannel
         },
         "ret": "stats.MegagroupStats",
     },
     0x5630281B: {
         "_": "stats.getMessagePublicForwards",
         "params": {
-            "channel": TLType,
+            "channel": TLType,  # InputChannel
             "msg_id": Int32,
             "offset_rate": Int32,
-            "offset_peer": TLType,
+            "offset_peer": TLType,  # InputPeer
             "offset_id": Int32,
             "limit": Int32,
         },
@@ -14273,7 +14273,7 @@ MAP = {
         "params": {
             "flags": Int32,
             "dark": FlagsOf("flags", 0, Bit),
-            "channel": TLType,
+            "channel": TLType,  # InputChannel
             "msg_id": Int32,
         },
         "ret": "stats.MessageStats",
@@ -14281,7 +14281,7 @@ MAP = {
     0x8472478E: {
         "_": "chatlists.exportChatlistInvite",
         "params": {
-            "chatlist": TLType,
+            "chatlist": TLType,  # InputChatlist
             "title": str,
             "peers": list["InputPeer"],
         },
@@ -14290,7 +14290,7 @@ MAP = {
     0x719C5C5E: {
         "_": "chatlists.deleteExportedInvite",
         "params": {
-            "chatlist": TLType,
+            "chatlist": TLType,  # InputChatlist
             "slug": str,
         },
         "ret": bool,
@@ -14299,7 +14299,7 @@ MAP = {
         "_": "chatlists.editExportedInvite",
         "params": {
             "flags": Int32,
-            "chatlist": TLType,
+            "chatlist": TLType,  # InputChatlist
             "slug": str,
             "title": FlagsOf("flags", 1, str),
             "peers": FlagsOf("flags", 2, list["InputPeer"]),
@@ -14309,7 +14309,7 @@ MAP = {
     0xCE03DA83: {
         "_": "chatlists.getExportedInvites",
         "params": {
-            "chatlist": TLType,
+            "chatlist": TLType,  # InputChatlist
         },
         "ret": "chatlists.ExportedInvites",
     },
@@ -14331,14 +14331,14 @@ MAP = {
     0x89419521: {
         "_": "chatlists.getChatlistUpdates",
         "params": {
-            "chatlist": TLType,
+            "chatlist": TLType,  # InputChatlist
         },
         "ret": "chatlists.ChatlistUpdates",
     },
     0xE089F8F5: {
         "_": "chatlists.joinChatlistUpdates",
         "params": {
-            "chatlist": TLType,
+            "chatlist": TLType,  # InputChatlist
             "peers": list["InputPeer"],
         },
         "ret": "Updates",
@@ -14346,21 +14346,21 @@ MAP = {
     0x66E486FB: {
         "_": "chatlists.hideChatlistUpdates",
         "params": {
-            "chatlist": TLType,
+            "chatlist": TLType,  # InputChatlist
         },
         "ret": bool,
     },
     0xFDBCD714: {
         "_": "chatlists.getLeaveChatlistSuggestions",
         "params": {
-            "chatlist": TLType,
+            "chatlist": TLType,  # InputChatlist
         },
         "ret": list["Peer"],
     },
     0x74FAE13A: {
         "_": "chatlists.leaveChatlist",
         "params": {
-            "chatlist": TLType,
+            "chatlist": TLType,  # InputChatlist
             "peers": list["InputPeer"],
         },
         "ret": "Updates",
@@ -14368,7 +14368,7 @@ MAP = {
     0xC7DFDFDD: {
         "_": "stories.canSendStory",
         "params": {
-            "peer": TLType,
+            "peer": TLType,  # InputPeer
         },
         "ret": bool,
     },
@@ -14378,8 +14378,8 @@ MAP = {
             "flags": Int32,
             "pinned": FlagsOf("flags", 2, Bit),
             "noforwards": FlagsOf("flags", 4, Bit),
-            "peer": TLType,
-            "media": TLType,
+            "peer": TLType,  # InputPeer
+            "media": TLType,  # InputMedia
             "media_areas": FlagsOf("flags", 5, list["MediaArea"]),
             "caption": FlagsOf("flags", 0, str),
             "entities": FlagsOf("flags", 1, list["MessageEntity"]),
@@ -14393,7 +14393,7 @@ MAP = {
         "_": "stories.editStory",
         "params": {
             "flags": Int32,
-            "peer": TLType,
+            "peer": TLType,  # InputPeer
             "id": Int32,
             "media": FlagsOf("flags", 0, TLType),
             "media_areas": FlagsOf("flags", 3, list["MediaArea"]),
@@ -14406,7 +14406,7 @@ MAP = {
     0xAE59DB5F: {
         "_": "stories.deleteStories",
         "params": {
-            "peer": TLType,
+            "peer": TLType,  # InputPeer
             "id": list[Int32],
         },
         "ret": list[Int32],
@@ -14414,7 +14414,7 @@ MAP = {
     0x9A75A1EF: {
         "_": "stories.togglePinned",
         "params": {
-            "peer": TLType,
+            "peer": TLType,  # InputPeer
             "id": list[Int32],
             "pinned": bool,
         },
@@ -14433,7 +14433,7 @@ MAP = {
     0x5821A5DC: {
         "_": "stories.getPinnedStories",
         "params": {
-            "peer": TLType,
+            "peer": TLType,  # InputPeer
             "offset_id": Int32,
             "limit": Int32,
         },
@@ -14442,7 +14442,7 @@ MAP = {
     0xB4352016: {
         "_": "stories.getStoriesArchive",
         "params": {
-            "peer": TLType,
+            "peer": TLType,  # InputPeer
             "offset_id": Int32,
             "limit": Int32,
         },
@@ -14451,7 +14451,7 @@ MAP = {
     0x5774CA74: {
         "_": "stories.getStoriesByID",
         "params": {
-            "peer": TLType,
+            "peer": TLType,  # InputPeer
             "id": list[Int32],
         },
         "ret": "stories.Stories",
@@ -14466,7 +14466,7 @@ MAP = {
     0xA556DAC8: {
         "_": "stories.readStories",
         "params": {
-            "peer": TLType,
+            "peer": TLType,  # InputPeer
             "max_id": Int32,
         },
         "ret": list[Int32],
@@ -14474,7 +14474,7 @@ MAP = {
     0xB2028AFB: {
         "_": "stories.incrementStoryViews",
         "params": {
-            "peer": TLType,
+            "peer": TLType,  # InputPeer
             "id": list[Int32],
         },
         "ret": bool,
@@ -14485,7 +14485,7 @@ MAP = {
             "flags": Int32,
             "just_contacts": FlagsOf("flags", 0, Bit),
             "reactions_first": FlagsOf("flags", 2, Bit),
-            "peer": TLType,
+            "peer": TLType,  # InputPeer
             "q": FlagsOf("flags", 1, str),
             "id": Int32,
             "offset": str,
@@ -14496,7 +14496,7 @@ MAP = {
     0x28E16CC8: {
         "_": "stories.getStoriesViews",
         "params": {
-            "peer": TLType,
+            "peer": TLType,  # InputPeer
             "id": list[Int32],
         },
         "ret": "stories.StoryViews",
@@ -14504,7 +14504,7 @@ MAP = {
     0x7B8DEF20: {
         "_": "stories.exportStoryLink",
         "params": {
-            "peer": TLType,
+            "peer": TLType,  # InputPeer
             "id": Int32,
         },
         "ret": "ExportedStoryLink",
@@ -14512,9 +14512,9 @@ MAP = {
     0x1923FA8C: {
         "_": "stories.report",
         "params": {
-            "peer": TLType,
+            "peer": TLType,  # InputPeer
             "id": list[Int32],
-            "reason": TLType,
+            "reason": TLType,  # ReportReason
             "message": str,
         },
         "ret": bool,
@@ -14533,16 +14533,16 @@ MAP = {
         "params": {
             "flags": Int32,
             "add_to_recent": FlagsOf("flags", 0, Bit),
-            "peer": TLType,
+            "peer": TLType,  # InputPeer
             "story_id": Int32,
-            "reaction": TLType,
+            "reaction": TLType,  # Reaction
         },
         "ret": "Updates",
     },
     0x2C4ADA50: {
         "_": "stories.getPeerStories",
         "params": {
-            "peer": TLType,
+            "peer": TLType,  # InputPeer
         },
         "ret": "stories.PeerStories",
     },
@@ -14564,7 +14564,7 @@ MAP = {
     0xBD0415C4: {
         "_": "stories.togglePeerStoriesHidden",
         "params": {
-            "peer": TLType,
+            "peer": TLType,  # InputPeer
             "hidden": bool,
         },
         "ret": bool,
@@ -14572,14 +14572,14 @@ MAP = {
     0x4C449472: {
         "_": "stories.getBoostsStatus",
         "params": {
-            "peer": TLType,
+            "peer": TLType,  # InputPeer
         },
         "ret": "stories.BoostsStatus",
     },
     0x337EF980: {
         "_": "stories.getBoostersList",
         "params": {
-            "peer": TLType,
+            "peer": TLType,  # InputPeer
             "offset": str,
             "limit": Int32,
         },
@@ -14588,14 +14588,14 @@ MAP = {
     0xDB05C1BD: {
         "_": "stories.canApplyBoost",
         "params": {
-            "peer": TLType,
+            "peer": TLType,  # InputPeer
         },
         "ret": "stories.CanApplyBoostResult",
     },
     0xF29D7C2B: {
         "_": "stories.applyBoost",
         "params": {
-            "peer": TLType,
+            "peer": TLType,  # InputPeer
         },
         "ret": bool,
     },
