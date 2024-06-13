@@ -734,7 +734,10 @@ async def main():
     async def get_sticker_set(client: Client, request: CoreMessage, session_id: int):
         import random
 
-        if request.obj.stickerset._ == "inputStickerSetShortName" and request.obj.stickerset.short_name == "tg_placeholders_android":
+        if (
+            request.obj.stickerset._ == "inputStickerSetShortName"
+            and request.obj.stickerset.short_name == "tg_placeholders_android"
+        ):
             return {
                 "_": "rpc_error",
                 "error_code": 400,
@@ -1236,9 +1239,11 @@ async def main():
             "hash": 0,
             "document_id": [],
         }
-    
+
     @pilt.on_message("account.getSavedRingtones")
-    async def get_saved_ringtones(client: Client, request: CoreMessage, session_id: int):
+    async def get_saved_ringtones(
+        client: Client, request: CoreMessage, session_id: int
+    ):
         return {
             "_": "account.savedRingtones",
             "hash": 0,
