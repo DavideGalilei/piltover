@@ -209,23 +209,35 @@ those values for later.**
 $ rm -rf tdata/ DebugLogs/ log.txt && c && ./Telegram
 ```
 
-### **Telegram Android (recommended: Owlgram)**
+### **Telegram for Android**
 
-- Clone the repo and follow the basic setup instructions
+- Clone the repo (optional: checkout the commit I used)
+```shell
+$ git clone https://github.com/DrKLO/Telegram.git
+$ cd Telegram
+$ # Optional: checkout the commit I used
+$ git checkout 5bc1c3dce0e9108615c784a565051e54246fe0cb
+```
 - Edit this file:
-  https://github.com/OwlGramDev/OwlGram/blob/master/TMessagesProj/jni/tgnet/ConnectionsManager.cpp#L1702-L1756
+  https://github.com/DrKLO/Telegram/blob/5bc1c3dce0e9108615c784a565051e54246fe0cb/TMessagesProj/jni/tgnet/ConnectionsManager.cpp#L1779-L1839
   - Replace every ip with your local ip address. It can be `127.0.0.1`
     (localhost) only in the case you're running the app with an emulator on the
     same machine the server is running. Otherwise, change it with e.g.
-    `192.168.1.35` (the LAN ip address of your machine).
+    `192.168.1.35` (the LAN ip address of your machine, which you can obtain by running `ip -c a`).
   - Replace every port with `4430`
+  - Either delete or change IPv6 addresses to `::1` (localhost). This will break the
+    IPv6 support, but if you know what you're doing, you can change it to your ipv6 address.
+  - In DataCenters like DC2 there are multiple ip addresses, you should delete the extra ones and change only the first one.
 - Edit this file:
-  https://github.com/OwlGramDev/OwlGram/blob/master/TMessagesProj/jni/tgnet/Handshake.cpp#L355-L372
+  https://github.com/DrKLO/Telegram/blob/5bc1c3dce0e9108615c784a565051e54246fe0cb/TMessagesProj/jni/tgnet/Handshake.cpp#L366-L385
   - Remove the existing rsa keys, and replace them with your own, taken from the
     `data/secrets/pubkey.asc` file on your piltover folder. **Important:** check
     the newlines thoroughly and make sure they are there, or it won't work. This
     took me way too much debugging time to realize that the missing newlines was
     the cause of the app crashes.
+  - Change the unsigned fingerprint with the one you got from the server logs (e.g. `9400d6d30b7c8fdb`)
+- If you haven't already, check the official repo for the build instructions.
+Generally, remember to edit `TMessagesProj/src/main/java/org/telegram/messenger/BuildVars.java`
 - Build the app, and see if it works.
 
 ### **Telegram WebK**
