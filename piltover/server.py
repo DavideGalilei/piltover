@@ -692,6 +692,8 @@ class Client:
                 # TODO: except invalid constructor id, raise INPUT_CONSTRUCTOR_INVALID_5EEF0214 (e.g.)
                 # except InvalidConstructor as e:
                 #     await self.reply_invalid_constructor(e, msg)
+                except Exception as e:
+                    logger.exception("Unexpected error", backtrace=True)
         except Disconnection:
             logger.info("Client disconnected")
 
